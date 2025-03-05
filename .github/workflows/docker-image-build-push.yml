@@ -17,7 +17,7 @@ on:
         type: string
 env:
   REGISTRY: ghcr.io
-  REPO_NAME: ${{ github.repository }}
+  ORG_NAME: rateit-pm4-org
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
