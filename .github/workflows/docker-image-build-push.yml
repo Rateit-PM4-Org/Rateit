@@ -36,9 +36,12 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Build the Docker image
-        run: docker build ${{ inputs.buildPath }} --file ${{ inputs.dockerFilePath }} --tag ${{ env.REGISTRY}}/${{ env.REPO_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}
-      - name: Push the Docker image
-        run: docker push ${{ env.REGISTRY}}/${{ env.REPO_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}
-        
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: ${{ inputs.buildPath }}
+          file: ${{ inputs.dockerFilePath }}
+          push: true
+          tags: ${{ env.REGISTRY}}/${{ env.REPO_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}        
