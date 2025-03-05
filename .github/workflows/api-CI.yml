@@ -1,6 +1,7 @@
 name: CI for API
 on: 
-  workflow_dispatch
+  workflow_dispatch:
+  workflow_call:
 
 jobs:
   build-and-push-image:
