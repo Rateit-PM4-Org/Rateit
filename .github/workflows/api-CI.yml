@@ -5,6 +5,11 @@ on:
 jobs:
   build-and-push-image:
     uses: ./.github/workflows/docker-image-build-push.yml
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     with:
       imageName: rateit-api
       imageTag: latest
