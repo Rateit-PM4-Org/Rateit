@@ -1,4 +1,4 @@
-name: Docker Image Build/Push
+name: Docker Image Build/Push for GHCR.io
 on:
   workflow_dispatch:
     inputs:
@@ -9,12 +9,40 @@ on:
         required: true
         type: string
         default: latest
+      dockerFilePath:
+        required: true
+        type: string
+      buildPath:
+        required: true
+        type: string
+env:
+  REGISTRY: ghcr.io
+  ORG_NAME: rateit-pm4-org
 jobs:
-  build:
+  build-and-push-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: |
-        docker build . --file Dockerfile --tag ${{ inputs.imageName }}:${{ inputs.imageTag }}
-        docker push ${{ inputs.imageName }}:${{ inputs.imageTag }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+     
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: ${{ inputs.buildPath }}
+          file: ${{ inputs.dockerFilePath }}
+          push: true
+          tags: ${{ env.REGISTRY}}/${{ env.ORG_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}        
+
