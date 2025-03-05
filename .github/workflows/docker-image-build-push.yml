@@ -44,4 +44,4 @@ jobs:
           context: ${{ inputs.buildPath }}
           file: ${{ inputs.dockerFilePath }}
           push: true
-          tags: ${{ env.REGISTRY}}/${{ env.REPO_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}        
+          tags: ${{ env.REGISTRY}}/${{ env.ORG_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}        
