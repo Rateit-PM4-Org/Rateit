@@ -16,5 +16,5 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: |
-        docker build . --file Dockerfile --tag ${{ inputs.imageName }}:${{ inputs.imageName }}
-        docker push ${{ inputs.imageName }}:${{ inputs.imageName }}
+        docker build . --file Dockerfile --tag ${{ inputs.imageName }}:${{ inputs.imageTag }}
+        docker push ${{ inputs.imageName }}:${{ inputs.imageTag }}
