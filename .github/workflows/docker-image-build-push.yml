@@ -9,6 +9,12 @@ on:
         required: true
         type: string
         default: latest
+      dockerFilePath:
+        required: true
+        type: string
+      buildPath:
+        required: true
+        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,5 +22,5 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: |
-        docker build . --file Dockerfile --tag ${{ inputs.imageName }}:${{ inputs.imageTag }}
+        docker build ${{ inputs.buildPath }} --file ${{ inputs.dockerFilePath }} --tag ${{ inputs.imageName }}:${{ inputs.imageTag }}
         docker push ${{ inputs.imageName }}:${{ inputs.imageTag }}
