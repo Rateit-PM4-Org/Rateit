@@ -6,6 +6,8 @@ jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - uses: ./.github/workflows/docker-image-build-push.yml
         with:
           imageName: rateit-api
