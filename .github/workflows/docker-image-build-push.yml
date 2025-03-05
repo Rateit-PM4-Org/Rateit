@@ -1,5 +1,20 @@
 name: Docker Image Build/Push for GHCR.io
 on:
+  workflow_call:
+    inputs:
+      imageName:
+        required: true
+        type: string
+      imageTag:
+        required: true
+        type: string
+        default: latest
+      dockerFilePath:
+        required: true
+        type: string
+      buildPath:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       imageName:
