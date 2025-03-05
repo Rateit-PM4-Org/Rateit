@@ -45,3 +45,4 @@ jobs:
           file: ${{ inputs.dockerFilePath }}
           push: true
           tags: ${{ env.REGISTRY}}/${{ env.ORG_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}        
+
