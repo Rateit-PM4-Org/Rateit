@@ -1,12 +1,38 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from './api.service';
+import { CommonModule } from '@angular/common';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'Hello, local World!';
+export class AppComponent implements OnInit {
+  data: any[] = [];
+  errorMessage: string = '';
+
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.apiService.getData().pipe(
+      catchError(error => {
+        console.error('Error fetching data:', error);
+        this.errorMessage = 'Failed to fetch data from backend';
+        return of([]); // Return an empty array in case of error
+      })
+    ).subscribe({
+      next: response => {
+        console.log('API Response:', response);
+        this.data = response; // Assign the response directly
+      },
+      error: err => {
+        console.error('Subscription Error:', err);
+        this.errorMessage = 'An error occurred';
+      }
+    });
+  }
 }
