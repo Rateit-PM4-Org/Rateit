@@ -17,6 +17,7 @@ on:
         type: string
 env:
   REGISTRY: ghcr.io
+  REPO_NAME: ${{ github.repository }}
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -37,7 +38,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build the Docker image
-        run: docker build ${{ inputs.buildPath }} --file ${{ inputs.dockerFilePath }} --tag ${{ env.REGISTRY}}/${{ inputs.imageName }}:${{ inputs.imageTag }}
+        run: docker build ${{ inputs.buildPath }} --file ${{ inputs.dockerFilePath }} --tag ${{ env.REGISTRY}}/${{ env.REPO_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}
       - name: Push the Docker image
-        run: docker push ${{ env.REGISTRY}}/${{ inputs.imageName }}:${{ inputs.imageTag }}
+        run: docker push ${{ env.REGISTRY}}/${{ env.REPO_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}
         
