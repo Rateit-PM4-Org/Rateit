@@ -1,4 +1,4 @@
-name: CI for API
+name: CD for API
 on: 
   workflow_dispatch:
   workflow_call:
