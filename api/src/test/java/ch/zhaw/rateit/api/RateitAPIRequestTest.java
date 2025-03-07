@@ -31,9 +31,4 @@ public class RateitAPIRequestTest extends AbstractBaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Hello World")));
     }
-
-    @Test
-    void failTest() {
-        fail();
-    }
 }

@@ -26,7 +26,7 @@ dependencies {
 	testImplementation "org.testcontainers:testcontainers:1.20.6"
 	testImplementation "org.testcontainers:junit-jupiter:1.20.6"
 	testImplementation "org.testcontainers:mongodb:1.20.6"
-	
+
 }
 
 tasks.named('test') {
