@@ -4,6 +4,10 @@ on:
   workflow_call:
 
 jobs:
+  java-test:
+    uses: ./.github/workflows/java-test.yml
+    with:
+      projectRoot: api
   build-and-push-image:
     uses: ./.github/workflows/docker-image-build-push.yml
     permissions:
