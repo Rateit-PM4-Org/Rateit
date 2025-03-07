@@ -1,0 +1,64 @@
+name: Docker Image Build/Push
+on:
+  workflow_call:
+    inputs:
+      imageName:
+        required: true
+        type: string
+      imageTag:
+        required: true
+        type: string
+        default: latest
+      dockerFilePath:
+        required: true
+        type: string
+      buildPath:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      imageName:
+        required: true
+        type: string
+      imageTag:
+        required: true
+        type: string
+        default: latest
+      dockerFilePath:
+        required: true
+        type: string
+      buildPath:
+        required: true
+        type: string
+env:
+  REGISTRY: ghcr.io
+  ORG_NAME: rateit-pm4-org
+jobs:
+  build-and-push-image:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+     
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: ${{ inputs.buildPath }}
+          file: ${{ inputs.dockerFilePath }}
+          push: true
+          tags: ${{ env.REGISTRY}}/${{ env.ORG_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}        
+
