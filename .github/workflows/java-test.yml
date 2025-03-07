@@ -23,6 +23,9 @@ jobs:
           java-version: '21'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: chmod Gradlew
+        run: chmod +x gradlew
+        working-directory: ${{ inputs.projectRoot }}
       - name: Test with Gradle
         run: ./gradlew test --no-daemon
         working-directory: ${{ inputs.projectRoot }}
