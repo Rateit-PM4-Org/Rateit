@@ -1,0 +1,10 @@
+name: CI for API
+on: 
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  java-test:
+    uses: ./.github/workflows/module-java-test.yml
+    with:
+      projectRoot: api

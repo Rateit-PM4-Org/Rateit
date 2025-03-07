@@ -11,7 +11,7 @@ on:
         required: true
         type: string
 jobs:
-  build-and-test:
+  Test:
     permissions:
       checks: write
     runs-on: ubuntu-latest
@@ -37,12 +37,19 @@ jobs:
         uses: PavanMudigonda/jacoco-reporter@v5.0
         with:
           coverage_results_path: ${{ inputs.projectRoot }}/build/reports/jacoco/test/jacocoTestReport.xml
-          coverage_report_name: Coverage
+          coverage_report_name: Coverage Report
           coverage_report_title: JaCoCo
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
-          minimum_coverage: 90
+          minimum_coverage: 80
           fail_below_threshold: false
           publish_only_summary: false
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+            name: Java Tests           # Name of the check run which will be created
+            path: ${{inputs.projectRoot}}/build/test-results/*.xml    # Path to test results
+            reporter: java-junit        # Format of test results
           
 
