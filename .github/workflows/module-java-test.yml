@@ -42,7 +42,7 @@ jobs:
       - name: JaCoCo Code Coverage Report
         id: jacoco_reporter
         if: success() || failure()
-        uses: PavanMudigonda/jacoco-reporter@v5.0
+        uses: PavanMudigonda/jacoco-reporter@v5.1
         with:
           coverage_results_path: ${{ inputs.projectRoot }}/build/reports/jacoco/test/jacocoTestReport.xml
           coverage_report_name: ${{ inputs.projectName}} Java Coverage Report
