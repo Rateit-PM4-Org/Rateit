@@ -11,7 +11,8 @@ on:
         required: true
         type: string
 jobs:
-  Test:
+  test:
+    name: Test Runner
     permissions:
       checks: write
     runs-on: ubuntu-latest
@@ -48,7 +49,7 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
         with:
-            name: Java Tests           # Name of the check run which will be created
+            name: Java Test Results           # Name of the check run which will be created
             path: ${{inputs.projectRoot}}/build/test-results/*.xml    # Path to test results
             reporter: java-junit        # Format of test results
           

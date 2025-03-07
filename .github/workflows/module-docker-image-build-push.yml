@@ -35,6 +35,7 @@ env:
   ORG_NAME: rateit-pm4-org
 jobs:
   build-and-push-image:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
