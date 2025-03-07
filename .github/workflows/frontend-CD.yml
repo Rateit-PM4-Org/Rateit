@@ -1,15 +1,11 @@
-name: CI for API
+name: CD for Frontend
 on: 
   workflow_dispatch:
   workflow_call:
   push:
-    branches:
-      - main
-      - stage
-  pull_request:
-    branches:
-      - main
-      - stage
+      branches:
+        - main
+        - stage
 
 jobs:
   pre_job:
@@ -23,14 +19,19 @@ jobs:
         with:
           # All of these options are optional, so you can remove them if you are happy with the defaults
           concurrent_skipping: 'never'
-          paths: '["api/**"]'
-  api-test:
+          paths: '["frontend/**"]'
+  build-and-push-image:
     needs: pre_job
-    name: API Test
+    name: Build and Push Docker Image Frontend
     if: needs.pre_job.outputs.should_skip != 'true'
+    uses: ./.github/workflows/module-docker-image-build-push.yml
     permissions:
-      checks: write
-    uses: ./.github/workflows/module-java-test.yml
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     with:
-      projectRoot: api
-      projectName: API
+      imageName: rateit-frontend
+      imageTag: ${{ github.ref_name== 'refs/heads/main' && 'latest' || 'stage' }}
+      dockerFilePath: frontend/Dockerfile
+      buildPath: frontend
