@@ -12,14 +12,36 @@ updates:
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: "daily"
+    groups:  
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
     # Look for a `Dockerfile` in the `root` directory
-    directory: "/api/docker/Dockerfile"
+    directory: "/api/docker"
     # Check for updates once a week
     schedule:
       interval: "daily"
+    groups:  
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    # Look for a `Dockerfile` in the `root` directory
+    directory: "/frontend"
+    # Check for updates once a week
+    schedule:
+      interval: "daily"
+    groups:  
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -28,6 +50,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    groups:  
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
 
   # Enable version updates for Gradle
   - package-ecosystem: "gradle"
@@ -36,3 +63,8 @@ updates:
     # Check the Gradle registry for updates every day (weekdays)
     schedule:
       interval: "daily"
+    groups:  
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
