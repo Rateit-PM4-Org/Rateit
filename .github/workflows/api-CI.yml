@@ -13,6 +13,8 @@ on:
 
 jobs:
   java-test:
+    permissions:
+      checks: write
     uses: ./.github/workflows/module-java-test.yml
     with:
       projectRoot: api
