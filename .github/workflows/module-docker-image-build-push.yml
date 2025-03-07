@@ -1,4 +1,4 @@
-name: Docker Image Build/Push for GHCR.io
+name: Docker Image Build/Push
 on:
   workflow_call:
     inputs:
