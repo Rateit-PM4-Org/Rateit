@@ -21,10 +21,11 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '21'
+      - name: Chmod Gradlew
+        run: chmod +x gradlew
+        working-directory: ${{ inputs.projectRoot }}
       - name: Build with Gradle
-        run: | 
-            chmod +x gradlew
-            ./gradlew build --no-daemon
+        run: ./gradlew build --no-daemon
         working-directory: ${{ inputs.projectRoot }}
       - name: Test with Gradle
         run: ./gradlew test --no-daemon
