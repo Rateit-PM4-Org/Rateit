@@ -6,6 +6,8 @@ on:
       branches:
         - main
         - stage
+      paths:
+        - api/**
 
 jobs:
   build-and-push-image:
