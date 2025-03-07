@@ -1,0 +1,23 @@
+name: CD for API
+on: 
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  java-test:
+    uses: ./.github/workflows/java-test.yml
+    with:
+      projectRoot: api
+  build-and-push-image:
+    uses: ./.github/workflows/docker-image-build-push.yml
+    needs: java-test
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    with:
+      imageName: rateit-api
+      imageTag: latest
+      dockerFilePath: api/docker/Dockerfile
+      buildPath: api
