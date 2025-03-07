@@ -8,22 +8,8 @@ on:
         - stage
 
 jobs:
-  pre_job:
-    name: Skip Check
-    runs-on: ubuntu-latest
-    outputs:
-      should_skip: ${{ steps.skip_check.outputs.should_skip }}
-    steps:
-      - id: skip_check
-        uses: fkirc/skip-duplicate-actions@v5
-        with:
-          # All of these options are optional, so you can remove them if you are happy with the defaults
-          concurrent_skipping: 'never'
-          paths: '["frontend/**"]'
   build-and-push-image:
-    needs: pre_job
     name: Build and Push Docker Image Frontend
-    if: needs.pre_job.outputs.should_skip != 'true'
     uses: ./.github/workflows/module-docker-image-build-push.yml
     permissions:
       contents: read
