@@ -13,9 +13,7 @@ on:
 jobs:
   build-and-test:
     permissions:
-      contents: read
-      packages: write
-      id-token: write
+      checks: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
