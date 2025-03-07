@@ -19,14 +19,12 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: '21'
-      - name: Chmod Gradlew
-        run: chmod +x gradlew
-        working-directory: ${{ inputs.projectRoot }}
-      - name: Build with Gradle
-        run: ./gradlew build --no-daemon
-        working-directory: ${{ inputs.projectRoot }}
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.0.12
       - name: Test with Gradle
         run: ./gradlew test --no-daemon
         working-directory: ${{ inputs.projectRoot }}
