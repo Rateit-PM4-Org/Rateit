@@ -5,9 +5,15 @@ on:
       projectRoot:
         required: true
         type: string
+      projectName:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       projectRoot:
+        required: true
+        type: string
+      projectName:
         required: true
         type: string
 jobs:
@@ -35,21 +41,22 @@ jobs:
       # generates coverage-report.md and publishes as checkrun
       - name: JaCoCo Code Coverage Report
         id: jacoco_reporter
+        if: success() || failure()
         uses: PavanMudigonda/jacoco-reporter@v5.0
         with:
           coverage_results_path: ${{ inputs.projectRoot }}/build/reports/jacoco/test/jacocoTestReport.xml
-          coverage_report_name: Coverage Report
+          coverage_report_name: ${{ inputs.projectName}} Java Coverage Report
           coverage_report_title: JaCoCo
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
-          minimum_coverage: 80
-          fail_below_threshold: false
+          minimum_coverage: 90
+          fail_below_threshold: true
           publish_only_summary: false
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
         with:
-            name: Java Test Results           # Name of the check run which will be created
+            name: ${{ inputs.projectName}} Java Test Results           # Name of the check run which will be created
             path: ${{inputs.projectRoot}}/build/test-results/test/*.xml    # Path to test results
             reporter: java-junit        # Format of test results
           

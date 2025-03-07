@@ -12,7 +12,8 @@ on:
       - stage
 
 jobs:
-  java-test:
+  api-test:
+    name: API Test
     permissions:
       checks: write
     uses: ./.github/workflows/module-java-test.yml
