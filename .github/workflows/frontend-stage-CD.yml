@@ -1,4 +1,4 @@
-name: CD Production for Frontend
+name: CD Stage for Frontend
 on: 
   workflow_dispatch:
   workflow_call:
