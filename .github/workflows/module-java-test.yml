@@ -21,7 +21,7 @@ jobs:
     name: Test Runner
     permissions:
       checks: write
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
