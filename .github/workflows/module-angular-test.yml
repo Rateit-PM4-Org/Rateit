@@ -1,4 +1,4 @@
-name: Java Build and Test
+name: Angular Build and Test
 on:
   workflow_call:
     inputs:
@@ -29,4 +29,6 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
+        with:
+          projectBaseDir: ${{ inputs.projectRoot }}
           
