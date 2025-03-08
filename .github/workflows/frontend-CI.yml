@@ -1,0 +1,34 @@
+name: CI for Frontend
+on: 
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    branches:
+      - main
+      - stage
+
+
+jobs:
+  pre_job:
+    name: Skip Check
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          # All of these options are optional, so you can remove them if you are happy with the defaults
+          concurrent_skipping: 'never'
+          paths: '["frontend/**"]'
+  api-test:
+    needs: pre_job
+    name: Frontend Test
+    if: needs.pre_job.outputs.should_skip != 'true'
+    permissions:
+      checks: write
+    uses: ./.github/workflows/module-angular-test.yml
+    secrets: inherit
+    with:
+      projectRoot: frontend
+      projectName: Frontend

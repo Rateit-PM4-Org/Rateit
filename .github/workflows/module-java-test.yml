@@ -43,7 +43,7 @@ jobs:
         working-directory: ${{ inputs.projectRoot }}
       - name: Test with Gradle
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_API }}
         run: ./gradlew test sonar --info --no-daemon
         working-directory: ${{ inputs.projectRoot }}
       # generates coverage-report.md and publishes as checkrun
