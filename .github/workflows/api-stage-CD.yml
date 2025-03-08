@@ -1,4 +1,4 @@
-name: CD for API
+name: CD Stage for API
 on: 
   workflow_dispatch:
   workflow_call:
