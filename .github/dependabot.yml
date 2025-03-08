@@ -9,6 +9,7 @@ updates:
   - package-ecosystem: "npm"
     # Look for `package.json` and `lock` files in the `root` directory
     directory: "/frontend"
+    target-branch: "stage"
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: "daily"
@@ -22,6 +23,7 @@ updates:
   - package-ecosystem: "docker"
     # Look for a `Dockerfile` in the `root` directory
     directory: "/api/docker"
+    target-branch: "stage"
     # Check for updates once a week
     schedule:
       interval: "daily"
@@ -34,6 +36,7 @@ updates:
   - package-ecosystem: "docker"
     # Look for a `Dockerfile` in the `root` directory
     directory: "/frontend"
+    target-branch: "stage"
     # Check for updates once a week
     schedule:
       interval: "daily"
@@ -48,6 +51,7 @@ updates:
     # Workflow files stored in the default location of `.github/workflows`
     # You don't need to specify `/.github/workflows` for `directory`. You can use `directory: "/"`.
     directory: "/"
+    target-branch: "stage"
     schedule:
       interval: "daily"
     groups:  
@@ -60,6 +64,7 @@ updates:
   - package-ecosystem: "gradle"
     # Look for `build.gradle` and `lock` files in the `root` directory
     directory: "/api"
+    target-branch: "stage"
     # Check the Gradle registry for updates every day (weekdays)
     schedule:
       interval: "daily"

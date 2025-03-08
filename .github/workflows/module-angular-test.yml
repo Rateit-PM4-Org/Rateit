@@ -1,0 +1,34 @@
+name: Angular Build and Test
+on:
+  workflow_call:
+    inputs:
+      projectRoot:
+        required: true
+        type: string
+      projectName:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      projectRoot:
+        required: true
+        type: string
+      projectName:
+        required: true
+        type: string
+jobs:
+  test:
+    name: Test Runner
+    permissions:
+      checks: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
+        with:
+          projectBaseDir: ${{ inputs.projectRoot }}
+          
