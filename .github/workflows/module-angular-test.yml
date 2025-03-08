@@ -25,6 +25,25 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Setup Node.js $
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: ${{ inputs.projectRoot}}/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ${{ inputs.projectRoot }}
+      - name: Run tests
+        run: npm run test:ci
+        working-directory: ${{ inputs.projectRoot }}
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+            name: ${{ inputs.projectName}} Angular Test Results           # Name of the check run which will be created
+            path: ${{inputs.projectRoot}}/coverage/**/*.xml    # Path to test results
+            reporter: java-junit        # Format of test results
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
