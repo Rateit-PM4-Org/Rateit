@@ -3,6 +3,7 @@ package ch.zhaw.rateit.api.test;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class TestController {
         testEntityRepository.save(testEntity);
     }
 
-    @RequestMapping("/test")
+    @RequestMapping(path = "/test", method = RequestMethod.GET)
     public List<TestEntity> getAll() {
         return testEntityRepository.findAll();
     }
