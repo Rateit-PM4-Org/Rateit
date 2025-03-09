@@ -1,0 +1,19 @@
+name: CI Prod for API
+on: 
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  api-test:
+    name: API Test
+    permissions:
+      checks: write
+    uses: ./.github/workflows/module-java-test.yml
+    secrets: inherit
+    with:
+      projectRoot: api
+      projectName: API
