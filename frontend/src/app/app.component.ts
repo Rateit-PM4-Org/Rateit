@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.apiService.getData().pipe(
       catchError(error => {
+        
         console.error('Error fetching data:', error);
         this.errorMessage = 'Failed to fetch data from backend';
         return of([]); // Return an empty array in case of error
