@@ -11,7 +11,8 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma'),
-      require('karma-junit-reporter')
+      require('karma-junit-reporter'),
+      require('karma-sonarqube-unit-reporter')
     ],
     client: {
       jasmine: {
@@ -25,7 +26,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage'),
+      dir: require('path').join(__dirname, './test-results/coverage'),
       subdir: '.',
       reporters: [
         { type: 'html' },
@@ -33,10 +34,16 @@ module.exports = function (config) {
         { type: 'lcovonly' }
       ]
     },
-    reporters: ['progress', 'kjhtml', 'junit'],
+    reporters: ['progress', 'kjhtml', 'junit', 'sonarqubeUnit'],
+    sonarQubeUnitReporter: {
+      sonarQubeVersion: 'LATEST',
+      outputFile: 'test-results/report_sonar.xml',
+      useBrowserName: false,
+    },
     junitReporter: {
-      outputDir: 'coverage',
-      outputFile: 'test-results.xml'
+      outputDir: 'test-results',
+      useBrowserName: false,
+      outputFile: 'junit-test-results.xml'
     },
     browsers: ['Chrome'],
     restartOnFileChange: true
