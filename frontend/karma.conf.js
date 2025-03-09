@@ -12,7 +12,7 @@ module.exports = function (config) {
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma'),
       require('karma-junit-reporter'),
-      require('karma-sonarqube-unit-reporter')
+      require('karma-sonarqube-reporter')
     ],
     client: {
       jasmine: {
@@ -34,11 +34,12 @@ module.exports = function (config) {
         { type: 'lcovonly' }
       ]
     },
-    reporters: ['progress', 'kjhtml', 'junit', 'sonarqubeUnit'],
-    sonarQubeUnitReporter: {
-      sonarQubeVersion: 'LATEST',
-      outputFile: 'test-results/report_sonar.xml',
-      useBrowserName: false,
+    reporters: ['progress', 'kjhtml', 'junit', 'sonarqube'],
+    sonarqubeReporter: {
+      basePath: 'src', 
+      filePattern: '**/*spec.ts',
+      outputFolder: 'test-results',
+      reportName: 'report-sonar.xml'
     },
     junitReporter: {
       outputDir: 'test-results',
