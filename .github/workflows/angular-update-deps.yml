@@ -6,6 +6,9 @@ on: # when the action should run. Can also be a CRON or in response to external 
 
 jobs:
   ngxUptodate:
+    permissions:
+      contents: write
+      pull-requests: write
     name: Update Angular Dependencies
     runs-on: ubuntu-latest
     steps:
