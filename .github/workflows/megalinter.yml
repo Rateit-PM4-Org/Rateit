@@ -1,8 +1,11 @@
 name: MegaLinter
 
 on:
-    workflow_dispatch:
-    workflow_call:
+    push:
+      branches: [main, stage] # Comment this line to trigger action only on pull-requests (not recommended if you don't pay for GH Actions)
+    pull_request:
+      branches: [main, stage]
+    workflow_dispatch:  
 
 env: # Comment env block if you don't want to apply fixes
   # Apply linter fixes configuration
