@@ -9,8 +9,8 @@ nameSuffix: -production
 
 labels:
   - pairs: 
-    - key: env
-      value: production
+      app: rateit
+      env: production
     includeSelectors: true  
     includeTemplates: true
 

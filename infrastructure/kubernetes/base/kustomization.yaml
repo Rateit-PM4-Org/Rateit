@@ -14,9 +14,7 @@ resources:
 
 labels:
   - pairs: 
-    - key: app
-      value: rateit
-    - key: env
-      value: base
+      app: rateit
+      env: base
     includeSelectors: true  
     includeTemplates: true

@@ -9,8 +9,8 @@ nameSuffix: -staging
 
 labels:
   - pairs: 
-    - key: env
-      value: base
+      app: rateit
+      env: production
     includeSelectors: true  
     includeTemplates: true
 
