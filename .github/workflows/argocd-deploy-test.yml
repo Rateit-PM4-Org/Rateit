@@ -78,6 +78,7 @@ jobs:
   deploy:
     name: Deploy Application to ArgoCD Test
     needs: [build-frontend, build-backend]
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
