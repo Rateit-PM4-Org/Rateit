@@ -13,7 +13,10 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Allow all endpoints
-                        .allowedOrigins("http://localhost:4200") // Allow Angular frontend
+                        .allowedOrigins(
+                            "http://localhost:4200",
+                            "http://frontend-rateit.pm4.init-lab.ch/"
+                        ) // Allow Angular frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow these HTTP methods
                         .allowedHeaders("*"); // Allow all headers
             }

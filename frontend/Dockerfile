@@ -13,7 +13,7 @@ FROM nginx:latest
 
 WORKDIR /usr/share/nginx/html
 
-COPY --from=build /app/dist/browser ./
+COPY --from=build /app/dist/browser/** .
 
 EXPOSE 80
 
