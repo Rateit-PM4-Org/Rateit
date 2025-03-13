@@ -102,7 +102,7 @@ jobs:
             --dest-namespace ${{env.DEST_NAMESPACE}} 
             --dest-server ${{env.DEST_SERVER}} 
             --project ${{env.ARGOCD_PROJECT}} 
-            --kustomize- 
+            --revision ${{github.event.pull_request.head.ref}} 
             --kustomize-image ghcr.io/rateit-pm4-org/rateit-api=ghcr.io/rateit-pm4-org/rateit-api:pr-${{ github.event.pull_request.number }}  
             --kustomize-common-label env=pr-${{github.event.pull_request.number}} --kustomize-force-common-label 
             --sync-policy auto --auto-prune --self-heal
