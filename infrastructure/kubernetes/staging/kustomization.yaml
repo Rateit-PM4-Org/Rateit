@@ -11,14 +11,6 @@ commonLabels:
   app: rateit
   env: staging
 
-configMapGenerator:
-  - name: rateit-env
-    behavior: replace
-    files:
-      - ./env/application.properties
-    literals:
-      - mongo-uri=db-service-staging
-
 images:
   - name: ghcr.io/rateit-pm4-org/rateit-api
     newName: ghcr.io/rateit-pm4-org/rateit-api
@@ -30,3 +22,11 @@ patches:
       labelSelector: 
         component=api
     path: api-ingress-patch.yaml
+  - target:
+      kind: ConfigMap
+      labelSelector: 
+        app=rateit
+    patch: |-
+      - op: replace
+        path: /data/mongo-uri
+        value: db-service-staging

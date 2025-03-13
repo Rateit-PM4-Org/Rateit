@@ -9,20 +9,9 @@ metadata:
 resources:
 - api.yaml
 - db.yaml
+- configMap.yaml
+- secrets.yaml
 
 commonLabels:
   app: rateit
   env: base
-
-configMapGenerator:
-  - name: rateit-env
-    files:
-      - ./env/application.properties
-    literals:
-      - mongo-uri=db-service
-
-secretGenerator:
-  - name: rateit-secret
-    literals:
-      - mongo-user=my-username
-      - mongo-password=my-password

@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bamc-rateit-pull-request-85
+spec:
+  project: bamc-rateit
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    path: infrastructure/kubernetes/base
+    repoURL: 'https://github.com/Rateit-PM4-Org/Rateit'
+    targetRevision: feature-argocd-pullrequest
+    kustomize:
+      nameSuffix: -pr-85
+      patches:
+        - target:
+            kind: Ingress
+            labelSelector: 
+              component=api
+          patch: |-
+            - op: replace
+              path: /spec/rules/0/host
+              value: pr85-api-rateit.pm4.init-lab.ch      
+        - target:
+            kind: ConfigMap
+            labelSelector:
+              app=rateit
+          patch: |-
+            - op: replace
+              path: /data/mongo-uri
+              value: db-service-pr-85                      
+      images:
+        - ghcr.io/rateit-pm4-org/rateit-api=ghcr.io/rateit-pm4-org/rateit-api:pr-85
+      commonLabels:
+        env: pr-85
+      forceCommonLabels: true  
+  destination:
+    namespace: bamc-rateit-testing
+    server: 'https://kubernetes.default.svc'
