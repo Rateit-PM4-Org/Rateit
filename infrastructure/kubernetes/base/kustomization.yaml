@@ -9,7 +9,7 @@ metadata:
 resources:
 - api.yaml
 - db.yaml
-- configMap.yaml
+- configmap.yaml
 - secrets.yaml
 
 labels:

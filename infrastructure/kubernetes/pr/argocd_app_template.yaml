@@ -33,9 +33,8 @@ spec:
               value: db-service-pr-85                      
       images:
         - ghcr.io/rateit-pm4-org/rateit-api=ghcr.io/rateit-pm4-org/rateit-api:pr-85
-      commonLabels:
+      labels:
         env: pr-85
-      forceCommonLabels: true  
   destination:
     namespace: bamc-rateit-testing
     server: 'https://kubernetes.default.svc'
