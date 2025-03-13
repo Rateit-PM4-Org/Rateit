@@ -1,92 +1,112 @@
 name: Deploy Application to ArgoCD Test
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - closed
     branches:
       - main
       - stage
 
 env:
-    ARGOCD_SERVER: argocd.pm4.init-lab.ch
-    ARGOCD_REPO_URL: https://github.com/Rateit-PM4-Org/Rateit
-    ARGOCD_PATH: infrastructure/kubernetes/base
-    DEST_NAMESPACE: bamc-rateit-testing
-    DEST_SERVER: https://kubernetes.default.svc
-    ARGOCD_PROJECT: bamc-rateit
+  ARGOCD_SERVER: argocd.pm4.init-lab.ch
+  ARGOCD_REPO_URL: https://github.com/Rateit-PM4-Org/Rateit
+  ARGOCD_PATH: infrastructure/kubernetes/base
+  DEST_NAMESPACE: bamc-rateit-testing
+  DEST_SERVER: https://kubernetes.default.svc
+  ARGOCD_PROJECT: bamc-rateit
 
 jobs:
-    pre_job_frontend:
-        name: Skip Check
-        runs-on: ubuntu-latest
-        outputs:
-          should_skip: ${{ steps.skip_check.outputs.should_skip }}
-        steps:
-          - id: skip_check
-            uses: fkirc/skip-duplicate-actions@v5
-            with:
-              # All of these options are optional, so you can remove them if you are happy with the defaults
-              concurrent_skipping: 'never'
-              paths: '["frontend/**"]'
-    build-frontend:
-        needs: pre_job_frontend
-        name: Build and Push Docker Image Frontend
-        uses: ./.github/workflows/module-docker-image-build-push.yml
-        if: needs.pre_job_frontend.outputs.should_skip != 'true'
-        permissions:
-            contents: read
-            packages: write
-            attestations: write
-            id-token: write
+  pre_job_frontend:
+    if: github.event.action == 'opened' || github.event.action == 'synchronize'
+    name: Skip Check
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
         with:
-            imageName: rateit-frontend
-            imageTag: pr-${{ github.event.pull_request.number }}
-            dockerFilePath: frontend/Dockerfile
-            buildPath: frontend
-    pre_job_backend:
-                name: Skip Check
-                runs-on: ubuntu-latest
-                outputs:
-                  should_skip: ${{ steps.skip_check.outputs.should_skip }}
-                steps:
-                  - id: skip_check
-                    uses: fkirc/skip-duplicate-actions@v5
-                    with:
-                      # All of these options are optional, so you can remove them if you are happy with the defaults
-                      concurrent_skipping: 'never'
-                      paths: '["api/**"]'
-    build-backend:    
-                needs: pre_job_backend
-                if: needs.pre_job_backend.outputs.should_skip != 'true'
-                name: Build and Push Docker Image Frontend
-                uses: ./.github/workflows/module-docker-image-build-push.yml
-                permissions:
-                    contents: read
-                    packages: write
-                    attestations: write
-                    id-token: write
-                with:
-                    imageName: rateit-api
-                    imageTag: pr-${{ github.event.pull_request.number }}
-                    dockerFilePath: api/docker/Dockerfile
-                    buildPath: api
+          # All of these options are optional, so you can remove them if you are happy with the defaults
+          concurrent_skipping: "never"
+          paths: '["frontend/**"]'
+  build-frontend:
+    needs: pre_job_frontend
+    name: Build and Push Docker Image Frontend
+    uses: ./.github/workflows/module-docker-image-build-push.yml
+    if: needs.pre_job_frontend.outputs.should_skip != 'true' && (github.event.action == 'opened' || github.event.action == 'synchronize')
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    with:
+      imageName: rateit-frontend
+      imageTag: pr-${{ github.event.pull_request.number }}
+      dockerFilePath: frontend/Dockerfile
+      buildPath: frontend
+  pre_job_backend:
+    if: github.event.action == 'opened' || github.event.action == 'synchronize'
+    name: Skip Check
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          # All of these options are optional, so you can remove them if you are happy with the defaults
+          concurrent_skipping: "never"
+          paths: '["api/**"]'
+  build-backend:
+    needs: pre_job_backend
+    if: needs.pre_job_backend.outputs.should_skip != 'true' && (github.event.action == 'opened' || github.event.action == 'synchronize')
+    name: Build and Push Docker Image Frontend
+    uses: ./.github/workflows/module-docker-image-build-push.yml
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    with:
+      imageName: rateit-api
+      imageTag: pr-${{ github.event.pull_request.number }}
+      dockerFilePath: api/docker/Dockerfile
+      buildPath: api
 
-    deploy:
-      name: Deploy Application to ArgoCD Test
-      needs: [build-frontend, build-backend]
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-        - name: Login to ArgoCD
-          uses: clowdhaus/argo-cd-action/@main
-          env:
-            # Only required for first step in job where API is called
-            # All subsequent setps in a job will not re-download the CLI
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            command: login ${{ env.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USER }} --password ${{ secrets.ARGOCD_PASSWORD }} 
-        - name: Deploy Application to ArgoCD
-          uses: clowdhaus/argo-cd-action/@main
-          with: 
-            command: app create pull-request-${{github.event.pull_request.number}} --repo ${{ env.ARGOCD_REPO_URL}} --path ${{ env.ARGOCD_PATH}} --dest-namespace ${{env.DEST_NAMESPACE}} --dest-server ${{env.DEST_SERVER}} --project ${{env.ARGOCD_PROJECT}} --kustomize-image ghcr.io/rateit-pm4-org/rateit-api=ghcr.io/rateit-pm4-org/rateit-api:pr-${{ github.event.pull_request.number }} --sync-policy auto --auto-prune --self-heal
-          
-  
+  deploy:
+    name: Deploy Application to ArgoCD Test
+    needs: [build-frontend, build-backend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Login to ArgoCD
+        uses: clowdhaus/argo-cd-action/@main
+        env:
+          # Only required for first step in job where API is called
+          # All subsequent setps in a job will not re-download the CLI
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          command: login ${{ env.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USER }} --password ${{ secrets.ARGOCD_PASSWORD }}
+      - name: Deploy Application to ArgoCD
+        uses: clowdhaus/argo-cd-action/@main
+        if: github.event.action == 'opened' || github.event.action == 'synchronize'
+        with:
+          command: >-
+            app create ${{env.ARGOCD_PROJECT}}-pull-request-${{github.event.pull_request.number}} 
+            --repo ${{ env.ARGOCD_REPO_URL}} 
+            --path ${{ env.ARGOCD_PATH}} 
+            --dest-namespace ${{env.DEST_NAMESPACE}} 
+            --dest-server ${{env.DEST_SERVER}} 
+            --project ${{env.ARGOCD_PROJECT}} 
+            --kustomize- 
+            --kustomize-image ghcr.io/rateit-pm4-org/rateit-api=ghcr.io/rateit-pm4-org/rateit-api:pr-${{ github.event.pull_request.number }}  
+            --kustomize-common-label env=pr-${{github.event.pull_request.number}} --kustomize-force-common-label 
+            --sync-policy auto --auto-prune --self-heal
+      - name: Delete Application on ArgoCD
+        uses: clowdhaus/argo-cd-action/@main
+        if: github.event.action == 'closed'
+        with:
+          command: app delete pull-request-${{github.event.pull_request.number}} -y
