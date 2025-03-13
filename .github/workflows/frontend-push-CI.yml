@@ -1,4 +1,4 @@
-name: CI for Frontend
+name: CI Production for Frontend
 on: 
   workflow_dispatch:
   workflow_call:
