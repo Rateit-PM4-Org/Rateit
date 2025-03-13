@@ -7,9 +7,12 @@ resources:
 
 nameSuffix: -production
 
-commonLabels:
-  app: rateit
-  env: production
+labels:
+  - pairs: 
+    - key: env
+      value: production
+    includeSelectors: true  
+    includeTemplates: true
 
 images:
   - name: ghcr.io/rateit-pm4-org/rateit-api

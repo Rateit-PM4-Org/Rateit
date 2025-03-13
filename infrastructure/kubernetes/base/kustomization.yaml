@@ -12,6 +12,11 @@ resources:
 - configMap.yaml
 - secrets.yaml
 
-commonLabels:
-  app: rateit
-  env: base
+labels:
+  - pairs: 
+    - key: app
+      value: rateit
+    - key: env
+      value: base
+    includeSelectors: true  
+    includeTemplates: true
