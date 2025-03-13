@@ -1,4 +1,4 @@
-name: CI Prod for API
+name: CI Production for API
 on: 
   workflow_dispatch:
   workflow_call:
