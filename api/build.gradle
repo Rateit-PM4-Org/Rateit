@@ -66,6 +66,7 @@ sonar {
     property "sonar.projectKey", "rateit-pm4-org_rateit_api"
     property "sonar.organization", "rateit-pm4-org"
     property "sonar.host.url", "https://sonarcloud.io"
+	property "sonar.gradle.scanAll", "true"
   }
 }
 
