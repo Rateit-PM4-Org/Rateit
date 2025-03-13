@@ -18,6 +18,8 @@ configMapGenerator:
   - name: rateit-env
     files:
       - ./env/application.properties
+    literals:
+      - mongo-uri=db-service
 
 secretGenerator:
   - name: rateit-secret

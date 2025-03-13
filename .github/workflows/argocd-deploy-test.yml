@@ -1,0 +1,57 @@
+name: Deploy Application to ArgoCD Test
+on:
+  pull_request:
+    branches:
+      - main
+      - stage
+
+env:
+    ARGOCD_SERVER: argocd.pm4.init-lab.ch
+    GITHUB_URL: https://github.com/Rateit-PM4-Org/Rateit
+    PATH: infrastructure/kubernetes/base
+    DEST_NAMESPACE: bamc-rateit-testing
+    DEST_SERVER: https://kubernetes.default.svc
+    ARGOCD_PROJECT: bamc-rateit
+
+jobs:
+    build-frontend:
+        name: Build and Push Docker Image Frontend
+        uses: ./.github/workflows/module-docker-image-build-push.yml
+        permissions:
+            contents: read
+            packages: write
+            attestations: write
+            id-token: write
+        with:
+            imageName: rateit-frontend
+            imageTag: pr-${{ github.event.pull_request.number }}
+            dockerFilePath: frontend/Dockerfile
+            buildPath: frontend
+    build-backend:            
+                name: Build and Push Docker Image Frontend
+                uses: ./.github/workflows/module-docker-image-build-push.yml
+                permissions:
+                    contents: read
+                    packages: write
+                    attestations: write
+                    id-token: write
+                with:
+                    imageName: rateit-api
+                    imageTag: pr-${{ github.event.pull_request.number }}
+                    dockerFilePath: api/docker/Dockerfile
+                    buildPath: api
+
+    deploy:
+      name: Deploy Application to ArgoCD Test
+      needs: [build-frontend, build-backend]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+        - name: Setup ArgoCD CLI 
+          uses: imajeetyadav/argocd-cli@v1  
+        - name: Login to ArgoCD
+          run: argocd login ${{ env.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USER }} --password ${{ secrets.ARGOCD_PASSWORD }} 
+        - name: Deploy Application to ArgoCD
+          run: argocd app create pull-request-${{github.event.pull_request.number}} --repo ${{ env.GITHUB_URL}} --path ${{ env.PATH}} --dest-namespace ${{env.DEST_NAMESPACE}} --dest-server ${{env.DEST_SERVER}} --project ${{env.ARGOCD_PROJECT}} --kustomize-image ghcr.io/rateit-pm4-org/rateit-api=ghcr.io/rateit-pm4-org/rateit-api:pr-${{ github.event.pull_request.number }} --sync-policy auto --auto-prune --self-heal
+  

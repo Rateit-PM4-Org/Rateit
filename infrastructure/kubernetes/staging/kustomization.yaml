@@ -16,13 +16,15 @@ configMapGenerator:
     behavior: replace
     files:
       - ./env/application.properties
+    literals:
+      - mongo-uri=db-service-staging
+
+images:
+  - name: ghcr.io/rateit-pm4-org/rateit-api
+    newName: ghcr.io/rateit-pm4-org/rateit-api
+    newTag: staging
 
 patches:
-  - target:
-      kind: Deployment
-      labelSelector: 
-        component=api
-    path: api-deployment-patch.yaml
   - target:
       kind: Ingress
       labelSelector: 
