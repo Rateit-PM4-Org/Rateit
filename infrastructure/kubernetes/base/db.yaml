@@ -1,24 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db
+  name: db-deployment
   labels:
-    app: rateit
+    component: db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rateit
       component: db
   strategy: {}
   template:
     metadata:
       labels:
-        app: rateit
         component: db
     spec:
       containers:
-      - name: mongo
+      - name: mongo-pod
         image: mongo:8.0.5
         imagePullPolicy: IfNotPresent
         ports:
@@ -48,9 +46,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: db
+  name: db-service
   labels:
-    app: rateit
+    component: db
 spec:
   type: ClusterIP
   ports:
@@ -58,7 +56,6 @@ spec:
     protocol: TCP
     targetPort: 27017
   selector:
-    app: rateit
     component: db
 
 
