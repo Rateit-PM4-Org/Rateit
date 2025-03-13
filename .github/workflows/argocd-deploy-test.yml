@@ -7,16 +7,30 @@ on:
 
 env:
     ARGOCD_SERVER: argocd.pm4.init-lab.ch
-    GITHUB_URL: https://github.com/Rateit-PM4-Org/Rateit
-    PATH: infrastructure/kubernetes/base
+    ARGOCD_REPO_URL: https://github.com/Rateit-PM4-Org/Rateit
+    ARGOCD_PATH: infrastructure/kubernetes/base
     DEST_NAMESPACE: bamc-rateit-testing
     DEST_SERVER: https://kubernetes.default.svc
     ARGOCD_PROJECT: bamc-rateit
 
 jobs:
+    pre_job_frontend:
+        name: Skip Check
+        runs-on: ubuntu-latest
+        outputs:
+          should_skip: ${{ steps.skip_check.outputs.should_skip }}
+        steps:
+          - id: skip_check
+            uses: fkirc/skip-duplicate-actions@v5
+            with:
+              # All of these options are optional, so you can remove them if you are happy with the defaults
+              concurrent_skipping: 'never'
+              paths: '["frontend/**"]'
     build-frontend:
+        needs: pre_job_frontend
         name: Build and Push Docker Image Frontend
         uses: ./.github/workflows/module-docker-image-build-push.yml
+        if: needs.pre_job_frontend.outputs.should_skip != 'true'
         permissions:
             contents: read
             packages: write
@@ -27,7 +41,21 @@ jobs:
             imageTag: pr-${{ github.event.pull_request.number }}
             dockerFilePath: frontend/Dockerfile
             buildPath: frontend
-    build-backend:            
+    pre_job_backend:
+                name: Skip Check
+                runs-on: ubuntu-latest
+                outputs:
+                  should_skip: ${{ steps.skip_check.outputs.should_skip }}
+                steps:
+                  - id: skip_check
+                    uses: fkirc/skip-duplicate-actions@v5
+                    with:
+                      # All of these options are optional, so you can remove them if you are happy with the defaults
+                      concurrent_skipping: 'never'
+                      paths: '["api/**"]'
+    build-backend:    
+                needs: pre_job_backend
+                if: needs.pre_job_backend.outputs.should_skip != 'true'
                 name: Build and Push Docker Image Frontend
                 uses: ./.github/workflows/module-docker-image-build-push.yml
                 permissions:
@@ -59,6 +87,6 @@ jobs:
         - name: Deploy Application to ArgoCD
           uses: clowdhaus/argo-cd-action/@main
           with: 
-            command: app create pull-request-${{github.event.pull_request.number}} --repo ${{ env.GITHUB_URL}} --path ${{ env.PATH}} --dest-namespace ${{env.DEST_NAMESPACE}} --dest-server ${{env.DEST_SERVER}} --project ${{env.ARGOCD_PROJECT}} --kustomize-image ghcr.io/rateit-pm4-org/rateit-api=ghcr.io/rateit-pm4-org/rateit-api:pr-${{ github.event.pull_request.number }} --sync-policy auto --auto-prune --self-heal
+            command: app create pull-request-${{github.event.pull_request.number}} --repo ${{ env.ARGOCD_REPO_URL}} --path ${{ env.ARGOCD_PATH}} --dest-namespace ${{env.DEST_NAMESPACE}} --dest-server ${{env.DEST_SERVER}} --project ${{env.ARGOCD_PROJECT}} --kustomize-image ghcr.io/rateit-pm4-org/rateit-api=ghcr.io/rateit-pm4-org/rateit-api:pr-${{ github.event.pull_request.number }} --sync-policy auto --auto-prune --self-heal
           
   
