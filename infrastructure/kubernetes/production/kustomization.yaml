@@ -28,3 +28,13 @@ patches:
       labelSelector: 
         component=api
     path: api-ingress-patch.yaml
+  - target:
+      kind: Deployment
+      labelSelector: 
+        component=frontend
+    path: frontend-deployment-patch.yaml
+  - target:
+      kind: Ingress
+      labelSelector: 
+        component=frontend
+    path: frontend-ingress-patch.yaml
