@@ -22,7 +22,8 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-actuator'
+	implementation 'org.springframework.boot:spring-boot-actuator-autoconfigure'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation "org.testcontainers:testcontainers:1.20.6"
@@ -45,7 +46,7 @@ tasks.register('bootRunDev') {
 	description = 'Runs the project with the dev profile'
 	dependsOn(bootRun)
 	bootRun {
-		args = ["--spring.profiles.active=dev"]
+		args = ["--spring.profiles.active=dev,default"]
 	}
 }
 

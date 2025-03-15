@@ -19,6 +19,8 @@ configMapGenerator:
     behavior: replace
     files:
       - ./env/application.properties
+    literals:
+      - SPRING_DATA_MONGODB_HOST=db-service-staging
 
 patches:
   - target:

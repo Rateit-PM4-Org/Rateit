@@ -9,6 +9,7 @@ metadata:
 resources:
 - api.yaml
 - db.yaml
+- db_backup.yaml
 - frontend.yaml
 
 labels:
@@ -22,6 +23,8 @@ configMapGenerator:
   - name: rateit-env
     files:
       - ./env/application.properties
+    literals:
+      - SPRING_DATA_MONGODB_HOST=db-service
 
 secretGenerator:
   - name: rateit-secret
