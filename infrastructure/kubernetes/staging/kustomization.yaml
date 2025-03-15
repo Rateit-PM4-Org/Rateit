@@ -20,7 +20,8 @@ configMapGenerator:
     files:
       - ./env/application.properties
     literals:
-      - SPRING_DATA_MONGODB_HOST=db-service-staging
+      - MONGODB_HOST=db-service-staging
+      - FRONTEND_URL=https://stage-frontend-rateit.pm4.init-lab.ch
 
 patches:
   - target:

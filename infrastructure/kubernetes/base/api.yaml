@@ -27,7 +27,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: rateit-env
-              key: SPRING_DATA_MONGODB_HOST
+              key: MONGODB_HOST
+        - name: CORS_ALLOWED-ORIGINS
+          valueFrom:
+            configMapKeyRef:
+              name: rateit-env
+              key: FRONTEND_URL
         volumeMounts:
         - name: api-props
           mountPath: /config

@@ -24,10 +24,5 @@ configMapGenerator:
     files:
       - ./env/application.properties
     literals:
-      - SPRING_DATA_MONGODB_HOST=db-service
-
-secretGenerator:
-  - name: rateit-secret
-    literals:
-      - mongo-user=my-username
-      - mongo-password=my-password
+      - MONGODB_HOST=db-service
+      - FRONTEND_URL=https://frontend-rateit-base.pm4.init-lab.ch

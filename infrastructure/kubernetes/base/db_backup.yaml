@@ -36,7 +36,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: rateit-env
-                  key: SPRING_DATA_MONGODB_HOST
+                  key: MONGODB_HOST
             - name: MONGO_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
