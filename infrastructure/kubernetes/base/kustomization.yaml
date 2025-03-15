@@ -11,9 +11,12 @@ resources:
 - db.yaml
 - frontend.yaml
 
-commonLabels:
-  app: rateit
-  env: base
+labels:
+  - pairs: 
+      app: rateit
+      env: base
+    includeSelectors: true  
+    includeTemplates: true
 
 configMapGenerator:
   - name: rateit-env

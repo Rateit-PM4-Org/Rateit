@@ -7,10 +7,13 @@ resources:
 
 nameSuffix: -production
 
-commonLabels:
-  app: rateit
-  env: production
-
+labels:
+  - pairs: 
+      app: rateit
+      env: production
+    includeSelectors: true  
+    includeTemplates: true
+    
 configMapGenerator:
   - name: rateit-env
     behavior: replace
