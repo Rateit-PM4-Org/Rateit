@@ -16,7 +16,7 @@ spec:
         component: api
     spec:
       containers:
-        - name: api-pod
+        - name: api-container
           image: ghcr.io/rateit-pm4-org/rateit-api:stage
           imagePullPolicy: Always
           ports:
