@@ -1,0 +1,1 @@
+for file in `find /dumps -name '*.dump'`; do mongorestore --drop --host=mongo --username=root --password=test --archive=$file; done

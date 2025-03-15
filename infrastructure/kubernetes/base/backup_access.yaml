@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backup-access-service
+spec:
+  selector:
+    component: backup-access
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backup-access-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: backup-access
+  template:
+    metadata:
+      labels:
+        component: backup-access
+    spec:
+      containers:
+        - name: backup-access-container
+          image: svenstaro/miniserve:latest
+          volumeMounts:
+            - name: backup-storage
+              mountPath: /files
+          ports:
+            - containerPort: 8080    
+          command: ["/app/miniserve"]  
+          args: ["/files", "--auth", "$(MINISERVE_USERNAME):$(MINISERVE_PASSWORD)"]
+          env:
+            - name: MINISERVE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: backup-access
+                  key: MINISERVE_USERNAME
+            - name: MINISERVE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backup-access
+                  key: MINISERVE_PASSWORD
+      volumes:
+        - name: backup-storage
+          persistentVolumeClaim:
+            claimName: backup-pvc
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backup-access-ingress
+  labels:
+    component: backup-access
+spec:
+  rules:
+    - host: backups-rateit-base.pm4.init-lab.ch 
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backup-access-service
+                port:
+                  number: 80
