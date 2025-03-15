@@ -1,15 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: db-deployment
+  name: db-statefulset
   labels:
     component: db
 spec:
+  serviceName: db-service
   replicas: 1
   selector:
     matchLabels:
       component: db
-  strategy: {}
   template:
     metadata:
       labels:
@@ -39,6 +39,14 @@ spec:
       volumes:
       - name: mongo-data
         emptyDir: {}
+  volumeClaimTemplates:
+      - metadata:
+          name: mongo-data
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 1Gi
 
 
 ---
@@ -51,6 +59,7 @@ metadata:
     component: db
 spec:
   type: ClusterIP
+  clusterIP: None
   ports:
   - port: 27017
     protocol: TCP
