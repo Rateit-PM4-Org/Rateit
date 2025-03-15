@@ -16,7 +16,7 @@ spec:
         component: db
     spec:
       containers:
-      - name: mongo-pod
+      - name: mongo-container
         image: mongo:8.0.5
         imagePullPolicy: IfNotPresent
         ports:

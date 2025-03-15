@@ -9,7 +9,9 @@ metadata:
 resources:
 - api.yaml
 - db.yaml
-- db_backup.yaml
+- backup_pvc.yaml
+- backup_db_job.yaml
+- backup_access.yaml
 - frontend.yaml
 
 labels:

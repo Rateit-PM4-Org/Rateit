@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: cinder-csi
+  resources:
+    requests:
+      storage: 10Gi

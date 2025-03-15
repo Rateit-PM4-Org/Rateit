@@ -21,3 +21,12 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: test
       ME_CONFIG_MONGODB_URL: mongodb://root:test@mongo:27017/
       ME_CONFIG_BASICAUTH: false
+
+# Kann ausgeführt werden, um Dumps aus dem dumps-Ordner in die MongoDB zu importieren
+  mongo-import-dump:
+    image: mongo:8.0.5
+    restart: "no"
+    volumes:
+      - ./dumps:/dumps
+      - ./loadDumps.sh:/loadDumps.sh
+    command: ["sh", "-c", "/loadDumps.sh"]
