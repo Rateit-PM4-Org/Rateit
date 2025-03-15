@@ -42,3 +42,8 @@ patches:
       labelSelector: 
         component=frontend
     path: frontend-ingress-patch.yaml
+  - target:
+      kind: Ingress
+      labelSelector: 
+        component=backup-access
+    path: backup-ingress-patch.yaml
