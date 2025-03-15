@@ -28,7 +28,7 @@ spec:
             - -c
             - |
               # Perform backup
-              mongodump --host=$MONGO_HOST --port=27017 --username=$MONGO_ROOT_USERNAME --password=$MONGO_ROOT_PASSWORD --out=/backup/$(date +\%Y-\%m-\%dT\%H-\%M-\%S)
+              mongodump --host=$MONGO_HOST --port=27017 --username=$MONGO_USERNAME --password=$MONGO_PASSWORD --out=/backup/$(date +\%Y-\%m-\%dT\%H-\%M-\%S)
               # Remove backups older than 7 days
               find /backup -type d -mtime +7 -exec rm -rf {} +
             env:
@@ -37,12 +37,12 @@ spec:
                 configMapKeyRef:
                   name: rateit-env
                   key: MONGODB_HOST
-            - name: MONGO_ROOT_USERNAME
+            - name: MONGO_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: rateit-secret
                   key: mongo-user
-            - name: MONGO_ROOT_PASSWORD
+            - name: MONGO_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: rateit-secret
