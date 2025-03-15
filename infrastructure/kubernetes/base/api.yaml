@@ -16,26 +16,45 @@ spec:
         component: api
     spec:
       containers:
-      - name: api-pod
-        image: ghcr.io/rateit-pm4-org/rateit-api:stage
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        resources: {}
-        volumeMounts:
-        - name: api-props
-          mountPath: /config
+        - name: api-pod
+          image: ghcr.io/rateit-pm4-org/rateit-api:stage
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources: {}
+          env:
+            - name: SPRING_DATA_MONGODB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: rateit-env
+                  key: MONGODB_HOST
+            - name: CORS_ALLOWED-ORIGINS
+              valueFrom:
+                configMapKeyRef:
+                  name: rateit-env
+                  key: FRONTEND_URL
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rateit-secret
+                  key: mongo-user
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rateit-secret
+                  key: mongo-password
+          volumeMounts:
+            - name: api-props
+              mountPath: /config
       volumes:
-      - name: api-props
-        configMap:
-          name: rateit-env
-          items:
-          - key: application.properties
-            path: application.properties
-
+        - name: api-props
+          configMap:
+            name: rateit-env
+            items:
+              - key: application.properties
+                path: application.properties
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -45,15 +64,14 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 8080
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
   selector:
     app: rateit
     component: api
 
 ---
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -62,15 +80,13 @@ metadata:
     component: api
 spec:
   rules:
-  - host: api-rateit-base.pm4.init-lab.ch
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: api-service
-            port:
-              number: 80
-
-
+    - host: api-rateit-base.pm4.init-lab.ch
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 80
