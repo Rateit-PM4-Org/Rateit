@@ -16,9 +16,7 @@ labels:
 
 configMapGenerator:
   - name: rateit-env
-    behavior: replace
-    files:
-      - ./env/application.properties
+    behavior: merge
     literals:
       - MONGODB_HOST=db-service-staging
       - FRONTEND_URL=https://stage-frontend-rateit.pm4.init-lab.ch
