@@ -1,24 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: frontend-deployment
   labels:
-    app: rateit
+    component: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rateit
       component: frontend
   strategy: {}
   template:
     metadata:
       labels:
-        app: rateit
         component: frontend
     spec:
       containers:
-      - name: frontend
+      - name: frontend-pod
         image: ghcr.io/rateit-pm4-org/rateit-frontend:stage
         imagePullPolicy: Always
         ports:
@@ -31,9 +29,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: frontend-service
   labels:
-    app: rateit
+    component: frontend
 spec:
   type: ClusterIP
   ports:
@@ -41,7 +39,6 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: rateit
     component: frontend
 
 ---
@@ -51,17 +48,17 @@ kind: Ingress
 metadata:
   name: frontend-ingress
   labels:
-    app: rateit
+    component: frontend
 spec:
   rules:
-  - host: frontend-rateit.pm4.init-lab.ch
+  - host: frontend-rateit-base.pm4.init-lab.ch
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: frontend
+            name: frontend-service
             port:
               number: 80
 

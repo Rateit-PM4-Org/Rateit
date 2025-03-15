@@ -7,9 +7,12 @@ resources:
 
 nameSuffix: -staging
 
-commonLabels:
-  app: rateit
-  env: staging
+labels:
+  - pairs: 
+      app: rateit
+      env: staging
+    includeSelectors: true  
+    includeTemplates: true
 
 configMapGenerator:
   - name: rateit-env
@@ -28,3 +31,13 @@ patches:
       labelSelector: 
         component=api
     path: api-ingress-patch.yaml
+  - target:
+      kind: Deployment
+      labelSelector: 
+        component=frontend
+    path: frontend-deployment-patch.yaml
+  - target:
+      kind: Ingress
+      labelSelector: 
+        component=frontend
+    path: frontend-ingress-patch.yaml
