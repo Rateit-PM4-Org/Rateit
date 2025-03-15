@@ -9,6 +9,7 @@ metadata:
 resources:
 - api.yaml
 - db.yaml
+- frontend.yaml
 
 commonLabels:
   app: rateit
