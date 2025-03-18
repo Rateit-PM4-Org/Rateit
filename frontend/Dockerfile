@@ -15,6 +15,14 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=build /app/dist/browser/** .
 
+# Copy the entire /env folder into the container
+COPY env /env/
+
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Run entrypoint script at container startup
+CMD ["/entrypoint.sh"]
