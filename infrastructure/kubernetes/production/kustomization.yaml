@@ -18,6 +18,7 @@ configMapGenerator:
   - name: rateit-env
     behavior: merge
     literals:
+      - API_URL=https://api-rateit.pm4.init-lab.ch
       - MONGODB_HOST=db-service-production
       - FRONTEND_URL=https://rateit.pm4.init-lab.ch
 
