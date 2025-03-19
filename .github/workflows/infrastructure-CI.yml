@@ -1,0 +1,27 @@
+name: CI for Infrastructure
+on: 
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    branches:
+      - main
+      - stage
+  push:
+    branches:
+      - main
+      - stage    
+
+
+jobs:
+  sonar-scan:
+    name: SonarQube Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_INFRASTRUCTURE }}
+        with:
+          projectBaseDir: infrastructure
