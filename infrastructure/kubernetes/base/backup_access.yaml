@@ -39,7 +39,7 @@ spec:
             limits:
               memory: 1024Mi
               cpu: 500m
-              storage: 5Gi
+              ephemeral-storage: 5Gi
           env:
             - name: MINISERVE_USERNAME
               valueFrom:
