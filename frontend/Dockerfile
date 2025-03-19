@@ -5,7 +5,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-COPY . .
+COPY ./public ./public
+COPY ./src ./src
+COPY ./angular.json ./
+COPY ./tsconfig.json ./
+COPY ./tsconfig.app.json ./
+COPY ./tsconfig.spec.json ./
 
 RUN npm run build -- --output-path=dist/browser
 
@@ -15,6 +20,8 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=build /app/dist/browser/** .
 
-EXPOSE 80
+# Copy entrypoint script
+COPY entrypoint.sh /docker-entrypoint.d/entrypoint.sh
+RUN chmod +x /docker-entrypoint.d/entrypoint.sh
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80

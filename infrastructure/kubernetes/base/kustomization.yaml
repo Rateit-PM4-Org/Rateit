@@ -26,5 +26,6 @@ configMapGenerator:
     files:
       - ./env/application.properties
     literals:
+      - API_URL=https://api-rateit-base.pm4.init-lab.ch
       - MONGODB_HOST=db-service
       - FRONTEND_URL=https://frontend-rateit-base.pm4.init-lab.ch
