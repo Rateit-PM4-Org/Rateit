@@ -24,6 +24,7 @@ spec:
       labels:
         component: backup-access
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: backup-access-container
           image: svenstaro/miniserve:latest
@@ -34,6 +35,11 @@ spec:
             - containerPort: 8080    
           command: ["/app/miniserve"]  
           args: ["/files", "--auth", "$(MINISERVE_USERNAME):$(MINISERVE_PASSWORD)"]
+          resources: 
+            limits:
+              memory: 1024Mi
+              cpu: 500m
+              storage: 5Gi
           env:
             - name: MINISERVE_USERNAME
               valueFrom:

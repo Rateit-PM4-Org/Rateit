@@ -33,7 +33,10 @@ spec:
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
-          resources: {}
+          resources: 
+            limits:
+              memory: 1024Mi
+              cpu: 500m
           env:
             - name: SPRING_DATA_MONGODB_HOST
               valueFrom:
@@ -58,6 +61,7 @@ spec:
           volumeMounts:
             - name: api-props
               mountPath: /config
+      automountServiceAccountToken: false
       volumes:
         - name: api-props
           configMap:

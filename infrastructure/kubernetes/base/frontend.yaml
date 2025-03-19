@@ -15,23 +15,25 @@ spec:
       labels:
         component: frontend
     spec:
+      automountServiceAccountToken: false
       containers:
-      - name: frontend-pod
-        image: ghcr.io/rateit-pm4-org/rateit-frontend:stage
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        env:
-        - name: API_URL
-          valueFrom:
-            configMapKeyRef:
-              name: rateit-env
-              key: API_URL
-        resources: {}
-
+        - name: frontend-pod
+          image: ghcr.io/rateit-pm4-org/rateit-frontend:stage
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: 1024Mi
+              cpu: 500m
+          env:
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rateit-env
+                  key: API_URL
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,14 +43,13 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 80
+    - port: 80
+      protocol: TCP
+      targetPort: 80
   selector:
     component: frontend
 
 ---
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -57,15 +58,13 @@ metadata:
     component: frontend
 spec:
   rules:
-  - host: frontend-rateit-base.pm4.init-lab.ch
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80
-
-
+    - host: frontend-rateit-base.pm4.init-lab.ch
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
