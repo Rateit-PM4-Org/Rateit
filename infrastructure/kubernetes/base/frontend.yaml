@@ -21,6 +21,12 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        env:
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rateit-env
+              key: API_URL
         resources: {}
 
 
