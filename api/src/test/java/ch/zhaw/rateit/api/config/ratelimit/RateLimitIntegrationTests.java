@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @TestPropertySource(locations = {"classpath:config/ratelimit/test-ratelimit.properties"})
-public class RateLimitIntegrationTests extends AbstractBaseIntegrationTest {
+class RateLimitIntegrationTests extends AbstractBaseIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
