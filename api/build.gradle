@@ -1,3 +1,4 @@
+import org.springframework.boot.gradle.tasks.run.BootRun
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.3'
@@ -24,7 +25,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-actuator-autoconfigure'
+
+	// Rate limiting
 	implementation 'com.bucket4j:bucket4j-core:8.10.1'
+
+	// Cacheing
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
 
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -32,6 +39,7 @@ dependencies {
 	testImplementation "org.testcontainers:testcontainers:1.20.6"
 	testImplementation "org.testcontainers:junit-jupiter:1.20.6"
 	testImplementation "org.testcontainers:mongodb:1.20.6"
+	testImplementation 'org.mockito:mockito-junit-jupiter:4.2.0'
 
 }
 
@@ -42,15 +50,6 @@ tasks.named('test') {
 	}
 	ignoreFailures = true
 	finalizedBy jacocoTestReport
-}
-
-tasks.register('bootRunDev') {
-	group = 'application'
-	description = 'Runs the project with the dev profile'
-	dependsOn(bootRun)
-	bootRun {
-		args = ["--spring.profiles.active=dev,default"]
-	}
 }
 
 jacoco {
