@@ -1,4 +1,4 @@
-package ch.zhaw.rateit.api.test;
+package ch.zhaw.rateit.api.logic.test;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
