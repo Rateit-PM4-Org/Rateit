@@ -2,15 +2,11 @@ package ch.zhaw.rateit.api.config.ratelimit;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import io.github.bucket4j.*;
-import jakarta.annotation.PostConstruct;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Service for rate limiting.

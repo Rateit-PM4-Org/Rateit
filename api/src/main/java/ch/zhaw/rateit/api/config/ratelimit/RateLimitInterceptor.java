@@ -1,6 +1,5 @@
 package ch.zhaw.rateit.api.config.ratelimit;
 
-import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
