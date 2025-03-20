@@ -27,7 +27,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: backup-access-container
-          image: svenstaro/miniserve:latest
+          image: svenstaro/miniserve:0.29.0
           volumeMounts:
             - name: backup-storage
               mountPath: /files
@@ -40,6 +40,10 @@ spec:
               memory: 1024Mi
               cpu: 500m
               ephemeral-storage: 5Gi
+            requests:
+              memory: 512Mi
+              cpu: 250m
+              ephemeral-storage: 2Gi  
           env:
             - name: MINISERVE_USERNAME
               valueFrom:
