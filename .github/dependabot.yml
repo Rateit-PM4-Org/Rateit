@@ -46,6 +46,48 @@ updates:
       development-dependencies:
         dependency-type: "development"
 
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    # Look for a `Dockerfile` in the `root` directory
+    directory: "/infrastructure/kubernetes/base"
+    target-branch: "stage"
+    # Check for updates once a week
+    schedule:
+      interval: "daily"
+    groups:  
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    # Look for a `Dockerfile` in the `root` directory
+    directory: "/infrastructure/kubernetes/staging"
+    target-branch: "stage"
+    # Check for updates once a week
+    schedule:
+      interval: "daily"
+    groups:  
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    # Look for a `Dockerfile` in the `root` directory
+    directory: "/infrastructure/kubernetes/base"
+    target-branch: "production"
+    # Check for updates once a week
+    schedule:
+      interval: "daily"
+    groups:  
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     # Workflow files stored in the default location of `.github/workflows`
