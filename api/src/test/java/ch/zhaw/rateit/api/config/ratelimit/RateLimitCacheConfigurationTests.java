@@ -5,7 +5,6 @@ import io.github.bucket4j.Bucket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -13,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RateLimitCacheConfigurationTest {
+class RateLimitCacheConfigurationTests {
 
     @InjectMocks
     private RateLimitCacheConfiguration rateLimitCacheConfiguration;
