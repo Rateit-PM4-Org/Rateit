@@ -65,6 +65,7 @@ jacocoTestReport {
 	}
 }
 
+
 sonar {
   properties {
     property "sonar.projectKey", "rateit-pm4-org_rateit_api"
