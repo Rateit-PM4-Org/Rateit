@@ -40,9 +40,18 @@ jobs:
         needs:  [build-and-push-image-frontend, build-and-push-image-api]
         name: Update Deployment Image Tag
         runs-on: ubuntu-latest
+        permissions:
+          contents: write
         steps:
+          - uses: actions/create-github-app-token@v1
+            id: app-token
+            with:
+              app-id: ${{ vars.RATEIT_BOT_APPID }}
+              private-key: ${{ secrets.RATEIT_BOT_SECRET }}
           - name: Checkout repository
             uses: actions/checkout@v4
+            with:
+              token: ${{ steps.app-token.outputs.token }}
           - name: Update Deployment Image Tags in FIles
             run: |
               echo "Updating Deployment Image Tags"
@@ -54,3 +63,4 @@ jobs:
             uses: EndBug/add-and-commit@v9.1.4
             with:
               message: "Update Deployment Image Tags"
+              default_author: github_actions
