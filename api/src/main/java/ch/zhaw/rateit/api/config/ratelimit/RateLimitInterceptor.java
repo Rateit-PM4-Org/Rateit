@@ -45,11 +45,11 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(!rateLimitProperties.isEnabled()){
-            logger.debug("RateLimitInterceptor is disabled");
+            logger.trace("RateLimitInterceptor is disabled");
             return true;
         }
         if(request.getRequestURI().equals("/error")) {
-            logger.debug("Request to error endpoint. Skipping rate limiting.");
+            logger.trace("Request to error endpoint. Skipping rate limiting.");
             return true;
         }
 
@@ -62,11 +62,11 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 
         ConsumptionProbe probe = rateLimitService.tryConsume(ipAddress, request.getRequestURI());
         if (probe.isConsumed()) {
-            logger.debug("Request allowed. Remaining tokens: {}", probe.getRemainingTokens());
+            logger.trace("Request allowed. Remaining tokens: {}", probe.getRemainingTokens());
             response.addHeader("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
             return true;
         } else {
-            logger.debug("Request denied. Wait for refill: {} seconds", probe.getNanosToWaitForRefill() / 1_000_000_000);
+            logger.trace("Request denied. Wait for refill: {} seconds", probe.getNanosToWaitForRefill() / 1_000_000_000);
             long waitForRefill = probe.getNanosToWaitForRefill() / 1_000_000_000;
             response.addHeader("X-Rate-Limit-Retry-After-Seconds", String.valueOf(waitForRefill));
             response.sendError(HttpStatus.TOO_MANY_REQUESTS.value(),

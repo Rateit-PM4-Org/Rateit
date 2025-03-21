@@ -40,7 +40,7 @@ public class RateLimitCacheConfiguration {
 
     @PostConstruct
     public void init() {
-        logger.debug("Rate limit cache configuration: Maximum size: {} - Expire after write: {} minutes", maximumSize, expireAfterWrite);
+        logger.info("Rate limit cache configuration: Maximum size: {} - Expire after write: {} minutes", maximumSize, expireAfterWrite);
     }
 
     /**
