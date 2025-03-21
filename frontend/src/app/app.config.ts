@@ -6,7 +6,7 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(IonicModule.forRoot()), // ✅ HIER passiert die globale Bereitstellung
+    importProvidersFrom(IonicModule.forRoot()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes)
   ]

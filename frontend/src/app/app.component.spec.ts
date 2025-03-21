@@ -9,8 +9,8 @@ describe('AppComponent (Ionic)', () => {
     await TestBed.configureTestingModule({
       imports: [
         AppComponent,
-        IonicModule.forRoot(), // 🔹 Ionic Komponenten registrieren
-        NoopAnimationsModule   // 🔹 Verhindert Animationsprobleme bei Tests
+        IonicModule.forRoot(),
+        NoopAnimationsModule
       ],
       providers: [provideHttpClient()]
     }).compileComponents();
