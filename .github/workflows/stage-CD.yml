@@ -43,14 +43,16 @@ jobs:
         steps:
           - name: Checkout repository
             uses: actions/checkout@v4
-          - name: Update Deployment Image Tag
+          - name: Update Deployment Image Tags in FIles
             run: |
-              echo "Updating Deployment Image Tag"
+              echo "Updating Deployment Image Tags"
               sed -i "s|rateit-frontend.*|rateit-frontend@${{needs.build-and-push-image-frontend.outputs.imageDigest}}|g" infrastructure/kubernetes/staging/frontend-deployment-patch.yaml
               sed -i "s|rateit-frontend.*|rateit-frontend@${{needs.build-and-push-image-frontend.outputs.imageDigest}}|g" infrastructure/kubernetes/production/frontend-deployment-patch.yaml
               sed -i "s|rateit-api.*|rateit-api@${{needs.build-and-push-image-api.outputs.imageDigest}}|g" infrastructure/kubernetes/staging/api-deployment-patch.yaml
               sed -i "s|rateit-api.*|rateit-api@${{needs.build-and-push-image-api.outputs.imageDigest}}|g" infrastructure/kubernetes/production/api-deployment-patch.yaml
-              git add infrastructure/kubernetes/staging/frontend-deployment-patch.yaml
-              git commit -m "Update Deployment Image Tag"
-              git push
+          - name: Commit and Push Changes
+            uses: EndBug/add-and-commit@v9.1.4
+            with:
+              message: "Update Deployment Image Tags"
+              add: "infrastructure/kubernetes/staging/frontend-deployment-patch.yaml, infrastructure/kubernetes/production/frontend-deployment-patch.yaml, infrastructure/kubernetes/staging/api-deployment-patch.yaml, infrastructure/kubernetes/production/api-deployment-patch.yaml"
           
