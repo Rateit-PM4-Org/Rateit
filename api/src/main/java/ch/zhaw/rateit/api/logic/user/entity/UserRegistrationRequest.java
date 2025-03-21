@@ -5,6 +5,12 @@ public class UserRegistrationRequest {
     private String displayName;
     private String cleanPassword;
 
+    public UserRegistrationRequest(String email, String displayName, String cleanPassword) {
+        this.email = email;
+        this.displayName = displayName;
+        this.cleanPassword = cleanPassword;
+    }
+
     public String getEmail() {
         return email;
     }
