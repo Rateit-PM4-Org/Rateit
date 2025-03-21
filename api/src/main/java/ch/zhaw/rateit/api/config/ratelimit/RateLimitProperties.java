@@ -29,7 +29,7 @@ public class RateLimitProperties {
      */
     private List<RateLimit> rateLimits;
 
-    private final static Logger logger = LoggerFactory.getLogger(RateLimitProperties.class);
+    private static final Logger logger = LoggerFactory.getLogger(RateLimitProperties.class);
 
     /**
      * Logs the rate limiting configuration.

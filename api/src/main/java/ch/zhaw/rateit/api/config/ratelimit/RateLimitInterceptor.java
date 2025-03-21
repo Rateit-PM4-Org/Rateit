@@ -19,7 +19,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Configuration
 @ConditionalOnProperty(value = "rate.limiting.enabled", havingValue = "true")
 public class RateLimitInterceptor implements HandlerInterceptor {
-    private final Logger logger = LoggerFactory.getLogger(RateLimitInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(RateLimitInterceptor.class);
     private RateLimitService rateLimitService;
 
     private RateLimitProperties rateLimitProperties;

@@ -36,7 +36,7 @@ public class RateLimitCacheConfiguration {
     @Value("${rate.limiting.cache.expire-after-write}")
     private long expireAfterWrite;
 
-    private final static Logger logger = LoggerFactory.getLogger(RateLimitCacheConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(RateLimitCacheConfiguration.class);
 
     @PostConstruct
     public void init() {

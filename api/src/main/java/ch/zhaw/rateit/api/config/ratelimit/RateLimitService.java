@@ -44,7 +44,7 @@ public class RateLimitService {
 
         Bucket bucket = resolveBucket(ip, rateLimit);
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
-        logger.trace("Consumed RateLimit for [{}]", ip+":"+path);
+        logger.trace("Consumed RateLimit for [{}:{}]", ip, path);
         logger.trace("Consumed: {} - Remaining: {} - Wait Time: {}", probe.isConsumed(), probe.getRemainingTokens(), probe.getNanosToWaitForRefill());
         return probe;
 

@@ -1,7 +1,6 @@
 package ch.zhaw.rateit.api.config;
 
 import ch.zhaw.rateit.api.config.ratelimit.RateLimitInterceptor;
-import ch.zhaw.rateit.api.config.ratelimit.RateLimitProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
