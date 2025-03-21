@@ -4,7 +4,7 @@ metadata:
   name: backup-db-cronjob
 spec:
   schedule: "*/30 * * * *" # Runs backup every 30 minutes
-  concurentPolicy: Replace
+  concurrencyPolicy: Replace
   jobTemplate:
     spec:
       template:
