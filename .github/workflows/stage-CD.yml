@@ -54,5 +54,3 @@ jobs:
             uses: EndBug/add-and-commit@v9.1.4
             with:
               message: "Update Deployment Image Tags"
-              add: "infrastructure/kubernetes/staging/frontend-deployment-patch.yaml, infrastructure/kubernetes/production/frontend-deployment-patch.yaml, infrastructure/kubernetes/staging/api-deployment-patch.yaml, infrastructure/kubernetes/production/api-deployment-patch.yaml"
-          
