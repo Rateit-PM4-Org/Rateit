@@ -14,9 +14,20 @@ Rateit is designed to help you rate and organize your favorite products. Whether
 - 📊 View analytics on your ratings
 - 🌐 Sync across multiple devices
 
+## Installation & Setup
+
+Rateit is a web application—no installation is required. You can access it directly in your browser.
+
+## Usage
+
+1. Open [Rateit](https://rateit.pm4.init-lab.ch) in your browser
+2. Create your first rating
+3. Organize your rated items into categories
+4. Explore analytics on your preferences
+
 ## Developer infrastructure setup
 
-You can find a detailed guide on how to install Rateit in the [Wiki](https://github.com/Rateit-PM4-Org/Rateit/wiki/Infrastruktur#lokale-entwicklungsumgebung-aufbauen).
+Developers can follow the guide in the [Wiki](https://github.com/Rateit-PM4-Org/Rateit/wiki/Infrastruktur#lokale-entwicklungsumgebung-aufbauen) to set up the local development environment.
 
 ## Contributing
 
