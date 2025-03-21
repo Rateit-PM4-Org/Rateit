@@ -3,6 +3,8 @@ package ch.zhaw.rateit.api.config.ratelimit;
 import io.github.bucket4j.ConsumptionProbe;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Configuration
 @ConditionalOnProperty(value = "rate.limiting.enabled", havingValue = "true")
 public class RateLimitInterceptor implements HandlerInterceptor {
+    private final Logger logger = LoggerFactory.getLogger(RateLimitInterceptor.class);
     private RateLimitService rateLimitService;
 
     private RateLimitProperties rateLimitProperties;
@@ -42,9 +45,11 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(!rateLimitProperties.isEnabled()){
+            logger.debug("RateLimitInterceptor is disabled");
             return true;
         }
         if(request.getRequestURI().equals("/error")) {
+            logger.debug("Request to error endpoint. Skipping rate limiting.");
             return true;
         }
 
@@ -53,11 +58,15 @@ public class RateLimitInterceptor implements HandlerInterceptor {
             ipAddress = request.getRemoteAddr();
         }
 
+        logger.trace("IP Address: {}", ipAddress);
+
         ConsumptionProbe probe = rateLimitService.tryConsume(ipAddress, request.getRequestURI());
         if (probe.isConsumed()) {
+            logger.debug("Request allowed. Remaining tokens: {}", probe.getRemainingTokens());
             response.addHeader("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
             return true;
         } else {
+            logger.debug("Request denied. Wait for refill: {} seconds", probe.getNanosToWaitForRefill() / 1_000_000_000);
             long waitForRefill = probe.getNanosToWaitForRefill() / 1_000_000_000;
             response.addHeader("X-Rate-Limit-Retry-After-Seconds", String.valueOf(waitForRefill));
             response.sendError(HttpStatus.TOO_MANY_REQUESTS.value(),

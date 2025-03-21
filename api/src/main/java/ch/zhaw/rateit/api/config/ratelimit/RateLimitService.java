@@ -3,6 +3,8 @@ package ch.zhaw.rateit.api.config.ratelimit;
 import com.github.benmanes.caffeine.cache.Cache;
 import io.github.bucket4j.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.time.Duration;
 @Service
 @ConditionalOnProperty(value = "rate.limiting.enabled", havingValue = "true")
 public class RateLimitService {
+    private static final Logger logger = LoggerFactory.getLogger(RateLimitService.class);
 
     // TODO should be distributed via db
     private final Cache<String, Bucket> ipCache;
@@ -40,7 +43,10 @@ public class RateLimitService {
         RateLimitProperties.RateLimit rateLimit = rateLimitProperties.getRateLimit(path);
 
         Bucket bucket = resolveBucket(ip, rateLimit);
-        return bucket.tryConsumeAndReturnRemaining(1);
+        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+        logger.trace("Consumed RateLimit for [{}]", ip+":"+path);
+        logger.trace("Consumed: {} - Remaining: {} - Wait Time: {}", probe.isConsumed(), probe.getRemainingTokens(), probe.getNanosToWaitForRefill());
+        return probe;
 
     }
 

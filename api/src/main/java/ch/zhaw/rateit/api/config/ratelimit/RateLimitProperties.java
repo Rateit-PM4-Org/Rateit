@@ -1,5 +1,8 @@
 package ch.zhaw.rateit.api.config.ratelimit;
 
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -25,6 +28,17 @@ public class RateLimitProperties {
      * List of rate limits.
      */
     private List<RateLimit> rateLimits;
+
+    private final static Logger logger = LoggerFactory.getLogger(RateLimitProperties.class);
+
+    /**
+     * Logs the rate limiting configuration.
+     */
+    @PostConstruct
+    public void init() {
+        logger.info("Rate limiting enabled: {}", enabled);
+        rateLimits.forEach(rateLimit -> logger.info("Rate limit path: {} - Limit: {} - Duration: {} seconds", rateLimit.getPath(), rateLimit.getLimit(), rateLimit.getDuration()));
+    }
 
     public boolean isEnabled() {
         return enabled;

@@ -3,6 +3,9 @@ package ch.zhaw.rateit.api.config.ratelimit;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.github.bucket4j.Bucket;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +35,13 @@ public class RateLimitCacheConfiguration {
      */
     @Value("${rate.limiting.cache.expire-after-write}")
     private long expireAfterWrite;
+
+    private final static Logger logger = LoggerFactory.getLogger(RateLimitCacheConfiguration.class);
+
+    @PostConstruct
+    public void init() {
+        logger.debug("Rate limit cache configuration: Maximum size: {} - Expire after write: {} minutes", maximumSize, expireAfterWrite);
+    }
 
     /**
      * Creates the rate limit cache.
