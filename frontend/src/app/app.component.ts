@@ -1,16 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from './shared/services/api.service';
 import { CommonModule } from '@angular/common';
-import { catchError } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonItem, IonLabel, IonList, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { of } from 'rxjs';
-import { IonicModule } from '@ionic/angular';
+import { catchError } from 'rxjs/operators';
+import { ApiService } from './shared/services/api.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonSpinner
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -19,12 +30,12 @@ export class AppComponent implements OnInit {
   data: any[] = [];
   errorMessage: string = '';
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   ngOnInit() {
     this.apiService.getData().pipe(
       catchError(error => {
-        
+
         console.error('Error fetching data:', error);
         this.errorMessage = 'Failed to fetch data from backend';
         return of([]); // Return an empty array in case of error
