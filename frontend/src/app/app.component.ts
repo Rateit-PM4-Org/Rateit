@@ -3,11 +3,15 @@ import { ApiService } from './shared/services/api.service';
 import { CommonModule } from '@angular/common';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    IonicModule
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
