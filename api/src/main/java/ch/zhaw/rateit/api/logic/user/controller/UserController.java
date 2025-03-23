@@ -1,6 +1,6 @@
-package ch.zhaw.rateit.api.logic.user.Controller;
+package ch.zhaw.rateit.api.logic.user.controller;
 
-import ch.zhaw.rateit.api.logic.user.UserService;
+import ch.zhaw.rateit.api.logic.user.service.UserService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;

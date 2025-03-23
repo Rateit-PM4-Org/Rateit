@@ -1,5 +1,6 @@
-package ch.zhaw.rateit.api.logic.user;
+package ch.zhaw.rateit.api.logic.user.service;
 
+import ch.zhaw.rateit.api.logic.user.PasswordEncrypter;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
