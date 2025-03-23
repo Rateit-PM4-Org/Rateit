@@ -29,7 +29,7 @@ public class RateitAPIUserTest extends AbstractBaseIntegrationTest {
 
     @BeforeEach
     void cleanDatabase() {
-        userRepository.deleteAll(); // Clears all data before each test
+        userRepository.deleteAll();
     }
     @Test
     void endpointRegisterPositive() throws Exception {
