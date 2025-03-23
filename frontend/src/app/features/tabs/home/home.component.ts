@@ -6,12 +6,12 @@ import { ApiService } from '../../../shared/services/api.service';
 
 @Component({
   selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
   standalone: true,
   imports: [
     CommonModule, ...IonicStandaloneComponents
   ],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
 
