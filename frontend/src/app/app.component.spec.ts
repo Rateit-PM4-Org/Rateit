@@ -1,11 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import {provideHttpClient} from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
+import { IonicModule } from '@ionic/angular';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('AppComponent', () => {
+describe('AppComponent (Ionic)', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [
+        AppComponent,
+        IonicModule.forRoot(),
+        NoopAnimationsModule
+      ],
       providers: [provideHttpClient()]
     }).compileComponents();
   });
@@ -16,12 +22,18 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', () => {
+  it('should render "Local Greetings" in ion-title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Local Greetings');
+    const title = compiled.querySelector('ion-title');
+    expect(title?.textContent).toContain('Local Greetings');
   });
 
-  
+  it('should show loading message if no data and no error', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Loading data...');
+  });
 });
