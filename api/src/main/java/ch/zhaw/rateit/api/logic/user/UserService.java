@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncrypter passwordEncrypter;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncrypter passwordEncrypter) {
         this.userRepository = userRepository;
+        this.passwordEncrypter = passwordEncrypter;
     }
 
     public User register(UserRegistrationRequest userRegistrationRequest) {
@@ -29,6 +31,7 @@ public class UserService {
 
     private String hashCleanPassword(String password) {
         //ToDo implement
-        return password;
+        String hashedPassword = passwordEncrypter.getPasswordEncoder().encode(password);
+        return hashedPassword;
     }
 }
