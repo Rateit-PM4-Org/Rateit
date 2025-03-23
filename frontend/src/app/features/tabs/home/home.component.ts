@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { catchError, of } from 'rxjs';
-import { IonicStandaloneComponents } from '../../../shared/ionic-imports';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { ApiService } from '../../../shared/services/api.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { ApiService } from '../../../shared/services/api.service';
   styleUrls: ['./home.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ...IonicStandaloneComponents
+    CommonModule, ...IonicStandaloneStandardImports
   ],
 })
 export class HomeComponent implements OnInit {

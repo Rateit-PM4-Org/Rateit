@@ -23,4 +23,12 @@ describe('ProfileComponent', () => {
     expect(app).toBeTruthy();
   });
 
+  it('should render "Profile" in ion-title', () => {
+    const fixture = TestBed.createComponent(ProfileComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const title = compiled.querySelector('ion-title');
+    expect(title?.textContent).toContain('Profile');
+  });
+
 });

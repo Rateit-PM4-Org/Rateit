@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicStandaloneComponents } from '../../../shared/ionic-imports';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 
 @Component({
   selector: 'app-tab-menu',
@@ -8,13 +8,13 @@ import { IonicStandaloneComponents } from '../../../shared/ionic-imports';
   styleUrls: ['./tab-menu.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ...IonicStandaloneComponents
+    CommonModule, ...IonicStandaloneStandardImports
   ]
 })
-export class TabMenuComponent  implements OnInit {
+export class TabMenuComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
 }

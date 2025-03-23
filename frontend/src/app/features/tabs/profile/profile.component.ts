@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicStandaloneComponents } from '../../../shared/ionic-imports';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 
 @Component({
   selector: 'app-profile',
@@ -8,13 +8,13 @@ import { IonicStandaloneComponents } from '../../../shared/ionic-imports';
   styleUrls: ['./profile.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ...IonicStandaloneComponents
+    CommonModule, ...IonicStandaloneStandardImports
   ],
 })
-export class ProfileComponent  implements OnInit {
+export class ProfileComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
 }

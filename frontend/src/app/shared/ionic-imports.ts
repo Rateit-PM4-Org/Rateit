@@ -19,7 +19,7 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 
-export const IonicStandaloneComponents = [
+export const IonicStandaloneStandardImports = [
   IonCard,
   IonCardHeader,
   IonCardTitle,
