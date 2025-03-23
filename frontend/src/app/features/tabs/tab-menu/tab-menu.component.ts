@@ -11,10 +11,8 @@ import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
     CommonModule, ...IonicStandaloneStandardImports
   ]
 })
-export class TabMenuComponent implements OnInit {
+export class TabMenuComponent {
 
   constructor() { }
-
-  ngOnInit() { }
 
 }
