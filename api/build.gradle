@@ -1,7 +1,7 @@
 import org.springframework.boot.gradle.tasks.run.BootRun
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.3'
+	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'jacoco'
 	id "org.sonarqube" version "6.0.1.5171"
@@ -39,7 +39,7 @@ dependencies {
 	testImplementation "org.testcontainers:testcontainers:1.20.6"
 	testImplementation "org.testcontainers:junit-jupiter:1.20.6"
 	testImplementation "org.testcontainers:mongodb:1.20.6"
-	testImplementation 'org.mockito:mockito-junit-jupiter:4.2.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.16.1'
 
 }
 
