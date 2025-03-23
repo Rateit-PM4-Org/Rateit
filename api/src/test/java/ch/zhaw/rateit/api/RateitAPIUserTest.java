@@ -34,7 +34,27 @@ public class RateitAPIUserTest extends AbstractBaseIntegrationTest {
     @Test
     void endpointRegisterPositive() throws Exception {
         String email = "test@example.com";
-        String displayName = "TestUser1";
+        String displayName = "TestUser";
+
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                            "email": "%s",
+                            "displayName": "%s",
+                            "cleanPassword": "mostSecurePassword"
+                        }
+                        """.formatted(email, displayName)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value(email))
+                .andExpect(jsonPath("$.displayName").value(displayName));
+    }
+
+    @Test
+    void endpointRegisterPositiveDisplaynameAlreadyExists() throws Exception {
+        String displayName = "TestUser";
+        String email1 = "test1@example.com";
+        String email2 = "test2@example.com";
 
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -44,9 +64,22 @@ public class RateitAPIUserTest extends AbstractBaseIntegrationTest {
                             "displayName": "%s",
                             "cleanPassword": "mostSecurePassword1"
                         }
-                        """.formatted(email, displayName)))
+                        """.formatted(email1, displayName)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(email))
+                .andExpect(jsonPath("$.email").value(email1))
+                .andExpect(jsonPath("$.displayName").value(displayName));
+
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                            "email": "%s",
+                            "displayName": "%s",
+                            "cleanPassword": "mostSecurePassword2"
+                        }
+                        """.formatted(email2, displayName)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value(email2))
                 .andExpect(jsonPath("$.displayName").value(displayName));
     }
 
