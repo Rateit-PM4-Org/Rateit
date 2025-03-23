@@ -1,7 +1,7 @@
 package ch.zhaw.rateit.api.logic;
 
 
-public interface EmailService {
+public interface MailService {
     /**
      * Sends an email to the given recipient.
      *
