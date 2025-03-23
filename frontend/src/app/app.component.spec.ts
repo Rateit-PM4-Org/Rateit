@@ -34,4 +34,14 @@ describe('AppComponent (Standalone)', () => {
   it('should create the app', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should contain an ion-app element', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('ion-app')).toBeTruthy();
+  });
+
+  it('should contain an ion-router-outlet', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('ion-router-outlet')).toBeTruthy();
+  });
 });
