@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
  * @author Nicolas Zillig
  */
 @Service
-public class UserService {
+public class UserRegistrationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncrypter;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncrypter) {
+    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncrypter) {
         this.userRepository = userRepository;
         this.passwordEncrypter = passwordEncrypter;
     }

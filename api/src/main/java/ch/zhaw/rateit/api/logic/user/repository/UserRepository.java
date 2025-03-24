@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 /**
- * Interface defining methods needed for the user class.
+ * Repository for users.
  *
  * @author Nicolas Zillig
  */

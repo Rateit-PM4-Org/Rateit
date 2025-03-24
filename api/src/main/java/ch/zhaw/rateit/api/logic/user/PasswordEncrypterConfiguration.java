@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
- * Class to handle password encoder globally.
+ * Class to configure password encoder globally.
  *
  * @author Nicolas Zillig
  */
