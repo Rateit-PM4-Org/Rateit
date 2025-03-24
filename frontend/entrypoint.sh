@@ -7,9 +7,9 @@ if [ -z "$API_URL" ]; then
 fi
 
 # Replace placeholders in compiled Angular files
-for file in /usr/share/nginx/html/main*.js; do
+for file in /usr/share/nginx/html/*.js; do
     sed -i "s#API_URL#$API_URL#" $file
-    echo "Replaced API_URL in $file with: $API_URL"
+    echo "Replaced API_URL in $file with (if present): $API_URL"
 done
 
 echo "Environment variables injected successfully."
