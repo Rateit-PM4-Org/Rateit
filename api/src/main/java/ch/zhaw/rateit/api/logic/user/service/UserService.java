@@ -1,9 +1,9 @@
 package ch.zhaw.rateit.api.logic.user.service;
 
-import ch.zhaw.rateit.api.logic.user.PasswordEncrypter;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncrypter passwordEncrypter;
+    private final PasswordEncoder passwordEncrypter;
 
-    public UserService(UserRepository userRepository, PasswordEncrypter passwordEncrypter) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncrypter) {
         this.userRepository = userRepository;
         this.passwordEncrypter = passwordEncrypter;
     }
@@ -36,8 +36,6 @@ public class UserService {
     }
 
     private String hashCleanPassword(String password) {
-        //ToDo implement
-        String hashedPassword = passwordEncrypter.getPasswordEncoder().encode(password);
-        return hashedPassword;
+        return passwordEncrypter.encode(password);
     }
 }
