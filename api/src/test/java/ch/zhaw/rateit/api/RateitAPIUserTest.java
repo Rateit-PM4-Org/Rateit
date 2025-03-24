@@ -1,6 +1,6 @@
 package ch.zhaw.rateit.api;
 
-import ch.zhaw.rateit.api.exceptions.types.UserRegistrationException;
+import ch.zhaw.rateit.api.exceptions.types.DuplicateEmailUserException;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
@@ -102,7 +102,7 @@ public class RateitAPIUserTest extends AbstractBaseIntegrationTest {
                 .andReturn().getResolvedException();;
 
         assertNotNull(resolvedException);
-        assertInstanceOf(UserRegistrationException.class, resolvedException);
+        assertInstanceOf(DuplicateEmailUserException.class, resolvedException);
         assertTrue(resolvedException.getMessage().contains("User with email " + email + " already exists"));
     }
 }

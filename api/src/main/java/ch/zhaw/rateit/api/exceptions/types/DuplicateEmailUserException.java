@@ -5,8 +5,8 @@ package ch.zhaw.rateit.api.exceptions.types;
  *
  * @author Nicolas Zillig
  */
-public class UserRegistrationException extends RuntimeException {
-    public UserRegistrationException(String message) {
+public class DuplicateEmailUserException extends RuntimeException {
+    public DuplicateEmailUserException(String message) {
         super(message);
     }
 }

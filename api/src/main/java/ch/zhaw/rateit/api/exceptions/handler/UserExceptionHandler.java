@@ -1,6 +1,6 @@
 package ch.zhaw.rateit.api.exceptions.handler;
 
-import ch.zhaw.rateit.api.exceptions.types.UserRegistrationException;
+import ch.zhaw.rateit.api.exceptions.types.DuplicateEmailUserException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,8 +15,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class UserExceptionHandler {
 
-    @ExceptionHandler(UserRegistrationException.class)
-    public ResponseEntity<Map<String, String>> handleUserRegistration(UserRegistrationException ex) {
+    @ExceptionHandler(DuplicateEmailUserException.class)
+    public ResponseEntity<Map<String, String>> handleUserRegistration(DuplicateEmailUserException ex) {
         return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
     }
 }
