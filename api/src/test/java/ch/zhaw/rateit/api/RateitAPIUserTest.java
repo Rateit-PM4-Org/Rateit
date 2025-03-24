@@ -1,5 +1,7 @@
 package ch.zhaw.rateit.api;
 
+import ch.zhaw.rateit.api.exceptions.types.UserRegistrationException;
+import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
 import ch.zhaw.rateit.api.util.AbstractBaseIntegrationTest;
@@ -11,8 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -86,32 +87,22 @@ public class RateitAPIUserTest extends AbstractBaseIntegrationTest {
     @Test
     void endpointRegisterNegativeEmailAlreadyExisting() throws Exception {
         String email = "test@example.com";
+        User user = new User(email, "TestUser1", "mostSecurePassword1");
+        userRepository.save(user);
 
-        mockMvc.perform(post("/register")
+        Exception resolvedException = mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                         {
                             "email": "%s",
-                            "displayName": "TestUser1",
-                            "cleanPassword": "mostSecurePassword1"
+                            "displayName": "TestUser2",
+                            "cleanPassword": "mostSecurePassword2"
                         }
                         """.formatted(email)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(email));
+                .andReturn().getResolvedException();;
 
-        Exception exception = assertThrows(Exception.class, () -> {
-            mockMvc.perform(post("/register")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("""
-                            {
-                                "email": "%s",
-                                "displayName": "TestUser2",
-                                "cleanPassword": "mostSecurePassword2"
-                            }
-                            """.formatted(email)))
-                    .andExpect(status().isBadRequest());
-        });
-
-        assertTrue(exception.getMessage().contains("User with email " + email + " already exists"));
+        assertNotNull(resolvedException);
+        assertInstanceOf(UserRegistrationException.class, resolvedException);
+        assertTrue(resolvedException.getMessage().contains("User with email " + email + " already exists"));
     }
 }

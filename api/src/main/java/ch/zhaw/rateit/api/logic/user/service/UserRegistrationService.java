@@ -1,5 +1,6 @@
 package ch.zhaw.rateit.api.logic.user.service;
 
+import ch.zhaw.rateit.api.exceptions.types.UserRegistrationException;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
@@ -31,7 +32,7 @@ public class UserRegistrationService {
 
     private void checkEmailUnique(String email) {
         userRepository.findByEmail(email).ifPresent(user -> {
-            throw new RuntimeException("User with email " + email + " already exists");
+            throw new UserRegistrationException("User with email " + email + " already exists");
         });
     }
 
