@@ -1,0 +1,29 @@
+.image-wrapper {
+    position: relative;
+  }
+
+  .rating-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 1.1rem;
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: var(--ion-color-medium);
+    color: white;
+    --box-shadow: none;
+    --background-hover: var(--ion-color-medium-shade);
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --ripple-color: transparent;
+    z-index: 10;
+  }
+
+  .rating-button ion-icon {
+    margin-left: 4px;
+  }
+
+  .rit-input {
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }

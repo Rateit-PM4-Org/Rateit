@@ -1,0 +1,34 @@
+<ion-content class="ion-padding">
+  <!-- Image Placeholder -->
+  <div class="image-wrapper">
+    <ion-img src="/assets/placeholder-image.svg"></ion-img>
+
+    <ion-badge color="medium" class="rating-badge">
+      4 <ion-icon name="star"></ion-icon>
+    </ion-badge>
+  </div>
+
+  <ion-input label="Name" label-placement="floating" class="rit-input" placeholder="Rit Name...">
+  </ion-input>
+
+  <ion-chip>
+    <ion-icon name="pricetag-outline"></ion-icon>
+    <ion-label>ABC</ion-label>
+  </ion-chip>
+  <ion-chip>
+    <ion-icon name="pricetag-outline"></ion-icon>
+    <ion-label>123</ion-label>
+  </ion-chip>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Details</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-textarea label="Outline textarea" [autoGrow]="true" labelPlacement="floating" fill="outline"
+        placeholder="Enter text">
+      </ion-textarea>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

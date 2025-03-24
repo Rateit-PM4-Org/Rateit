@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { catchError, of } from 'rxjs';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { ApiService } from '../../../shared/services/api.service';
+import { ActionSheetController } from '@ionic/angular/standalone';
+import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +12,7 @@ import { ApiService } from '../../../shared/services/api.service';
   styleUrls: ['./home.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ...IonicStandaloneStandardImports
+    CommonModule, ...IonicStandaloneStandardImports, RitCreateComponent
   ],
 })
 export class HomeComponent implements OnInit {
@@ -18,9 +20,13 @@ export class HomeComponent implements OnInit {
   data: any[] = [];
   errorMessage: string = '';
 
-  constructor(private apiService: ApiService) { }
+  presentingElement!: HTMLElement | null;
+
+  constructor(private apiService: ApiService, private actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
+    this.presentingElement = document.querySelector('.ion-page');
+
     this.apiService.getData().pipe(
       catchError(error => {
 
@@ -39,5 +45,27 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
+  canDismiss = async () => {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Are you sure?',
+      buttons: [
+        {
+          text: 'Yes',
+          role: 'confirm',
+        },
+        {
+          text: 'No',
+          role: 'cancel',
+        },
+      ],
+    });
+
+    actionSheet.present();
+
+    const { role } = await actionSheet.onWillDismiss();
+
+    return role === 'confirm';
+  };
 
 }

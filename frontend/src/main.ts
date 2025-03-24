@@ -6,7 +6,7 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { addIcons } from 'ionicons';
-import { home, personOutline } from 'ionicons/icons';
+import { addOutline, home, personOutline, pricetagOutline } from 'ionicons/icons';
 
 // Call the element loader before the bootstrapModule/bootstrapApplication call
 defineCustomElements(window);
@@ -22,5 +22,7 @@ bootstrapApplication(AppComponent, {
 
 addIcons({
   home,
-  personOutline
+  personOutline,
+  addOutline,
+  pricetagOutline
 });
