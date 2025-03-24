@@ -1,5 +1,10 @@
 package ch.zhaw.rateit.api.logic.user.entity;
 
+/**
+ * Dataclass for users requests.
+ *
+ * @author Nicolas Zillig
+ */
 public class UserRegistrationRequest {
     private String email;
     private String displayName;

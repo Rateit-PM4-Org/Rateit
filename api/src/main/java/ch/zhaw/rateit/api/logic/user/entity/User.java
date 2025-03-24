@@ -3,6 +3,11 @@ package ch.zhaw.rateit.api.logic.user.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * Dataclass for users in database.
+ *
+ * @author Nicolas Zillig
+ */
 @Document
 public class User {
     @Id

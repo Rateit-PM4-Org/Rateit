@@ -6,6 +6,11 @@ import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+/**
+ * Class to handle user creation.
+ *
+ * @author Nicolas Zillig
+ */
 @Service
 public class UserService {
     private final UserRepository userRepository;
