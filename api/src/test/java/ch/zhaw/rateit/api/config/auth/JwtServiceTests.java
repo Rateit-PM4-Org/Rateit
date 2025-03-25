@@ -40,6 +40,21 @@ class JwtServiceTests extends AbstractBaseIntegrationTest {
     }
 
     @Test
+    void testIsTokenInvalid_WrongUser() {
+        UserDetails user = validUser;
+        String token = jwtService.generateToken(user);
+        UserDetails wrongUser = new User("wrong@example.com", "Test User", "password");
+        assertFalse(jwtService.isTokenValid(token, wrongUser));
+    }
+
+    @Test
+    void testIsTokenInvalid_Expired() {
+        UserDetails user = validUser;
+        String token = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiaWF0IjoxNzQyOTM0MjM2LCJleHAiOjE3NDI5MzQyMzd9.h9TWNOvW2r-bjTXE1uEwQhWyQSyGee8GVd0RLTJse6156yt7oarPuB50DES11fIx";
+        assertFalse(jwtService.isTokenValid(token, user));
+    }
+
+    @Test
     void testIsTokenInvalid_Signature() {
         UserDetails user = validUser;
         String token = jwtService.generateToken(user);
