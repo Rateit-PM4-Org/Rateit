@@ -1,4 +1,4 @@
-package ch.zhaw.rateit.api.test;
+package ch.zhaw.rateit.api.logic.test;
 
 import org.springframework.data.annotation.Id;
 
