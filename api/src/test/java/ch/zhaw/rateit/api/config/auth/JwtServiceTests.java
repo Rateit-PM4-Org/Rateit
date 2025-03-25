@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class JwtServiceTests extends AbstractBaseIntegrationTest {
+class JwtServiceTests extends AbstractBaseIntegrationTest {
     @Autowired
     JwtService jwtService;
 
