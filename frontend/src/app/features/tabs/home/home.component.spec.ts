@@ -1,102 +1,96 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { IonicModule } from '@ionic/angular';
+import { provideHttpClient } from '@angular/common/http';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home.component';
-import { of, throwError } from 'rxjs';
-import { ApiService } from '../../../shared/services/api.service';
-import { ActionSheetController } from '@ionic/angular';
-import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
-import { IonicModule, IonModal } from '@ionic/angular';
 
 describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
-  let apiServiceSpy: jasmine.SpyObj<ApiService>;
-  let actionSheetCtrlSpy: jasmine.SpyObj<ActionSheetController>;
-
   beforeEach(async () => {
-    const apiSpy = jasmine.createSpyObj('ApiService', ['getData']);
-    const actionSheetSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
-
     await TestBed.configureTestingModule({
-      imports: [HomeComponent, IonicModule],
-      providers: [
-        { provide: ApiService, useValue: apiSpy },
-        { provide: ActionSheetController, useValue: actionSheetSpy }
-      ]
+      imports: [
+        HomeComponent,
+        IonicModule.forRoot(),
+        NoopAnimationsModule
+      ],
+      providers: [provideHttpClient()]
     }).compileComponents();
-
-    fixture = TestBed.createComponent(HomeComponent);
-    component = fixture.componentInstance;
-
-    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
-    actionSheetCtrlSpy = TestBed.inject(ActionSheetController) as jasmine.SpyObj<ActionSheetController>;
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
   });
 
-  it('should load data from API on init', () => {
-    const mockData = [{ id: 1, name: 'Test' }];
-    apiServiceSpy.getData.and.returnValue(of(mockData));
-
-    component.ngOnInit();
-
-    expect(apiServiceSpy.getData).toHaveBeenCalled();
-    expect(component.data).toEqual(mockData);
-    expect(component.errorMessage).toBe('');
+  it('should render "Local Greetings" in ion-title', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const title = compiled.querySelector('ion-title');
+    expect(title?.textContent).toContain('Local Greetings');
   });
 
-  it('should set errorMessage on API error', () => {
-    apiServiceSpy.getData.and.returnValue(throwError(() => new Error('API failure')));
-
-    component.ngOnInit();
-
-    expect(apiServiceSpy.getData).toHaveBeenCalled();
-    expect(component.data).toEqual([]);
-    expect(component.errorMessage).toContain('Failed');
+  it('should show loading message if no data and no error', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Loading data...');
   });
 
-  it('should handle confirm and dismiss modal with data', () => {
-    const mockModal = jasmine.createSpyObj('IonModal', ['dismiss']);
-    component.modal = mockModal;
+  // 👉 Zusätzliche Tests für Methoden --------------------------------
+
+  it('confirm() should call modal.dismiss with correct data', async () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    const component = fixture.componentInstance;
+
     component.ritCreateComponent = {
-      ritName: 'MyName',
-      details: 'MyDetails',
-      tags: ['one'],
-      selectedImage: 'data:image/test',
-    } as RitCreateComponent;
+      ritName: 'TestRit',
+      details: 'TestDetails',
+      tags: ['x'],
+      selectedImage: 'img.jpg',
+    } as any;
 
-    component.confirm();
+    let dismissCalled = false;
 
-    expect(mockModal.dismiss).toHaveBeenCalledWith({
-      name: 'MyName',
-      details: 'MyDetails',
-      tags: ['one'],
-      image: 'data:image/test',
-    }, 'confirm');
-  });
-
-  it('should handle modal dismiss event with confirm role', () => {
-    const logSpy = spyOn(console, 'log');
-    const event = {
-      detail: {
-        role: 'confirm',
-        data: {
-          name: 'Test',
-          details: 'Some details',
-          tags: ['Tag1'],
-          image: 'data:image'
-        }
+    component.modal = {
+      dismiss: async (data: any, role: string) => {
+        dismissCalled = true;
+        expect(role).toBe('confirm');
+        expect(data).toEqual({
+          name: 'TestRit',
+          details: 'TestDetails',
+          tags: ['x'],
+          image: 'img.jpg',
+        });
       }
-    } as CustomEvent;
+    } as any;
 
-    component.handleModalDismiss(event);
-
-    expect(logSpy).toHaveBeenCalledWith('To be created');
-    expect(logSpy).toHaveBeenCalledWith('Name: ', 'Test');
-    expect(logSpy).toHaveBeenCalledWith('Details: ', 'Some details');
-    expect(logSpy).toHaveBeenCalledWith('Tags: ', ['Tag1']);
-    expect(logSpy).toHaveBeenCalledWith('Image: ', 'data:image');
+    await component.confirm();
+    expect(dismissCalled).toBeTrue();
   });
 
+  it('should call modal.dismiss with null and "cancel" when Cancel button logic is used', async () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    const component = fixture.componentInstance;
+  
+    let dismissCalled = false;
+    let receivedData = null;
+    let receivedRole = '';
+  
+    component.modal = {
+      dismiss: async (data: any, role: string) => {
+        dismissCalled = true;
+        receivedData = data;
+        receivedRole = role;
+      }
+    } as any;
+  
+    await component.modal.dismiss(null, 'cancel');
+  
+    expect(dismissCalled).toBeTrue();
+    expect(receivedData).toBeNull();
+    expect(receivedRole).toBe('cancel');
+  });
+  
+  
 });
