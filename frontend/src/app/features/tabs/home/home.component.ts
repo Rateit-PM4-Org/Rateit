@@ -52,12 +52,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleModalDismiss(event: CustomEvent) {
-    const role = event.detail.role;
-    const data = event.detail.data;
-
-    if (role === 'confirm') {
-      // TODO add backend call here
-    }
+    // TODO backend call here
   }
 
 

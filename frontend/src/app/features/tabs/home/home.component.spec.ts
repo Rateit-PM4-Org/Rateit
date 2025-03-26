@@ -147,34 +147,4 @@ describe('HomeComponent', () => {
     expect(result).toBeFalse();
   });
 
-  it('should handle modal dismiss with role "confirm"', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
-  
-    let called = false;
-  
-    component['handleModalDismiss'] = (event: CustomEvent) => {
-      const role = event.detail.role;
-      const data = event.detail.data;
-      if (role === 'confirm') {
-        called = true;
-      }
-    };
-  
-    const event = new CustomEvent('dismiss', {
-      detail: {
-        role: 'confirm',
-        data: {
-          name: 'abc',
-          details: 'xyz',
-          tags: ['t'],
-          image: 'img.jpg',
-        }
-      }
-    });
-  
-    component.handleModalDismiss(event);
-    expect(called).toBeTrue();
-  });
-
 });
