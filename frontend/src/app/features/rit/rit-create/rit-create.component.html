@@ -2,17 +2,17 @@
 
   <ion-card>
     <ion-card-content class="outline-image-container">
-      <ion-card-content (click)="selectImage()" class="image-container ion-activatable ripple-parent">
+      <ion-card-content (click)="selectImage()" class="image-container ion-activatable ripple-parent" data-testid="image-container">
 
-        <ion-thumbnail *ngIf="selectedImage" class="preview-wrapper">
+        <ion-thumbnail *ngIf="selectedImage" class="preview-wrapper" data-testid="image-preview">
           <ion-img [src]="selectedImage"></ion-img>
         </ion-thumbnail>
 
-        <div *ngIf="!selectedImage" class="image-placeholder">
+        <div *ngIf="!selectedImage" class="image-placeholder" data-testid="image-placeholder">
           Select a picture
         </div>
 
-        <ion-button class="rating-button" size="medium" fill="solid" color="warning">
+        <ion-button class="rating-button" size="medium" fill="solid" color="warning" data-testid="rating-button">
           4 <ion-icon name="star" slot="end"></ion-icon>
         </ion-button>
 
@@ -22,7 +22,7 @@
 
     <ion-card-header>
       <ion-card-title>
-        <ion-input [value]="ritName" (ionInput)="setRitName($event)" placeholder="Rit Name..."></ion-input>
+        <ion-input data-testid="rit-name-input" [value]="ritName" (ionInput)="setRitName($event)" placeholder="Rit Name..."></ion-input>
       </ion-card-title>
       <ion-card-subtitle>
         Rit Name
@@ -30,15 +30,25 @@
     </ion-card-header>
 
     <ion-card-content class="tags-container">
-      <ion-chip color="primary" *ngFor="let tag of tags; let i = index" (click)="removeTag(i)">
+      <ion-chip
+        color="primary"
+        *ngFor="let tag of tags; let i = index"
+        (click)="removeTag(i)"
+        [attr.data-testid]="'tag-chip-' + i"
+      >
         <ion-icon name="pricetag-outline"></ion-icon>
         <ion-label>{{ tag }}</ion-label>
         <ion-icon name="close"></ion-icon>
       </ion-chip>
 
-      <ion-input class="tag-input" [value]="newTag" (ionInput)="setNewTag($event)" placeholder="Enter Tag"
-        (keyup.enter)="addTag()">
-      </ion-input>
+      <ion-input
+        class="tag-input"
+        data-testid="new-tag-input"
+        [value]="newTag"
+        (ionInput)="setNewTag($event)"
+        placeholder="Enter Tag"
+        (keyup.enter)="addTag()"
+      ></ion-input>
     </ion-card-content>
   </ion-card>
 
@@ -59,9 +69,17 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-textarea [value]="details" (ionInput)="setDetails($event)" label="Enter your Description"
-        [autoGrow]="true" labelPlacement="floating" fill="outline" placeholder="Enter text">
-      </ion-textarea>
+      <ion-textarea
+        data-testid="details-textarea"
+        [value]="details"
+        (ionInput)="setDetails($event)"
+        label="Enter your Description"
+        [autoGrow]="true"
+        labelPlacement="floating"
+        fill="outline"
+        placeholder="Enter text"
+      ></ion-textarea>
     </ion-card-content>
   </ion-card>
+
 </ion-content>

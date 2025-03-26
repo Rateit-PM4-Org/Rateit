@@ -4,67 +4,82 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { RitCreateComponent } from './rit-create.component';
 
-describe('RitCreateComponent Tests', () => {
+describe('RitFormComponent', () => {
   let component: RitCreateComponent;
   let fixture: ComponentFixture<RitCreateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RitCreateComponent, IonicModule.forRoot(), FormsModule],
+      imports: [RitCreateComponent, IonicModule.forRoot(), FormsModule], // standalone
     }).compileComponents();
 
     fixture = TestBed.createComponent(RitCreateComponent);
     component = fixture.componentInstance;
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
-  it('should render ritName in ion-input', () => {
-    component.ritName = 'Sample Rit';
+  it('should render ritName in the ion-input', () => {
+    component.ritName = 'Test Rit';
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(By.css('ion-input[placeholder="Rit Name..."]'));
-    expect(input).toBeTruthy();
-    expect(input.nativeElement.value || input.attributes['ng-reflect-value']).toContain('Sample Rit');
+    const input = fixture.debugElement.query(By.css('[data-testid="rit-name-input"]'));
+    expect(input.attributes['ng-reflect-value']).toContain('Test Rit');
   });
 
-  it('should show the selected image if selectedImage is defined', () => {
-    component.selectedImage = 'http://example.com/image.png';
+  it('should show the selected image when selectedImage is set', () => {
+    component.selectedImage = 'http://example.com/image.jpg';
     fixture.detectChanges();
 
-    const img = fixture.debugElement.query(By.css('ion-img'));
-    expect(img).toBeTruthy();
-    expect(img.attributes['ng-reflect-src']).toBe('http://example.com/image.png');
+    const image = fixture.debugElement.query(By.css('[data-testid="image-preview"] ion-img'));
+    expect(image).toBeTruthy();
+    expect(image.attributes['ng-reflect-src']).toBe('http://example.com/image.jpg');
   });
 
-  it('should show "Select a picture" if no image is selected', () => {
+  it('should show placeholder when no image is selected', () => {
     component.selectedImage = null;
     fixture.detectChanges();
 
-    const placeholder = fixture.debugElement.query(By.css('.image-placeholder'));
-    expect(placeholder.nativeElement.textContent).toContain('Select a picture');
+    const placeholder = fixture.debugElement.query(By.css('[data-testid="image-placeholder"]'));
+    expect(placeholder.nativeElement.textContent.trim()).toBe('Select a picture');
   });
 
-  it('should render tags as chips', () => {
-    component.tags = ['art', 'nature', 'travel'];
+  it('should display all tag chips', () => {
+    component.tags = ['red', 'blue', 'green'];
     fixture.detectChanges();
 
-    const chips = fixture.debugElement.queryAll(By.css('ion-chip'));
-    expect(chips.length).toBe(3);
-    expect(chips[0].nativeElement.textContent).toContain('art');
-    expect(chips[1].nativeElement.textContent).toContain('nature');
-    expect(chips[2].nativeElement.textContent).toContain('travel');
+    component.tags.forEach((tag, i) => {
+      const chip = fixture.debugElement.query(By.css(`[data-testid="tag-chip-${i}"]`));
+      expect(chip.nativeElement.textContent).toContain(tag);
+    });
   });
 
-  it('should render details in the textarea', () => {
-    component.details = 'This is a test description.';
+  it('should show the new tag input value', () => {
+    component.newTag = 'hafermilch';
     fixture.detectChanges();
 
-    const textarea = fixture.debugElement.query(By.css('ion-textarea'));
-    expect(textarea).toBeTruthy();
-    expect(textarea.attributes['ng-reflect-value']).toContain('This is a test description.');
+    const newTagInput = fixture.debugElement.query(By.css('[data-testid="new-tag-input"]'));
+    expect(newTagInput.attributes['ng-reflect-value']).toContain('hafermilch');
+  });
+
+  it('should render the details text in ion-textarea', () => {
+    component.details = 'Here are the details.';
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('[data-testid="details-textarea"]'));
+    expect(textarea.attributes['ng-reflect-value']).toContain('Here are the details.');
+  });
+
+  it('should call selectImage() when image container is clicked', () => {
+    spyOn(component, 'selectImage');
+    fixture.detectChanges();
+
+    const imageContainer = fixture.debugElement.query(By.css('[data-testid="image-container"]'));
+    imageContainer.triggerEventHandler('click', null);
+
+    expect(component.selectImage).toHaveBeenCalled();
   });
 });
