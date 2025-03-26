@@ -1,4 +1,4 @@
-package ch.zhaw.rateit.api;
+package ch.zhaw.rateit.api.logic.user;
 
 import ch.zhaw.rateit.api.exceptions.types.DuplicateEmailUserException;
 import ch.zhaw.rateit.api.logic.user.entity.User;
