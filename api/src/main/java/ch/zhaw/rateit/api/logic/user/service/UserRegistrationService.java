@@ -23,9 +23,9 @@ public class UserRegistrationService {
     }
 
     public User register(UserRegistrationRequest userRegistrationRequest) {
-        checkEmailUnique(userRegistrationRequest.getEmail());
+        checkEmailUnique(userRegistrationRequest.email());
 
-        User newUser = new User(userRegistrationRequest.getEmail(), userRegistrationRequest.getDisplayName(), hashCleanPassword(userRegistrationRequest.getPassword()));
+        User newUser = new User(userRegistrationRequest.email(), userRegistrationRequest.displayName(), hashCleanPassword(userRegistrationRequest.password()));
         userRepository.save(newUser);
         return newUser;
     }

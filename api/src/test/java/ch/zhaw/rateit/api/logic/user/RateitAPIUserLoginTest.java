@@ -56,7 +56,7 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
 
         TokenResponse tokenResponse = objectMapper.readValue(result, TokenResponse.class);
         assertNotNull(tokenResponse);
-        assertNotNull(tokenResponse.getToken());
+        assertNotNull(tokenResponse.token());
     }
 
     @Test

@@ -34,8 +34,8 @@ public class UserLoginService {
      * @return
      */
     public TokenResponse verifyLoginAndGetToken(UserLoginRequest userLoginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.getEmail(), userLoginRequest.getPassword()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.email(), userLoginRequest.password()));
 
-        return new TokenResponse(jwtService.generateToken(userDetailsService.loadUserByUsername(userLoginRequest.getEmail())));
+        return new TokenResponse(jwtService.generateToken(userDetailsService.loadUserByUsername(userLoginRequest.email())));
     }
 }
