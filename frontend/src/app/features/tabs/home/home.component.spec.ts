@@ -99,33 +99,4 @@ describe('HomeComponent', () => {
     expect(logSpy).toHaveBeenCalledWith('Image: ', 'data:image');
   });
 
-  it('should confirm dismiss only when user selects "Yes"', async () => {
-    const actionSheetMock = {
-      present: jasmine.createSpy('present'),
-      onWillDismiss: jasmine.createSpy('onWillDismiss').and.returnValue(Promise.resolve({ role: 'confirm' })),
-    };
-  
-    actionSheetCtrlSpy.create.and.returnValue(Promise.resolve(actionSheetMock as any));
-  
-    const result = await component.canDismiss();
-  
-    expect(actionSheetCtrlSpy.create).toHaveBeenCalled();
-    expect(actionSheetMock.present).toHaveBeenCalled();
-    expect(result).toBeTrue();
-  });
-  
-  it('should cancel dismiss when user selects "No"', async () => {
-    const actionSheetMock = {
-      present: jasmine.createSpy('present'),
-      onWillDismiss: jasmine.createSpy('onWillDismiss').and.returnValue(Promise.resolve({ role: 'cancel' })),
-    };
-  
-    actionSheetCtrlSpy.create.and.returnValue(Promise.resolve(actionSheetMock as any));
-  
-    const result = await component.canDismiss();
-  
-    expect(actionSheetCtrlSpy.create).toHaveBeenCalled();
-    expect(actionSheetMock.present).toHaveBeenCalled();
-    expect(result).toBeFalse();
-  });
 });

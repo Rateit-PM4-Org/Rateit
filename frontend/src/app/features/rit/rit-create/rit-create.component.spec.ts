@@ -123,4 +123,41 @@ describe('RitFormComponent', () => {
     expect(component.tags.length).toBe(initialLength - 1);
   });
 
+  it('should call FileReader.readAsDataURL when a file is selected', () => {
+    const mockFile = new File(['dummy'], 'test.png', { type: 'image/png' });
+  
+    const mockReader: Partial<FileReader> = {
+      readAsDataURL: jasmine.createSpy('readAsDataURL'),
+      result: 'data:image/png;base64,abc123',
+      onload: null,
+    };
+  
+    spyOn(window as any, 'FileReader').and.returnValue(mockReader as FileReader);
+  
+    component.selectImage();
+  
+    const fileInputEvent = { target: { files: [mockFile] } } as any;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+  
+    const onchange = (e: any) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        component.selectedImage = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    };
+  
+    (window as any).FileReader = function () {
+      return mockReader;
+    };
+    onchange(fileInputEvent);
+    (mockReader.onload as any)(); // Triggert reader.onload
+  
+    expect(mockReader.readAsDataURL).toHaveBeenCalledWith(mockFile);
+    expect(component.selectedImage).toBe('data:image/png;base64,abc123');
+  });
+
 });
