@@ -2,7 +2,6 @@ package ch.zhaw.rateit.api.exceptions.handler;
 
 import ch.zhaw.rateit.api.exceptions.types.DuplicateEmailUserException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 public class ExceptionHandlers {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(DuplicateEmailUserException.class)
     public Map<String, String> handleUserRegistration(DuplicateEmailUserException ex) {
         return Map.of("error", ex.getMessage());
     }

@@ -7,11 +7,9 @@ import ch.zhaw.rateit.api.logic.user.service.UserRegistrationService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller to handle interactions with users.
@@ -36,8 +34,25 @@ public class UserController {
         return userRegistrationService.register(userRegistrationRequest);
     }
 
+    /**
+     * Exchange Login-Information for a JWT-Access-Token
+     *
+     * @param userLoginRequest
+     * @return
+     */
     @PostMapping(path = "/login")
     public TokenResponse login(@RequestBody @Validated UserLoginRequest userLoginRequest) {
         return userLoginService.verifyLoginAndGetToken(userLoginRequest);
+    }
+
+    /**
+     * Get own user information
+     *
+     * @param user
+     * @return
+     */
+    @GetMapping(path = "/me")
+    public User me(@AuthenticationPrincipal User user) {
+        return user;
     }
 }

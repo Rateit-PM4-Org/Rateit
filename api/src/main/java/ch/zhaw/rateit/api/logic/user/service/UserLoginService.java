@@ -27,6 +27,12 @@ public class UserLoginService {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Verifies the login of a user and returns a token
+     *
+     * @param userLoginRequest
+     * @return
+     */
     public TokenResponse verifyLoginAndGetToken(UserLoginRequest userLoginRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.getEmail(), userLoginRequest.getPassword()));
 
