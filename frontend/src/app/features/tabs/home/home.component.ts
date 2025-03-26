@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActionSheetController, IonModal } from '@ionic/angular/standalone';
 import { catchError, of } from 'rxjs';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { ApiService } from '../../../shared/services/api.service';
-import { ActionSheetController } from '@ionic/angular/standalone';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 
 @Component({
@@ -17,12 +17,17 @@ import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 })
 export class HomeComponent implements OnInit {
 
+  @ViewChild(IonModal) modal!: IonModal;
+  @ViewChild('ritCreate') ritCreateComponent!: RitCreateComponent;
+
+  presentingElement!: HTMLElement | null;
   data: any[] = [];
   errorMessage: string = '';
 
-  presentingElement!: HTMLElement | null;
-
-  constructor(private apiService: ApiService, private actionSheetCtrl: ActionSheetController) { }
+  constructor(
+    private apiService: ApiService,
+    private actionSheetCtrl: ActionSheetController
+  ) { }
 
   ngOnInit() {
     this.presentingElement = document.querySelector('.ion-page');
@@ -44,6 +49,34 @@ export class HomeComponent implements OnInit {
         this.errorMessage = 'An error occurred';
       }
     });
+  }
+
+  handleModalDismiss(event: CustomEvent) {
+    const role = event.detail.role;
+    const data = event.detail.data;
+
+    if (role === 'confirm') {
+
+      // TODO add backend call here
+      console.log('To be created');
+      console.log('Name: ', data?.name);
+      console.log('Details: ', data?.details);
+      console.log('Tags: ', data?.tags);
+      console.log('Image: ', data?.image);
+    }
+  }
+
+
+  confirm() {
+    this.modal.dismiss(
+      {
+        name: this.ritCreateComponent.ritName,
+        details: this.ritCreateComponent.details,
+        tags: this.ritCreateComponent.tags,
+        image: this.ritCreateComponent.selectedImage,
+      },
+      'confirm'
+    );
   }
 
   canDismiss = async () => {

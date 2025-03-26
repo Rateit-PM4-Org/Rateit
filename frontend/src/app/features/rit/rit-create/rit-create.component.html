@@ -1,34 +1,67 @@
 <ion-content class="ion-padding">
-  <!-- Image Placeholder -->
-  <div class="image-wrapper">
-    <ion-img src="/assets/placeholder-image.svg"></ion-img>
 
-    <ion-badge color="medium" class="rating-badge">
-      4 <ion-icon name="star"></ion-icon>
-    </ion-badge>
-  </div>
+  <ion-card>
+    <ion-card-content class="outline-image-container">
+      <ion-card-content (click)="selectImage()" class="image-container ion-activatable ripple-parent">
 
-  <ion-input label="Name" label-placement="floating" class="rit-input" placeholder="Rit Name...">
-  </ion-input>
+        <ion-thumbnail *ngIf="selectedImage" class="preview-wrapper">
+          <ion-img [src]="selectedImage"></ion-img>
+        </ion-thumbnail>
 
-  <ion-chip>
-    <ion-icon name="pricetag-outline"></ion-icon>
-    <ion-label>ABC</ion-label>
-  </ion-chip>
-  <ion-chip>
-    <ion-icon name="pricetag-outline"></ion-icon>
-    <ion-label>123</ion-label>
-  </ion-chip>
+        <div *ngIf="!selectedImage" class="image-placeholder">
+          Select a picture
+        </div>
+
+        <ion-button class="rating-button" size="medium" fill="solid" color="warning">
+          4 <ion-icon name="star" slot="end"></ion-icon>
+        </ion-button>
+
+        <ion-ripple-effect></ion-ripple-effect>
+      </ion-card-content>
+    </ion-card-content>
+
+    <ion-card-header>
+      <ion-card-title>
+        <ion-input [value]="ritName" (ionInput)="setRitName($event)" placeholder="Rit Name..."></ion-input>
+      </ion-card-title>
+      <ion-card-subtitle>
+        Rit Name
+      </ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content class="tags-container">
+      <ion-chip color="primary" *ngFor="let tag of tags; let i = index" (click)="removeTag(i)">
+        <ion-icon name="pricetag-outline"></ion-icon>
+        <ion-label>{{ tag }}</ion-label>
+        <ion-icon name="close"></ion-icon>
+      </ion-chip>
+
+      <ion-input class="tag-input" [value]="newTag" (ionInput)="setNewTag($event)" placeholder="Enter Tag"
+        (keyup.enter)="addTag()">
+      </ion-input>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-segment color="primary" value="primary">
+      <ion-segment-button value="primary">
+        <ion-label>Public</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="segment">
+        <ion-label>Private</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-card>
 
   <ion-card>
     <ion-card-header>
       <ion-card-title>Details</ion-card-title>
     </ion-card-header>
+
     <ion-card-content>
-      <ion-textarea label="Outline textarea" [autoGrow]="true" labelPlacement="floating" fill="outline"
-        placeholder="Enter text">
+      <ion-textarea [value]="details" (ionInput)="setDetails($event)" label="Enter your Description"
+        [autoGrow]="true" labelPlacement="floating" fill="outline" placeholder="Enter text">
       </ion-textarea>
     </ion-card-content>
   </ion-card>
-
 </ion-content>
