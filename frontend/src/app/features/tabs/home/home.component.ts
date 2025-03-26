@@ -56,13 +56,7 @@ export class HomeComponent implements OnInit {
     const data = event.detail.data;
 
     if (role === 'confirm') {
-
       // TODO add backend call here
-      console.log('To be created');
-      console.log('Name: ', data?.name);
-      console.log('Details: ', data?.details);
-      console.log('Tags: ', data?.tags);
-      console.log('Image: ', data?.image);
     }
   }
 
