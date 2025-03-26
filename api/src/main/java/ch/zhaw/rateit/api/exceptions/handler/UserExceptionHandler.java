@@ -15,8 +15,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class UserExceptionHandler {
 
-    @ExceptionHandler(DuplicateEmailUserException.class)
-    public ResponseEntity<Map<String, String>> handleUserRegistration(DuplicateEmailUserException ex) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, String>> handleUserRegistration(RuntimeException ex) {
         return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
     }
 }
