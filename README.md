@@ -42,6 +42,7 @@ We welcome contributions! You can contribute by:
 - **[averel10](https://github.com/averel10)**
 - **[Bascal89](https://github.com/Bascal89)**
 - **[bermic01](https://github.com/bermic01)**
+- **[michamettler](https://github.com/michamettler)**
 - **[SamKry](https://github.com/SamKry)**
 - **[smaubio](https://github.com/smaubio)**
 - **[zillinic](https://github.com/zillinichttps://github.com/zillinic)**
