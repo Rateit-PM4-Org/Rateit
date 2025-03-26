@@ -22,6 +22,8 @@ describe('RitFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  // HTML
+
   it('should render ritName in the ion-input', () => {
     component.ritName = 'Test Rit';
     fixture.detectChanges();
@@ -82,4 +84,43 @@ describe('RitFormComponent', () => {
 
     expect(component.selectImage).toHaveBeenCalled();
   });
+
+  // TypeScript
+
+  it('should set ritName', () => {
+    const event = { target: { value: 'My Rit' } };
+    component.setRitName(event);
+    expect(component.ritName).toBe('My Rit');
+  });
+
+  it('should set details', () => {
+    const event = { target: { value: 'Details here' } };
+    component.setDetails(event);
+    expect(component.details).toBe('Details here');
+  });
+
+  it('should set new tag', () => {
+    const event = { target: { value: 'TestTag' } };
+    component.setNewTag(event);
+    expect(component.newTag).toBe('TestTag');
+  });
+
+  it('should add new tag', () => {
+    component.newTag = 'NewTag';
+    component.addTag();
+    expect(component.tags.includes('NewTag')).toBeTrue();
+  });
+
+  it('should not add empty tag', () => {
+    component.newTag = '   ';
+    component.addTag();
+    expect(component.tags.includes('')).toBeFalse();
+  });
+
+  it('should remove tag', () => {
+    const initialLength = component.tags.length;
+    component.removeTag(0);
+    expect(component.tags.length).toBe(initialLength - 1);
+  });
+
 });
