@@ -6,6 +6,7 @@ import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Nicolas Zillig
  */
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private final UserRegistrationService userRegistrationService;

@@ -9,12 +9,12 @@ package ch.zhaw.rateit.api.logic.user.entity;
 public class UserRegistrationRequest {
     private String email;
     private String displayName;
-    private String cleanPassword;
+    private String password;
 
-    public UserRegistrationRequest(String email, String displayName, String cleanPassword) {
+    public UserRegistrationRequest(String email, String displayName, String password) {
         this.email = email;
         this.displayName = displayName;
-        this.cleanPassword = cleanPassword;
+        this.password = password;
     }
 
     public String getEmail() {
@@ -33,11 +33,11 @@ public class UserRegistrationRequest {
         this.displayName = displayName;
     }
 
-    public String getCleanPassword() {
-        return cleanPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setCleanPassword(String cleanPassword) {
-        this.cleanPassword = cleanPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -47,7 +47,7 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(email, displayName, cleanPassword);
         String requestBody = objectMapper.writeValueAsString(userRegistrationRequest);
 
-        String result = mockMvc.perform(post("/register")
+        String result = mockMvc.perform(post("/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andReturn()
@@ -58,7 +58,6 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         assertNotNull(resultObject);
         assertEquals(email, resultObject.getEmail());
         assertEquals(displayName, resultObject.getDisplayName());
-        assertTrue(passwordEncrypter.matches(cleanPassword, resultObject.getHashedPassword()));
     }
 
     @Test
@@ -72,7 +71,7 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         User user = new User("test1@example.com", "TestUser1", "mostSecurePassword1");
         userRepository.save(user);
 
-        String result = mockMvc.perform(post("/register")
+        String result = mockMvc.perform(post("/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andReturn()
@@ -83,7 +82,28 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         assertNotNull(resultObject);
         assertEquals(email2, resultObject.getEmail());
         assertEquals(displayName, resultObject.getDisplayName());
-        assertTrue(passwordEncrypter.matches(cleanPassword, resultObject.getHashedPassword()));
+    }
+
+    @Test
+    void registeredUserValidatePasswordHash() throws Exception {
+        String displayName = "TestUser";
+        String email2 = "test2@example.com";
+        String cleanPassword = "mostSecurePassword2";
+        UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(email2, displayName, cleanPassword);
+        String requestBody = objectMapper.writeValueAsString(userRegistrationRequest);
+
+        User user = new User("test1@example.com", "TestUser1", "mostSecurePassword1");
+        userRepository.save(user);
+
+        String result = mockMvc.perform(post("/user/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        User savedUser = userRepository.findByEmail(email2).get();
+        assertTrue(passwordEncrypter.matches(cleanPassword, savedUser.getHashedPassword()));
     }
 
     @Test
@@ -95,7 +115,7 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         User user = new User(email, "TestUser1", "mostSecurePassword1");
         userRepository.save(user);
 
-        Exception resolvedException = mockMvc.perform(post("/register")
+        Exception resolvedException = mockMvc.perform(post("/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andReturn().getResolvedException();

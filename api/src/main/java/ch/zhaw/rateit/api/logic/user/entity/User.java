@@ -1,5 +1,6 @@
 package ch.zhaw.rateit.api.logic.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,6 +44,7 @@ public class User implements UserDetails {
         this.displayName = displayName;
     }
 
+    @JsonIgnore
     public String getHashedPassword() {
         return hashedPassword;
     }
@@ -57,6 +59,7 @@ public class User implements UserDetails {
      * @return
      */
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
@@ -67,6 +70,7 @@ public class User implements UserDetails {
      * @return
      */
     @Override
+    @JsonIgnore
     public String getPassword() {
         return getHashedPassword();
     }
@@ -77,7 +81,32 @@ public class User implements UserDetails {
      * @return
      */
     @Override
+    @JsonIgnore
     public String getUsername() {
         return getEmail();
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
     }
 }
