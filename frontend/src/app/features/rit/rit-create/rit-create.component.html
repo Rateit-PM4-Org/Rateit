@@ -2,7 +2,7 @@
 
   <ion-card>
     <ion-card-content class="outline-image-container">
-      <ion-card-content (click)="selectImage()" class="image-container ion-activatable ripple-parent" data-testid="image-container">
+      <ion-card-content (click)="selectImage()" (keydown.enter)="selectImage()" class="image-container ion-activatable ripple-parent" data-testid="image-container">
 
         <ion-thumbnail *ngIf="selectedImage" class="preview-wrapper" data-testid="image-preview">
           <ion-img [src]="selectedImage"></ion-img>
@@ -34,6 +34,7 @@
         color="primary"
         *ngFor="let tag of tags; let i = index"
         (click)="removeTag(i)"
+        (keydown.enter)="removeTag(i)"
         [attr.data-testid]="'tag-chip-' + i"
       >
         <ion-icon name="pricetag-outline"></ion-icon>

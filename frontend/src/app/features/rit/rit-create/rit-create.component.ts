@@ -9,12 +9,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ...IonicStandaloneStandardImports],
 })
-export class RitCreateComponent implements OnInit {
+export class RitCreateComponent {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   selectedImage: any
   tags: any[] = ['ABC', '123']

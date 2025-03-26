@@ -25,8 +25,8 @@ export class HomeComponent implements OnInit {
   errorMessage: string = '';
 
   constructor(
-    private apiService: ApiService,
-    private actionSheetCtrl: ActionSheetController
+    private readonly apiService: ApiService,
+    private readonly actionSheetCtrl: ActionSheetController
   ) { }
 
   ngOnInit() {
