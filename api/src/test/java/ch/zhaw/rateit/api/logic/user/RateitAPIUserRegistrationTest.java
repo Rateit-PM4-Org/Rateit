@@ -95,12 +95,9 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         User user = new User("test1@example.com", "TestUser1", "mostSecurePassword1");
         userRepository.save(user);
 
-        String result = mockMvc.perform(post("/user/register")
+        mockMvc.perform(post("/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                        .content(requestBody));
 
         User savedUser = userRepository.findByEmail(email2).get();
         assertTrue(passwordEncrypter.matches(cleanPassword, savedUser.getHashedPassword()));

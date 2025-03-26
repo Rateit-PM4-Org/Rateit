@@ -3,8 +3,6 @@ package ch.zhaw.rateit.api.config.auth;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import ch.zhaw.rateit.api.config.auth.JwtRequestFilter;
-import ch.zhaw.rateit.api.config.auth.JwtService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,10 +16,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
 class JwtRequestFilterTests {

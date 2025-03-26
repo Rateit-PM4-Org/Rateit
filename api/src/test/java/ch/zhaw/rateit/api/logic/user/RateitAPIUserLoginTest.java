@@ -9,11 +9,16 @@ import ch.zhaw.rateit.api.util.AbstractBaseIntegrationTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -63,30 +68,23 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
                 .andExpect(status().isForbidden());
     }
 
-    @Test
-    void endpointLoginNegativeInvalidEmail() throws Exception {
-        UserLoginRequest userLoginRequest = new UserLoginRequest("test", "wrongPW");
-        String requestBody = objectMapper.writeValueAsString(userLoginRequest);
-
-        mockMvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
+    static Stream<Arguments> provideInvalidLoginRequests() {
+        return Stream.of(
+                Arguments.of("test", "wrongPW"), // Invalid email
+                Arguments.of("", "wrongPW"),      // Missing email
+                Arguments.of("test@test.ch", "")  // Missing password
+        );
     }
 
-    @Test
-    void endpointLoginNegativeMissingEmail() throws Exception {
-        UserLoginRequest userLoginRequest = new UserLoginRequest("", "wrongPW");
+    @ParameterizedTest
+    @MethodSource("provideInvalidLoginRequests")
+    void endpointLoginNegative(String email, String password) throws Exception {
+        UserLoginRequest userLoginRequest = new UserLoginRequest(email, password);
         String requestBody = objectMapper.writeValueAsString(userLoginRequest);
 
-        mockMvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void endpointLoginNegativeMissingPassword() throws Exception {
-        UserLoginRequest userLoginRequest = new UserLoginRequest("test@test.ch", "");
-        String requestBody = objectMapper.writeValueAsString(userLoginRequest);
-
-        mockMvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(requestBody))
+        mockMvc.perform(post("/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
