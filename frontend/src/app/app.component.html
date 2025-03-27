@@ -1,16 +1,3 @@
-<h1>Local Greetings</h1>
-
-<!-- Show error message if there's an issue -->
-<div *ngIf="errorMessage" class="error">
-  {{ errorMessage }}
-</div>
-
-<!-- If data is available, show it -->
-<ul *ngIf="data.length > 0">
-  <li *ngFor="let item of data">
-    <strong>ID:</strong> {{ item.id }} - <strong>Value:</strong> {{ item.value }}
-  </li>
-</ul>
-
-<!-- Show loading message if no data -->
-<p *ngIf="!errorMessage && data.length === 0">Loading data...</p>
+<ion-app>
+  <ion-router-outlet></ion-router-outlet>
+</ion-app>
