@@ -18,45 +18,25 @@ import org.springframework.stereotype.Service;
 public class UserRegistrationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncrypter;
-    private final MailService mailService;
+    private final UserVerificationService userVerificationService;
 
-    @Value("${app.base-url}")  // Add this to your application.properties
-    private String baseUrl;
-
-    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncrypter, MailService mailService) {
+    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncrypter, UserVerificationService userVerificationService) {
         this.userRepository = userRepository;
         this.passwordEncrypter = passwordEncrypter;
-        this.mailService = mailService;
+        this.userVerificationService = userVerificationService;
     }
 
     public User register(UserRegistrationRequest userRegistrationRequest) {
         checkEmailUnique(userRegistrationRequest.email());
 
         User newUser = new User(userRegistrationRequest.email(), userRegistrationRequest.displayName(), hashCleanPassword(userRegistrationRequest.password()));
+        newUser = userVerificationService.sendVerificationEmail(newUser);
         userRepository.save(newUser);
-
-        sendVerificationEmail(newUser);
 
         return newUser;
     }
 
-    private void sendVerificationEmail(User user) {
-        String verificationUrl = String.format(
-                "%s/user/confirm?token=%s&email=%s",
-                baseUrl,
-                user.getVerificationToken(),
-                user.getEmail()
-        );
 
-        String emailSubject = "Please verify your email address";
-        String emailText = String.format(
-                "Please verify your email address by clicking on the following link:\n%s\n\n" +
-                "If you did not create an account on Rateit, you can safely ignore this email.",
-                verificationUrl
-        );
-
-        mailService.sendEmail(user.getEmail(), emailSubject, emailText);
-    }
 
     private void checkEmailUnique(String email) {
         userRepository.findByEmail(email).ifPresent(user -> {

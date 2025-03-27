@@ -6,7 +6,9 @@ import ch.zhaw.rateit.api.logic.user.service.UserLoginService;
 import ch.zhaw.rateit.api.logic.user.service.UserRegistrationService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
+import ch.zhaw.rateit.api.logic.user.service.UserVerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +24,33 @@ public class UserController {
 
     private final UserRegistrationService userRegistrationService;
     private final UserLoginService userLoginService;
+    private final UserVerificationService userVerificationService;
 
     @Autowired
-    public UserController(UserRegistrationService userRegistrationService, UserLoginService userLoginService) {
+    public UserController(UserRegistrationService userRegistrationService, UserLoginService userLoginService, UserVerificationService userVerificationService) {
         this.userRegistrationService = userRegistrationService;
         this.userLoginService = userLoginService;
+        this.userVerificationService = userVerificationService;
     }
 
     @PostMapping(path = "/register")
     public User register(@RequestBody UserRegistrationRequest userRegistrationRequest) {
         return userRegistrationService.register(userRegistrationRequest);
+    }
+
+
+    @GetMapping("/mail-confirmation")
+    public ResponseEntity<String> verifyUser(
+            @RequestParam String email,
+            @RequestParam String token
+    ) {
+        boolean isVerified = userVerificationService.verifyUser(email, token);
+
+        if (isVerified) {
+            return ResponseEntity.ok("Email verified successfully. You can now log in.");
+        } else {
+            return ResponseEntity.badRequest().body("Email verification failed. Invalid token or email.");
+        }
     }
 
     /**

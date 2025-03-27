@@ -66,6 +66,16 @@ spec:
                 secretKeyRef:
                   name: rateit-secret
                   key: jwt-secret
+            - name: SPRING_MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rateit-secret
+                  key: mail-password
+            - name: APP_FRONTEND-URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rateit-env
+                  key: FRONTEND_URL
           volumeMounts:
             - name: api-props
               mountPath: /config
