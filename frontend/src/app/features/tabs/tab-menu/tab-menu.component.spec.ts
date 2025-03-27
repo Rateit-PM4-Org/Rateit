@@ -4,6 +4,8 @@ import { IonicModule } from '@ionic/angular';
 import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TabMenuComponent } from './tab-menu.component';
+import { ActivatedRoute, provideRouter } from '@angular/router';
+import { routes } from '../../../app.routes';
 
 describe('TabMenuComponent', () => {
   beforeEach(async () => {
@@ -13,7 +15,7 @@ describe('TabMenuComponent', () => {
         IonicModule.forRoot(),
         NoopAnimationsModule
       ],
-      providers: [provideHttpClient()]
+      providers: [provideHttpClient(), provideRouter(routes)]
     }).compileComponents();
   });
 
@@ -25,6 +27,7 @@ describe('TabMenuComponent', () => {
 
   it('should render two tab buttons', () => {
     const fixture = TestBed.createComponent(TabMenuComponent);
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const tabButtons = compiled.querySelectorAll('ion-tab-button');
     expect(tabButtons.length).toBeGreaterThanOrEqual(2);
@@ -37,11 +40,12 @@ describe('TabMenuComponent', () => {
     expect(homeTab).toBeTruthy();
   });
 
-  it('should have a "profile" tab', () => {
+  it('should have a "login" tab, when not logged in', () => {
     const fixture = TestBed.createComponent(TabMenuComponent);
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    const profileTab = compiled.querySelector('ion-tab-button[tab="profile"]');
-    expect(profileTab).toBeTruthy();
+    const loginTab = compiled.querySelector('ion-tab-button[tab="login"]');
+    expect(loginTab).toBeTruthy();
   });
 
 });

@@ -4,6 +4,7 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 import { provideRouter, Router, RouterOutlet } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 @Component({
   standalone: true,
@@ -30,14 +31,14 @@ describe('App Routing', () => {
     location = TestBed.inject(Location);
   }));
 
-  it('should navigate to /profile', waitForAsync(async () => {
+  it('should not navigate to /profile (empty instead)', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
     await router.navigate(['/profile']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/profile');
+    expect(location.path()).toBe('');
   }));
 
   it('should navigate to /home', waitForAsync(async () => {

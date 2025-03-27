@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-tab-menu',
@@ -12,7 +13,15 @@ import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
   ]
 })
 export class TabMenuComponent {
+  isAuthenticated: boolean = false;
+  constructor(private authService: AuthService) { }
 
-  constructor() { }
+  ngOnInit() {
+    this.authService.getAuthenticationStatusObservable().subscribe({
+      next: response => {
+        this.isAuthenticated = response;
+      }
+    })
+  }
 
 }

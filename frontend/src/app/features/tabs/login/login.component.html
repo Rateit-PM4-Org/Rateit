@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label>Email</ion-label>
+    <ion-input type="email" [value]="email" (ionInput)="setEmail($event)"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Password</ion-label>
+    <ion-input type="password" [value]="password" (ionInput)="setPassword($event)"></ion-input>
+  </ion-item>
+  <ion-button (click)="login()">Submit</ion-button>
+  <ion-button (click)="register()">Register</ion-button>
+  <ion-ripple-effect></ion-ripple-effect>
+</ion-content>
