@@ -31,7 +31,7 @@ describe('App Routing', () => {
     location = TestBed.inject(Location);
   }));
 
-  it('should not navigate to /profile (empty instead)', waitForAsync(async () => {
+  it('should not navigate to /profile (empty instead) if not authenticated', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
@@ -39,6 +39,18 @@ describe('App Routing', () => {
     fixture.detectChanges();
 
     expect(location.path()).toBe('');
+  }));
+
+  it('should not navigate to /profile if authenticated', waitForAsync(async () => {
+    const authGuard = TestBed.inject(AuthGuard);
+    spyOn(authGuard, 'canActivate').and.returnValue(true);
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/profile']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/profile');
   }));
 
   it('should navigate to /home', waitForAsync(async () => {
@@ -49,6 +61,26 @@ describe('App Routing', () => {
     fixture.detectChanges();
 
     expect(location.path()).toBe('/home');
+  }));
+
+  it('should navigate to /login', waitForAsync(async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/login']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/login');
+  }));
+
+  it('should navigate to /register', waitForAsync(async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/register']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/register');
   }));
 
   it('should navigate "" to /home', waitForAsync(async () => {
