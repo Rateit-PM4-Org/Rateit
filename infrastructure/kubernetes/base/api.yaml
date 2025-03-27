@@ -61,6 +61,11 @@ spec:
                 secretKeyRef:
                   name: rateit-secret
                   key: mongo-password
+            - name: SECURITY_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: rateit-secret
+                  key: jwt-secret
           volumeMounts:
             - name: api-props
               mountPath: /config
