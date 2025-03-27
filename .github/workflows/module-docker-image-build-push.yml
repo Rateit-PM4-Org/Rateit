@@ -15,6 +15,9 @@ on:
       buildPath:
         required: true
         type: string
+    outputs:
+      imageDigest:
+        value: ${{ jobs.build-and-push-image.outputs.imageDigest }}     
   workflow_dispatch:
     inputs:
       imageName:
@@ -37,6 +40,8 @@ jobs:
   build-and-push-image:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
+    outputs:
+      imageDigest: ${{ steps.push.outputs.digest }}
     permissions:
       contents: read
       packages: write
