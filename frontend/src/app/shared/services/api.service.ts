@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseEndpoint = environment.apiUrl;
+  private readonly baseEndpoint = environment.apiUrl;
 
   constructor(private readonly http: HttpClient, private readonly authService: AuthService) {
   }

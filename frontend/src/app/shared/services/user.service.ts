@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable} from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private profile = new BehaviorSubject<any>(null);
+  private readonly profile = new BehaviorSubject<any>(null);
 
   constructor(private readonly apiService: ApiService, authService: AuthService) { 
     authService.getAuthenticationStatusObservable().subscribe(authenticated => {

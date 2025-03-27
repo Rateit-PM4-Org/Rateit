@@ -13,7 +13,7 @@
     <ion-label>Password</ion-label>
     <ion-input type="password" [value]="password" (ionInput)="setPassword($event)"></ion-input>
   </ion-item>
-  <ion-button (click)="login()" (onKeyDown)="login()">Submit</ion-button>
-  <ion-button (click)="register()" (onKeyDown)="register()">Register</ion-button>
+  <ion-button (click)="login()" (keydown.enter)="login()">Submit</ion-button>
+  <ion-button (click)="register()" (keydown.enter)="register()">Register</ion-button>
   <ion-ripple-effect></ion-ripple-effect>
 </ion-content>

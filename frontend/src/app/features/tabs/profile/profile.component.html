@@ -11,5 +11,5 @@
       <ion-text>{{ profile.email }}</ion-text>
     </ion-item>
   </ion-list>
-  <ion-button (click)="logout()" (onKeyDown)="logout()">Logout</ion-button>
+  <ion-button (click)="logout()" (keydown.enter)="logout()">Logout</ion-button>
 </ion-content>
