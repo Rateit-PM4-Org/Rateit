@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-    private final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
+
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
