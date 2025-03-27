@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ import java.io.IOException;
  */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+    private final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
@@ -60,8 +63,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
 
 
-        } catch (RuntimeException ignored) {
-
+        } catch (RuntimeException e) {
+            logger.trace("JWT-Request-Filter failed: ",e.getCause());
         }
         filterChain.doFilter(request, response);
     }
