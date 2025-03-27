@@ -1,11 +1,9 @@
 package ch.zhaw.rateit.api.logic.user.service;
 
 import ch.zhaw.rateit.api.exceptions.types.DuplicateEmailUserException;
-import ch.zhaw.rateit.api.logic.mail.MailService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

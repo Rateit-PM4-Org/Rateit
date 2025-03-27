@@ -30,7 +30,7 @@ public class UserVerificationService {
 
     public User sendVerificationEmail(User user) {
         user.setEmailVerified(false);
-        user.setEmailVerificationToken(UUID.randomUUID().toString()); // Generate a unique token);
+        user.setEmailVerificationToken(UUID.randomUUID().toString());
 
         String verificationUrl = String.format(
                 "%s/user/mail-confirmation?token=%s&email=%s",
