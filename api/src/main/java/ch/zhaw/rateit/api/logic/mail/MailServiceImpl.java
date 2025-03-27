@@ -1,4 +1,4 @@
-package ch.zhaw.rateit.api.logic;
+package ch.zhaw.rateit.api.logic.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

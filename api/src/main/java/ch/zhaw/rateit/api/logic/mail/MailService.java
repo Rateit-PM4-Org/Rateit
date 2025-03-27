@@ -1,4 +1,4 @@
-package ch.zhaw.rateit.api.logic;
+package ch.zhaw.rateit.api.logic.mail;
 
 
 public interface MailService {
