@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Dataclass for users in database.
@@ -21,11 +22,14 @@ public class User implements UserDetails {
     private String email;
     private String displayName;
     private String hashedPassword;
+    private boolean isEmailVerified = false;
+    private String verificationToken;
 
     public User(String email, String displayName, String hashedPassword) {
         this.email = email;
         this.displayName = displayName;
         this.hashedPassword = hashedPassword;
+        this.verificationToken = UUID.randomUUID().toString(); // Generate a unique token
     }
 
     public String getEmail() {
@@ -51,6 +55,22 @@ public class User implements UserDetails {
 
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    public boolean isEmailVerified() {
+        return isEmailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        isEmailVerified = emailVerified;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 
     /**
@@ -89,7 +109,7 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return isEmailVerified;
     }
 
     @Override
