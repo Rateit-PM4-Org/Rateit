@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EmailVerificationFieldsUserChangelogTest extends AbstractBaseIntegrationTest {
+class EmailVerificationFieldsUserChangelogTest extends AbstractBaseIntegrationTest {
 
     @Autowired UserRepository userRepository;
 
     @Test
-    public void testAddVerificationFields() {
+    void testAddVerificationFields() {
         User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq"); //pw: test
         User testUserNoChange = new User("test@test.com", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
 
