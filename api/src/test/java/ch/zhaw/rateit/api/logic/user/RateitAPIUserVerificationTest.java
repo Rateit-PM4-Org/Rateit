@@ -75,6 +75,6 @@ class RateitAPIUserVerificationTest extends AbstractBaseIntegrationTest {
         userRepository.save(testUser);
 
         mockMvc.perform(get("/user/mail-confirmation").param("token", token).param("email", email)).andExpect(
-                status().isBadRequest());
+                status().isForbidden());
     }
 }

@@ -49,7 +49,7 @@ public class UserController {
         if (isVerified) {
             return ResponseEntity.ok("Email verified successfully. You can now log in.");
         } else {
-            return ResponseEntity.badRequest().body("Email verification failed. Invalid token or email.");
+            return ResponseEntity.status(403).body("Email verification failed. Invalid token or email.");
         }
     }
 
