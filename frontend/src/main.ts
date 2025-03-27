@@ -3,10 +3,10 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { addIcons } from 'ionicons';
+import { addOutline, close, home, personOutline, pricetagOutline, star } from 'ionicons/icons';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
-import { addIcons } from 'ionicons';
-import { home, personOutline } from 'ionicons/icons';
 
 // Call the element loader before the bootstrapModule/bootstrapApplication call
 defineCustomElements(window);
@@ -22,5 +22,9 @@ bootstrapApplication(AppComponent, {
 
 addIcons({
   home,
-  personOutline
+  personOutline,
+  addOutline,
+  pricetagOutline,
+  star,
+  close
 });

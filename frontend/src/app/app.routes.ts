@@ -26,14 +26,4 @@ export const routes: Routes = [
         redirectTo: '/home',
         pathMatch: 'full',
       },
-      {
-        path: 'home',
-        redirectTo: '/home',
-        pathMatch: 'full',
-      },
-      {
-        path: 'profile',
-        redirectTo: '/profile',
-        pathMatch: 'full',
-      },
 ];
