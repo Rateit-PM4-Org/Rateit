@@ -14,7 +14,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 })
 export class TabMenuComponent {
   isAuthenticated: boolean = false;
-  constructor(private authService: AuthService) { }
+  constructor(private readonly authService: AuthService) { }
 
   ngOnInit() {
     this.authService.getAuthenticationStatusObservable().subscribe({

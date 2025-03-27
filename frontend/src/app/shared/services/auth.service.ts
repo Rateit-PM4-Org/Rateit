@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, map, Observable} from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private endpoint = environment.apiUrl + '/user';
-  private token: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+  private readonly endpoint = environment.apiUrl + '/user';
+  private readonly token: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     this.token.next(localStorage.getItem('token'));
   }
 

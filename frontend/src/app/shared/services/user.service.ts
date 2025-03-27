@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 export class UserService {
   private profile = new BehaviorSubject<any>(null);
 
-  constructor(private apiService: ApiService, authService: AuthService) { 
+  constructor(private readonly apiService: ApiService, authService: AuthService) { 
     authService.getAuthenticationStatusObservable().subscribe(authenticated => {
       if(authenticated){
         this.reloadProfile();

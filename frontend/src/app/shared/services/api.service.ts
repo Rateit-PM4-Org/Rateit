@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -10,10 +10,10 @@ import { AuthService } from './auth.service';
 export class ApiService {
   private baseEndpoint = environment.apiUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private readonly http: HttpClient, private readonly authService: AuthService) {
   }
 
-  get(path: String): Observable<any> {
+  get(path: string): Observable<any> {
     return this.http.get<any>(this.baseEndpoint + path, this.addTokenHeader()).pipe(
       catchError(error => {
         if (error.status === 403) {
@@ -24,7 +24,7 @@ export class ApiService {
     );
   }
 
-  post(path: String, body: Object): Observable<any> {
+  post(path: string, body: Object): Observable<any> {
     return this.http.post<any>(this.baseEndpoint + path, body, this.addTokenHeader()).pipe(
       catchError(error => {
         if (error.status === 403) {

@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TestService {
-  private endpoint = environment.apiUrl+'/test';
+  private readonly endpoint = environment.apiUrl+'/test';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getData(): Observable<any> {
     return this.http.get<any>(this.endpoint);

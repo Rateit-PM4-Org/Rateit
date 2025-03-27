@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   profile: any;
 
-  constructor(private userService: UserService, private authService: AuthService, private router: Router) {
+  constructor(private readonly userService: UserService, private readonly authService: AuthService, private readonly router: Router) {
   }
 
   ngOnInit() {

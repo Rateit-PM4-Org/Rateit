@@ -1,8 +1,8 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { AuthService } from '../../../shared/services/auth.service';
-import { ActivatedRoute, ActivatedRouteSnapshot, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private readonly authService: AuthService, private readonly router: Router, private readonly route: ActivatedRoute) { }
 
   ngOnInit() { }
 
