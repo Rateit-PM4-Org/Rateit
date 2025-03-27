@@ -4,6 +4,10 @@ import { IonicModule } from '@ionic/angular';
 import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfileComponent } from './profile.component';
+import { UserService } from '../../../shared/services/user.service';
+import { of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../shared/services/auth.service';
 
 describe('ProfileComponent', () => {
   beforeEach(async () => {
@@ -29,6 +33,38 @@ describe('ProfileComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const title = compiled.querySelector('ion-title');
     expect(title?.textContent).toContain('Profile');
+  });
+
+  it('should fetch and set profile data on ngOnInit', () => {
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['getProfile']);
+    const mockProfile = { name: 'John Doe', email: 'john.doe@example.com' };
+    userServiceSpy.getProfile.and.returnValue(of(mockProfile));
+
+    TestBed.overrideProvider(UserService, { useValue: userServiceSpy });
+    const fixture = TestBed.createComponent(ProfileComponent);
+    const component = fixture.componentInstance;
+
+    component.ngOnInit();
+
+    expect(userServiceSpy.getProfile).toHaveBeenCalled();
+    expect(component.profile).toEqual(mockProfile);
+  });
+
+  it('should call AuthService.logout and navigate to /home on logout', () => {
+    const authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'getAuthenticationStatusObservable']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
+    authServiceSpy.getAuthenticationStatusObservable.and.returnValue(of(false));
+
+    TestBed.overrideProvider(AuthService, { useValue: authServiceSpy });
+    TestBed.overrideProvider(Router, { useValue: routerSpy });
+    const fixture = TestBed.createComponent(ProfileComponent);
+    const component = fixture.componentInstance;
+
+    component.logout();
+
+    expect(authServiceSpy.logout).toHaveBeenCalled();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/home']);
   });
 
 });

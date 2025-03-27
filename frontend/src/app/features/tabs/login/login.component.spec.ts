@@ -55,7 +55,7 @@ describe('LoginComponent', () => {
     expect(component.password).toBe('password123');
   });
 
-  it('should call AuthService.login and navigate on successful login', () => {
+  it('should call AuthService.login and navigate on successful login to home', () => {
     authServiceSpy.login.and.returnValue(of({}));
     component.email = 'test@example.com';
     component.password = 'password123';
@@ -67,6 +67,22 @@ describe('LoginComponent', () => {
     expect(component.email).toBe('');
     expect(component.password).toBe('');
   });
+
+  it('should call AuthService.login and navigate on successful login to get-param', () => {
+    const route = TestBed.inject(ActivatedRoute);
+    route.snapshot.queryParams['returnUrl'] = '/profile';
+    authServiceSpy.login.and.returnValue(of({}));
+    component.email = 'test@example.com';
+    component.password = 'password123';
+
+    component.login();
+
+    expect(authServiceSpy.login).toHaveBeenCalledWith('test@example.com', 'password123');
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/profile');
+    expect(component.email).toBe('');
+    expect(component.password).toBe('');
+  });
+
 
   it('should navigate to register page when register is called', () => {
     component.register();
