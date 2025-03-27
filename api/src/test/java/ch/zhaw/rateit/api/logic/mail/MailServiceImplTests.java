@@ -1,6 +1,5 @@
 package ch.zhaw.rateit.api.logic.mail;
 
-import ch.zhaw.rateit.api.util.AbstractBaseIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class MailServiceImplTest {
+class MailServiceImplTests {
 
     @Mock
     private JavaMailSender emailSender;
