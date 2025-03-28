@@ -8,6 +8,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AuthService } from './shared/services/auth.service';
 import { of } from 'rxjs';
+import { provideMockAuthService } from './shared/test-util/test-util';
 
 @Component({
   standalone: true,
@@ -20,9 +21,6 @@ class TestHostComponent { }
 describe('App Routing', () => {
   let router: Router;
   let location: Location;
-  const authServiceSpy = jasmine.createSpyObj('AuthService', ['isAuthenticated', 'getAuthenticationStatusObservable']);
-  authServiceSpy.getAuthenticationStatusObservable.and.returnValue(of(false));
-  authServiceSpy.isAuthenticated.and.returnValue(false);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -31,10 +29,7 @@ describe('App Routing', () => {
         provideRouter(routes),
         provideHttpClient(),
         provideHttpClientTesting(),
-        {
-          provide: AuthService,
-          useValue: authServiceSpy
-        }
+        provideMockAuthService(false)
       ],
     }).compileComponents();
 
@@ -52,9 +47,9 @@ describe('App Routing', () => {
     expect(location.path()).toBe('');
   }));
 
-  it('should not navigate to /profile if authenticated', waitForAsync(async () => {
-    const authGuard = TestBed.inject(AuthGuard);
-    spyOn(authGuard, 'canActivate').and.returnValue(true);
+  it('should navigate to /profile if authenticated', waitForAsync(async () => {
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    authServiceSpy.isAuthenticated.and.returnValue(true);
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
