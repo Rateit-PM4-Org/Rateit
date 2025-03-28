@@ -4,7 +4,11 @@
       <ion-icon name="home"></ion-icon>
       Home
     </ion-tab-button>
-    <ion-tab-button tab="profile">
+    <ion-tab-button *ngIf="!isAuthenticated" tab="login">
+      <ion-icon name="log-in-outline"></ion-icon>
+      Login
+    </ion-tab-button>
+    <ion-tab-button *ngIf="isAuthenticated" tab="profile">
       <ion-icon name="person-outline"></ion-icon>
       Profile
     </ion-tab-button>

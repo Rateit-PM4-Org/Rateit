@@ -3,8 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController, IonModal } from '@ionic/angular/standalone';
 import { catchError, of } from 'rxjs';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { ApiService } from '../../../shared/services/api.service';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
+import { TestService } from '../../../shared/services/test.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   errorMessage: string = '';
 
   constructor(
-    private readonly apiService: ApiService,
+    private readonly apiService: TestService,
     private readonly actionSheetCtrl: ActionSheetController
   ) { }
 

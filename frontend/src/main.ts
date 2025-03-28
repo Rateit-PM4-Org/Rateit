@@ -4,7 +4,7 @@ import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { addIcons } from 'ionicons';
-import { addOutline, close, home, personOutline, pricetagOutline, star } from 'ionicons/icons';
+import { addOutline, close, home, logInOutline, personOutline, pricetagOutline, star } from 'ionicons/icons';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
@@ -26,5 +26,6 @@ addIcons({
   addOutline,
   pricetagOutline,
   star,
-  close
+  close,
+  logInOutline
 });

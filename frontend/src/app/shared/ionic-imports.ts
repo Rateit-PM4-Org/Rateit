@@ -29,6 +29,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  IonText,
   IonTextarea,
   IonThumbnail,
   IonTitle,
@@ -70,5 +71,6 @@ export const IonicStandaloneStandardImports = [
   IonLabel,
   IonContent,
   IonButton,
-  IonHeader
+  IonHeader,
+  IonText
 ];
