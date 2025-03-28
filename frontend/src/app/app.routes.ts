@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { TabMenuComponent } from './features/tabs/tab-menu/tab-menu.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -11,8 +12,17 @@ export const routes: Routes = [
             loadComponent: () => import('./features/tabs/home/home.component').then((m) => m.HomeComponent),
           },
           {
+            path: 'login',
+            loadComponent: () => import('./features/tabs/login/login.component').then((m) => m.LoginComponent),
+          },
+          {
+            path: 'register',
+            loadComponent: () => import('./features/tabs/register/register.component').then((m) => m.RegisterComponent),
+          },
+          {
             path: 'profile',
             loadComponent: () => import('./features/tabs/profile/profile.component').then((m) => m.ProfileComponent),
+            canActivate: [AuthGuard],
           },
           {
             path: '',
