@@ -7,11 +7,15 @@ import ch.zhaw.rateit.api.logic.user.service.UserRegistrationService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.service.UserVerificationService;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Controller to handle interactions with users.
@@ -46,16 +50,13 @@ public class UserController {
 
 
     @GetMapping("/mail-confirmation")
-    public ResponseEntity<String> verifyUser(
-            @RequestParam String email,
-            @RequestParam String token
-    ) {
+    public ResponseEntity<Map<String, Object>> verifyUser(@RequestParam @NotEmpty @Email String email, @RequestParam @NotEmpty String token) {
         boolean isVerified = userVerificationService.verifyUser(email, token);
 
         if (isVerified) {
-            return ResponseEntity.ok("Email verified successfully. You can now log in.");
+            return ResponseEntity.ok().body(null);
         } else {
-            return ResponseEntity.status(403).body("Email verification failed. Invalid token or email.");
+            return ResponseEntity.badRequest().body(Map.of("error", "Email verification failed. Invalid token or email."));
         }
     }
 

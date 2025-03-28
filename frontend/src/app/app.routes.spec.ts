@@ -69,6 +69,17 @@ describe('App Routing', () => {
     expect(location.path()).toBe('/home');
   }));
 
+  it('should navigate to /user/mail-confirmation', waitForAsync(async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/user/mail-confirmation']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/user/mail-confirmation');
+  }
+  ));
+
   it('should navigate to /login', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();

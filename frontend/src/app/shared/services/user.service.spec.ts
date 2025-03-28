@@ -31,5 +31,17 @@ describe('UserService', () => {
       expect(response).toEqual(mockResponse);
     });
   });
+
+  it('should confirm email', () => {
+    const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
+    apiServiceSpy.get.and.returnValue(of({ success: true }));
+    const mockResponse = { success: true };
+    const email = 'email'
+    const token = 'mock-token';
+
+    service.confirmEmail(email, token).pipe(first()).subscribe(response => {
+      expect(response).toEqual(mockResponse);
+    });
+  });
   
 });

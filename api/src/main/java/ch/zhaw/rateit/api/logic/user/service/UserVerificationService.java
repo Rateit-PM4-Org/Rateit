@@ -52,7 +52,7 @@ public class UserVerificationService {
     public boolean verifyUser(String email, String token) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
-        if (userOptional.isPresent()) {
+        if (userOptional.isPresent() && userOptional.get().getEmailVerificationToken() != null && !userOptional.get().isEmailVerified()) {
             User user = userOptional.get();
 
             if (user.getEmailVerificationToken().equals(token)) {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { BehaviorSubject, Observable} from 'rxjs';
 import { AuthService } from './auth.service';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,9 @@ export class UserService {
 
   register(email: string, displayName: string, password: string): Observable<any> {
     return this.apiService.post('/user/register', { email, displayName, password });
+  }
+
+  confirmEmail(email: string, token: string): Observable<any> {
+    return this.apiService.get('/user/mail-confirmation?email=' + email + '&token=' + token);
   }
 }
