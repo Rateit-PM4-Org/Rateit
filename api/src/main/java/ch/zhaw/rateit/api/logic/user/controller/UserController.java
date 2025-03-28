@@ -29,8 +29,14 @@ public class UserController {
         this.userLoginService = userLoginService;
     }
 
+    /**
+     * Register a new user
+     *
+     * @param userRegistrationRequest
+     * @return created user
+     */
     @PostMapping(path = "/register")
-    public User register(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+    public User register(@RequestBody @Validated UserRegistrationRequest userRegistrationRequest) {
         return userRegistrationService.register(userRegistrationRequest);
     }
 
