@@ -5,21 +5,19 @@ import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 import { first } from 'rxjs';
+import { provideMockAuthService } from '../test-util/test-util';
 
 describe('ApiService', () => {
   let service: ApiService;
   let httpMock: HttpTestingController;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(() => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['getToken', 'logout']);
-
     TestBed.configureTestingModule({
       providers: [
         ApiService,
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: AuthService, useValue: authServiceSpy }
+        provideMockAuthService(true)
       ]
     });
 
@@ -36,7 +34,6 @@ describe('ApiService', () => {
   });
 
   it('should perform a GET request with the correct headers', () => {
-    authServiceSpy.getToken.and.returnValue('mock-token');
     const mockResponse = { data: 'test' };
 
     service.get('/test').pipe(first()).subscribe(response => {
@@ -45,12 +42,11 @@ describe('ApiService', () => {
 
     const req = httpMock.expectOne(`${environment.apiUrl}/test`);
     expect(req.request.method).toBe('GET');
-    expect(req.request.headers.get('Authorization')).toBe('Bearer mock-token');
+    expect(req.request.headers.get('Authorization')).toBe('Bearer token');
     req.flush(mockResponse);
   });
 
   it('should perform a POST request with the correct headers and body', () => {
-    authServiceSpy.getToken.and.returnValue('mock-token');
     const mockBody = { key: 'value' };
     const mockResponse = { success: true };
 
@@ -60,13 +56,13 @@ describe('ApiService', () => {
 
     const req = httpMock.expectOne(`${environment.apiUrl}/test`);
     expect(req.request.method).toBe('POST');
-    expect(req.request.headers.get('Authorization')).toBe('Bearer mock-token');
+    expect(req.request.headers.get('Authorization')).toBe('Bearer token');
     expect(req.request.body).toEqual(mockBody);
     req.flush(mockResponse);
   });
 
   it('should call AuthService.logout on 403 error for GET request', () => {
-    authServiceSpy.getToken.and.returnValue('mock-token');
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     service.get('/test').pipe(first()).subscribe({
       error: () => {
         expect(authServiceSpy.logout).toHaveBeenCalled();
@@ -78,7 +74,7 @@ describe('ApiService', () => {
   });
 
   it('should call AuthService.logout on 403 error for POST request', () => {
-    authServiceSpy.getToken.and.returnValue('mock-token');
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     const mockBody = { key: 'value' };
 
     service.post('/test', mockBody).pipe(first()).subscribe({

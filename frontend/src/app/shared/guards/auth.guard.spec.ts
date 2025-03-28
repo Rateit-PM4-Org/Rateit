@@ -3,6 +3,9 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/ro
 import { AuthGuard } from './auth.guard';
 import { AuthService } from '../services/auth.service';
 import { of } from 'rxjs';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideMockAuthService } from '../test-util/test-util';
 
 describe('AuthGuard', () => {
   let authGuard: AuthGuard;
@@ -11,13 +14,14 @@ describe('AuthGuard', () => {
   
 
   beforeEach(() => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['isAuthenticated']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         AuthGuard,
-        { provide: AuthService, useValue: authServiceSpy },
+        provideMockAuthService(false),
         { provide: Router, useValue: routerSpy }
       ]
     });
@@ -30,13 +34,12 @@ describe('AuthGuard', () => {
   });
 
   it('should allow activation if user is authenticated', () => {
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     authServiceSpy.isAuthenticated.and.returnValue(true);
     expect(authGuard.canActivate(new ActivatedRouteSnapshot(), <RouterStateSnapshot>{url: 'testUrl'})).toBeTrue();
   });
 
   it('should deny activation and redirect to login if user is not authenticated', () => {
-    authServiceSpy.isAuthenticated.and.returnValue(false);
-
     expect(authGuard.canActivate(new ActivatedRouteSnapshot(), <RouterStateSnapshot>{url: 'testUrl'})).toBeFalse();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/login'], Object({ queryParams: Object({ returnUrl: "testUrl" }) }));
   });

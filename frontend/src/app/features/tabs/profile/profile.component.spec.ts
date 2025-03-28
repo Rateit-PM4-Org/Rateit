@@ -8,6 +8,8 @@ import { UserService } from '../../../shared/services/user.service';
 import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideMockAuthService } from '../../../shared/test-util/test-util';
 
 describe('ProfileComponent', () => {
   beforeEach(async () => {
@@ -17,7 +19,7 @@ describe('ProfileComponent', () => {
         IonicModule.forRoot(),
         NoopAnimationsModule
       ],
-      providers: [provideHttpClient()]
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
   });
 
@@ -51,13 +53,12 @@ describe('ProfileComponent', () => {
   });
 
   it('should call AuthService.logout and navigate to /home on logout', () => {
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'getAuthenticationStatusObservable']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
-    authServiceSpy.getAuthenticationStatusObservable.and.returnValue(of(false));
 
-    TestBed.overrideProvider(AuthService, { useValue: authServiceSpy });
+    TestBed.overrideProvider(AuthService, provideMockAuthService(false));
     TestBed.overrideProvider(Router, { useValue: routerSpy });
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     const fixture = TestBed.createComponent(ProfileComponent);
     const component = fixture.componentInstance;
 

@@ -5,6 +5,9 @@ import { provideRouter, Router, RouterOutlet } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { AuthService } from './shared/services/auth.service';
+import { of } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -17,6 +20,9 @@ class TestHostComponent { }
 describe('App Routing', () => {
   let router: Router;
   let location: Location;
+  const authServiceSpy = jasmine.createSpyObj('AuthService', ['isAuthenticated', 'getAuthenticationStatusObservable']);
+  authServiceSpy.getAuthenticationStatusObservable.and.returnValue(of(false));
+  authServiceSpy.isAuthenticated.and.returnValue(false);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -24,9 +30,14 @@ describe('App Routing', () => {
       providers: [
         provideRouter(routes),
         provideHttpClient(),
+        provideHttpClientTesting(),
+        {
+          provide: AuthService,
+          useValue: authServiceSpy
+        }
       ],
     }).compileComponents();
-  
+
     router = TestBed.inject(Router);
     location = TestBed.inject(Location);
   }));

@@ -8,6 +8,8 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { routes } from '../../../app.routes';
 import { AuthService } from '../../../shared/services/auth.service';
 import { of } from 'rxjs';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideMockAuthService } from '../../../shared/test-util/test-util';
 
 describe('TabMenuComponent', () => {
   beforeEach(async () => {
@@ -17,7 +19,7 @@ describe('TabMenuComponent', () => {
         IonicModule.forRoot(),
         NoopAnimationsModule
       ],
-      providers: [provideHttpClient(), provideRouter(routes)]
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter(routes), provideMockAuthService(false)]
     }).compileComponents();
   });
 
@@ -51,11 +53,7 @@ describe('TabMenuComponent', () => {
   });
 
   it('should have a "profile" tab, when logged in', () => {
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['logout', 'getAuthenticationStatusObservable']);
-
-    authServiceSpy.getAuthenticationStatusObservable.and.returnValue(of(true));
-
-    TestBed.overrideProvider(AuthService, { useValue: authServiceSpy });
+    TestBed.overrideProvider(AuthService, provideMockAuthService(true));
     const fixture = TestBed.createComponent(TabMenuComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;

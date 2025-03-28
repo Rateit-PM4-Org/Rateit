@@ -4,6 +4,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
 import { of, throwError } from 'rxjs';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideMockAuthService } from '../../../shared/test-util/test-util';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -12,13 +14,14 @@ describe('LoginComponent', () => {
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(waitForAsync(() => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
     routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl', 'navigate']);
 
     TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
         provideHttpClient(),
+        provideHttpClientTesting(),
+        provideMockAuthService(false),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -29,7 +32,6 @@ describe('LoginComponent', () => {
             }
           }
         },
-        { provide: AuthService, useValue: authServiceSpy },
         { provide: Router, useValue: routerSpy }
       ]
     }).compileComponents();
@@ -56,7 +58,7 @@ describe('LoginComponent', () => {
   });
 
   it('should call AuthService.login and navigate on successful login to home', () => {
-    authServiceSpy.login.and.returnValue(of({}));
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     component.email = 'test@example.com';
     component.password = 'password123';
 
@@ -69,9 +71,9 @@ describe('LoginComponent', () => {
   });
 
   it('should call AuthService.login and navigate on successful login to get-param', () => {
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     const route = TestBed.inject(ActivatedRoute);
     route.snapshot.queryParams['returnUrl'] = '/profile';
-    authServiceSpy.login.and.returnValue(of({}));
     component.email = 'test@example.com';
     component.password = 'password123';
 

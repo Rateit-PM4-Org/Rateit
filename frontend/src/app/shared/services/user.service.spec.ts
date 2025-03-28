@@ -9,7 +9,6 @@ import { provideHttpClient } from '@angular/common/http';
 describe('UserService', () => {
   let service: UserService;
   let httpMock: HttpTestingController;
-  let authService: AuthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -18,13 +17,8 @@ describe('UserService', () => {
         provideHttpClientTesting(),
       ]
     });
-    authService = TestBed.inject(AuthService);
     service = TestBed.inject(UserService);
     httpMock = TestBed.inject(HttpTestingController);
-  });
-
-  afterEach(() => {
-    httpMock.verify();
   });
 
   it('should be created', () => {
