@@ -10,12 +10,12 @@ import { Router } from '@angular/router';
 })
 export class MailConfirmationComponent  implements OnInit {
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private readonly userService: UserService, private readonly router: Router) { }
 
   ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
-    const email = urlParams.get('email') || '';
-    const token = urlParams.get('token') || '';
+    const email = urlParams.get('email') ?? '';
+    const token = urlParams.get('token') ?? '';
 
     this.userService.confirmEmail(email, token).subscribe(
       {

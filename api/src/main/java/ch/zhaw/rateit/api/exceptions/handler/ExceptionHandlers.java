@@ -4,7 +4,6 @@ import ch.zhaw.rateit.api.exceptions.types.DuplicateEmailUserException;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -50,7 +49,7 @@ public class ExceptionHandlers {
         Map<String, Object> errorResponse = new HashMap<>();
 
         Map<String, List<String>> errors = ex.getParameterValidationResults().stream()
-                .collect(Collectors.toMap(o -> o.getMethodParameter().getParameterName(), o -> o.getResolvableErrors().stream().map(MessageSourceResolvable::getDefaultMessage).collect(Collectors.toList())));
+                .collect(Collectors.toMap(o -> o.getMethodParameter().getParameterName(), o -> o.getResolvableErrors().stream().map(MessageSourceResolvable::getDefaultMessage).toList()));
         errorResponse.put("error", "Validation failed");
         errorResponse.put("fields", errors);
 
