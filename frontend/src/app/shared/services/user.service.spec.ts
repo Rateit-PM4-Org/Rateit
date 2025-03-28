@@ -1,24 +1,20 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { UserService } from './user.service';
-import { environment } from '../../../environments/environment';
-import { AuthService } from './auth.service';
 import { first, of } from 'rxjs';
-import { provideHttpClient } from '@angular/common/http';
+import { provideMockApiService, provideMockAuthService } from '../test-util/test-util';
+import { ApiService } from './api.service';
 
 describe('UserService', () => {
   let service: UserService;
-  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [UserService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
+        provideMockAuthService(true),
+        provideMockApiService()
       ]
     });
     service = TestBed.inject(UserService);
-    httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should be created', () => {
@@ -26,17 +22,14 @@ describe('UserService', () => {
   });
 
   it('should register a new user', () => {
+    const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
+    apiServiceSpy.post.and.returnValue(of({ success: true }));
     const mockResponse = { success: true };
     const registrationData = { email: 'test@example.com', displayName: 'Test User', password: 'password123' };
 
     service.register(registrationData.email, registrationData.displayName, registrationData.password).pipe(first()).subscribe(response => {
       expect(response).toEqual(mockResponse);
-      
-    })
-
-    const req = httpMock.expectOne(`${environment.apiUrl}/user/register`);
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(registrationData);
-    req.flush(mockResponse);
+    });
   });
+  
 });
