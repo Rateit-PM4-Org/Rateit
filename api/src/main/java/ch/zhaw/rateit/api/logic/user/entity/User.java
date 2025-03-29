@@ -21,6 +21,8 @@ public class User implements UserDetails {
     private String email;
     private String displayName;
     private String hashedPassword;
+    private boolean isEmailVerified = false;
+    private String emailVerificationToken;
 
     public User(String email, String displayName, String hashedPassword) {
         this.email = email;
@@ -51,6 +53,24 @@ public class User implements UserDetails {
 
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    @JsonIgnore
+    public boolean isEmailVerified() {
+        return isEmailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        isEmailVerified = emailVerified;
+    }
+
+    @JsonIgnore
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
+    }
+
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
     }
 
     /**
@@ -89,7 +109,7 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return isEmailVerified;
     }
 
     @Override
