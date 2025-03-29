@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController, IonModal } from '@ionic/angular/standalone';
-import { catchError, of } from 'rxjs';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 

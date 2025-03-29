@@ -1,6 +1,5 @@
 package ch.zhaw.rateit.api.config.db.migration;
 
-import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
