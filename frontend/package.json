@@ -21,6 +21,7 @@
     "@angular/router": "^19.2.4",
     "@ionic/angular": "^8.5.2",
     "@ionic/pwa-elements": "^3.3.0",
+    "ionicons": "^7.4.0",
     "karma-sonarqube-reporter": "^1.4.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

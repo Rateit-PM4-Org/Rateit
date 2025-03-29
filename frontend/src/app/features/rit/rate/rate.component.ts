@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { addIcons } from 'ionicons';
+import { star, starOutline } from 'ionicons/icons';
+
+addIcons({ star, 'star-outline': starOutline });
 
 @Component({
   selector: 'app-rate',
@@ -14,5 +18,12 @@ export class RateComponent  implements OnInit {
   constructor() { }
 
   ngOnInit() {}
+
+
+  rating: number = 0;
+
+  setRating(value: number) {
+    this.rating = this.rating === value ? 0 : value;
+  }
 
 }

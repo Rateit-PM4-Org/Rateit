@@ -8,10 +8,12 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonChip,
+  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
   IonFabList,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonImg,
@@ -22,6 +24,7 @@ import {
   IonModal,
   IonRippleEffect,
   IonRouterOutlet,
+  IonRow,
   IonSegment,
   IonSegmentButton,
   IonSegmentContent,
@@ -70,5 +73,8 @@ export const IonicStandaloneStandardImports = [
   IonLabel,
   IonContent,
   IonButton,
-  IonHeader
+  IonHeader,
+  IonGrid,
+  IonRow,
+  IonCol
 ];

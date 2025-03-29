@@ -19,6 +19,11 @@ export const routes: Routes = [
             redirectTo: '/home',
             pathMatch: 'full',
           },
+          {
+            path: 'rating',
+            loadComponent: () =>
+              import('./features/rit/rate/rate.component').then((m) => m.RateComponent),
+          },
         ],
       },
       {

@@ -9,7 +9,7 @@ import { ModalController } from '@ionic/angular/standalone';
   templateUrl: './rit-create.component.html',
   styleUrls: ['./rit-create.component.scss'],
   standalone: true,
-  imports: [CommonModule, ...IonicStandaloneStandardImports, RateComponent],
+  imports: [CommonModule, ...IonicStandaloneStandardImports],
 })
 export class RitCreateComponent {
 
