@@ -34,4 +34,8 @@ export class UserService {
   register(email: string, displayName: string, password: string): Observable<any> {
     return this.apiService.post('/user/register', { email, displayName, password });
   }
+
+  confirmEmail(email: string, token: string): Observable<any> {
+    return this.apiService.get('/user/mail-confirmation?email=' + email + '&token=' + token);
+  }
 }
