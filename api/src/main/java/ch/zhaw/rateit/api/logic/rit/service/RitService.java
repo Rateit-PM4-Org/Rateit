@@ -28,7 +28,7 @@ public class RitService {
 
         Rit rit = new Rit(
                 request.name(),
-                user.getId(),
+                user,
                 request.image(),
                 request.details(),
                 request.published()

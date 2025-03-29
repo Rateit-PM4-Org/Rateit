@@ -1,9 +1,11 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
+import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.Instant;
 
@@ -19,8 +21,10 @@ public class Rit {
     @Id
     private String id;
 
+    @DocumentReference(lazy = true)
+    private User user;
+
     private String name;
-    private String userId;
     private String image;
     private String details;
     private boolean published;
@@ -34,9 +38,9 @@ public class Rit {
     public Rit() {
     }
 
-    public Rit(String name, String userId, String image, String details, boolean published) {
+    public Rit(String name, User user, String image, String details, boolean published) {
         this.name = name;
-        this.userId = userId;
+        this.user = user;
         this.image = image;
         this.details = details;
         this.published = published;
@@ -54,12 +58,12 @@ public class Rit {
         this.name = name;
     }
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getImage() {

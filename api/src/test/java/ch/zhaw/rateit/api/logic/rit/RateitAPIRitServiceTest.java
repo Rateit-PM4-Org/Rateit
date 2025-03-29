@@ -16,6 +16,8 @@ class RitServiceTest {
     private RitRepository ritRepository;
     private RitService ritService;
 
+    private User testUser = new User("test@test.ch", "TestUser","$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
+
     @BeforeEach
     void setUp() {
         ritRepository = mock(RitRepository.class);
@@ -34,13 +36,13 @@ class RitServiceTest {
                 false
         );
 
-        Rit savedRit = new Rit("Test Rit", "123", "data:image/jpeg;base64,validimage", "Details", false);
+        Rit savedRit = new Rit("Test Rit", testUser, "data:image/jpeg;base64,validimage", "Details", false);
         when(ritRepository.save(any())).thenReturn(savedRit);
 
         Rit result = ritService.create(user, request);
 
         assertEquals("Test Rit", result.getName());
-        assertEquals("123", result.getUserId());
+        assertEquals("TestUser", result.getUser().getDisplayName());
         assertEquals("Details", result.getDetails());
         verify(ritRepository, times(1)).save(any(Rit.class));
     }
