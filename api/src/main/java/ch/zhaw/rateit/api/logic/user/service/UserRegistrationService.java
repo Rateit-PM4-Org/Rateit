@@ -16,19 +16,25 @@ import org.springframework.stereotype.Service;
 public class UserRegistrationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncrypter;
+    private final UserVerificationService userVerificationService;
 
-    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncrypter) {
+    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncrypter, UserVerificationService userVerificationService) {
         this.userRepository = userRepository;
         this.passwordEncrypter = passwordEncrypter;
+        this.userVerificationService = userVerificationService;
     }
 
     public User register(UserRegistrationRequest userRegistrationRequest) {
         checkEmailUnique(userRegistrationRequest.email());
 
         User newUser = new User(userRegistrationRequest.email(), userRegistrationRequest.displayName(), hashCleanPassword(userRegistrationRequest.password()));
+        newUser = userVerificationService.sendVerificationEmail(newUser);
         userRepository.save(newUser);
+
         return newUser;
     }
+
+
 
     private void checkEmailUnique(String email) {
         userRepository.findByEmail(email).ifPresent(user -> {

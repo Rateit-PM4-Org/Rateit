@@ -6,10 +6,16 @@ import ch.zhaw.rateit.api.logic.user.service.UserLoginService;
 import ch.zhaw.rateit.api.logic.user.service.UserRegistrationService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
+import ch.zhaw.rateit.api.logic.user.service.UserVerificationService;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Controller to handle interactions with users.
@@ -22,16 +28,36 @@ public class UserController {
 
     private final UserRegistrationService userRegistrationService;
     private final UserLoginService userLoginService;
+    private final UserVerificationService userVerificationService;
 
     @Autowired
-    public UserController(UserRegistrationService userRegistrationService, UserLoginService userLoginService) {
+    public UserController(UserRegistrationService userRegistrationService, UserLoginService userLoginService, UserVerificationService userVerificationService) {
         this.userRegistrationService = userRegistrationService;
         this.userLoginService = userLoginService;
+        this.userVerificationService = userVerificationService;
     }
 
+    /**
+     * Register a new user
+     *
+     * @param userRegistrationRequest
+     * @return created user
+     */
     @PostMapping(path = "/register")
-    public User register(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+    public User register(@RequestBody @Validated UserRegistrationRequest userRegistrationRequest) {
         return userRegistrationService.register(userRegistrationRequest);
+    }
+
+
+    @GetMapping("/mail-confirmation")
+    public ResponseEntity<Map<String, Object>> verifyUser(@RequestParam @NotEmpty @Email String email, @RequestParam @NotEmpty String token) {
+        boolean isVerified = userVerificationService.verifyUser(email, token);
+
+        if (isVerified) {
+            return ResponseEntity.ok().body(null);
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("error", "Email verification failed. Invalid token or email."));
+        }
     }
 
     /**

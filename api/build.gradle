@@ -39,6 +39,13 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
+	// Mongock
+	implementation "io.mongock:mongock:5.5.1"
+	implementation "io.mongock:mongock-springboot:5.5.1"
+	implementation "io.mongock:mongodb-springdata-v4-driver:5.5.1"
+
+	// Mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
