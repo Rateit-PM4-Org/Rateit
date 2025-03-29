@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @Import(WebsecurityConfig.class)
-class RitControllerIntegrationTest extends AbstractBaseIntegrationTest {
+public class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

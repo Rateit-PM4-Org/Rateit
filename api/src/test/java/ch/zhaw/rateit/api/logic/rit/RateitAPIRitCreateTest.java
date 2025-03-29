@@ -8,10 +8,12 @@ import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
-class RitServiceTest {
+public class RateitAPIRitCreateTest {
 
     private RitRepository ritRepository;
     private RitService ritService;
@@ -26,9 +28,6 @@ class RitServiceTest {
 
     @Test
     void create_validRequest_savesRit() {
-
-        User user = new User("max", "123", "blabla");
-
         RitCreateRequest request = new RitCreateRequest(
                 "Test Rit",
                 "data:image/jpeg;base64,validimage",
@@ -39,7 +38,7 @@ class RitServiceTest {
         Rit savedRit = new Rit("Test Rit", testUser, "data:image/jpeg;base64,validimage", "Details", false);
         when(ritRepository.save(any())).thenReturn(savedRit);
 
-        Rit result = ritService.create(user, request);
+        Rit result = ritService.create(testUser, request);
 
         assertEquals("Test Rit", result.getName());
         assertEquals("TestUser", result.getUser().getDisplayName());
@@ -49,14 +48,12 @@ class RitServiceTest {
 
     @Test
     void create_imageTooLarge_throwsException() {
-        User user = new User("max", "123", "blabla");
-
         String tooLargeImage = "data:image/jpeg;base64," + "A".repeat(600_000);
 
         RitCreateRequest request = new RitCreateRequest("Name", tooLargeImage, "Details", false);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
-                ritService.create(user, request)
+                ritService.create(testUser, request)
         );
 
         assertTrue(ex.getMessage().contains("Image is too large"));
@@ -64,12 +61,10 @@ class RitServiceTest {
 
     @Test
     void create_invalidImageFormat_throwsException() {
-        User user = new User("max", "123", "blabla");
-
         RitCreateRequest request = new RitCreateRequest("Name", "notBase64Image", "Details", false);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
-                ritService.create(user, request)
+                ritService.create(testUser, request)
         );
 
         assertTrue(ex.getMessage().contains("Invalid image format"));
