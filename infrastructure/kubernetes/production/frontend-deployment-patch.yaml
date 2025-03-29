@@ -1,3 +1,3 @@
 - op: replace #action 
   path: /spec/template/spec/containers/0/image #resouirce we want to change
-  value: ghcr.io/rateit-pm4-org/rateit-frontend@sha256:a203f229e2ef91ceee731b0add029b7694e9a48b20414d9e60aabb91c331e742
+  value: ghcr.io/rateit-pm4-org/rateit-frontend@sha256:f61a2dcac94a054de5220e79e3c1bd1afcabd4c44212418ae308632dfd10f8c4

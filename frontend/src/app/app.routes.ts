@@ -20,6 +20,10 @@ export const routes: Routes = [
             loadComponent: () => import('./features/tabs/register/register.component').then((m) => m.RegisterComponent),
           },
           {
+            path: 'user/mail-confirmation',
+            loadComponent: () => import('./features/tabs/mail-confirmation/mail-confirmation.component').then((m) => m.MailConfirmationComponent),
+          },
+          {
             path: 'profile',
             loadComponent: () => import('./features/tabs/profile/profile.component').then((m) => m.ProfileComponent),
             canActivate: [AuthGuard],

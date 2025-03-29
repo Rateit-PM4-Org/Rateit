@@ -44,6 +44,7 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
     @BeforeEach
     void cleanDatabase() {
         userRepository.deleteAll();
+        testUser.setEmailVerified(true);
         userRepository.save(testUser);
     }
 
