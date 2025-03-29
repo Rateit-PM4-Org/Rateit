@@ -12,7 +12,13 @@
           Select a picture
         </div>
 
-        <ion-button class="rating-button" size="medium" fill="solid" color="warning" data-testid="rating-button">
+        <ion-button
+          class="rating-button"
+          size="medium"
+          fill="solid"
+          color="warning"
+          (click)="onRatingButtonClick($event)"
+        >
           4 <ion-icon name="star" slot="end"></ion-icon>
         </ion-button>
 
