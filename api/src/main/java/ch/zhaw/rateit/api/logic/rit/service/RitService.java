@@ -26,11 +26,13 @@ public class RitService {
     public Rit create(User user, RitCreateRequest request) {
         validateImage(request.image());
 
+        //TODO save image to MiniIO
+
         Rit rit = new Rit(
                 request.name(),
                 user,
                 request.image(),
-                request.details(),
+                null, //TODO MiniIO setup
                 request.published()
         );
 
