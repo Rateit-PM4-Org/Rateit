@@ -37,7 +37,7 @@ public class RitService {
         return ritRepository.save(rit);
     }
 
-    private void validateImage(String image) {
+    private void validateImage(String image) throws IllegalArgumentException {
         if (image == null) return;
 
         if (image.length() > MAX_IMAGE_SIZE) {
