@@ -28,6 +28,10 @@ public class User implements UserDetails {
         this.hashedPassword = hashedPassword;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public String getEmail() {
         return email;
     }
