@@ -8,10 +8,12 @@
       <ion-grid>
         <ion-row>
           <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]; let i = index">
-            <ion-icon class="rating-star" [class.filled]="i < rating" [name]="i < rating ? 'star' : 'star-outline'"
+            <ion-icon
+              class="rating-star"
+              [class.filled]="i < rating"
+              [name]="i < rating ? 'star' : 'star-outline'"
               (click)="setRating(i + 1)">
             </ion-icon>
-
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -23,8 +25,13 @@
       <ion-card-title>Positive</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-textarea data-testid="details-textarea" label="Enter Pros" [autoGrow]="true" labelPlacement="floating"
-        fill="outline" placeholder="Enter text"></ion-textarea>
+      <ion-textarea
+        label="Enter Pros"
+        [autoGrow]="true"
+        labelPlacement="floating"
+        fill="outline"
+        placeholder="Enter text">
+      </ion-textarea>
     </ion-card-content>
   </ion-card>
 
@@ -33,8 +40,13 @@
       <ion-card-title>Negative</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-textarea data-testid="details-textarea" label="Enter Cons" [autoGrow]="true" labelPlacement="floating"
-        fill="outline" placeholder="Enter text"></ion-textarea>
+      <ion-textarea
+        label="Enter Cons"
+        [autoGrow]="true"
+        labelPlacement="floating"
+        fill="outline"
+        placeholder="Enter text">
+      </ion-textarea>
     </ion-card-content>
   </ion-card>
 
