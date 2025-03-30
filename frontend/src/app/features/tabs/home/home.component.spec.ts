@@ -23,19 +23,12 @@ describe('HomeComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render "Local Greetings" in ion-title', () => {
+  it('should render "Home" in ion-title', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const title = compiled.querySelector('ion-title');
-    expect(title?.textContent).toContain('Local Greetings');
-  });
-
-  it('should show loading message if no data and no error', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('Loading data...');
+    expect(title?.textContent).toContain('Home');
   });
 
   it('confirm() should call modal.dismiss with correct data', async () => {

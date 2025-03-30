@@ -46,7 +46,7 @@ describe('ProfileComponent', () => {
     const fixture = TestBed.createComponent(ProfileComponent);
     const component = fixture.componentInstance;
 
-    component.ngOnInit();
+    component.ionViewWillEnter();
 
     expect(userServiceSpy.getProfile).toHaveBeenCalled();
     expect(component.profile).toEqual(mockProfile);
