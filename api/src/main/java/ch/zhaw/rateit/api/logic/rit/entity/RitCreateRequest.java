@@ -1,18 +1,23 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
- * Dataclass to store rit requests. This is used when a new rit is created.
- * @param name name of the rit
- * @param image image base64-encoded image of the rit
- * @param details details of the rit
- * @param published published status of the rit
+ * Request object for creating a new rit.
+ * Contains the name, image, details and published status of the rit.
+ *
+ * @param name      Name of the rit
+ * @param images    List of images for the rit
+ * @param details   Details about the rit
+ * @param published Whether the rit is published or not
  */
 public record RitCreateRequest(
-        @NotEmpty String name,
-        @Size(max = 500_000, message = "Image too large. Max 500 KB base64.") String image,
+        @NotBlank String name,
         String details,
+        List<MultipartFile> images,
         boolean published
-) {}
+) {
+}

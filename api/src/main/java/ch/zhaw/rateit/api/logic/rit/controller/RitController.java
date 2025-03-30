@@ -5,12 +5,15 @@ import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.service.RitService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * Controller to handle interactions with rits.
@@ -29,10 +32,17 @@ public class RitController {
         this.ritService = ritService;
     }
 
-    @PostMapping(path = "/create")
-    public Rit create(@AuthenticationPrincipal User user,
-                      @RequestBody @Validated RitCreateRequest ritCreateRequest) {
-        return ritService.create(user, ritCreateRequest);
+    @PostMapping(path = "/create", consumes = "multipart/form-data")
+    public ResponseEntity<Map<String, Object>> create(@AuthenticationPrincipal User user,
+                                                      @ModelAttribute @Validated RitCreateRequest request) {
+        StringBuilder error = new StringBuilder();
+        Rit created = ritService.create(user, request, error);
+
+        if (created == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", error.toString()));
+        }
+
+        return ResponseEntity.ok(Map.of("id", created.getId()));
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * Dataclass for rits in the MongoDB database.
@@ -16,7 +17,7 @@ import java.time.Instant;
  *
  * @author Micha Mettler
  */
-@Document(collection = "rits")
+@Document
 public class Rit {
     @Id
     private String id;
@@ -25,7 +26,7 @@ public class Rit {
     private User user;
 
     private String name;
-    private String image;
+    private List<ImageReference> images;
     private String details;
     private boolean published;
 
@@ -38,12 +39,12 @@ public class Rit {
     public Rit() {
     }
 
-    public Rit(String name, User user, String image, String details, boolean published) {
+    public Rit(String name, String details, List<ImageReference> images, boolean published, User user) {
         this.name = name;
-        this.user = user;
-        this.image = image;
         this.details = details;
+        this.images = images;
         this.published = published;
+        this.user = user;
     }
 
     public String getId() {
@@ -66,12 +67,12 @@ public class Rit {
         this.user = user;
     }
 
-    public String getImage() {
-        return image;
+    public List<ImageReference> getImages() {
+        return images;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImages(List<ImageReference> images) {
+        this.images = images;
     }
 
     public String getDetails() {

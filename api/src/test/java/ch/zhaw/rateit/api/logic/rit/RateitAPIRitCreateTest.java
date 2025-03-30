@@ -7,66 +7,81 @@ import ch.zhaw.rateit.api.logic.rit.service.RitService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
-public class RateitAPIRitCreateTest {
+@ExtendWith(MockitoExtension.class)
+class RateitAPIRitCreateTest {
 
+    @Mock
     private RitRepository ritRepository;
+
     private RitService ritService;
 
-    private User testUser = new User("test@test.ch", "TestUser","$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
+    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
 
     @BeforeEach
     void setUp() {
-        ritRepository = mock(RitRepository.class);
         ritService = new RitService(ritRepository);
     }
 
     @Test
-    void create_validRequest_savesRit() {
+    void create_validRequestWithoutImages_returnsSavedRit() {
         RitCreateRequest request = new RitCreateRequest(
                 "Test Rit",
-                "data:image/jpeg;base64,validimage",
                 "Details",
+                null,
                 false
         );
 
-        Rit savedRit = new Rit("Test Rit", testUser, "data:image/jpeg;base64,validimage", "Details", false);
-        when(ritRepository.save(any())).thenReturn(savedRit);
+        Rit dummyRit = new Rit("Test Rit", "Details", null, false, testUser);
+        when(ritRepository.save(any())).thenReturn(dummyRit);
 
-        Rit result = ritService.create(testUser, request);
+        StringBuilder error = new StringBuilder();
+        Rit result = ritService.create(testUser, request, error);
 
-        assertEquals("Test Rit", result.getName());
-        assertEquals("TestUser", result.getUser().getDisplayName());
-        assertEquals("Details", result.getDetails());
-        verify(ritRepository, times(1)).save(any(Rit.class));
+        assertNotNull(result);
+        assertEquals(request.name(), result.getName());
+        assertEquals(request.details(), result.getDetails());
+        assertEquals(testUser.getId(), result.getUser().getId());
+        assertEquals(0, error.length());
+        verify(ritRepository).save(any());
     }
 
     @Test
-    void create_imageTooLarge_throwsException() {
-        String tooLargeImage = "data:image/jpeg;base64," + "A".repeat(600_000);
+    void create_imageTooLarge_returnsNullAndErrorSet() {
+        byte[] large = "A".repeat(9 * 1024 * 1024).getBytes(); // 9MB
+        MockMultipartFile file = new MockMultipartFile("images", "large.jpg", "image/jpeg", large);
 
-        RitCreateRequest request = new RitCreateRequest("Name", tooLargeImage, "Details", false);
+        RitCreateRequest request = new RitCreateRequest("Big", "Too big", List.of(file), false);
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
-                ritService.create(testUser, request)
-        );
+        StringBuilder error = new StringBuilder();
+        Rit result = ritService.create(testUser, request, error);
 
-        assertTrue(ex.getMessage().contains("Image is too large"));
+        assertNull(result);
+        assertTrue(error.toString().contains("exceeds the maximum size"));
+        verifyNoInteractions(ritRepository);
     }
 
     @Test
-    void create_invalidImageFormat_throwsException() {
-        RitCreateRequest request = new RitCreateRequest("Name", "notBase64Image", "Details", false);
+    void create_tooManyImages_returnsNullAndErrorSet() {
+        MockMultipartFile file = new MockMultipartFile("images", "img.jpg", "image/jpeg", "x".getBytes());
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
-                ritService.create(testUser, request)
-        );
+        RitCreateRequest request = new RitCreateRequest("Too many", "Details", List.of(file, file, file, file), false);
 
-        assertTrue(ex.getMessage().contains("Invalid image format"));
+        StringBuilder error = new StringBuilder();
+        Rit result = ritService.create(testUser, request, error);
+
+        assertNull(result);
+        assertTrue(error.toString().contains("Maximum of 3 images allowed"));
+        verifyNoInteractions(ritRepository);
     }
 }
