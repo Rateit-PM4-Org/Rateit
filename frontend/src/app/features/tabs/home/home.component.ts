@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController, IonModal } from '@ionic/angular/standalone';
-import { catchError, of } from 'rxjs';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
-import { TestService } from '../../../shared/services/test.service';
 
 @Component({
   selector: 'app-home',
@@ -25,30 +23,11 @@ export class HomeComponent implements OnInit {
   errorMessage: string = '';
 
   constructor(
-    private readonly apiService: TestService,
     private readonly actionSheetCtrl: ActionSheetController
   ) { }
 
   ngOnInit() {
     this.presentingElement = document.querySelector('.ion-page');
-
-    this.apiService.getData().pipe(
-      catchError(error => {
-
-        console.error('Error fetching data:', error);
-        this.errorMessage = 'Failed to fetch data from backend';
-        return of([]); // Return an empty array in case of error
-      })
-    ).subscribe({
-      next: response => {
-        console.log('API Response:', response);
-        this.data = response; // Assign the response directly
-      },
-      error: err => {
-        console.error('Subscription Error:', err);
-        this.errorMessage = 'An error occurred';
-      }
-    });
   }
 
   handleModalDismiss(event: CustomEvent) {
