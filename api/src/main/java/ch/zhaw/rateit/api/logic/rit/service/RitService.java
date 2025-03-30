@@ -35,7 +35,8 @@ public class RitService {
                 user
         );
 
-        return ritRepository.save(rit);
+        ritRepository.save(rit);
+        return ritRepository.getRitById(rit.getId());
     }
 
 }

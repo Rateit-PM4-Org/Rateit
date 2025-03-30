@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
 /**
  * Handles Attachment-Requests and Logic
  *
@@ -57,10 +61,16 @@ public class AttachmentService {
      */
     private void validateImage(MultipartFile file) {
         if (file.getSize() > MAX_IMAGE_SIZE) {
-            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("images", "One of the images exceeds the maximum size of 8 MB."));
+            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("file", "exceeds the maximum size of 8 MB."));
         }
 
-        // TODO validate image type
-
+        try {
+            BufferedImage image = ImageIO.read(file.getInputStream());
+            if (image == null) {
+                throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("file", "is not a valid image."));
+            }
+        } catch (IOException e) {
+            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("file", "is not a valid image."));
+        }
     }
 }

@@ -26,8 +26,10 @@ public class Rit {
     @DocumentReference(lazy = true)
     private User owner;
 
-    private String name;
+    @DocumentReference(lazy = true)
     private List<Attachment> images;
+
+    private String name;
     private String details;
     private boolean published;
 

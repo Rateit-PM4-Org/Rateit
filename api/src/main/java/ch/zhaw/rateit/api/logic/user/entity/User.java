@@ -1,6 +1,7 @@
 package ch.zhaw.rateit.api.logic.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ import java.util.List;
  * @author Nicolas Zillig
  */
 @Document
+@JsonIgnoreProperties(value = { "target", "source" })
 public class User implements UserDetails {
     @Id
     private String id;

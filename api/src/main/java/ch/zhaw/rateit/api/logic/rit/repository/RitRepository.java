@@ -9,4 +9,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @author Micha Mettler
  */
 public interface RitRepository extends MongoRepository<Rit, String> {
+    Rit getRitById(String id);
 }

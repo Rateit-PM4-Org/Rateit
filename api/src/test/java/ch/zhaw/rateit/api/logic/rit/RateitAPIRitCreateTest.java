@@ -40,7 +40,7 @@ class RateitAPIRitCreateTest {
         );
 
         Rit dummyRit = new Rit("Test Rit", "Details", null, false, testUser);
-        when(ritRepository.save(any())).thenReturn(dummyRit);
+        when(ritRepository.getRitById(any())).thenReturn(dummyRit);
 
         Rit result = ritService.create(testUser, request);
 
