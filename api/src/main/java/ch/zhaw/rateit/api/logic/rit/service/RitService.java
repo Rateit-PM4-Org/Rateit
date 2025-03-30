@@ -19,7 +19,7 @@ import java.util.List;
 public class RitService {
     private final RitRepository ritRepository;
 
-    private static final long MAX_IMAGE_SIZE = 8 * 1024 * 1024; // 8 MB
+    private static final long MAX_IMAGE_SIZE = 8L * 1024 * 1024; // 8 MB
 
     @Autowired
     public RitService(RitRepository ritRepository) {
