@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { CommonModule } from '@angular/common';
+import { RateComponent } from '../rate/rate.component';
+import { ModalController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-rit-create',
@@ -11,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class RitCreateComponent {
 
-  constructor() { }
+  constructor(private readonly modalCtrl: ModalController) { }
 
   selectedImage: any
   tags: any[] = ['ABC', '123']
@@ -33,6 +35,23 @@ export class RitCreateComponent {
       reader.readAsDataURL(file)
     };
     input.click()
+  }
+
+  async openRateComponent() {
+    const modal = await this.modalCtrl.create({
+      component: RateComponent,
+      breakpoints: [0, 0.25, 0.85],
+      initialBreakpoint: 0.85,
+      showBackdrop: true,
+      canDismiss: true,
+    });
+
+    await modal.present();
+  }
+
+  onRatingButtonClick(event: Event) {
+    event.stopPropagation();
+    this.openRateComponent();
   }
 
   setRitName(event: any) {

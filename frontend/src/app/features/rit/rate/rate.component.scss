@@ -1,0 +1,16 @@
+.rating-star {
+    font-size: 32px;
+    margin: 4px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    color: var( --custom-color-accent); // Default gray for unselected stars
+  
+    &.filled {
+      color: var( --custom-color-accent); // Yellow for selected stars
+    }
+  
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+  
