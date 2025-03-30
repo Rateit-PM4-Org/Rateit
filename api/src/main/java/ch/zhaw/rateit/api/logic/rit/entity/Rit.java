@@ -1,5 +1,6 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
+import ch.zhaw.rateit.api.logic.attachment.entity.Attachment;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Dataclass for rits in the MongoDB database.
  * Represents an item that can be rated, with optional image and details.
- * Owned by a user and can be published or private.
+ * Owned by a owner and can be published or private.
  *
  * @author Micha Mettler
  */
@@ -23,10 +24,10 @@ public class Rit {
     private String id;
 
     @DocumentReference(lazy = true)
-    private User user;
+    private User owner;
 
     private String name;
-    private List<ImageReference> images;
+    private List<Attachment> images;
     private String details;
     private boolean published;
 
@@ -39,12 +40,12 @@ public class Rit {
     public Rit() {
     }
 
-    public Rit(String name, String details, List<ImageReference> images, boolean published, User user) {
+    public Rit(String name, String details, List<Attachment> images, boolean published, User owner) {
         this.name = name;
         this.details = details;
         this.images = images;
         this.published = published;
-        this.user = user;
+        this.owner = owner;
     }
 
     public String getId() {
@@ -59,19 +60,19 @@ public class Rit {
         this.name = name;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
-    public List<ImageReference> getImages() {
+    public List<Attachment> getImages() {
         return images;
     }
 
-    public void setImages(List<ImageReference> images) {
+    public void setImages(List<Attachment> images) {
         this.images = images;
     }
 

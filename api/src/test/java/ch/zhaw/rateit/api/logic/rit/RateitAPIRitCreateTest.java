@@ -5,15 +5,11 @@ import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.rit.service.RitService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
-import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockMultipartFile;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,28 +47,7 @@ class RateitAPIRitCreateTest {
         assertNotNull(result);
         assertEquals(request.name(), result.getName());
         assertEquals(request.details(), result.getDetails());
-        assertEquals(testUser.getId(), result.getUser().getId());
+        assertEquals(testUser.getId(), result.getOwner().getId());
         verify(ritRepository).save(any());
-    }
-
-    @Test
-    void create_imageTooLarge_returnsNullAndErrorSet() {
-        byte[] large = "A".repeat(9 * 1024 * 1024).getBytes(); // 9MB
-        MockMultipartFile file = new MockMultipartFile("images", "large.jpg", "image/jpeg", large);
-
-        RitCreateRequest request = new RitCreateRequest("Big", "Too big", List.of(file), false);
-
-        assertThrows(ValidationException.class, () -> ritService.create(testUser, request));
-        verifyNoInteractions(ritRepository);
-    }
-
-    @Test
-    void create_tooManyImages_returnsNullAndErrorSet() {
-        MockMultipartFile file = new MockMultipartFile("images", "img.jpg", "image/jpeg", "x".getBytes());
-
-        RitCreateRequest request = new RitCreateRequest("Too many", "Details", List.of(file, file, file, file), false);
-
-        assertThrows(ValidationException.class, () -> ritService.create(testUser, request));
-        verifyNoInteractions(ritRepository);
     }
 }

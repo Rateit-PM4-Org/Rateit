@@ -21,43 +21,21 @@ import java.util.List;
 public class RitService {
     private final RitRepository ritRepository;
 
-    private static final long MAX_IMAGE_SIZE = 8L * 1024 * 1024; // 8 MB
-
     @Autowired
     public RitService(RitRepository ritRepository) {
         this.ritRepository = ritRepository;
     }
 
     public Rit create(User user, RitCreateRequest request) {
-        List<MultipartFile> files = request.images();
-
-        if (files != null && !files.isEmpty()) {
-            validateImages(files);
-        }
-
-        // TODO upload image to MinIO
-
         Rit rit = new Rit(
                 request.name(),
                 request.details(),
-                null, // TODO change to imageRefs after upload
+                request.images(),
                 request.published(),
                 user
         );
 
         return ritRepository.save(rit);
-    }
-
-    private void validateImages(List<MultipartFile> files) {
-        if (files.size() > 3) {
-            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("images", "Maximum of 3 images allowed."));
-        }
-
-        for (MultipartFile file : files) {
-            if (file.getSize() > MAX_IMAGE_SIZE) {
-                throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("images", "One of the images exceeds the maximum size of 8 MB."));
-            }
-        }
     }
 
 }

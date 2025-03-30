@@ -1,8 +1,8 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
+import ch.zhaw.rateit.api.logic.attachment.entity.Attachment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public record RitCreateRequest(
         @NotBlank String name,
         String details,
-        List<MultipartFile> images,
+        List<Attachment> images,
         @NotNull Boolean published
 ) {
 }
