@@ -3,6 +3,7 @@ package ch.zhaw.rateit.api.config.db.migration;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
 import ch.zhaw.rateit.api.util.AbstractBaseIntegrationTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,6 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class EmailVerificationFieldsUserChangelogTest extends AbstractBaseIntegrationTest {
 
     @Autowired UserRepository userRepository;
+
+    @BeforeEach
+    void init() {
+        userRepository.deleteAll();
+    }
 
     @Test
     void testAddVerificationFields() {
