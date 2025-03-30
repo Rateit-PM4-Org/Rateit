@@ -4,15 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { RitCreateComponent } from './rit-create.component';
 import { ModalController } from '@ionic/angular/standalone';
+import { RateComponent } from '../rate/rate.component';
 
 describe('RitCreateComponent', () => {
   let component: RitCreateComponent;
   let fixture: ComponentFixture<RitCreateComponent>;
+  let modalCtrlSpy = jasmine.createSpyObj('ModalController', ['create']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RitCreateComponent, IonicModule.forRoot(), FormsModule], // standalone
-      providers: [ModalController]
+      imports: [RitCreateComponent, IonicModule.forRoot(), FormsModule],
+      providers: [
+        { provide: ModalController, useValue: modalCtrlSpy }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(RitCreateComponent);
@@ -160,6 +164,23 @@ describe('RitCreateComponent', () => {
   
     expect(mockReader.readAsDataURL).toHaveBeenCalledWith(mockFile);
     expect(component.selectedImage).toBe('data:image/png;base64,abc123');
+  });
+
+  it('should open modal with RateComponent', async () => {
+    const modalSpyObj = jasmine.createSpyObj('HTMLIonModalElement', ['present']);
+    modalCtrlSpy.create.and.resolveTo(modalSpyObj);
+
+    await component.openRateComponent();
+
+    expect(modalCtrlSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({
+      component: RateComponent,
+      breakpoints: [0, 0.25, 0.85],
+      initialBreakpoint: 0.85,
+      showBackdrop: true,
+      canDismiss: true,
+    }));
+
+    expect(modalSpyObj.present).toHaveBeenCalled();
   });
 
 });
