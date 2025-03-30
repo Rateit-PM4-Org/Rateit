@@ -24,7 +24,6 @@ export class UserService {
   }
 
   private reloadProfile(): void {
-    console.log('getProfile');
     this.apiService.get('/user/me').subscribe(profile => {
       this.profile.next(profile);
     });
