@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { AuthService } from '../../../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tab-menu',
@@ -13,15 +14,19 @@ import { AuthService } from '../../../shared/services/auth.service';
   ]
 })
 export class TabMenuComponent {
+  private authSubscription: Subscription|null = null;
   isAuthenticated: boolean = false;
   constructor(private readonly authService: AuthService) { }
 
-  ngOnInit() {
-    this.authService.getAuthenticationStatusObservable().subscribe({
+  ionViewWillEnter() {
+    this.authSubscription = this.authService.getAuthenticationStatusObservable().subscribe({
       next: response => {
         this.isAuthenticated = response;
       }
     })
   }
 
+  ionViewWillLeave() {
+    this.authSubscription?.unsubscribe();
+  }
 }

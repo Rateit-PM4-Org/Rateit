@@ -1,31 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Local Greetings</ion-title>
+    <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-
-  <ion-card *ngIf="errorMessage" color="danger">
-    <ion-card-header>
-      <ion-card-title>Error</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      {{ errorMessage }}
-    </ion-card-content>
-  </ion-card>
-
-  <ion-list *ngIf="data.length > 0">
-    <ion-item *ngFor="let item of data">
-      <ion-label>
-        <h2><strong>ID:</strong> {{ item.id }}</h2>
-        <p><strong>Value:</strong> {{ item.value }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ion-spinner *ngIf="!errorMessage && data.length === 0" name="dots"></ion-spinner>
-  <p *ngIf="!errorMessage && data.length === 0" class="ion-text-center">Loading data...</p>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" vertical="bottom" horizontal="end">
     <ion-fab-button>

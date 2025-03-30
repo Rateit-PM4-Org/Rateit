@@ -55,6 +55,7 @@ describe('TabMenuComponent', () => {
   it('should have a "profile" tab, when logged in', () => {
     TestBed.overrideProvider(AuthService, provideMockAuthService(true));
     const fixture = TestBed.createComponent(TabMenuComponent);
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const profileTab = compiled.querySelector('ion-tab-button[tab="profile"]');

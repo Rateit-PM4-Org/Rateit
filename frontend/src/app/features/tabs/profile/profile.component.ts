@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { UserService } from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -14,14 +15,15 @@ import { Router } from '@angular/router';
     CommonModule, ...IonicStandaloneStandardImports
   ],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
+  private profileSubscription: Subscription|null = null;
   profile: any;
 
   constructor(private readonly userService: UserService, private readonly authService: AuthService, private readonly router: Router) {
   }
 
-  ngOnInit() {
-    this.userService.getProfile().subscribe({
+  ionViewWillEnter() {
+    this.profileSubscription = this.userService.getProfile().subscribe({
       next: response => {
         this.profile = response;
       },
@@ -29,6 +31,10 @@ export class ProfileComponent implements OnInit {
         console.error('Profile Error:', err);
       }
     })
+  }
+  
+  ionViewWillLeave() {
+    this.profileSubscription?.unsubscribe();
   }
 
   logout() {

@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,12 +23,12 @@ class RateLimitIntegrationTests extends AbstractBaseIntegrationTest {
         int limit = 5; // Adjust based on your rate limit configuration
 
         for (int i = 0; i < limit; i++) {
-            mockMvc.perform(get("/test"))
-                    .andExpect(status().isOk());
+            mockMvc.perform(get("/").with(user("test")))
+                    .andExpect(status().isNotFound());
         }
 
         // The next request should be blocked
-        mockMvc.perform(get("/test"))
+        mockMvc.perform(get("/").with(user("test")))
                 .andExpect(status().isTooManyRequests());
     }
 
