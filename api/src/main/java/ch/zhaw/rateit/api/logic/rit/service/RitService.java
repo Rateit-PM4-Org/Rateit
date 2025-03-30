@@ -1,9 +1,11 @@
 package ch.zhaw.rateit.api.logic.rit.service;
 
+import ch.zhaw.rateit.api.exceptions.types.ValidationExceptionWithField;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,11 +28,11 @@ public class RitService {
         this.ritRepository = ritRepository;
     }
 
-    public Rit create(User user, RitCreateRequest request, StringBuilder error) {
+    public Rit create(User user, RitCreateRequest request) {
         List<MultipartFile> files = request.images();
 
-        if (!validateImages(files, error)) {
-            return null;
+        if (files != null && !files.isEmpty()) {
+            validateImages(files);
         }
 
         // TODO upload image to MinIO
@@ -46,24 +48,16 @@ public class RitService {
         return ritRepository.save(rit);
     }
 
-    private boolean validateImages(List<MultipartFile> files, StringBuilder error) {
-        if (files == null || files.isEmpty()) {
-            return true;
-        }
-
+    private void validateImages(List<MultipartFile> files) {
         if (files.size() > 3) {
-            error.append("Maximum of 3 images allowed.");
-            return false;
+            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("images", "Maximum of 3 images allowed."));
         }
 
         for (MultipartFile file : files) {
             if (file.getSize() > MAX_IMAGE_SIZE) {
-                error.append("One of the images exceeds the maximum size of 8 MB.");
-                return false;
+                throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("images", "One of the images exceeds the maximum size of 8 MB."));
             }
         }
-
-        return true;
     }
 
 }

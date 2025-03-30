@@ -33,16 +33,8 @@ public class RitController {
     }
 
     @PostMapping(path = "/create", consumes = "multipart/form-data")
-    public ResponseEntity<Map<String, Object>> create(@AuthenticationPrincipal User user,
-                                                      @ModelAttribute @Validated RitCreateRequest request) {
-        StringBuilder error = new StringBuilder();
-        Rit created = ritService.create(user, request, error);
-
-        if (created == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", error.toString()));
-        }
-
-        return ResponseEntity.ok(Map.of("id", created.getId()));
+    public Rit create(@AuthenticationPrincipal User user, @ModelAttribute @Validated RitCreateRequest request) {
+        return ritService.create(user, request);
     }
 
 }

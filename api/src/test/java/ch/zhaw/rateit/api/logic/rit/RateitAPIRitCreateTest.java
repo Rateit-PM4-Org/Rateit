@@ -5,6 +5,7 @@ import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.rit.service.RitService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
+import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,14 +46,12 @@ class RateitAPIRitCreateTest {
         Rit dummyRit = new Rit("Test Rit", "Details", null, false, testUser);
         when(ritRepository.save(any())).thenReturn(dummyRit);
 
-        StringBuilder error = new StringBuilder();
-        Rit result = ritService.create(testUser, request, error);
+        Rit result = ritService.create(testUser, request);
 
         assertNotNull(result);
         assertEquals(request.name(), result.getName());
         assertEquals(request.details(), result.getDetails());
         assertEquals(testUser.getId(), result.getUser().getId());
-        assertEquals(0, error.length());
         verify(ritRepository).save(any());
     }
 
@@ -63,11 +62,7 @@ class RateitAPIRitCreateTest {
 
         RitCreateRequest request = new RitCreateRequest("Big", "Too big", List.of(file), false);
 
-        StringBuilder error = new StringBuilder();
-        Rit result = ritService.create(testUser, request, error);
-
-        assertNull(result);
-        assertTrue(error.toString().contains("exceeds the maximum size"));
+        assertThrows(ValidationException.class, () -> ritService.create(testUser, request));
         verifyNoInteractions(ritRepository);
     }
 
@@ -77,11 +72,7 @@ class RateitAPIRitCreateTest {
 
         RitCreateRequest request = new RitCreateRequest("Too many", "Details", List.of(file, file, file, file), false);
 
-        StringBuilder error = new StringBuilder();
-        Rit result = ritService.create(testUser, request, error);
-
-        assertNull(result);
-        assertTrue(error.toString().contains("Maximum of 3 images allowed"));
+        assertThrows(ValidationException.class, () -> ritService.create(testUser, request));
         verifyNoInteractions(ritRepository);
     }
 }

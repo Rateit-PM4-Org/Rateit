@@ -28,7 +28,7 @@ public class Rit {
     private String name;
     private List<ImageReference> images;
     private String details;
-    private boolean published = false;
+    private boolean published;
 
     @CreatedDate
     private Instant createdAt;
@@ -39,13 +39,10 @@ public class Rit {
     public Rit() {
     }
 
-    public Rit(String name, String details, List<ImageReference> images, Boolean published, User user) {
+    public Rit(String name, String details, List<ImageReference> images, boolean published, User user) {
         this.name = name;
         this.details = details;
         this.images = images;
-        if(published==null){
-            published = false;
-        }
         this.published = published;
         this.user = user;
     }
@@ -86,14 +83,11 @@ public class Rit {
         this.details = details;
     }
 
-    public Boolean isPublished() {
+    public boolean isPublished() {
         return published;
     }
 
-    public void setPublished(Boolean published) {
-        if(published == null) {
-            published = false;
-        }
+    public void setPublished(boolean published) {
         this.published = published;
     }
 

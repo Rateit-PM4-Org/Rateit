@@ -1,6 +1,7 @@
 package ch.zhaw.rateit.api.exceptions.handler;
 
-import ch.zhaw.rateit.api.exceptions.types.DuplicateEmailUserException;
+import ch.zhaw.rateit.api.exceptions.types.ValidationExceptionWithField;
+import jakarta.validation.ValidationException;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -24,9 +25,12 @@ import java.util.stream.Collectors;
 public class ExceptionHandlers {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DuplicateEmailUserException.class)
-    public Map<String, String> handleUserRegistration(DuplicateEmailUserException ex) {
-        return Map.of("error", ex.getMessage());
+    @ExceptionHandler(ValidationExceptionWithField.class)
+    public Map<String, Object> handleUserRegistration(ValidationExceptionWithField ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("fields", ex.getErrors().stream().collect(Collectors.toMap(ValidationExceptionWithField.ValidationError::getField, ValidationExceptionWithField.ValidationError::getMessage)));
+        return errorResponse;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
