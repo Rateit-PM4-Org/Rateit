@@ -1,6 +1,8 @@
 package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
+import ch.zhaw.rateit.api.logic.attachment.entity.Attachment;
+import ch.zhaw.rateit.api.logic.attachment.repository.AttachmentRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +44,9 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
+    private AttachmentRepository attachmentRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
@@ -49,6 +55,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     void setup() {
         userRepository.deleteAll();
         ritRepository.deleteAll();
+        attachmentRepository.deleteAll();
         testUser.setEmailVerified(true);
         userRepository.save(testUser);
     }
@@ -115,4 +122,23 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
         assertEquals(rit.getCreatedAt(), rit.getUpdatedAt(), "createdAt and updatedAt must be equal after creation");
     }
 
+    @Test
+    void createRit_positive_withImages() throws Exception {
+        Attachment attachment = attachmentRepository.save(new Attachment("TEST_URL", Attachment.AttachmentType.IMAGE, testUser));
+
+        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", List.of(attachment), false));
+
+        String response = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testUser)))
+                .andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
+
+        String id = objectMapper.readTree(response).get("id").asText();
+        Rit rit = ritRepository.findById(id).orElseThrow();
+
+        assertNotNull(rit, "Rit must be present in the database");
+        assertNotNull(rit.getImages(), "images must be set");
+        assertEquals(1, rit.getImages().size(), "images size must be 1");
+        assertEquals(attachment.getId(), rit.getImages().get(0).getId(), "images must be the same");
+        assertEquals(attachment.getUrl(), rit.getImages().get(0).getUrl(), "images must be the same");
+    }
 }
