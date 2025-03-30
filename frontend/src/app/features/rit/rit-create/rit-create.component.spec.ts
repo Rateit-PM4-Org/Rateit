@@ -3,14 +3,16 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { RitCreateComponent } from './rit-create.component';
+import { ModalController } from '@ionic/angular/standalone';
 
-describe('RitFormComponent', () => {
+describe('RitCreateComponent', () => {
   let component: RitCreateComponent;
   let fixture: ComponentFixture<RitCreateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RitCreateComponent, IonicModule.forRoot(), FormsModule], // standalone
+      providers: [ModalController]
     }).compileComponents();
 
     fixture = TestBed.createComponent(RitCreateComponent);
