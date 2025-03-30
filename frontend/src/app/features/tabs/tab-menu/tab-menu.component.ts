@@ -19,7 +19,7 @@ export class TabMenuComponent {
   constructor(private readonly authService: AuthService) { }
 
   ionViewWillEnter() {
-    this.authService.getAuthenticationStatusObservable().subscribe({
+    this.authSubscription = this.authService.getAuthenticationStatusObservable().subscribe({
       next: response => {
         this.isAuthenticated = response;
       }
