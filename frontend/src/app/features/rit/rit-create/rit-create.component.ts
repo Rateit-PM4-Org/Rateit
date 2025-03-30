@@ -40,8 +40,8 @@ export class RitCreateComponent {
   async openRateComponent() {
     const modal = await this.modalCtrl.create({
       component: RateComponent,
-      breakpoints: [0, 0.5, 0.92],
-      initialBreakpoint: 0.92,
+      breakpoints: [0, 0.25, 0.85],
+      initialBreakpoint: 0.85,
       showBackdrop: true,
       canDismiss: true,
     });
