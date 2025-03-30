@@ -18,6 +18,6 @@ public record RitCreateRequest(
         @NotBlank String name,
         String details,
         List<MultipartFile> images,
-        boolean published
+        Boolean published
 ) {
 }
