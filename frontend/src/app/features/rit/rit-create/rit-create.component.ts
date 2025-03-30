@@ -13,7 +13,7 @@ import { ModalController } from '@ionic/angular/standalone';
 })
 export class RitCreateComponent {
 
-  constructor(private modalCtrl: ModalController) { }
+  constructor(private readonly modalCtrl: ModalController) { }
 
   selectedImage: any
   tags: any[] = ['ABC', '123']

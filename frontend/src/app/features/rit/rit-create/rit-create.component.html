@@ -18,6 +18,7 @@
           fill="solid"
           color="warning"
           (click)="onRatingButtonClick($event)"
+          (keydown.enter)="onRatingButtonClick($event)"
         >
           4 <ion-icon name="star" slot="end"></ion-icon>
         </ion-button>

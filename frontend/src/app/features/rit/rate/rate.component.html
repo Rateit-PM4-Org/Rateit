@@ -12,6 +12,7 @@
               class="rating-star"
               [class.filled]="i < rating"
               [name]="i < rating ? 'star' : 'star-outline'"
+              (keydown.enter)="setRating(i + 1)"
               (click)="setRating(i + 1)">
             </ion-icon>
           </ion-col>

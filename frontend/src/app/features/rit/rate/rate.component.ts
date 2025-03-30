@@ -13,12 +13,9 @@ addIcons({ star, 'star-outline': starOutline });
   imports: [CommonModule, ...IonicStandaloneStandardImports],
   standalone: true,
 })
-export class RateComponent  implements OnInit {
+export class RateComponent {
 
   constructor() { }
-
-  ngOnInit() {}
-
 
   rating: number = 0;
 
