@@ -2,6 +2,7 @@ package ch.zhaw.rateit.api.logic.rit.controller;
 
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
+import ch.zhaw.rateit.api.logic.rit.entity.RitRateRequest;
 import ch.zhaw.rateit.api.logic.rit.service.RitService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,11 @@ public class RitController {
     @PostMapping(path = "/create")
     public Rit create(@AuthenticationPrincipal User user, @RequestBody @Validated RitCreateRequest request) {
         return ritService.create(user, request);
+    }
+
+    @PostMapping(path = "/rate")
+    public Rit rate(@AuthenticationPrincipal User user, @RequestBody @Validated RitRateRequest request) {
+        return ritService.rate(user, request);
     }
 
 }

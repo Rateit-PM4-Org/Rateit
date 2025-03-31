@@ -101,4 +101,7 @@ public class Rit {
     public Instant getUpdatedAt() {
         return updatedAt;
     }
+
+    public void addRating(Rating rating) {
+    }
 }
