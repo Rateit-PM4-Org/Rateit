@@ -17,6 +17,7 @@ export class RegisterComponent  implements OnInit {
   private email: string = '';
   private displayName: string = '';
   private password: string = '';
+  protected errorMessage: string = '';
 
   constructor(private readonly router: Router, private readonly userService: UserService) { }
 
@@ -41,6 +42,7 @@ export class RegisterComponent  implements OnInit {
       },
       error: err => {
         console.error('Registration Error:', err);
+        this.errorMessage = err.message;
       }
     })
   }
