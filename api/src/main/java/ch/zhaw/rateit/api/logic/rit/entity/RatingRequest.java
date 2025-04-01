@@ -4,6 +4,7 @@ package ch.zhaw.rateit.api.logic.rit.entity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 
 /* * Request object for rating a rit.
@@ -14,9 +15,9 @@ import jakarta.validation.constraints.NotEmpty;
  * @param negative Optional comment for negative feedback.
  * @author Michèle Berger
  */
-public record RitRateRequest(
-        @NotEmpty Rit rit,
-        @Min(1) @Max(5) int value,
+public record RatingRequest(
+        @NotEmpty String ritId,
+        @NotNull @Min(1) @Max(5) int value,
         String positive,
         String negative
 ) {

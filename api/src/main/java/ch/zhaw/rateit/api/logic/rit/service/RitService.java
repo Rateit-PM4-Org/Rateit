@@ -1,9 +1,9 @@
 package ch.zhaw.rateit.api.logic.rit.service;
 
 import ch.zhaw.rateit.api.logic.rit.entity.Rating;
+import ch.zhaw.rateit.api.logic.rit.entity.RatingRequest;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
-import ch.zhaw.rateit.api.logic.rit.entity.RitRateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
@@ -40,17 +40,18 @@ public class RitService {
         return ritRepository.getRitById(rit.getId());
     }
 
-    public Rating rate(User owner, RitRateRequest request) {
+    public Rating rate(User owner, RatingRequest request) {
+        Rit rit = ritRepository.getRitById(request.ritId());
+
         Rating rating = new Rating(
                 request.value(),
                 request.positive(),
                 request.negative(),
-                request.rit(),
+                rit,
                 owner
         );
 
-        ratingRepository.save(rating);
-        return ratingRepository.getRatingById(rating.getId());
+        return ratingRepository.save(rating);
     }
 
 }
