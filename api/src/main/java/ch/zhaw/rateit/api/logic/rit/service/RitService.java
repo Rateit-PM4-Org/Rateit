@@ -4,12 +4,11 @@ import ch.zhaw.rateit.api.logic.rit.entity.Rating;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.entity.RitRateRequest;
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 
 
 /**
@@ -20,10 +19,12 @@ import java.time.Instant;
 @Service
 public class RitService {
     private final RitRepository ritRepository;
+    private final RatingRepository ratingRepository;
 
     @Autowired
-    public RitService(RitRepository ritRepository) {
+    public RitService(RitRepository ritRepository, RatingRepository ratingRepository) {
         this.ritRepository = ritRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     public Rit create(User user, RitCreateRequest request) {
@@ -39,17 +40,17 @@ public class RitService {
         return ritRepository.getRitById(rit.getId());
     }
 
-    public Rit rate(User user, RitRateRequest request) {
-        Rit rit = ritRepository.getRitById(request.ritId());
+    public Rating rate(User owner, RitRateRequest request) {
         Rating rating = new Rating(
                 request.value(),
-                request.comment(),
-                user,
-                Instant.now()
+                request.positive(),
+                request.negative(),
+                request.rit(),
+                owner
         );
-        rit.addRating(rating);
-        ritRepository.save(rit);
-        return ritRepository.getRitById(rit.getId());
+
+        ratingRepository.save(rating);
+        return ratingRepository.getRatingById(rating.getId());
     }
 
 }
