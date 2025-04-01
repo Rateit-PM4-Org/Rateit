@@ -1,10 +1,9 @@
 package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
-import ch.zhaw.rateit.api.logic.rit.entity.Rating;
-import ch.zhaw.rateit.api.logic.rit.entity.RatingRequest;
+import ch.zhaw.rateit.api.logic.rating.entity.RatingRequest;
+import ch.zhaw.rateit.api.logic.rating.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
-import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
@@ -110,19 +109,18 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void createRit_positive_setsTimestamps() throws Exception {
-        var rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingRequest(rit.getId(), 4, "test", "test"));
+        var rating = ritRepository.save(testRit);
+        String input = objectMapper.writeValueAsString(new RatingRequest(rating.getId(), 4, "test", "test"));
         String response = mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
 
         String id = objectMapper.readTree(response).get("id").asText();
-        Rating rating = ratingRepository.findById(id).orElseThrow();
 
-        assertNotNull(rit, "Rit must be present in the database");
-        assertNotNull(rit.getCreatedAt(), "createdAt must be set");
-        assertNotNull(rit.getUpdatedAt(), "updatedAt must be set");
-        assertEquals(rit.getCreatedAt(), rit.getUpdatedAt(), "createdAt and updatedAt must be equal after creation");
+        assertNotNull(rating, "Rating must be present in the database");
+        assertNotNull(rating.getCreatedAt(), "createdAt must be set");
+        assertNotNull(rating.getUpdatedAt(), "updatedAt must be set");
+        assertEquals(rating.getCreatedAt(), rating.getUpdatedAt(), "createdAt and updatedAt must be equal after creation");
     }
 
 }

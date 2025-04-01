@@ -1,6 +1,7 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
 import ch.zhaw.rateit.api.logic.attachment.entity.Attachment;
+import ch.zhaw.rateit.api.logic.rating.entity.Rating;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;

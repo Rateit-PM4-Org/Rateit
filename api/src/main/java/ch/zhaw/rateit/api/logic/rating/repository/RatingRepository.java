@@ -1,6 +1,6 @@
-package ch.zhaw.rateit.api.logic.rit.repository;
+package ch.zhaw.rateit.api.logic.rating.repository;
 
-import ch.zhaw.rateit.api.logic.rit.entity.Rating;
+import ch.zhaw.rateit.api.logic.rating.entity.Rating;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

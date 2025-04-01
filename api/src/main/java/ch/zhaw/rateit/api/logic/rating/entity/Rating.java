@@ -1,5 +1,6 @@
-package ch.zhaw.rateit.api.logic.rit.entity;
+package ch.zhaw.rateit.api.logic.rating.entity;
 
+import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -55,46 +56,6 @@ public class Rating {
 
     public void setValue(int value) {
         this.value = value;
-    }
-
-    public String getPositive() {
-        return positive;
-    }
-
-    public void setPositive(String positive) {
-        this.positive = positive;
-    }
-
-    public String getNegative() {
-        return negative;
-    }
-
-    public void setNegative(String negative) {
-        this.negative = negative;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
     }
 
     public Rit getRit() {

@@ -1,4 +1,4 @@
-package ch.zhaw.rateit.api.logic.rit.entity;
+package ch.zhaw.rateit.api.logic.rating.entity;
 
 
 import jakarta.validation.constraints.Max;
