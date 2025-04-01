@@ -10,6 +10,13 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.Instant;
 
+/**
+ * Dataclass for ratings in the MongoDB database.
+ * Represents a rating of a rit, with optional positive and negative feedback.
+ * Owned by a user and associated with a rit.
+ *
+ * @author Michèle Berger
+ */
 @Document
 public class Rating {
     @Id
@@ -50,6 +57,22 @@ public class Rating {
         this.id = id;
     }
 
+    public Rit getRit() {
+        return rit;
+    }
+
+    public void setRit(Rit rit) {
+        this.rit = rit;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     public int getValue() {
         return value;
     }
@@ -58,7 +81,35 @@ public class Rating {
         this.value = value;
     }
 
-    public Rit getRit() {
-        return rit;
+    public String getPositive() {
+        return positive;
+    }
+
+    public void setPositive(String positive) {
+        this.positive = positive;
+    }
+
+    public String getNegative() {
+        return negative;
+    }
+
+    public void setNegative(String negative) {
+        this.negative = negative;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
