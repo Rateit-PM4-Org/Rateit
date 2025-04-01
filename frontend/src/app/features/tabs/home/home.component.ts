@@ -3,6 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController, IonModal } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
+import { Rit } from '../../../model/rit';
+import { RitService } from '../../../shared/services/rit.service';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +25,7 @@ export class HomeComponent implements OnInit {
   errorMessage: string = '';
 
   constructor(
-    private readonly actionSheetCtrl: ActionSheetController
+    private readonly actionSheetCtrl: ActionSheetController, private readonly ritService: RitService
   ) { }
 
   ngOnInit() {
@@ -31,7 +33,20 @@ export class HomeComponent implements OnInit {
   }
 
   handleModalDismiss(event: CustomEvent) {
-    // TODO backend call here
+    let data = event.detail.data
+
+    if (data.name) {
+      let request: Rit = {
+        name: data.name,
+        details: data.details,
+        published: data.published === 'published' ? true : false
+      }
+      this.ritService.createRit(request).subscribe({
+        next: (rit) => console.log('Erstellt:', rit),
+        error: (err) => console.error('Fehler:', err),
+      });
+    }
+    
   }
 
 
@@ -40,8 +55,7 @@ export class HomeComponent implements OnInit {
       {
         name: this.ritCreateComponent.ritName,
         details: this.ritCreateComponent.details,
-        tags: this.ritCreateComponent.tags,
-        image: this.ritCreateComponent.selectedImage,
+        published: this.ritCreateComponent.published,
       },
       'confirm'
     );

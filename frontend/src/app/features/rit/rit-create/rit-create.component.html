@@ -62,11 +62,11 @@
 
   <ion-card>
     <ion-segment color="primary" value="primary">
-      <ion-segment-button value="primary">
-        <ion-label>Public</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="segment">
+      <ion-segment-button (click)="unpublish()" (keydown.enter)="unpublish()" value="primary">
         <ion-label>Private</ion-label>
+      </ion-segment-button>
+      <ion-segment-button (click)="publish()" (keydown.enter)="publish()" value="segment">
+        <ion-label>Public</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-card>

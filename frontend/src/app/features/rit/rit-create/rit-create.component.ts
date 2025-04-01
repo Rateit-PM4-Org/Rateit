@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { CommonModule } from '@angular/common';
-import { RateComponent } from '../rate/rate.component';
+import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular/standalone';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { RateComponent } from '../rate/rate.component';
 
 @Component({
   selector: 'app-rit-create',
@@ -20,6 +20,7 @@ export class RitCreateComponent {
 
   ritName?: string
   details?: string
+  published: 'published' | 'private' = 'private'
   newTag?: string
 
   selectImage() {
@@ -56,21 +57,29 @@ export class RitCreateComponent {
 
   setRitName(event: any) {
     let input = event.target.value
-    if (event.target.value) {
+    if (input) {
       this.ritName = input
     }
   }
 
   setDetails(event: any) {
     let input = event.target.value
-    if (event.target.value) {
+    if (input) {
       this.details = input
     }
   }
 
+  publish() {
+    this.published = 'published'
+  }
+
+  unpublish() {
+    this.published = 'private'
+  }
+
   setNewTag(event: any) {
     let input = event.target.value
-    if (event.target.value) {
+    if (input) {
       this.newTag = input
     }
   }
