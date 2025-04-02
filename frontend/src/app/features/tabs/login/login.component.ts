@@ -16,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
+  loginError: string = '';
 
   constructor(private readonly authService: AuthService, private readonly router: Router, private readonly route: ActivatedRoute) { }
 
@@ -38,6 +39,8 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl(returnUrl);
       },
       error: err => {
+        this.loginError = "Login failed. Please make sure that Email and password are correct."
+        this.password = "";
         console.error('Login Error:', err);
       }
     })

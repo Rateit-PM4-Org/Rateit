@@ -15,5 +15,8 @@
   </ion-item>
   <ion-button (click)="login()" (keydown.enter)="login()">Submit</ion-button>
   <ion-button (click)="register()" (keydown.enter)="register()">Register</ion-button>
+  <ion-text color="danger" *ngIf="loginError">
+    <p>{{ loginError }}</p>
+  </ion-text>
   <ion-ripple-effect></ion-ripple-effect>
 </ion-content>
