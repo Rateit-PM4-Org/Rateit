@@ -104,7 +104,7 @@ describe('LoginComponent', () => {
 
     component.login();
 
-    expect(component.loginError).toBe('Login failed. Please make sure that Email and password are correct.');
+    expect(component.hasLoginError).toBe(true);
     expect(component.password).toBe('');
   });
 });
