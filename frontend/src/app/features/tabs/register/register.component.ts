@@ -18,6 +18,7 @@ export class RegisterComponent  implements OnInit {
   private displayName: string = '';
   protected password: string = '';
   private passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_\-+=?.:,])[A-Za-z\d!@#$%^&*_\-+=?.:,]+$/;
+  private emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   protected hasRegistrationError: boolean = false;
   protected isEmailValid: boolean = true;
   protected isPasswordValid: boolean = true;
@@ -28,7 +29,7 @@ export class RegisterComponent  implements OnInit {
 
   setEmail(e: any) {
     this.email = (e.target as HTMLInputElement).value;
-    this.isEmailValid = this.validateEmailFormat(this.email);
+    this.isEmailValid = this.emailRegex.test(this.email);
   }
 
   setDisplayName(e: any) {
@@ -37,7 +38,7 @@ export class RegisterComponent  implements OnInit {
 
   setPassword(e: any) {
     this.password = (e.target as HTMLInputElement).value;
-    this.isPasswordValid = this.validatePasswordStrength(this.password);
+    this.isPasswordValid = this.passwordRegex.test(this.password);
   }
 
   register() {
@@ -51,14 +52,5 @@ export class RegisterComponent  implements OnInit {
         this.password = '';
       }
     })
-  }
-
-  private validateEmailFormat(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  private validatePasswordStrength(password: string): boolean {
-    return this.passwordRegex.test(password);
   }
 }
