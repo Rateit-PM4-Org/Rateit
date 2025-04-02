@@ -18,8 +18,14 @@
     <ion-input type="password" (ionInput)="setPassword($event)"></ion-input>
   </ion-item>
   <ion-button (click)="register()" (keydown.enter)="register()">Submit</ion-button>
-  <ion-text color="danger" *ngIf="registrationError">
-    <p>{{ registrationError }}</p>
+  <ion-text color="danger" *ngIf="hasRegistrationError">
+    <p>Registration failed. Please try again.</p>
+  </ion-text>
+  <ion-text color="warning" *ngIf="!isEmailValid && email">
+    <p>Please enter a valid email address.</p>
+  </ion-text>
+  <ion-text color="warning" *ngIf="!isPasswordValid && password">
+    <p>Password is not strong enough. It must contain at least one lowercase, uppercase, digit and special character and must be at least 12 characters long.</p>
   </ion-text>
   <ion-ripple-effect></ion-ripple-effect>
 </ion-content>

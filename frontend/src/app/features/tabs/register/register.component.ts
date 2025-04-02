@@ -14,10 +14,13 @@ import { UserService } from '../../../shared/services/user.service';
   ],
 })
 export class RegisterComponent  implements OnInit {
-  private email: string = '';
+  protected email: string = '';
   private displayName: string = '';
-  private password: string = '';
-  protected registrationError: string = '';
+  protected password: string = '';
+  private passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_\-+=?.:,])[A-Za-z\d!@#$%^&*_\-+=?.:,]+$/;
+  protected hasRegistrationError: boolean = false;
+  protected isEmailValid: boolean = true;
+  protected isPasswordValid: boolean = true;
 
   constructor(private readonly router: Router, private readonly userService: UserService) { }
 
@@ -25,6 +28,7 @@ export class RegisterComponent  implements OnInit {
 
   setEmail(e: any) {
     this.email = (e.target as HTMLInputElement).value;
+    this.isEmailValid = this.validateEmailFormat(this.email);
   }
 
   setDisplayName(e: any) {
@@ -33,6 +37,7 @@ export class RegisterComponent  implements OnInit {
 
   setPassword(e: any) {
     this.password = (e.target as HTMLInputElement).value;
+    this.isPasswordValid = this.validatePasswordStrength(this.password);
   }
 
   register() {
@@ -42,10 +47,18 @@ export class RegisterComponent  implements OnInit {
       },
       error: err => {
         console.error('Registration Error:', err);
-        this.registrationError = "Registration failed. Please try again.";
+        this.hasRegistrationError = true;
         this.password = '';
       }
     })
   }
 
+  private validateEmailFormat(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  private validatePasswordStrength(password: string): boolean {
+    return this.passwordRegex.test(password);
+  }
 }
