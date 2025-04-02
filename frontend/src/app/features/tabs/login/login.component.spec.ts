@@ -85,9 +85,26 @@ describe('LoginComponent', () => {
     expect(component.password).toBe('');
   });
 
-
   it('should navigate to register page when register is called', () => {
     component.register();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/register']);
+  });
+
+  it('should set errorMessage and clear password on login error', () => {
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    component.email = 'test@example.com';
+    component.password = 'wrongPassword';
+
+    const mockError = {
+      error: {
+        message: 'Invalid credentials'
+      }
+    };
+    authServiceSpy.login.and.returnValue(throwError(() => mockError));
+
+    component.login();
+
+    expect(component.loginError).toBe('Login failed. Please make sure that Email and password are correct.');
+    expect(component.password).toBe('');
   });
 });
