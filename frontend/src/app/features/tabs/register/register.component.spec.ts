@@ -63,4 +63,21 @@ describe('RegisterComponent', () => {
     expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/login');
   });
 
+  it('should set errorMessage and clear password on registration error', () => {
+    const mockError = {
+      error: {
+        message: 'Registration failed.'
+      }
+    };
+    component['email'] = 'notAnEmail';
+    component['displayName'] = 'John Doe';
+    component['password'] = 'badPassword';
+
+    userServiceSpy.register.and.returnValue(throwError(() => mockError));
+
+    component.register();
+
+    expect(component['registrationError']).toBe('Registration failed. Please try again.');
+    expect(component['password']).toBe('');
+  });
 });
