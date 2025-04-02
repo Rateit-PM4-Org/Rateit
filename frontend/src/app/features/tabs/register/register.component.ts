@@ -42,7 +42,7 @@ export class RegisterComponent  implements OnInit {
       },
       error: err => {
         console.error('Registration Error:', err);
-        this.errorMessage = err.message;
+        this.errorMessage = "Registration Error. Please try again.";
       }
     })
   }
