@@ -50,8 +50,8 @@ public class UserController {
 
 
     @GetMapping("/mail-confirmation")
-    public ResponseEntity<Map<String, Object>> verifyUser(@RequestParam @NotEmpty @Email String email, @RequestParam @NotEmpty String token) {
-        boolean isVerified = userVerificationService.verifyUser(email, token);
+    public ResponseEntity<Map<String, Object>> verifyUser(@RequestParam @NotEmpty String token) {
+        boolean isVerified = userVerificationService.verifyUser(token);
 
         if (isVerified) {
             return ResponseEntity.ok().body(null);

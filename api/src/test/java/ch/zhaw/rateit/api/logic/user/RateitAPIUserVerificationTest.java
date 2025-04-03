@@ -60,21 +60,19 @@ class RateitAPIUserVerificationTest extends AbstractBaseIntegrationTest {
 
     static Stream<Arguments> provideInvalidVerificationRequests() {
         return Stream.of(
-                Arguments.of("test@test.com", "testToken"), // Invalid email
-                Arguments.of("", "testToken"),      // Missing email
-                Arguments.of("test@test.ch", "")  // Missing password
+                Arguments.of("")   // Empty Token
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidVerificationRequests")
-    void verifyUserNegative(String email, String token) throws Exception {
+    void verifyUserNegative(String token) throws Exception {
         testUser.setEmailVerified(false);
         testUser.setEmailVerificationToken("testToken");
 
         userRepository.save(testUser);
 
-        mockMvc.perform(get("/user/mail-confirmation").param("token", token).param("email", email)).andExpect(
+        mockMvc.perform(get("/user/mail-confirmation").param("token", token)).andExpect(
                 status().isBadRequest());
     }
 }
