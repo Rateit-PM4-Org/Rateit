@@ -51,15 +51,13 @@ public class UserVerificationService {
     public boolean verifyUser(String token) {
         Optional<User> userOptional = userRepository.findByEmailVerificationToken(token);
 
-        if (userOptional.isPresent() && !userOptional.get().isEmailVerified()) {
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            if (user.getEmailVerificationToken().equals(token)) {
-                user.setEmailVerified(true);
-                user.setEmailVerificationToken(null); // Clear the token after verification
-                userRepository.save(user);
-                return true;
-            }
+            user.setEmailVerified(true);
+            user.setEmailVerificationToken(null); // Clear the token after verification
+            userRepository.save(user);
+            return true;
         }
 
         return false;
