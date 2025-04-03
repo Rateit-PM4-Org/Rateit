@@ -15,5 +15,8 @@
   </ion-item>
   <ion-button (click)="login()" (keydown.enter)="login()">Submit</ion-button>
   <ion-button (click)="register()" (keydown.enter)="register()">Register</ion-button>
+  <ion-text color="danger" *ngIf="hasLoginError">
+    <p>Login failed. Please make sure that Email and password are correct.</p>
+  </ion-text>
   <ion-ripple-effect></ion-ripple-effect>
 </ion-content>
