@@ -16,7 +16,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
-  hasLoginError: boolean = false;
+  loginErrorMessage: string = '';
+  loginErrorFields: { [key: string]: string } = {};
 
   constructor(private readonly authService: AuthService, private readonly router: Router, private readonly route: ActivatedRoute) { }
 
@@ -39,8 +40,9 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl(returnUrl);
       },
       error: err => {
-        this.hasLoginError = true;
-        this.password = "";
+        this.loginErrorMessage = err.error?.error || 'Login Error';
+        this.loginErrorFields = err.error?.fields || {};
+        this.password = '';
         console.error('Login Error:', err);
       }
     })
@@ -49,6 +51,4 @@ export class LoginComponent implements OnInit {
   register() {
     this.router.navigate(['/register']);
   }
-
-
 }

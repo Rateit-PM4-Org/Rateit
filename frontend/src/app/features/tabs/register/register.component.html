@@ -9,23 +9,26 @@
     <ion-label>Email</ion-label>
     <ion-input type="email" (ionInput)="setEmail($event)"></ion-input>
   </ion-item>
+  <ion-text color="danger" *ngIf="registrationErrorFields['email']">
+    <p>{{registrationErrorFields['email']}}</p>
+  </ion-text>
   <ion-item>
     <ion-label>Display-Name</ion-label>
     <ion-input type="text" (ionInput)="setDisplayName($event)"></ion-input>
   </ion-item>
+  <ion-text color="danger" *ngIf="registrationErrorFields['displayName']">
+    <p>{{registrationErrorFields['displayName']}}</p>
+  </ion-text>
   <ion-item>
     <ion-label>Password</ion-label>
     <ion-input type="password" (ionInput)="setPassword($event)"></ion-input>
   </ion-item>
+  <ion-text color="danger" *ngIf="registrationErrorFields['password']">
+    <p>{{registrationErrorFields['password']}}</p>
+  </ion-text>
   <ion-button (click)="register()" (keydown.enter)="register()">Submit</ion-button>
-  <ion-text color="danger" *ngIf="hasRegistrationError">
-    <p>Registration failed. Please try again.</p>
-  </ion-text>
-  <ion-text color="warning" *ngIf="!isEmailValid && email">
-    <p>Please enter a valid email address.</p>
-  </ion-text>
-  <ion-text color="warning" *ngIf="!isPasswordValid && password">
-    <p>Password is not strong enough. It must contain at least one lowercase, uppercase, digit and special character and must be at least 12 characters long.</p>
+  <ion-text color="danger" *ngIf="registrationErrorMessage">
+    <p>{{registrationErrorMessage}}</p>
   </ion-text>
   <ion-ripple-effect></ion-ripple-effect>
 </ion-content>

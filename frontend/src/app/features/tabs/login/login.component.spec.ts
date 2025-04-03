@@ -104,7 +104,8 @@ describe('LoginComponent', () => {
 
     component.login();
 
-    expect(component.hasLoginError).toBe(true);
+    expect(component.loginErrorMessage).toBe('Login Error');
+    expect(component.loginErrorFields).toEqual({});
     expect(component.password).toBe('');
   });
 });

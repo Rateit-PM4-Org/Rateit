@@ -17,11 +17,8 @@ export class RegisterComponent  implements OnInit {
   protected email: string = '';
   private displayName: string = '';
   protected password: string = '';
-  private passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*_\-+=?.:,])[A-Za-z\d!@#$%^&*_\-+=?.:,]+$/;
-  private emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  protected hasRegistrationError: boolean = false;
-  protected isEmailValid: boolean = true;
-  protected isPasswordValid: boolean = true;
+  protected registrationErrorMessage: string = '';
+  protected registrationErrorFields: { [key: string]: string } = {};
 
   constructor(private readonly router: Router, private readonly userService: UserService) { }
 
@@ -29,7 +26,6 @@ export class RegisterComponent  implements OnInit {
 
   setEmail(e: any) {
     this.email = (e.target as HTMLInputElement).value;
-    this.isEmailValid = this.emailRegex.test(this.email);
   }
 
   setDisplayName(e: any) {
@@ -38,7 +34,6 @@ export class RegisterComponent  implements OnInit {
 
   setPassword(e: any) {
     this.password = (e.target as HTMLInputElement).value;
-    this.isPasswordValid = this.passwordRegex.test(this.password);
   }
 
   register() {
@@ -47,9 +42,10 @@ export class RegisterComponent  implements OnInit {
         this.router.navigateByUrl("/login");
       },
       error: err => {
-        console.error('Registration Error:', err);
-        this.hasRegistrationError = true;
+        this.registrationErrorMessage = err.error?.error || 'Registration Error';
+        this.registrationErrorFields = err.error?.fields || {};
         this.password = '';
+        console.error('Registration Error:', err);
       }
     })
   }

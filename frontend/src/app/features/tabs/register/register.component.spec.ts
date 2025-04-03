@@ -37,13 +37,6 @@ describe('RegisterComponent', () => {
     const mockEvent = { target: { value: 'test@example.com' } } as any;
     component.setEmail(mockEvent);
     expect(component['email']).toBe('test@example.com');
-    expect(component['isEmailValid']).toBe(true);
-  });
-
-  it('should set flag on bad email format', () => {
-    const mockEvent = { target: { value: 'notAnEmail' } } as any;
-    component.setEmail(mockEvent);
-    expect(component['isEmailValid']).toBe(false);
   });
 
   it('should set displayName when setDisplayName is called', () => {
@@ -56,13 +49,6 @@ describe('RegisterComponent', () => {
     const mockEvent = { target: { value: 'goodPassword1!' } } as any;
     component.setPassword(mockEvent);
     expect(component['password']).toBe('goodPassword1!');
-    expect(component['isPasswordValid']).toBe(true);
-  });
-
-  it('should set flag on weak password', () => {
-    const mockEvent = { target: { value: 'badPassword' } } as any;
-    component.setPassword(mockEvent);
-    expect(component['isPasswordValid']).toBe(false);
   });
 
   it('should call UserService.register and navigate to login on successful registration', () => {
@@ -91,7 +77,8 @@ describe('RegisterComponent', () => {
 
     component.register();
 
-    expect(component['hasRegistrationError']).toBe(true);
+    expect(component['registrationErrorMessage']).toBe('Registration Error');
+    expect(component['registrationErrorFields']).toEqual({});
     expect(component['password']).toBe('');
   });
 });
