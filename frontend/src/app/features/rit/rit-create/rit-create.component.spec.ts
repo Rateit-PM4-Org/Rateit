@@ -28,8 +28,6 @@ describe('RitCreateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // HTML
-
   it('should render ritName in the ion-input', () => {
     component.ritName = 'Test Rit';
     fixture.detectChanges();
@@ -38,22 +36,6 @@ describe('RitCreateComponent', () => {
     expect(input.attributes['ng-reflect-value']).toContain('Test Rit');
   });
 
-  it('should show the selected image when selectedImage is set', () => {
-    component.selectedImage = 'http://example.com/image.jpg';
-    fixture.detectChanges();
-
-    const image = fixture.debugElement.query(By.css('[data-testid="image-preview"] ion-img'));
-    expect(image).toBeTruthy();
-    expect(image.attributes['ng-reflect-src']).toBe('http://example.com/image.jpg');
-  });
-
-  it('should show placeholder when no image is selected', () => {
-    component.selectedImage = null;
-    fixture.detectChanges();
-
-    const placeholder = fixture.debugElement.query(By.css('[data-testid="image-placeholder"]'));
-    expect(placeholder.nativeElement.textContent.trim()).toBe('Select a picture');
-  });
 
   it('should display all tag chips', () => {
     component.tags = ['red', 'blue', 'green'];
@@ -80,18 +62,6 @@ describe('RitCreateComponent', () => {
     const textarea = fixture.debugElement.query(By.css('[data-testid="details-textarea"]'));
     expect(textarea.attributes['ng-reflect-value']).toContain('Here are the details.');
   });
-
-  it('should call selectImage() when image container is clicked', () => {
-    spyOn(component, 'selectImage');
-    fixture.detectChanges();
-
-    const imageContainer = fixture.debugElement.query(By.css('[data-testid="image-container"]'));
-    imageContainer.triggerEventHandler('click', null);
-
-    expect(component.selectImage).toHaveBeenCalled();
-  });
-
-  // TypeScript
 
   it('should set ritName', () => {
     const event = { target: { value: 'My Rit' } };
@@ -127,60 +97,6 @@ describe('RitCreateComponent', () => {
     const initialLength = component.tags.length;
     component.removeTag(0);
     expect(component.tags.length).toBe(initialLength - 1);
-  });
-
-  it('should call FileReader.readAsDataURL when a file is selected', () => {
-    const mockFile = new File(['dummy'], 'test.png', { type: 'image/png' });
-  
-    const mockReader: Partial<FileReader> = {
-      readAsDataURL: jasmine.createSpy('readAsDataURL'),
-      result: 'data:image/png;base64,abc123',
-      onload: null,
-    };
-  
-    spyOn(window as any, 'FileReader').and.returnValue(mockReader as FileReader);
-  
-    component.selectImage();
-  
-    const fileInputEvent = { target: { files: [mockFile] } } as any;
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-  
-    const onchange = (e: any) => {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        component.selectedImage = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    };
-  
-    (window as any).FileReader = function () {
-      return mockReader;
-    };
-    onchange(fileInputEvent);
-    (mockReader.onload as any)(); // Triggert reader.onload
-  
-    expect(mockReader.readAsDataURL).toHaveBeenCalledWith(mockFile);
-    expect(component.selectedImage).toBe('data:image/png;base64,abc123');
-  });
-
-  it('should open modal with RateComponent', async () => {
-    const modalSpyObj = jasmine.createSpyObj('HTMLIonModalElement', ['present']);
-    modalCtrlSpy.create.and.resolveTo(modalSpyObj);
-
-    await component.openRateComponent();
-
-    expect(modalCtrlSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({
-      component: RateComponent,
-      breakpoints: [0, 0.25, 0.85],
-      initialBreakpoint: 0.85,
-      showBackdrop: true,
-      canDismiss: true,
-    }));
-
-    expect(modalSpyObj.present).toHaveBeenCalled();
   });
 
 });

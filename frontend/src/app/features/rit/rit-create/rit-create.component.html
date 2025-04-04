@@ -1,32 +1,6 @@
 <ion-content class="ion-padding">
 
   <ion-card>
-    <ion-card-content class="outline-image-container">
-      <ion-card-content (click)="selectImage()" (keydown.enter)="selectImage()" class="image-container ion-activatable ripple-parent" data-testid="image-container">
-
-        <ion-thumbnail *ngIf="selectedImage" class="preview-wrapper" data-testid="image-preview">
-          <ion-img [src]="selectedImage"></ion-img>
-        </ion-thumbnail>
-
-        <div *ngIf="!selectedImage" class="image-placeholder" data-testid="image-placeholder">
-          Select a picture
-        </div>
-
-        <ion-button
-          class="rating-button"
-          size="medium"
-          fill="solid"
-          color="warning"
-          (click)="onRatingButtonClick($event)"
-          (keydown.enter)="onRatingButtonClick($event)"
-        >
-          4 <ion-icon name="star" slot="end"></ion-icon>
-        </ion-button>
-
-        <ion-ripple-effect></ion-ripple-effect>
-      </ion-card-content>
-    </ion-card-content>
-
     <ion-card-header>
       <ion-card-title>
         <ion-input data-testid="rit-name-input" [value]="ritName" (ionInput)="setRitName($event)" placeholder="Rit Name..."></ion-input>
@@ -58,17 +32,6 @@
         (keyup.enter)="addTag()"
       ></ion-input>
     </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-segment color="primary" value="primary">
-      <ion-segment-button (click)="unpublish()" (keydown.enter)="unpublish()" value="primary">
-        <ion-label>Private</ion-label>
-      </ion-segment-button>
-      <ion-segment-button (click)="publish()" (keydown.enter)="publish()" value="segment">
-        <ion-label>Public</ion-label>
-      </ion-segment-button>
-    </ion-segment>
   </ion-card>
 
   <ion-card>

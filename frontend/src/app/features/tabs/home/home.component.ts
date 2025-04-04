@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController, IonModal } from '@ionic/angular/standalone';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 import { Rit } from '../../../model/rit';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
+import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 
 @Component({
   selector: 'app-home',
@@ -39,23 +39,22 @@ export class HomeComponent implements OnInit {
       let request: Rit = {
         name: data.name,
         details: data.details,
-        published: data.published === 'published' ? true : false
+        tags: data.tags,
       }
       this.ritService.createRit(request).subscribe({
         next: (rit) => console.log('Erstellt:', rit),
         error: (err) => console.error('Fehler:', err),
       });
     }
-    
-  }
 
+  }
 
   confirm() {
     this.modal.dismiss(
       {
         name: this.ritCreateComponent.ritName,
         details: this.ritCreateComponent.details,
-        published: this.ritCreateComponent.published,
+        tags: this.ritCreateComponent.tags,
       },
       'confirm'
     );

@@ -38,8 +38,6 @@ describe('HomeComponent', () => {
     component.ritCreateComponent = {
       ritName: 'TestRit',
       details: 'TestDetails',
-      tags: ['x'],
-      selectedImage: 'img.jpg',
     } as any;
 
     let dismissCalled = false;
@@ -51,8 +49,6 @@ describe('HomeComponent', () => {
         expect(data).toEqual({
           name: 'TestRit',
           details: 'TestDetails',
-          tags: ['x'],
-          image: 'img.jpg',
         });
       }
     } as any;
