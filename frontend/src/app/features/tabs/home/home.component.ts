@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
       position: 'top',
       color: 'success',
     });
-  
+
     await toast.present();
   }
 
@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
       position: 'top',
       color: 'danger',
     });
-  
+
     await toast.present();
   }
 
@@ -69,13 +69,13 @@ export class HomeComponent implements OnInit {
           },
         ],
       });
-  
+
       await actionSheet.present();
       const { role: actionRole } = await actionSheet.onWillDismiss();
-  
+
       return actionRole === 'confirm';
     }
-  
+
     return true;
   };
 
@@ -84,17 +84,17 @@ export class HomeComponent implements OnInit {
       this.errorMessage = 'Rit Name is required';
       return;
     }
-  
+
     const request: Rit = {
       name: this.ritCreateComponent.ritName,
       details: this.ritCreateComponent.details,
       tags: this.ritCreateComponent.tags ?? [],
     };
-  
+
     this.ritService.createRit(request).subscribe({
       next: () => {
         this.showSuccessToast('Rit created successfully!');
-        this.modal.dismiss('confirm');
+        this.modal.dismiss(null, 'confirm');
       },
       error: (err) => {
         console.error('Fehler:', err);
