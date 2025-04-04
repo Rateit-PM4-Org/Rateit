@@ -23,8 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,9 +72,21 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     void createRit_positive_returnsStatusOk(String name, String details, List<String> tags) throws Exception {
         String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags));
 
-        mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
-                        .with(user(testUser)))
-                .andExpect(status().is2xxSuccessful());
+        var resultActions = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
+                .with(user(testUser)));
+        String result = resultActions
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        resultActions.andExpect(status().is2xxSuccessful());
+        Rit rit = objectMapper.readValue(result, Rit.class);
+        assertNotNull(rit, "Rit must be present in the database");
+        assertEquals(name, rit.getName(), "Rit name must be equal to the input name");
+        assertEquals(details, rit.getDetails(), "Rit details must be equal to the input details");
+        assertEquals(tags, rit.getTags(), "Rit tags must be equal to the input tags");
+        assertFalse(rit.isPublished(), "Rit must not be published");
+        assertEquals(testUser.getId(), rit.getOwner().getId(), "Rit owner must be equal to the input owner");
     }
 
     private static Stream<Arguments> provideInvalidRitCreateParams() {
