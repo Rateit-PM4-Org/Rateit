@@ -102,7 +102,7 @@ describe('HomeComponent', () => {
     tick();
 
     expect(ritServiceSpy.createRit).toHaveBeenCalled();
-    expect(component.modal.dismiss).toHaveBeenCalledWith('confirm');
+    expect(component.modal.dismiss).toHaveBeenCalledWith(null, 'confirm');
     expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Rit created successfully!' }));
     expect(toast.present).toHaveBeenCalled();
   }));
@@ -130,7 +130,7 @@ describe('HomeComponent', () => {
   }));
 
   it('canDismiss returns true if role is not cancel', async () => {
-    const result = await component.canDismiss({}, 'confirm');
+    const result = await component.canDismiss({},  'confirm');
     expect(result).toBeTrue();
   });
 
