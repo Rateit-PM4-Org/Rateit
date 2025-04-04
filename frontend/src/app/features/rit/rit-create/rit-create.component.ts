@@ -15,23 +15,17 @@ export class RitCreateComponent {
 
   constructor() { }
 
-  tags: string[] = ['']
+  tags: string[] = []
   ritName?: string
   details?: string
   newTag?: string
 
   setRitName(event: any) {
-    let input = event.target.value
-    if (input) {
-      this.ritName = input
-    }
+    this.ritName = event.target.value
   }
 
   setDetails(event: any) {
-    let input = event.target.value
-    if (input) {
-      this.details = input
-    }
+    this.details = event.target.value
   }
 
   setNewTag(event: any) {

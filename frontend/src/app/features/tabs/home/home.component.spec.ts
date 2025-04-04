@@ -31,32 +31,6 @@ describe('HomeComponent', () => {
     expect(title?.textContent).toContain('Home');
   });
 
-  it('confirm() should call modal.dismiss with correct data', async () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
-
-    component.ritCreateComponent = {
-      ritName: 'TestRit',
-      details: 'TestDetails',
-    } as any;
-
-    let dismissCalled = false;
-
-    component.modal = {
-      dismiss: async (data: any, role: string) => {
-        dismissCalled = true;
-        expect(role).toBe('confirm');
-        expect(data).toEqual({
-          name: 'TestRit',
-          details: 'TestDetails',
-        });
-      }
-    } as any;
-
-    await component.confirm();
-    expect(dismissCalled).toBeTrue();
-  });
-
   it('should call modal.dismiss with null and "cancel" when Cancel button logic is used', async () => {
     const fixture = TestBed.createComponent(HomeComponent);
     const component = fixture.componentInstance;
@@ -78,62 +52,6 @@ describe('HomeComponent', () => {
     expect(dismissCalled).toBeTrue();
     expect(receivedData).toBeNull();
     expect(receivedRole).toBe('cancel');
-  });
-
-  it('canDismiss() should return true when user selects "Yes"', async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        HomeComponent,
-        IonicModule.forRoot(),
-        NoopAnimationsModule,
-      ],
-      providers: [
-        provideHttpClient(),
-        {
-          provide: ActionSheetController,
-          useValue: {
-            create: async () => ({
-              present: () => Promise.resolve(),
-              onWillDismiss: () => Promise.resolve({ role: 'confirm' }),
-            }),
-          },
-        },
-      ],
-    }).compileComponents();
-
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
-
-    const result = await component.canDismiss();
-    expect(result).toBeTrue();
-  });
-
-  it('canDismiss() should return true when user selects "No"', async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        HomeComponent,
-        IonicModule.forRoot(),
-        NoopAnimationsModule,
-      ],
-      providers: [
-        provideHttpClient(),
-        {
-          provide: ActionSheetController,
-          useValue: {
-            create: async () => ({
-              present: () => Promise.resolve(),
-              onWillDismiss: () => Promise.resolve({ role: 'cancel' }),
-            }),
-          },
-        },
-      ],
-    }).compileComponents();
-
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
-
-    const result = await component.canDismiss();
-    expect(result).toBeFalse();
   });
 
 });

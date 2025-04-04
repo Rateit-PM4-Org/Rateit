@@ -94,6 +94,7 @@ describe('RitCreateComponent', () => {
   });
 
   it('should remove tag', () => {
+    component.tags = ['Tag1', 'Tag2', 'Tag3'];
     const initialLength = component.tags.length;
     component.removeTag(0);
     expect(component.tags.length).toBe(initialLength - 1);

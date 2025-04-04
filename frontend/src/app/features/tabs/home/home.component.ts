@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActionSheetController, IonModal } from '@ionic/angular/standalone';
+import { ActionSheetController, IonModal, ToastController } from '@ionic/angular/standalone';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
@@ -25,61 +25,83 @@ export class HomeComponent implements OnInit {
   errorMessage: string = '';
 
   constructor(
-    private readonly actionSheetCtrl: ActionSheetController, private readonly ritService: RitService
+    private readonly actionSheetCtrl: ActionSheetController, private readonly ritService: RitService, private toastController: ToastController
   ) { }
 
   ngOnInit() {
     this.presentingElement = document.querySelector('.ion-page');
   }
 
-  handleModalDismiss(event: CustomEvent) {
-    let data = event.detail.data
-
-    if (data.name) {
-      let request: Rit = {
-        name: data.name,
-        details: data.details,
-        tags: data.tags,
-      }
-      this.ritService.createRit(request).subscribe({
-        next: (rit) => console.log('Erstellt:', rit),
-        error: (err) => console.error('Fehler:', err),
-      });
-    }
-
-  }
-
-  confirm() {
-    this.modal.dismiss(
-      {
-        name: this.ritCreateComponent.ritName,
-        details: this.ritCreateComponent.details,
-        tags: this.ritCreateComponent.tags,
-      },
-      'confirm'
-    );
-  }
-
-  canDismiss = async () => {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Are you sure?',
-      buttons: [
-        {
-          text: 'Yes',
-          role: 'confirm',
-        },
-        {
-          text: 'No',
-          role: 'cancel',
-        },
-      ],
+  async showSuccessToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      color: 'success',
     });
+  
+    await toast.present();
+  }
 
-    actionSheet.present();
+  async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      color: 'danger',
+    });
+  
+    await toast.present();
+  }
 
-    const { role } = await actionSheet.onWillDismiss();
-
-    return role === 'confirm';
+  canDismiss = async (data: any, role: string) => {
+    if (role === 'cancel') {
+      const actionSheet = await this.actionSheetCtrl.create({
+        header: 'Are you sure you want to cancel?',
+        buttons: [
+          {
+            text: 'Yes',
+            role: 'confirm',
+          },
+          {
+            text: 'No',
+            role: 'cancel',
+          },
+        ],
+      });
+  
+      await actionSheet.present();
+      const { role: actionRole } = await actionSheet.onWillDismiss();
+  
+      return actionRole === 'confirm';
+    }
+  
+    return true;
   };
+
+  async confirm() {
+    if (!this.ritCreateComponent.ritName?.trim()) {
+      this.errorMessage = 'Rit Name is required';
+      return;
+    }
+  
+    const request: Rit = {
+      name: this.ritCreateComponent.ritName,
+      details: this.ritCreateComponent.details,
+      tags: this.ritCreateComponent.tags ?? [],
+    };
+  
+    this.ritService.createRit(request).subscribe({
+      next: () => {
+        this.showSuccessToast('Rit created successfully!');
+        this.modal.dismiss('confirm');
+      },
+      error: (err) => {
+        console.error('Fehler:', err);
+        this.errorMessage = 'Error creating Rit: ' + (err.error?.error ?? 'Unknown error');
+        this.showErrorToast(this.errorMessage);
+      },
+    });
+  }
 
 }

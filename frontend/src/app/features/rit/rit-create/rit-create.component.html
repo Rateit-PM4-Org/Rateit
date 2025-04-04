@@ -3,7 +3,7 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>
-        <ion-input data-testid="rit-name-input" [value]="ritName" (ionInput)="setRitName($event)" placeholder="Rit Name..."></ion-input>
+        <ion-input data-testid="rit-name-input" ngModel [required]="true" [value]="ritName" (ionInput)="setRitName($event)" placeholder="Rit Name..."></ion-input>
       </ion-card-title>
       <ion-card-subtitle>
         Rit Name
