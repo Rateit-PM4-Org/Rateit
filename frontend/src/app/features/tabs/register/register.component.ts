@@ -19,6 +19,7 @@ export class RegisterComponent  implements OnInit {
   protected password: string = '';
   protected registrationErrorMessage: string = '';
   protected registrationErrorFields: { [key: string]: string } = {};
+  protected registrationSuccess: boolean = false;
 
   constructor(private readonly router: Router, private readonly userService: UserService) { }
 
@@ -39,7 +40,7 @@ export class RegisterComponent  implements OnInit {
   register() {
     this.userService.register(this.email, this.displayName, this.password).subscribe({
       next: response => {
-        this.router.navigateByUrl("/login");
+        this.registrationSuccess = true;
       },
       error: err => {
         this.registrationErrorMessage = err.error?.error || 'Registration Error';

@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" *ngIf="!registrationSuccess">
   <ion-item>
     <ion-label>Email</ion-label>
     <ion-input type="email" (ionInput)="setEmail($event)"></ion-input>
@@ -31,4 +31,12 @@
     <p>{{registrationErrorMessage}}</p>
   </ion-text>
   <ion-ripple-effect></ion-ripple-effect>
+</ion-content>
+<ion-content class="ion-padding" *ngIf="registrationSuccess">
+  <ion-text>
+    <p>Registration successful.</p>
+  </ion-text>
+  <ion-text>
+    <p>You will receive an email to verify your account shortly.</p>
+  </ion-text>
 </ion-content>

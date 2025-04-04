@@ -51,7 +51,7 @@ describe('RegisterComponent', () => {
     expect(component['password']).toBe('goodPassword1!');
   });
 
-  it('should call UserService.register and navigate to login on successful registration', () => {
+  it('should call UserService.register', () => {
     userServiceSpy.register.and.returnValue(of({}));
     component['email'] = 'test@example.com';
     component['displayName'] = 'John Doe';
@@ -60,7 +60,17 @@ describe('RegisterComponent', () => {
     component.register();
 
     expect(userServiceSpy.register).toHaveBeenCalledWith('test@example.com', 'John Doe', 'password123');
-    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/login');
+  });
+
+  it('should set registrationSuccess on successful registration', () => {
+    userServiceSpy.register.and.returnValue(of({}));
+    component['email'] = 'test@example.com';
+    component['displayName'] = 'John Doe';
+    component['password'] = 'password123';
+
+    component.register();
+
+    expect(component['registrationSuccess']).toBe(true);
   });
 
   it('should set errorMessage and clear password on registration error', () => {
@@ -80,5 +90,22 @@ describe('RegisterComponent', () => {
     expect(component['registrationErrorMessage']).toBe('Registration Error');
     expect(component['registrationErrorFields']).toEqual({});
     expect(component['password']).toBe('');
+  });
+
+  it('should set registrationSuccess on registration error', () => {
+    const mockError = {
+      error: {
+        message: 'Registration failed.'
+      }
+    };
+    component['email'] = 'notAnEmail';
+    component['displayName'] = 'John Doe';
+    component['password'] = 'badPassword';
+
+    userServiceSpy.register.and.returnValue(throwError(() => mockError));
+
+    component.register();
+
+    expect(component['registrationSuccess']).toBe(false);
   });
 });
