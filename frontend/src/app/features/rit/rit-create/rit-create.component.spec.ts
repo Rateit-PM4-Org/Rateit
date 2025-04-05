@@ -80,15 +80,39 @@ describe('RitCreateComponent', () => {
     expect(component.newTag).toBe('TestTag');
   });
 
-  it('should add new tag', () => {
+  it('should add new tag with fake input element', () => {
     component.newTag = 'NewTag';
-    component.addTag();
+
+    const fakeInput = {
+      setFocus: jasmine.createSpy('setFocus')
+    } as any;
+
+    component.addTag(fakeInput);
+
     expect(component.tags.includes('NewTag')).toBeTrue();
   });
 
+
   it('should not add empty tag', () => {
     component.newTag = '   ';
-    component.addTag();
+
+    const fakeInput = {
+      setFocus: jasmine.createSpy('setFocus')
+    } as any;
+
+    component.addTag(fakeInput);
+    expect(component.tags.includes('')).toBeFalse();
+  });
+
+  it('should not add existing tag', () => {
+    component.tags = ['existingTag'];
+    component.newTag = 'existingTag';
+
+    const fakeInput = {
+      setFocus: jasmine.createSpy('setFocus')
+    } as any;
+
+    component.addTag(fakeInput);
     expect(component.tags.includes('')).toBeFalse();
   });
 

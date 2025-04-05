@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { IonInput } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 
 @Component({
@@ -33,12 +34,14 @@ export class RitCreateComponent {
     }
   }
 
-  addTag() {
+  addTag(inputEl: IonInput) {
     const tag = this.newTag?.trim();
-    if (tag) {
+    if (tag && !this.tags.includes(tag)) {
       this.tags.push(tag);
-      this.newTag = '';
     }
+    this.newTag = '';
+
+    setTimeout(() => inputEl.setFocus(), 100);
   }
 
   removeTag(index: number) {

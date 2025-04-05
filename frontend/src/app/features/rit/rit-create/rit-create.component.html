@@ -19,8 +19,8 @@
         <ion-icon name="close"></ion-icon>
       </ion-chip>
 
-      <ion-input class="tag-input" data-testid="new-tag-input" [value]="newTag" (ionInput)="setNewTag($event)"
-        placeholder="Enter Tag" (keyup.enter)="addTag()"></ion-input>
+      <ion-input #tagInput class="tag-input" data-testid="new-tag-input" [value]="newTag" (ionInput)="setNewTag($event)"
+        placeholder="Enter Tag" (keyup.enter)="addTag(tagInput)" (ionBlur)="addTag(tagInput)"></ion-input>
     </ion-card-content>
   </ion-card>
 
