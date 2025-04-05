@@ -14,7 +14,7 @@ import java.util.List;
  * @param tags    The tags of the rit.
  */
 public record RitCreateRequest(
-        @NotBlank @Length(min = 12) String name,
+        @NotBlank String name,
         String details,
         @NotNull List<String> tags
 ) {
