@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
   async showErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: 4000,
       position: 'top',
       color: 'danger',
     });
@@ -98,7 +98,18 @@ export class HomeComponent implements OnInit {
       },
       error: (err) => {
         console.error('Fehler:', err);
-        this.errorMessage = 'Error creating Rit: ' + (err.error?.error ?? 'Unknown error');
+        const baseError = err.error?.error ?? 'Unknown error';
+        let fieldErrors = '';
+
+        const fields = err.error?.fields;
+        if (fields) {
+          fieldErrors = Object.entries(fields)
+          .map(([field, messages]: any) => `- ${field}: ${messages.join(', ')}`)
+          .join('');
+        }
+
+        this.errorMessage = `Error creating Rit: ${baseError}${fieldErrors ? '\n' + fieldErrors : ''}`;
+
         this.showErrorToast(this.errorMessage);
       },
     });
