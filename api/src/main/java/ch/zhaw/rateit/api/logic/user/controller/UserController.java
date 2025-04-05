@@ -7,7 +7,6 @@ import ch.zhaw.rateit.api.logic.user.service.UserRegistrationService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.service.UserVerificationService;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +49,8 @@ public class UserController {
 
 
     @GetMapping("/mail-confirmation")
-    public ResponseEntity<Map<String, Object>> verifyUser(@RequestParam @NotEmpty @Email String email, @RequestParam @NotEmpty String token) {
-        boolean isVerified = userVerificationService.verifyUser(email, token);
+    public ResponseEntity<Map<String, Object>> verifyUser(@RequestParam @NotEmpty String token) {
+        boolean isVerified = userVerificationService.verifyUser(token);
 
         if (isVerified) {
             return ResponseEntity.ok().body(null);
