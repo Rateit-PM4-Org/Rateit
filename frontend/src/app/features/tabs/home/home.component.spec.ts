@@ -51,39 +51,6 @@ describe('HomeComponent', () => {
     expect(title?.textContent).toContain('Home');
   });
 
-  it('should call modal.dismiss with null and "cancel" when Cancel button logic is used', async () => {
-    let dismissCalled = false;
-    let receivedData = null;
-    let receivedRole = '';
-
-    component.modal = {
-      dismiss: async (data: any, role: string) => {
-        dismissCalled = true;
-        receivedData = data;
-        receivedRole = role;
-      }
-    } as any;
-
-    await component.modal.dismiss(null, 'cancel');
-
-    expect(dismissCalled).toBeTrue();
-    expect(receivedData).toBeNull();
-    expect(receivedRole).toBe('cancel');
-  });
-
-  it('should not call createRit if ritName is missing', async () => {
-    component.ritCreateComponent = {
-      ritName: '   ',
-      details: '',
-      tags: []
-    } as any;
-
-    await component.confirm();
-
-    expect(component.errorMessage).toBe('Rit Name is required');
-    expect(ritServiceSpy.createRit).not.toHaveBeenCalled();
-  });
-
   it('should call createRit and show success toast on success', fakeAsync(() => {
     const toast = { present: jasmine.createSpy() };
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
@@ -104,30 +71,61 @@ describe('HomeComponent', () => {
     expect(ritServiceSpy.createRit).toHaveBeenCalled();
     expect(component.modal.dismiss).toHaveBeenCalledWith(null, 'confirm');
     expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Rit created successfully!' }));
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'success' }));
     expect(toast.present).toHaveBeenCalled();
   }));
 
-  it('should show error toast on failure', fakeAsync(() => {
+  it('should call createRit and show error toast on error', fakeAsync(() => {
     const toast = { present: jasmine.createSpy() };
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
 
+    component.modal = { dismiss: jasmine.createSpy() } as any;
+
     component.ritCreateComponent = {
-      ritName: 'Test Rit',
+      ritName: '',
       details: 'Details',
       tags: ['tag1']
     } as any;
 
-    ritServiceSpy.createRit.and.returnValue(throwError(() => ({
-      error: { error: 'Validation failed' }
-    })));
+    const mockErrorResponse = {
+      error: {
+        error: 'Validation failed',
+        fields: {
+          ritName: ['must not be empty']
+        }
+      }
+    };
+
+    ritServiceSpy.createRit.and.returnValue(throwError(() => mockErrorResponse));
 
     component.confirm();
     tick();
 
     expect(component.errorMessage).toContain('Validation failed');
+    expect(component.errorMessage).toContain('- ritName: must not be empty');
     expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'danger' }));
     expect(toast.present).toHaveBeenCalled();
   }));
+
+  it('should call modal.dismiss with null and "cancel" when Cancel button logic is used', async () => {
+    let dismissCalled = false;
+    let receivedData = null;
+    let receivedRole = '';
+
+    component.modal = {
+      dismiss: async (data: any, role: string) => {
+        dismissCalled = true;
+        receivedData = data;
+        receivedRole = role;
+      }
+    } as any;
+
+    await component.modal.dismiss(null, 'cancel');
+
+    expect(dismissCalled).toBeTrue();
+    expect(receivedData).toBeNull();
+    expect(receivedRole).toBe('cancel');
+  });
 
   it('canDismiss returns true if role is not cancel', async () => {
     const result = await component.canDismiss({}, 'confirm');

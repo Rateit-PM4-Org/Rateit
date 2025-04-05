@@ -1,6 +1,6 @@
 export type Rit = {
     id?: string;
-    name: string;
+    name?: string;
     details?: string;
     tags: string[]
 };

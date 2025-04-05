@@ -2,6 +2,7 @@ package ch.zhaw.rateit.api.logic.rit.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @param tags    The tags of the rit.
  */
 public record RitCreateRequest(
-        @NotBlank String name,
+        @NotBlank @Length(min = 12) String name,
         String details,
         @NotNull List<String> tags
 ) {

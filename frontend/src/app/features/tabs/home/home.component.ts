@@ -80,11 +80,6 @@ export class HomeComponent implements OnInit {
   };
 
   async confirm() {
-    if (!this.ritCreateComponent.ritName?.trim()) {
-      this.errorMessage = 'Rit Name is required';
-      return;
-    }
-
     const request: Rit = {
       name: this.ritCreateComponent.ritName,
       details: this.ritCreateComponent.details,
@@ -97,7 +92,6 @@ export class HomeComponent implements OnInit {
         this.modal.dismiss(null, 'confirm');
       },
       error: (err) => {
-        console.error('Fehler:', err);
         const baseError = err.error?.error ?? 'Unknown error';
         let fieldErrors = '';
 
