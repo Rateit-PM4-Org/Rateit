@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController, IonModal, ToastController } from '@ionic/angular/standalone';
+import { Observable } from 'rxjs';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
+import { UserService } from '../../../shared/services/user.service';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 
 @Component({
@@ -24,12 +26,18 @@ export class HomeComponent implements OnInit {
   data: any[] = [];
   errorMessage: string = '';
 
+  isLoggedIn$!: Observable<boolean>;
+
   constructor(
-    private readonly actionSheetCtrl: ActionSheetController, private readonly ritService: RitService, private readonly toastController: ToastController
+    private readonly actionSheetCtrl: ActionSheetController,
+    private readonly ritService: RitService,
+    private readonly toastController: ToastController,
+    private readonly userService: UserService
   ) { }
 
   ngOnInit() {
     this.presentingElement = document.querySelector('.ion-page');
+    this.isLoggedIn$ = this.userService.isLoggedIn();
   }
 
   async showSuccessToast(message: string) {
@@ -98,8 +106,8 @@ export class HomeComponent implements OnInit {
         const fields = err.error?.fields;
         if (fields) {
           fieldErrors = Object.entries(fields)
-          .map(([field, messages]: any) => `- ${field}: ${messages.join(', ')}`)
-          .join('');
+            .map(([field, messages]: any) => `- ${field}: ${messages.join(', ')}`)
+            .join('');
         }
 
         this.errorMessage = `Error creating Rit: ${baseError}${fieldErrors ? '\n' + fieldErrors : ''}`;

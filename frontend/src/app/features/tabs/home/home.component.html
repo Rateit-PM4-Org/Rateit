@@ -4,9 +4,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content *ngIf="isLoggedIn$ | async" class="ion-padding">
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end" vertical="bottom" horizontal="end">
+  <ion-fab data-testid="rit-create-button" slot="fixed" vertical="bottom" horizontal="end" vertical="bottom"
+    horizontal="end">
     <ion-fab-button>
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

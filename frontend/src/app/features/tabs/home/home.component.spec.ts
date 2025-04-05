@@ -5,7 +5,12 @@ import { IonicModule } from '@ionic/angular';
 import { ActionSheetController, ToastController } from '@ionic/angular/standalone';
 import { of, throwError } from 'rxjs';
 import { RitService } from '../../../shared/services/rit.service';
+import { UserService } from '../../../shared/services/user.service';
 import { HomeComponent } from './home.component';
+
+const userServiceMock = {
+  isLoggedIn: () => of(true)
+};
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -26,6 +31,7 @@ describe('HomeComponent', () => {
         NoopAnimationsModule
       ],
       providers: [
+        { provide: UserService, useValue: userServiceMock },
         { provide: RitService, useValue: ritSpy },
         { provide: ToastController, useValue: toastSpy },
         { provide: ActionSheetController, useValue: actionSheetSpy },
@@ -157,4 +163,25 @@ describe('HomeComponent', () => {
     const result = await component.canDismiss({}, 'cancel');
     expect(result).toBeFalse();
   });
+
+  it('should render ion-fab-button when logged in', async () => {
+    fixture.detectChanges();
+
+    const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
+    expect(fabButton).toBeTruthy();
+  });
+
+  it('should not render ion-fab-button when not logged in', async () => {
+    userServiceMock.isLoggedIn = () => of(false);
+
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
+    expect(fabButton).toBeFalsy();
+
+    userServiceMock.isLoggedIn = () => of(true)
+  });
+
 });
