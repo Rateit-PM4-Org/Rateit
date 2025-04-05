@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ModalController } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { RateComponent } from '../rate/rate.component';
 
 @Component({
   selector: 'app-rit-create',

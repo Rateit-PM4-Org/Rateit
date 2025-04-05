@@ -1,11 +1,11 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { HomeComponent } from './home.component';
+import { IonicModule } from '@ionic/angular';
 import { ActionSheetController, ToastController } from '@ionic/angular/standalone';
-import { RitService } from '../../../shared/services/rit.service';
 import { of, throwError } from 'rxjs';
+import { RitService } from '../../../shared/services/rit.service';
+import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -130,7 +130,7 @@ describe('HomeComponent', () => {
   }));
 
   it('canDismiss returns true if role is not cancel', async () => {
-    const result = await component.canDismiss({},  'confirm');
+    const result = await component.canDismiss({}, 'confirm');
     expect(result).toBeTrue();
   });
 

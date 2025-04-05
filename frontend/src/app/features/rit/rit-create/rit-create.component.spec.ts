@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { RitCreateComponent } from './rit-create.component';
+import { IonicModule } from '@ionic/angular';
 import { ModalController } from '@ionic/angular/standalone';
-import { RateComponent } from '../rate/rate.component';
+import { RitCreateComponent } from './rit-create.component';
 
 describe('RitCreateComponent', () => {
   let component: RitCreateComponent;

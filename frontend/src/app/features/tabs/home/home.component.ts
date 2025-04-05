@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   errorMessage: string = '';
 
   constructor(
-    private readonly actionSheetCtrl: ActionSheetController, private readonly ritService: RitService, private toastController: ToastController
+    private readonly actionSheetCtrl: ActionSheetController, private readonly ritService: RitService, private readonly toastController: ToastController
   ) { }
 
   ngOnInit() {

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { Component } from '@angular/core';
 import { addIcons } from 'ionicons';
 import { star, starOutline } from 'ionicons/icons';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 
 addIcons({ star, 'star-outline': starOutline });
 

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RateComponent } from './rate.component';
 import { IonicModule } from '@ionic/angular';
+import { RateComponent } from './rate.component';
 
 describe('RateComponent', () => {
   let component: RateComponent;
