@@ -34,14 +34,15 @@ export class RitCreateComponent {
     }
   }
 
-  addTag(inputEl: IonInput) {
+  addTag(inputEl: IonInput, action: string) {
     const tag = this.newTag?.trim();
     if (tag && !this.tags.includes(tag)) {
       this.tags.push(tag);
+      if (action === 'enter') {
+        setTimeout(() => inputEl.setFocus(), 100);
+      }
     }
     this.newTag = '';
-
-    setTimeout(() => inputEl.setFocus(), 100);
   }
 
   removeTag(index: number) {

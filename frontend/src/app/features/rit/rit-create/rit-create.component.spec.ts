@@ -87,7 +87,7 @@ describe('RitCreateComponent', () => {
       setFocus: jasmine.createSpy('setFocus')
     } as any;
 
-    component.addTag(fakeInput);
+    component.addTag(fakeInput, 'blur');
 
     expect(component.tags.includes('NewTag')).toBeTrue();
   });
@@ -100,7 +100,7 @@ describe('RitCreateComponent', () => {
       setFocus: jasmine.createSpy('setFocus')
     } as any;
 
-    component.addTag(fakeInput);
+    component.addTag(fakeInput, 'blur');
     expect(component.tags.includes('')).toBeFalse();
   });
 
@@ -112,7 +112,7 @@ describe('RitCreateComponent', () => {
       setFocus: jasmine.createSpy('setFocus')
     } as any;
 
-    component.addTag(fakeInput);
+    component.addTag(fakeInput, 'blur');
     expect(component.tags.includes('')).toBeFalse();
   });
 
