@@ -104,13 +104,19 @@ export class HomeComponent implements OnInit {
         const fields = err.error?.fields;
         if (fields) {
           if (fields.name) {
-            this.ritCreateComponent.ritNameErrorMessage = `${fields.name}`;
+            this.ritCreateComponent.ritNameErrorMessage = Array.isArray(fields.name)
+              ? fields.name.join(', ')
+              : `${fields.name}`;
           }
           if (fields.details) {
-            this.ritCreateComponent.detailsErrorMessage = `${fields.details}`;
+            this.ritCreateComponent.detailsErrorMessage = Array.isArray(fields.details)
+            ? fields.details.join(', ')
+            : `${fields.details}`;
           }
           if (fields.tags) {
-            this.ritCreateComponent.tagsErrorMessage = `${fields.tags}`;
+            this.ritCreateComponent.tagsErrorMessage = Array.isArray(fields.tags)
+            ? fields.tags.join(', ')
+            : `${fields.tags}`;
           }
         } else {
           this.showErrorToast(baseError);
