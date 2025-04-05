@@ -10,6 +10,11 @@
         Rit Name
       </ion-card-subtitle>
     </ion-card-header>
+    <ion-card-content class="name-error-container">
+      <ion-text color="danger" *ngIf="ritNameErrorMessage">
+        <p>{{ritNameErrorMessage}}</p>
+      </ion-text>
+    </ion-card-content>
 
     <ion-card-content class="tags-container">
       <ion-chip color="primary" *ngFor="let tag of tags; let i = index" (click)="removeTag(i)"
@@ -20,7 +25,13 @@
       </ion-chip>
 
       <ion-input #tagInput class="tag-input" data-testid="new-tag-input" [value]="newTag" (ionInput)="setNewTag($event)"
-        placeholder="Enter Tag" (keyup.enter)="addTag(tagInput, 'enter')" (ionBlur)="addTag(tagInput, 'blur')"></ion-input>
+        placeholder="Enter Tag" (keyup.enter)="addTag(tagInput, 'enter')"
+        (ionBlur)="addTag(tagInput, 'blur')"></ion-input>
+    </ion-card-content>
+    <ion-card-content class="tags-error-container">
+      <ion-text color="danger" *ngIf="tagsErrorMessage">
+        <p>{{tagsErrorMessage}}</p>
+      </ion-text>
     </ion-card-content>
   </ion-card>
 
@@ -33,6 +44,9 @@
       <ion-textarea data-testid="details-textarea" [value]="details" (ionInput)="setDetails($event)"
         label="Enter your Description" [autoGrow]="true" labelPlacement="floating" fill="outline"
         placeholder="Enter text"></ion-textarea>
+      <ion-text color="danger" *ngIf="detailsErrorMessage">
+        <p>{{detailsErrorMessage}}</p>
+      </ion-text>
     </ion-card-content>
   </ion-card>
 

@@ -6,6 +6,7 @@ import { ActionSheetController, ToastController } from '@ionic/angular/standalon
 import { of, throwError } from 'rxjs';
 import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
+import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 import { HomeComponent } from './home.component';
 
 const userServiceMock = {
@@ -81,23 +82,67 @@ describe('HomeComponent', () => {
     expect(toast.present).toHaveBeenCalled();
   }));
 
-  it('should call createRit and show error toast on error', fakeAsync(() => {
+  it('should call createRit and show error toast on unknown error', fakeAsync(() => {
     const toast = { present: jasmine.createSpy() };
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
 
     component.modal = { dismiss: jasmine.createSpy() } as any;
 
     component.ritCreateComponent = {
-      ritName: '',
+      ritName: 'test rit',
       details: 'Details',
-      tags: ['tag1']
-    } as any;
+      tags: ['tag1'],
+      ritNameErrorMessage: '',
+      tagsErrorMessage: '',
+      detailsErrorMessage: ''
+    } as RitCreateComponent;
+
+    const mockErrorResponse = {
+      error: {
+        error: 'Unknown error',
+      }
+    };
+
+    ritServiceSpy.createRit.and.returnValue(throwError(() => mockErrorResponse));
+
+    component.confirm();
+    tick();
+
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'danger', message: 'Unknown error' }));
+    expect(toast.present).toHaveBeenCalled();
+    expect(component.ritCreateComponent.ritNameErrorMessage).toEqual('');
+    expect(component.ritCreateComponent.tagsErrorMessage).toEqual('');
+    expect(component.ritCreateComponent.detailsErrorMessage).toEqual('');
+  }));
+
+  it('should call createRit and not show error toast on field errors', fakeAsync(() => {
+    const toast = { present: jasmine.createSpy() };
+    toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
+
+    component.modal = { dismiss: jasmine.createSpy() } as any;
+
+    component.ritCreateComponent = {
+      ritName: undefined,
+      details: 'Details',
+      tags: ['tag1'],
+      ritNameErrorMessage: '',
+      tagsErrorMessage: '',
+      detailsErrorMessage: ''
+    } as RitCreateComponent;
 
     const mockErrorResponse = {
       error: {
         error: 'Validation failed',
         fields: {
-          ritName: ['must not be empty']
+          name: [
+            'must not be empty'
+          ],
+          details: [
+            'test'
+          ],
+          tags: [
+            'test'
+          ]
         }
       }
     };
@@ -107,10 +152,11 @@ describe('HomeComponent', () => {
     component.confirm();
     tick();
 
-    expect(component.errorMessage).toContain('Validation failed');
-    expect(component.errorMessage).toContain('- ritName: must not be empty');
-    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'danger' }));
-    expect(toast.present).toHaveBeenCalled();
+    expect(toastControllerSpy.create).not.toHaveBeenCalledWith(jasmine.objectContaining({ color: 'danger', message: 'Unknown error' }));
+    expect(toast.present).not.toHaveBeenCalled();
+    expect(component.ritCreateComponent.ritNameErrorMessage).toEqual('must not be empty');
+    expect(component.ritCreateComponent.tagsErrorMessage).toEqual('test');
+    expect(component.ritCreateComponent.detailsErrorMessage).toEqual('test');
   }));
 
   it('should call modal.dismiss with null and "cancel" when Cancel button logic is used', async () => {

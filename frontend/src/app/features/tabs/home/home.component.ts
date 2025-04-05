@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
 
   presentingElement!: HTMLElement | null;
   data: any[] = [];
-  errorMessage: string = '';
 
   isLoggedIn$!: Observable<boolean>;
 
@@ -101,18 +100,21 @@ export class HomeComponent implements OnInit {
       },
       error: (err) => {
         const baseError = err.error?.error ?? 'Unknown error';
-        let fieldErrors = '';
 
         const fields = err.error?.fields;
         if (fields) {
-          fieldErrors = Object.entries(fields)
-            .map(([field, messages]: any) => `- ${field}: ${messages.join(', ')}`)
-            .join('');
+          if (fields.name) {
+            this.ritCreateComponent.ritNameErrorMessage = `${fields.name}`;
+          }
+          if (fields.details) {
+            this.ritCreateComponent.detailsErrorMessage = `${fields.details}`;
+          }
+          if (fields.tags) {
+            this.ritCreateComponent.tagsErrorMessage = `${fields.tags}`;
+          }
+        } else {
+          this.showErrorToast(baseError);
         }
-
-        this.errorMessage = `Error creating Rit: ${baseError}${fieldErrors ? '\n' + fieldErrors : ''}`;
-
-        this.showErrorToast(this.errorMessage);
       },
     });
   }

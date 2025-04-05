@@ -15,8 +15,12 @@ export class RitCreateComponent {
   constructor() { }
 
   tags: string[] = []
+  tagsErrorMessage?: string
   ritName?: string
+  ritNameErrorMessage?: string
   details?: string
+  detailsErrorMessage?: string
+
   newTag?: string
 
   setRitName(event: any) {
@@ -37,16 +41,16 @@ export class RitCreateComponent {
   addTag(inputEl: IonInput, action: string) {
     const tag = this.newTag?.trim();
     if (tag && !this.tags.includes(tag)) {
-      this.tags.push(tag);
+      this.tags.push(tag)
       if (action === 'enter') {
-        setTimeout(() => inputEl.setFocus(), 100);
+        setTimeout(() => inputEl.setFocus(), 100)
       }
     }
-    this.newTag = '';
+    this.newTag = ''
   }
 
   removeTag(index: number) {
-    this.tags.splice(index, 1);
+    this.tags.splice(index, 1)
   }
 
 }

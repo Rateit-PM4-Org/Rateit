@@ -18,7 +18,7 @@
     </ion-fab-list>
   </ion-fab>
 
-  <ion-modal #modal trigger="open-modal" [canDismiss]="canDismiss" [initialBreakpoint]="0.7" [breakpoints]="[0, 0.7]">
+  <ion-modal #modal trigger="open-modal" [canDismiss]="canDismiss" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -39,10 +39,6 @@
 
       <ion-content class="ion-padding">
         <app-rit-create #ritCreate></app-rit-create>
-
-        <ion-text color="danger" *ngIf="errorMessage">
-          <p>{{ errorMessage }}</p>
-        </ion-text>
       </ion-content>
     </ng-template>
   </ion-modal>
