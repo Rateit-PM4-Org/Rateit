@@ -87,42 +87,52 @@ export class HomeComponent implements OnInit {
   };
 
   async confirm() {
-    const request: Rit = {
+    const request = this.buildRequest();
+
+    this.ritService.createRit(request).subscribe({
+      next: () => this.handleSuccess(),
+      error: (err) => this.handleError(err),
+    });
+  }
+
+  private buildRequest(): Rit {
+    return {
       name: this.ritCreateComponent.ritName,
       details: this.ritCreateComponent.details,
       tags: this.ritCreateComponent.tags ?? [],
     };
+  }
 
-    this.ritService.createRit(request).subscribe({
-      next: () => {
-        this.showSuccessToast('Rit created successfully!');
-        this.modal.dismiss(null, 'confirm');
-      },
-      error: (err) => {
-        const baseError = err.error?.error ?? 'Unknown error';
+  private handleSuccess() {
+    this.showSuccessToast('Rit created successfully!');
+    this.modal.dismiss(null, 'confirm');
+  }
 
-        const fields = err.error?.fields;
-        if (fields) {
-          if (fields.name) {
-            this.ritCreateComponent.ritNameErrorMessage = Array.isArray(fields.name)
-              ? fields.name.join(', ')
-              : `${fields.name}`;
-          }
-          if (fields.details) {
-            this.ritCreateComponent.detailsErrorMessage = Array.isArray(fields.details)
-            ? fields.details.join(', ')
-            : `${fields.details}`;
-          }
-          if (fields.tags) {
-            this.ritCreateComponent.tagsErrorMessage = Array.isArray(fields.tags)
-            ? fields.tags.join(', ')
-            : `${fields.tags}`;
-          }
-        } else {
-          this.showErrorToast(baseError);
-        }
-      },
-    });
+  private handleError(err: any) {
+    const baseError = err.error?.error ?? 'Unknown error';
+    const fields = err.error?.fields;
+
+    if (fields) {
+      this.setFieldErrorMessages(fields);
+    } else {
+      this.showErrorToast(baseError);
+    }
+  }
+
+  private setFieldErrorMessages(fields: any) {
+    if (fields.name) {
+      this.ritCreateComponent.ritNameErrorMessage = this.formatFieldError(fields.name);
+    }
+    if (fields.details) {
+      this.ritCreateComponent.detailsErrorMessage = this.formatFieldError(fields.details);
+    }
+    if (fields.tags) {
+      this.ritCreateComponent.tagsErrorMessage = this.formatFieldError(fields.tags);
+    }
+  }
+
+  private formatFieldError(fieldError: string | string[]): string {
+    return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
   }
 
 }
