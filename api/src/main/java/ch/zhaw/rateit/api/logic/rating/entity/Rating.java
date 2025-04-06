@@ -29,7 +29,7 @@ public class Rating {
     private User owner;
 
     private int value;
-    private String positive;
+    private String positiveComment;
     private String negative;
 
     @CreatedDate
@@ -41,9 +41,9 @@ public class Rating {
     public Rating() {
     }
 
-    public Rating(int value, String positive, String negative, Rit rit, User owner) {
+    public Rating(int value, String positiveComment, String negative, Rit rit, User owner) {
         this.value = value;
-        this.positive = positive;
+        this.positiveComment = positiveComment;
         this.negative = negative;
         this.rit = rit;
         this.owner = owner;
@@ -81,12 +81,12 @@ public class Rating {
         this.value = value;
     }
 
-    public String getPositive() {
-        return positive;
+    public String getPositiveComment() {
+        return positiveComment;
     }
 
-    public void setPositive(String positive) {
-        this.positive = positive;
+    public void setPositiveComment(String positiveComment) {
+        this.positiveComment = positiveComment;
     }
 
     public String getNegative() {
