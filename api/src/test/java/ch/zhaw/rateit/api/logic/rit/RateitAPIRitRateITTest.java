@@ -86,8 +86,8 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         Rating rating = objectMapper.readValue(result, Rating.class);
         assertNotNull(rating, "Rating must be present in the database");
         assertEquals(value, rating.getValue(), "Rating value must be equal to the input value");
-        assertEquals(positive, rating.getPositiveComment(), "Rating positive must be equal to the input positive");
-        assertEquals(negative, rating.getNegativeComment(), "Rating negative must be equal to the input negative");
+        assertEquals(positive, rating.getPositiveComment(), "Rating positiveComment must be equal to the input positiveComment");
+        assertEquals(negative, rating.getNegativeComment(), "Rating negativeComment must be equal to the input negativeComment");
         assertEquals(testRit.getId(), rating.getRit().getId(), "Rating rit must be equal to the input rit");
         assertEquals(testUser.getId(), rating.getOwner().getId(), "Rating owner must be equal to the input owner");
     }

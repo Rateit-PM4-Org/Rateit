@@ -45,8 +45,8 @@ public class RitService {
 
         Rating rating = new Rating(
                 request.value(),
-                request.positive(),
-                request.negative(),
+                request.positiveComment(),
+                request.negativeComment(),
                 rit,
                 owner
         );
