@@ -30,7 +30,7 @@ public class Rating {
 
     private int value;
     private String positiveComment;
-    private String negative;
+    private String negativeComment;
 
     @CreatedDate
     private Instant createdAt;
@@ -41,10 +41,10 @@ public class Rating {
     public Rating() {
     }
 
-    public Rating(int value, String positiveComment, String negative, Rit rit, User owner) {
+    public Rating(int value, String positiveComment, String negativeComment, Rit rit, User owner) {
         this.value = value;
         this.positiveComment = positiveComment;
-        this.negative = negative;
+        this.negativeComment = negativeComment;
         this.rit = rit;
         this.owner = owner;
     }
@@ -89,12 +89,12 @@ public class Rating {
         this.positiveComment = positiveComment;
     }
 
-    public String getNegative() {
-        return negative;
+    public String getNegativeComment() {
+        return negativeComment;
     }
 
-    public void setNegative(String negative) {
-        this.negative = negative;
+    public void setNegativeComment(String negativeComment) {
+        this.negativeComment = negativeComment;
     }
 
     public Instant getCreatedAt() {
