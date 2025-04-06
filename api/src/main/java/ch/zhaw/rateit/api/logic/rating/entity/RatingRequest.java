@@ -1,10 +1,7 @@
 package ch.zhaw.rateit.api.logic.rating.entity;
 
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 
 /* * Request object for rating a rit.
@@ -17,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public record RatingRequest(
         @NotEmpty String ritId,
-        @NotNull @Min(1) @Max(5) int value,
+        @Digits(integer = 1, fraction = 0) @NotNull @Min(1) @Max(5) int value,
         String positive,
         String negative
 ) {
