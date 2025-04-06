@@ -11,9 +11,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RateitAPIRitCreateTest {
@@ -24,6 +27,7 @@ class RateitAPIRitCreateTest {
     private RitService ritService;
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
+    private final List<String> tags = List.of("tag1", "tag2");
 
     @BeforeEach
     void setUp() {
@@ -35,11 +39,10 @@ class RateitAPIRitCreateTest {
         RitCreateRequest request = new RitCreateRequest(
                 "Test Rit",
                 "Details",
-                null,
-                false
+                tags
         );
 
-        Rit dummyRit = new Rit("Test Rit", "Details", null, false, testUser);
+        Rit dummyRit = new Rit("Test Rit", "Details", List.of("tag1", "tag2"), testUser);
         when(ritRepository.getRitById(any())).thenReturn(dummyRit);
 
         Rit result = ritService.create(testUser, request);
@@ -47,6 +50,8 @@ class RateitAPIRitCreateTest {
         assertNotNull(result);
         assertEquals(request.name(), result.getName());
         assertEquals(request.details(), result.getDetails());
+        assertEquals(request.tags(), result.getTags());
+        assertFalse(result.isPublished());
         assertEquals(testUser.getId(), result.getOwner().getId());
         verify(ritRepository).save(any());
     }

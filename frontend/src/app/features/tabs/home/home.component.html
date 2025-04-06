@@ -4,9 +4,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content *ngIf="isLoggedIn$ | async" class="ion-padding">
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end" vertical="bottom" horizontal="end">
+  <ion-fab data-testid="rit-create-button" slot="fixed" vertical="bottom" horizontal="end" vertical="bottom"
+    horizontal="end">
     <ion-fab-button>
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
@@ -17,20 +18,25 @@
     </ion-fab-list>
   </ion-fab>
 
-  <ion-modal #modal trigger="open-modal" [canDismiss]="canDismiss" [initialBreakpoint]="0.92" [breakpoints]="[0, 0.92]"
-    (didDismiss)="handleModalDismiss($event)">
+  <ion-modal #modal trigger="open-modal" [canDismiss]="canDismiss" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button (click)="modal.dismiss(null, 'cancel')" (keydown.enter)="modal.dismiss(null, 'cancel')">Cancel</ion-button>
+            <ion-button (click)="modal.dismiss(null, 'cancel')" (keydown.enter)="modal.dismiss(null, 'cancel')">
+              Cancel
+            </ion-button>
           </ion-buttons>
           <ion-title>Rit Create</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="confirm()" (keydown.enter)="confirm()" [strong]="true">Confirm</ion-button>
+            <ion-button [disabled]="!ritCreate.ritName?.trim()" (click)="confirm()" (keydown.enter)="confirm()"
+              [strong]="true">
+              Confirm
+            </ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
+
       <ion-content class="ion-padding">
         <app-rit-create #ritCreate></app-rit-create>
       </ion-content>
