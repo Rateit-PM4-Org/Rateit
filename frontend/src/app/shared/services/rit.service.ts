@@ -13,4 +13,8 @@ export class RitService {
   createRit(rit: Rit): Observable<any> {
     return this.apiService.post('/rit/create', rit);
   }
+
+  getAllRits(): Observable<Rit[]> {
+    return this.apiService.get('/rit/rits');
+  }
 }

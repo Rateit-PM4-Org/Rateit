@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Rits</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar [(ngModel)]="searchText" placeholder="Search..."></ion-searchbar>
+
+  <ion-item lines="none">
+    <ion-label>Tag: [{{ selectedTag || 'Tag Name' }}]</ion-label>
+  </ion-item>
+
+  <ion-list>
+    <app-rit-list-item
+      *ngFor="let rit of filteredRits()"
+      [rit]="rit">
+    </app-rit-list-item>
+  </ion-list>
+</ion-content>
