@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonInput, ToastController } from '@ionic/angular/standalone';
+import { IonSearchbar, ToastController } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { IonSearchbar } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
 import { Rit } from '../../../model/rit';
@@ -22,8 +21,10 @@ export class AllRitsComponent implements OnInit, ViewWillEnter {
   selectedTag: string = '';
   rits: Rit[] = [];
 
-  constructor(private ritService: RitService, 
-      private readonly toastController: ToastController) { }
+  constructor(
+    private readonly ritService: RitService,
+    private readonly toastController: ToastController
+  ) { }
 
   ionViewWillEnter(): void {
     this.loadRits();
@@ -50,7 +51,7 @@ export class AllRitsComponent implements OnInit, ViewWillEnter {
     );
   }
 
-  private handleSuccess(data:Rit[]) {
+  private handleSuccess(data: Rit[]) {
     if (data.length === 0) {
       return;
     }
@@ -62,12 +63,10 @@ export class AllRitsComponent implements OnInit, ViewWillEnter {
     const baseError = err.error?.error ?? 'Unknown error';
     const fields = err.error?.fields;
 
-    if (fields) {
+    // if (fields) {
       // Handle field-specific errors
-      this.showErrorToast(baseError);
-    } else {
-      this.showErrorToast(baseError);
-    }
+    // }
+    this.showErrorToast(baseError);
   }
 
   async showErrorToast(message: string) {
