@@ -38,6 +38,7 @@ import {
   IonThumbnail,
   IonTitle,
   IonToolbar,
+  IonNote,
 } from '@ionic/angular/standalone';
 
 export const IonicStandaloneStandardImports = [
@@ -80,5 +81,6 @@ export const IonicStandaloneStandardImports = [
   IonGrid,
   IonRow,
   IonCol,
-  IonText
+  IonText,
+  IonNote
 ];
