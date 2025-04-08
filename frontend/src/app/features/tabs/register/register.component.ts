@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { Router } from '@angular/router';
 import { UserService } from '../../../shared/services/user.service';
@@ -24,7 +24,7 @@ export class RegisterComponent {
   protected registrationErrorFields: { [key: string]: string } = {};
   protected registrationSuccess: boolean = false;
 
-  constructor(private readonly router: Router, private readonly userService: UserService, private toastController: ToastController) { }
+  constructor(private readonly router: Router, private readonly userService: UserService, private readonly toastController: ToastController) { }
 
   ionViewWillEnter() {
     this.reset();

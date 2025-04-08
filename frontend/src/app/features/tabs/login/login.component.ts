@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 
   loginErrorFields: { [key: string]: string } = {};
 
-  constructor(private readonly authService: AuthService, private readonly router: Router, private readonly route: ActivatedRoute, private toastController:ToastController) { }
+  constructor(private readonly authService: AuthService, private readonly router: Router, private readonly route: ActivatedRoute, private readonly toastController:ToastController) { }
 
   ngOnInit() { }
 
@@ -31,10 +31,6 @@ export class LoginComponent implements OnInit {
     this.route.snapshot.queryParams['emailConfirmed'] && this.showSuccessToast('Email confirmed successfully!');
     this.router.navigate(['/login'], { queryParams: { emailConfirmed: null } });
     this.reset();
-  }
-
-  ionViewDidLeave() {
-  
   }
 
   reset(): void {

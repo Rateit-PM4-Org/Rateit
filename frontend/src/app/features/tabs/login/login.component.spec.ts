@@ -3,7 +3,7 @@ import { LoginComponent } from './login.component';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
-import { of, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockAuthService } from '../../../shared/test-util/test-util';
 import { ModalController } from '@ionic/angular';
@@ -11,8 +11,6 @@ import { ModalController } from '@ionic/angular';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let modalCtrlSpy = jasmine.createSpyObj('ModalController', ['create']);
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(waitForAsync(() => {
@@ -34,8 +32,7 @@ describe('LoginComponent', () => {
             }
           }
         },
-        { provide: Router, useValue: routerSpy },
-        { provide: ModalController, useValue: modalCtrlSpy },]
+        { provide: Router, useValue: routerSpy },]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
@@ -97,6 +94,8 @@ describe('LoginComponent', () => {
 
     component.login();
 
+    expect(component.form.get('password')?.value).toBe('');
     expect(component.loginErrorFields).toEqual({});
   });
+  
 });
