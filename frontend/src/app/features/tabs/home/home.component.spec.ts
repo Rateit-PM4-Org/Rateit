@@ -1,70 +1,165 @@
-import { TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { IonicModule } from '@ionic/angular';
+import { ActionSheetController, ToastController } from '@ionic/angular/standalone';
+import { of, throwError } from 'rxjs';
+import { RitService } from '../../../shared/services/rit.service';
+import { UserService } from '../../../shared/services/user.service';
+import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 import { HomeComponent } from './home.component';
-import { ActionSheetController } from '@ionic/angular/standalone';
+
+const userServiceMock = {
+  isLoggedIn: () => of(true)
+};
 
 describe('HomeComponent', () => {
+  let component: HomeComponent;
+  let fixture: ComponentFixture<HomeComponent>;
+  let ritServiceSpy: jasmine.SpyObj<RitService>;
+  let toastControllerSpy: jasmine.SpyObj<ToastController>;
+  let actionSheetControllerSpy: jasmine.SpyObj<ActionSheetController>;
+
   beforeEach(async () => {
+    const ritSpy = jasmine.createSpyObj('RitService', ['createRit']);
+    const toastSpy = jasmine.createSpyObj('ToastController', ['create']);
+    const actionSheetSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
+
     await TestBed.configureTestingModule({
       imports: [
         HomeComponent,
         IonicModule.forRoot(),
         NoopAnimationsModule
       ],
-      providers: [provideHttpClient()]
+      providers: [
+        { provide: UserService, useValue: userServiceMock },
+        { provide: RitService, useValue: ritSpy },
+        { provide: ToastController, useValue: toastSpy },
+        { provide: ActionSheetController, useValue: actionSheetSpy },
+        provideHttpClient()
+      ]
     }).compileComponents();
+
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+    ritServiceSpy = TestBed.inject(RitService) as jasmine.SpyObj<RitService>;
+    toastControllerSpy = TestBed.inject(ToastController) as jasmine.SpyObj<ToastController>;
+    actionSheetControllerSpy = TestBed.inject(ActionSheetController) as jasmine.SpyObj<ActionSheetController>;
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
   it('should render "Home" in ion-title', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const title = compiled.querySelector('ion-title');
     expect(title?.textContent).toContain('Home');
   });
 
-  it('confirm() should call modal.dismiss with correct data', async () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
+  it('should call createRit and show success toast on success', fakeAsync(() => {
+    const toast = { present: jasmine.createSpy() };
+    toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
+
+    component.modal = { dismiss: jasmine.createSpy() } as any;
 
     component.ritCreateComponent = {
-      ritName: 'TestRit',
-      details: 'TestDetails',
-      tags: ['x'],
-      selectedImage: 'img.jpg',
+      ritName: 'Test Rit',
+      details: 'Details',
+      tags: ['tag1']
     } as any;
 
-    let dismissCalled = false;
+    ritServiceSpy.createRit.and.returnValue(of({}));
 
-    component.modal = {
-      dismiss: async (data: any, role: string) => {
-        dismissCalled = true;
-        expect(role).toBe('confirm');
-        expect(data).toEqual({
-          name: 'TestRit',
-          details: 'TestDetails',
-          tags: ['x'],
-          image: 'img.jpg',
-        });
+    component.confirm();
+    tick();
+
+    expect(ritServiceSpy.createRit).toHaveBeenCalled();
+    expect(component.modal.dismiss).toHaveBeenCalledWith(null, 'confirm');
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Rit created successfully!' }));
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'success' }));
+    expect(toast.present).toHaveBeenCalled();
+  }));
+
+  it('should call createRit and show error toast on unknown error', fakeAsync(() => {
+    const toast = { present: jasmine.createSpy() };
+    toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
+
+    component.modal = { dismiss: jasmine.createSpy() } as any;
+
+    component.ritCreateComponent = {
+      ritName: 'test rit',
+      details: 'Details',
+      tags: ['tag1'],
+      ritNameErrorMessage: '',
+      tagsErrorMessage: '',
+      detailsErrorMessage: ''
+    } as RitCreateComponent;
+
+    const mockErrorResponse = {
+      error: {
+        error: 'Unknown error',
       }
-    } as any;
+    };
 
-    await component.confirm();
-    expect(dismissCalled).toBeTrue();
-  });
+    ritServiceSpy.createRit.and.returnValue(throwError(() => mockErrorResponse));
+
+    component.confirm();
+    tick();
+
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'danger', message: 'Unknown error' }));
+    expect(toast.present).toHaveBeenCalled();
+    expect(component.ritCreateComponent.ritNameErrorMessage).toEqual('');
+    expect(component.ritCreateComponent.tagsErrorMessage).toEqual('');
+    expect(component.ritCreateComponent.detailsErrorMessage).toEqual('');
+  }));
+
+  it('should call createRit and not show error toast on field errors', fakeAsync(() => {
+    const toast = { present: jasmine.createSpy() };
+    toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
+
+    component.modal = { dismiss: jasmine.createSpy() } as any;
+
+    component.ritCreateComponent = {
+      ritName: undefined,
+      details: 'Details',
+      tags: ['tag1'],
+      ritNameErrorMessage: '',
+      tagsErrorMessage: '',
+      detailsErrorMessage: ''
+    } as RitCreateComponent;
+
+    const mockErrorResponse = {
+      error: {
+        error: 'Validation failed',
+        fields: {
+          name: [
+            'must not be empty'
+          ],
+          details: [
+            'test'
+          ],
+          tags: [
+            'test'
+          ]
+        }
+      }
+    };
+
+    ritServiceSpy.createRit.and.returnValue(throwError(() => mockErrorResponse));
+
+    component.confirm();
+    tick();
+
+    expect(toastControllerSpy.create).not.toHaveBeenCalledWith(jasmine.objectContaining({ color: 'danger', message: 'Unknown error' }));
+    expect(toast.present).not.toHaveBeenCalled();
+    expect(component.ritCreateComponent.ritNameErrorMessage).toEqual('must not be empty');
+    expect(component.ritCreateComponent.tagsErrorMessage).toEqual('test');
+    expect(component.ritCreateComponent.detailsErrorMessage).toEqual('test');
+  }));
 
   it('should call modal.dismiss with null and "cancel" when Cancel button logic is used', async () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
-
     let dismissCalled = false;
     let receivedData = null;
     let receivedRole = '';
@@ -84,60 +179,55 @@ describe('HomeComponent', () => {
     expect(receivedRole).toBe('cancel');
   });
 
-  it('canDismiss() should return true when user selects "Yes"', async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        HomeComponent,
-        IonicModule.forRoot(),
-        NoopAnimationsModule,
-      ],
-      providers: [
-        provideHttpClient(),
-        {
-          provide: ActionSheetController,
-          useValue: {
-            create: async () => ({
-              present: () => Promise.resolve(),
-              onWillDismiss: () => Promise.resolve({ role: 'confirm' }),
-            }),
-          },
-        },
-      ],
-    }).compileComponents();
-
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
-
-    const result = await component.canDismiss();
+  it('canDismiss returns true if role is not cancel', async () => {
+    const result = await component.canDismiss({}, 'confirm');
     expect(result).toBeTrue();
   });
 
-  it('canDismiss() should return true when user selects "No"', async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        HomeComponent,
-        IonicModule.forRoot(),
-        NoopAnimationsModule,
-      ],
-      providers: [
-        provideHttpClient(),
-        {
-          provide: ActionSheetController,
-          useValue: {
-            create: async () => ({
-              present: () => Promise.resolve(),
-              onWillDismiss: () => Promise.resolve({ role: 'cancel' }),
-            }),
-          },
-        },
-      ],
-    }).compileComponents();
+  it('canDismiss returns true if actionSheet returns confirm', async () => {
+    const present = jasmine.createSpy().and.returnValue(Promise.resolve());
+    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({ role: 'confirm' }));
+    actionSheetControllerSpy.create.and.returnValue(Promise.resolve({
+      present,
+      onWillDismiss
+    } as any));
 
-    const fixture = TestBed.createComponent(HomeComponent);
-    const component = fixture.componentInstance;
+    const result = await component.canDismiss({}, 'cancel');
+    expect(result).toBeTrue();
+    expect(present).toHaveBeenCalled();
+    expect(onWillDismiss).toHaveBeenCalled();
+  });
 
-    const result = await component.canDismiss();
+  it('canDismiss returns false if actionSheet returns cancel', async () => {
+    const present = jasmine.createSpy().and.returnValue(Promise.resolve());
+    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({ role: 'cancel' }));
+    actionSheetControllerSpy.create.and.returnValue(Promise.resolve({
+      present,
+      onWillDismiss
+    } as any));
+
+    const result = await component.canDismiss({}, 'cancel');
     expect(result).toBeFalse();
+  });
+
+  it('should render ion-fab-button when logged in', async () => {
+    fixture.detectChanges();
+
+    const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
+    expect(fabButton).toBeTruthy();
+  });
+
+  it('should not render ion-fab-button when not logged in', async () => {
+    userServiceMock.isLoggedIn = () => of(false);
+
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
+    expect(fabButton).toBeFalsy();
+
+    userServiceMock.isLoggedIn = () => of(true)
   });
 
 });

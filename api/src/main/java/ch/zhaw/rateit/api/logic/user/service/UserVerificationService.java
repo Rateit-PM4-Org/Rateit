@@ -33,10 +33,9 @@ public class UserVerificationService {
         user.setEmailVerificationToken(UUID.randomUUID().toString());
 
         String verificationUrl = String.format(
-                "%s/user/mail-confirmation?token=%s&email=%s",
+                "%s/user/mail-confirmation?token=%s",
                 frontendUrl,
-                user.getEmailVerificationToken(),
-                user.getEmail()
+                user.getEmailVerificationToken()
         );
 
         String emailText = String.format(
@@ -49,18 +48,16 @@ public class UserVerificationService {
         return user;
     }
 
-    public boolean verifyUser(String email, String token) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+    public boolean verifyUser(String token) {
+        Optional<User> userOptional = userRepository.findByEmailVerificationToken(token);
 
-        if (userOptional.isPresent() && userOptional.get().getEmailVerificationToken() != null && !userOptional.get().isEmailVerified()) {
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            if (user.getEmailVerificationToken().equals(token)) {
-                user.setEmailVerified(true);
-                user.setEmailVerificationToken(null); // Clear the token after verification
-                userRepository.save(user);
-                return true;
-            }
+            user.setEmailVerified(true);
+            user.setEmailVerificationToken(null); // Clear the token after verification
+            userRepository.save(user);
+            return true;
         }
 
         return false;
