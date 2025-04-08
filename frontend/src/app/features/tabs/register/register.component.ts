@@ -21,7 +21,7 @@ export class RegisterComponent {
     displayName: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
   });
-  protected registrationErrorFields: { [key: string]: string } = {};
+  protected registrationErrorFields: { [key: string]: string[] } = {};
   protected registrationSuccess: boolean = false;
 
   constructor(private readonly router: Router, private readonly userService: UserService, private readonly toastController: ToastController) { }
