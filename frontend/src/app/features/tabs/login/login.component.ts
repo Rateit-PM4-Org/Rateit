@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', Validators.required),
   });
 
-  loginErrorFields: { [key: string]: string } = {};
+  loginErrorFields: { [key: string]: string[] } = {};
 
   constructor(private readonly authService: AuthService, private readonly router: Router, private readonly route: ActivatedRoute, private readonly toastController:ToastController) { }
 
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
       error: err => {
         this.showErrorToast(err.error?.error || 'Login Error');
         this.form.get("password")?.setValue('');
-        this.form.get("password")?.markAsPristine();        
+        this.form.get("password")?.markAsPristine();
         this.loginErrorFields = err.error?.fields || {};
         console.error('Login Error:', err);
       }

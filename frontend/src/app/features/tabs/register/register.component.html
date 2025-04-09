@@ -9,17 +9,17 @@
       <ion-input label="Email" type="email" formControlName="email"></ion-input>
 
     <ion-text color="danger" *ngIf="registrationErrorFields['email']">
-      <p>{{registrationErrorFields['email']}}</p>
+      <p *ngFor="let message of registrationErrorFields['email']">{{message}}</p>
     </ion-text>
       <ion-input label="Display-Name" type="text" formControlName="displayName"></ion-input>
 
     <ion-text color="danger" *ngIf="registrationErrorFields['displayName']">
-      <p>{{registrationErrorFields['displayName']}}</p>
+      <p *ngFor="let message of registrationErrorFields['email']">{{message}}</p>
     </ion-text>
       <ion-input label="Password" type="password" formControlName="password"></ion-input>
 
     <ion-text color="danger" *ngIf="registrationErrorFields['password']">
-      <p>{{registrationErrorFields['password']}}</p>
+      <p *ngFor="let message of registrationErrorFields['email']">{{message}}</p>
     </ion-text>
     <ion-button type="submit" [disabled]="!form.valid">Submit</ion-button>
     <ion-ripple-effect></ion-ripple-effect>
