@@ -46,7 +46,7 @@ describe('AllRitsComponent', () => {
     ];
     ritServiceSpy.getAllRits.and.returnValue(of(mockRits));
 
-    component.ngOnInit();
+    component.ionViewWillEnter();
 
     expect(component.rits).toEqual(mockRits);
   });
@@ -55,7 +55,7 @@ describe('AllRitsComponent', () => {
     const mockError = { error: { error: 'Failed to load rits' } };
     ritServiceSpy.getAllRits.and.returnValue(throwError(() => mockError));
 
-    component.ngOnInit();
+    component.ionViewWillEnter();
 
     expect(component.rits).toEqual([]);
   });
@@ -79,7 +79,7 @@ describe('AllRitsComponent', () => {
     const mockError = { error: { error: 'Failed to load rits' } };
     ritServiceSpy.getAllRits.and.returnValue(throwError(() => mockError));
 
-    component.ngOnInit();
+    component.ionViewWillEnter();
 
     expect(component.showErrorToast).toHaveBeenCalledWith('Failed to load rits');
   });

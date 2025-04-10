@@ -8,13 +8,18 @@
   <ion-searchbar [(ngModel)]="searchText" placeholder="Search..."></ion-searchbar>
 
   <ion-item lines="none">
-    <ion-label>Tag: [{{ selectedTag || 'Tag Name' }}]</ion-label>
+    <ion-label>Tag:
+      <div class="tags-container">
+        <ion-chip color="primary">
+          <ion-icon name="pricetag-outline"></ion-icon>
+          <ion-label>{{ selectedTag || 'All' }}</ion-label>
+        </ion-chip>
+      </div>
+    </ion-label>
   </ion-item>
 
   <ion-list>
-    <app-rit-list-item
-      *ngFor="let rit of filteredRits()"
-      [rit]="rit">
+    <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit">
     </app-rit-list-item>
   </ion-list>
 </ion-content>

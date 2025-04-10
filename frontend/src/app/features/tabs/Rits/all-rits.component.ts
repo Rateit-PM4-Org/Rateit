@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonSearchbar, ToastController } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ import { ViewWillEnter } from '@ionic/angular';
   imports: [CommonModule, ...IonicStandaloneStandardImports, IonSearchbar, FormsModule, RitListItemComponent],
 })
 
-export class AllRitsComponent implements OnInit, ViewWillEnter {
+export class AllRitsComponent implements ViewWillEnter {
   searchText = '';
   selectedTag: string = '';
   rits: Rit[] = [];
@@ -39,10 +39,6 @@ export class AllRitsComponent implements OnInit, ViewWillEnter {
         this.handleError(err);
       }
     });
-  }
-
-  ngOnInit(): void {
-    this.loadRits();
   }
 
   filteredRits(): Rit[] {

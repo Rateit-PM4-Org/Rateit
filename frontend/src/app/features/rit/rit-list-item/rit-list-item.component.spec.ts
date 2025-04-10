@@ -43,14 +43,6 @@ describe('RitListItemComponent', () => {
     expect(tagsEl.textContent).toContain(testRit.tags.join(','));
   });
 
-  it('should show the rating button with icon', () => {
-    const buttonEl = fixture.debugElement.query(By.css('ion-button')).nativeElement;
-    const iconEl = fixture.debugElement.query(By.css('ion-icon')).nativeElement;
-
-    expect(buttonEl.textContent).toContain('4');
-    expect(iconEl.getAttribute('name')).toBe('star');
-  });
-
   // TODO: Rating not yet implemented
   // it('should display the correct rating', () => {
   //   fixture.detectChanges();

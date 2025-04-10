@@ -14,6 +14,7 @@ export const routes: Routes = [
       {
         path: 'rits',
         loadComponent: () => import('./features/tabs/Rits/all-rits.component').then((m) => m.AllRitsComponent),
+        canActivate: [AuthGuard],
       },
       {
         path: 'login',

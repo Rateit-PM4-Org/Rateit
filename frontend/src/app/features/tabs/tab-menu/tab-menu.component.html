@@ -4,7 +4,7 @@
       <ion-icon name='home-outline'></ion-icon>
       Home
     </ion-tab-button>
-    <ion-tab-button tab="rits">
+    <ion-tab-button *ngIf="isAuthenticated" tab="rits">
       <ion-icon name='star-outline'></ion-icon>
       Rits
     </ion-tab-button>

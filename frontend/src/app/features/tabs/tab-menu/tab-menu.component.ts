@@ -3,10 +3,6 @@ import { Component } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Subscription } from 'rxjs';
-import { addIcons } from 'ionicons';
-import { star, starOutline, homeOutline, pricetagOutline } from 'ionicons/icons';
-
-addIcons({ star, 'star-outline': starOutline, 'home-outline': homeOutline, 'pricetag-outline': pricetagOutline });
 
 @Component({
   selector: 'app-tab-menu',

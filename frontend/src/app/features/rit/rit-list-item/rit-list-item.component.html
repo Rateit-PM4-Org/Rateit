@@ -1,11 +1,15 @@
 <ion-item lines="none" class="list-item">
   <ion-label class="content">
     <h2 class="title">{{ rit.name }}</h2>
-    <h3 class="tags">{{ rit.tags }}</h3>
+    <div class="tags-container">
+      <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index">
+        <ion-icon name="pricetag-outline"></ion-icon>
+        <ion-label>{{ tag }}</ion-label>
+      </ion-chip>
+    </div>
   </ion-label>
-  <ion-button size="default" class="ratingButton">
-    <!-- {{ rit.rating }} -->
-    4
-    <ion-icon name="star" slot="end"></ion-icon>
-  </ion-button>
+  <!-- <ion-button size="default" class="ratingButton"> -->
+  <!-- {{ rit.rating }} -->
+  <!-- <ion-icon name="star" slot="end"></ion-icon> -->
+  <!-- </ion-button> -->
 </ion-item>
