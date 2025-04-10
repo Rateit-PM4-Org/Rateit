@@ -26,7 +26,7 @@ public class ExceptionHandlers {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationExceptionWithField.class)
     public Map<String, Object> handleUserRegistration(ValidationExceptionWithField ex) {
-      return formatErrorResponse(ex.getMessage(), ex.getErrors().stream().collect(Collectors.toMap(ValidationExceptionWithField.ValidationError::getField, ValidationExceptionWithField.ValidationError::getMessage)));
+      return formatErrorResponse(ex.getMessage(), ex.getErrors().stream().collect(Collectors.toMap(ValidationExceptionWithField.ValidationError::getField, input -> List.of(input.getMessage()))));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
