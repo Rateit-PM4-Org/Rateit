@@ -34,12 +34,13 @@
   text-overflow: ellipsis;
   margin: 0;
 }
-.list-item {
-  border-radius: 20px;
-  padding: 5px;
-  margin: 10px;
+.list-item-card {
   display: flex;
-  align-items: center;
+  width: 100%;
+  border-radius: 20px;
+  padding: 15px 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   background-color: var(--ion-color-light-shade);
   --background: var(--ion-color-light-shade);
 }
@@ -48,4 +49,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+}
+
+ion-chip:first-child{
+  margin-left: 0;
 }
