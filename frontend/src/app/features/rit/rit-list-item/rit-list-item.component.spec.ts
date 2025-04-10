@@ -3,10 +3,6 @@ import { IonicModule } from '@ionic/angular';
 import { RitListItemComponent } from './rit-list-item.component';
 import { Rit } from '../../../model/rit';
 import { By } from '@angular/platform-browser';
-import { RitService } from '../../../shared/services/rit.service';
-import { of, throwError } from 'rxjs';
-import { UserService } from '../../../shared/services/user.service';
-import { provideHttpClient } from '@angular/common/http';
 
 describe('RitListItemComponent', () => {
   let component: RitListItemComponent;
