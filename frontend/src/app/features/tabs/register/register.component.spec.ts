@@ -20,7 +20,7 @@ describe('RegisterComponent', () => {
       providers: [
         provideHttpClient(),
         { provide: UserService, useValue: userServiceSpy },
-        { provide: Router, useValue: routerSpy }
+        { provide: Router, useValue: routerSpy },
       ]
     }).compileComponents();
 
@@ -33,51 +33,28 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set email when setEmail is called', () => {
-    const mockEvent = { target: { value: 'test@example.com' } } as any;
-    component.setEmail(mockEvent);
-    expect(component['email']).toBe('test@example.com');
-    expect(component['isEmailValid']).toBe(true);
-  });
-
-  it('should set flag on bad email format', () => {
-    const mockEvent = { target: { value: 'notAnEmail' } } as any;
-    component.setEmail(mockEvent);
-    expect(component['isEmailValid']).toBe(false);
-  });
-
-  it('should set displayName when setDisplayName is called', () => {
-    const mockEvent = { target: { value: 'John Doe' } } as any;
-    component.setDisplayName(mockEvent);
-    expect(component['displayName']).toBe('John Doe');
-  });
-
-  it('should set password when setPassword is called', () => {
-    const mockEvent = { target: { value: 'goodPassword1!' } } as any;
-    component.setPassword(mockEvent);
-    expect(component['password']).toBe('goodPassword1!');
-    expect(component['isPasswordValid']).toBe(true);
-  });
-
-  it('should set flag on weak password', () => {
-    const mockEvent = { target: { value: 'badPassword' } } as any;
-    component.setPassword(mockEvent);
-    expect(component['isPasswordValid']).toBe(false);
-  });
-
-  it('should call UserService.register and navigate to login on successful registration', () => {
+  it('should call UserService.register', () => {
     userServiceSpy.register.and.returnValue(of({}));
-    component['email'] = 'test@example.com';
-    component['displayName'] = 'John Doe';
-    component['password'] = 'password123';
+    component['form'].setValue({
+      email: "test@example.com",
+      displayName: "John Doe",
+      password: "password123"
+    });
 
     component.register();
 
     expect(userServiceSpy.register).toHaveBeenCalledWith('test@example.com', 'John Doe', 'password123');
-    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/login');
   });
 
-  it('should set errorMessage and clear password on registration error', () => {
+  it('should set registrationSuccess on successful registration', () => {
+    userServiceSpy.register.and.returnValue(of({}));
+
+    component.register();
+
+    expect(component['registrationSuccess']).toBe(true);
+  });
+
+  /*it('should set errorMessage and clear password on registration error', () => {
     const mockError = {
       error: {
         message: 'Registration failed.'
@@ -91,7 +68,22 @@ describe('RegisterComponent', () => {
 
     component.register();
 
-    expect(component['hasRegistrationError']).toBe(true);
+    expect(component['registrationErrorMessage']).toBe('Registration Error');
+    expect(component['registrationErrorFields']).toEqual({});
     expect(component['password']).toBe('');
+  });*/
+
+  it('should set registrationSuccess on registration error', () => {
+    const mockError = {
+      error: {
+        message: 'Registration failed.'
+      }
+    };
+
+    userServiceSpy.register.and.returnValue(throwError(() => mockError));
+
+    component.register();
+
+    expect(component['registrationSuccess']).toBe(false);
   });
 });

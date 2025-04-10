@@ -5,18 +5,18 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-label>Email</ion-label>
-    <ion-input type="email" [value]="email" (ionInput)="setEmail($event)"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Password</ion-label>
-    <ion-input type="password" [value]="password" (ionInput)="setPassword($event)"></ion-input>
-  </ion-item>
-  <ion-button (click)="login()" (keydown.enter)="login()">Submit</ion-button>
-  <ion-button (click)="register()" (keydown.enter)="register()">Register</ion-button>
-  <ion-text color="danger" *ngIf="hasLoginError">
-    <p>Login failed. Please make sure that Email and password are correct.</p>
-  </ion-text>
-  <ion-ripple-effect></ion-ripple-effect>
+  <form [formGroup]="form" (ngSubmit)="login()">
+      <ion-input label="Email" type="email" formControlName="email" errorText="{{loginErrorFields['password']?.join('\n')}}" ngModel></ion-input>
+      <ion-text color="danger" *ngIf="loginErrorFields['email']">
+        <p *ngFor="let message of loginErrorFields['email']">{{message}}</p>
+      </ion-text>
+      <ion-input label="Password" type="password" formControlName="password" ngModel></ion-input>
+      <ion-text color="danger" *ngIf="loginErrorFields['password']">
+        <p *ngFor="let message of loginErrorFields['email']">{{message}}</p>
+      </ion-text>
+    <ion-button type="submit" [disabled]="!form.valid">Submit</ion-button>
+    <ion-button (click)="register()" (keydown.enter)="register()">Register</ion-button>
+    <ion-ripple-effect></ion-ripple-effect>
+
+  </form>
 </ion-content>
