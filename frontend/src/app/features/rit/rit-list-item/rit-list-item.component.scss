@@ -28,8 +28,7 @@
   max-width: calc(100% - 80px); /* Adjust based on button size */
 }
 
-.title,
-.tags {
+.title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -37,10 +37,13 @@ describe('RitListItemComponent', () => {
 
   it('should render rit name and tags', () => {
     const titleEl = fixture.debugElement.query(By.css('.title')).nativeElement;
-    const tagsEl = fixture.debugElement.query(By.css('.tags')).nativeElement;
+    const chipElements = fixture.debugElement.queryAll(By.css('ion-chip'));
 
     expect(titleEl.textContent).toContain(testRit.name);
-    expect(tagsEl.textContent).toContain(testRit.tags.join(','));
+    expect(chipElements.length).toBe(testRit.tags.length);
+    chipElements.forEach((chipEl, index) => {
+      expect(chipEl.nativeElement.textContent).toContain(testRit.tags[index]);
+    });
   });
 
   // TODO: Rating not yet implemented
