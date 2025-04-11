@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" *ngIf="!registrationSuccess">
+<ion-content class="ion-padding" *ngIf="!registrationSuccess" scroll-y="false">
   <form [formGroup]="form" (ngSubmit)="register()">
       <ion-input label="Email" type="email" formControlName="email"></ion-input>
 
@@ -25,7 +25,7 @@
     <ion-ripple-effect></ion-ripple-effect>
   </form>
 </ion-content>
-<ion-content class="ion-padding" *ngIf="registrationSuccess">
+<ion-content class="ion-padding" *ngIf="registrationSuccess" scroll-y="false">
   <ion-text>
     <p>Registration successful.</p>
   </ion-text>

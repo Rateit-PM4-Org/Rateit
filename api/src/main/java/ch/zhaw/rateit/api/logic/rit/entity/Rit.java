@@ -32,9 +32,6 @@ public class Rit {
     @LastModifiedDate
     private Instant updatedAt;
 
-    @Transient
-    private Instant lastInteractionAt;
-
     public Rit() {
     }
 

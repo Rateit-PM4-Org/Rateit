@@ -53,6 +53,7 @@ describe('HomeComponent', () => {
   });
 
   it('should render "Home" in ion-title', () => {
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const title = compiled.querySelector('ion-title');
@@ -212,6 +213,7 @@ describe('HomeComponent', () => {
   });
 
   it('should render ion-fab-button when logged in', async () => {
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
 
     const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
@@ -223,6 +225,7 @@ describe('HomeComponent', () => {
 
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
 
     const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
@@ -278,7 +281,7 @@ describe('HomeComponent', () => {
   });
 
   it('should render the Show all button for rits', () => {
-
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
 
     const button = fixture.nativeElement.querySelector('[data-testid="show-all-rits"]');
@@ -286,6 +289,7 @@ describe('HomeComponent', () => {
   });
   
   it('should call goToRitsTab() when Show all button is clicked', () => {
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
     
     spyOn(component, 'goToRitsTab');

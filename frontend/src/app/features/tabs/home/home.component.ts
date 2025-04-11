@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActionSheetController, IonModal, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { Observable } from 'rxjs';
 import { Rit } from '../../../model/rit';
@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
     RitListItemComponent
 ],
 })
-export class HomeComponent implements OnInit, ViewWillEnter {
+export class HomeComponent implements ViewWillEnter {
 
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild('ritCreate') ritCreateComponent!: RitCreateComponent;
@@ -43,10 +43,6 @@ export class HomeComponent implements OnInit, ViewWillEnter {
   ) { }
 
   ionViewWillEnter() {
-    this.ngOnInit();
-  }
-
-  ngOnInit() {
     this.presentingElement = document.querySelector('.ion-page');
     this.isLoggedIn$ = this.userService.isLoggedIn();
     this.loadRits();

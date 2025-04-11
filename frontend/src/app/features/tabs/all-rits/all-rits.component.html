@@ -5,8 +5,7 @@
   <ion-toolbar>
     <ion-searchbar [(ngModel)]="searchText" placeholder="Search..."></ion-searchbar>
 
-    <ion-item lines="none">
-      <div class="tags-input-container">
+      <div class="tags-input-container ion-padding-horizontal">
         <ion-label>Tag:</ion-label>
         <div class="tags-container">
           <ion-chip color="primary">
@@ -15,13 +14,12 @@
           </ion-chip>
         </div>
       </div>
-    </ion-item>
   </ion-toolbar>
 
 
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <ion-list>
     <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit">
     </app-rit-list-item>

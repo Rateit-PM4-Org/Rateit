@@ -4,11 +4,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="isLoggedIn$ | async" class="ion-padding">
+<ion-content *ngIf="isLoggedIn$ | async" class="ion-padding" scroll-y="false">
 
-  <div class="rits-header-row">
+  <div class="rits-header-row ion-margin-bottom">
     <ion-label>Your Rits</ion-label>
-    <ion-button fill="clear" size="small" (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button" data-testid="show-all-rits">
+    <ion-button size="small" (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button" data-testid="show-all-rits">
       Show all
       <ion-icon slot="end" name="chevron-forward"></ion-icon>
     </ion-button>
