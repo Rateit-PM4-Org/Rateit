@@ -6,6 +6,11 @@
 
 <ion-content *ngIf="isLoggedIn$ | async" class="ion-padding">
 
+  <ion-list>
+    <app-rit-list-item *ngFor="let rit of latestRits()" [rit]="rit">
+    </app-rit-list-item>
+  </ion-list>
+
   <ion-fab data-testid="rit-create-button" slot="fixed" vertical="bottom" horizontal="end" vertical="bottom"
     horizontal="end">
     <ion-fab-button>

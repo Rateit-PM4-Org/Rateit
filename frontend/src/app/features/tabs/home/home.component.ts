@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActionSheetController, IonModal, ToastController } from '@ionic/angular/standalone';
+import { ActionSheetController, IonModal, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { Observable } from 'rxjs';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
+import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
 
 @Component({
   selector: 'app-home',
@@ -14,16 +15,21 @@ import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
   styleUrls: ['./home.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ...IonicStandaloneStandardImports, RitCreateComponent
-  ],
+    CommonModule,
+    ...IonicStandaloneStandardImports,
+    RitCreateComponent,
+    RitListItemComponent
+],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, ViewWillEnter {
 
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild('ritCreate') ritCreateComponent!: RitCreateComponent;
 
   presentingElement!: HTMLElement | null;
-  data: any[] = [];
+
+  rits: Rit[] = [];
+  numberOfLatestRitsToShow: number = 10;
 
   isLoggedIn$!: Observable<boolean>;
 
@@ -34,9 +40,14 @@ export class HomeComponent implements OnInit {
     private readonly userService: UserService
   ) { }
 
+  ionViewWillEnter() {
+    this.ngOnInit();
+  }
+
   ngOnInit() {
     this.presentingElement = document.querySelector('.ion-page');
     this.isLoggedIn$ = this.userService.isLoggedIn();
+    this.loadRits();
   }
 
   async showSuccessToast(message: string) {
@@ -133,6 +144,40 @@ export class HomeComponent implements OnInit {
 
   private formatFieldError(fieldError: string | string[]): string {
     return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
+  }
+
+  private loadRits(): void {
+    this.ritService.getAllRits().subscribe({
+      next: (data) => {
+        this.handleLoadLatestRitsSuccess(data);
+      },
+      error: (err) => {
+        this.handleLoadLatestRitsError(err);
+      }
+    });
+  }
+
+  private handleLoadLatestRitsSuccess(data: Rit[]) {
+    if (data.length === 0) {
+      return;
+    }
+    // sotr by lastModifiedAt descending
+    data.sort((a, b) => {
+      const dateA = new Date(a.lastModifiedAt ?? 0);
+      const dateB = new Date(b.lastModifiedAt ?? 0);
+      return dateB.getTime() - dateA.getTime();
+    });
+    this.rits = data;
+  }
+
+  private handleLoadLatestRitsError(err: any) {
+    this.rits = [];
+    const baseError = err.error?.error ?? 'Unknown error';
+    this.showErrorToast(baseError);
+  }
+
+  latestRits(): Rit[] {
+    return this.rits.slice(0, this.numberOfLatestRitsToShow);
   }
 
 }
