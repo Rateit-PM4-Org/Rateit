@@ -286,9 +286,11 @@ describe('HomeComponent', () => {
   });
   
   it('should call goToRitsTab() when Show all button is clicked', () => {
+    fixture.detectChanges();
+    
     spyOn(component, 'goToRitsTab');
     const button = fixture.nativeElement.querySelector('[data-testid="show-all-rits"]');
-    button.nativeElement.click();
+    button.click();
     expect(component.goToRitsTab).toHaveBeenCalled();
   });
 

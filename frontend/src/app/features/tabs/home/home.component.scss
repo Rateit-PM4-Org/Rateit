@@ -5,3 +5,8 @@
   margin-bottom: 8px;
   padding: 0 16px;
 }
+
+.scrollable-list {
+  max-height: 75%;
+  overflow-y: auto;
+}
