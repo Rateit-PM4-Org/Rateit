@@ -21,7 +21,8 @@ describe('HomeComponent', () => {
   let actionSheetControllerSpy: jasmine.SpyObj<ActionSheetController>;
 
   beforeEach(async () => {
-    const ritSpy = jasmine.createSpyObj('RitService', ['createRit']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getAllRits']);
+    ritServiceSpy.getAllRits.and.returnValue(of([]));
     const toastSpy = jasmine.createSpyObj('ToastController', ['create']);
     const actionSheetSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
 
@@ -33,7 +34,7 @@ describe('HomeComponent', () => {
       ],
       providers: [
         { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritSpy },
+        { provide: RitService, useValue: ritServiceSpy },
         { provide: ToastController, useValue: toastSpy },
         { provide: ActionSheetController, useValue: actionSheetSpy },
         provideHttpClient()
@@ -52,6 +53,7 @@ describe('HomeComponent', () => {
   });
 
   it('should render "Home" in ion-title', () => {
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const title = compiled.querySelector('ion-title');
@@ -211,6 +213,7 @@ describe('HomeComponent', () => {
   });
 
   it('should render ion-fab-button when logged in', async () => {
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
 
     const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
@@ -222,12 +225,77 @@ describe('HomeComponent', () => {
 
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
+    fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
 
     const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
     expect(fabButton).toBeFalsy();
 
     userServiceMock.isLoggedIn = () => of(true)
+  });
+
+  it('should return the latest 10 rits sorted by lastInteractionAt descending', () => {
+    const now = new Date().getTime();
+    const ritsMock = Array.from({ length: 15 }, (_, i) => ({
+      name: `rit-${i}`,
+      details: '',
+      tags: [],
+      lastInteractionAt: now + i * 1000
+    })) as any[];
+  
+    component['rits'] = ritsMock;
+    component.numberOfLatestRitsToShow = 10;
+  
+    const latest = component.latestRits();
+  
+    expect(latest.length).toBe(10);
+    expect(latest[0].name).toBe('rit-0');
+    expect(latest[9].name).toBe('rit-9');
+  });
+
+  it('should return 10 latest rits when more than 10 are available', () => {
+    const now = new Date();
+    const rits = Array.from({ length: 20 }, (_, i) => ({
+      id: i.toString(),
+      name: `Rit ${i}`,
+      details: `Details ${i}`,
+      tags: [],
+      lastInteractionAt: new Date(now.getTime() - i * 1000).toISOString(),
+    }));
+  
+    ritServiceSpy.getAllRits = jasmine.createSpy().and.returnValue(of(rits));
+    component.ionViewWillEnter();
+  
+    expect(component.latestRits().length).toBe(10);
+  });
+
+  it('should show error toast on error', async () => {
+    spyOn(component, 'showErrorToast');
+
+    const mockError = { error: { error: 'Failed to load rits' } };
+    ritServiceSpy.getAllRits = jasmine.createSpy().and.returnValue(throwError(() => mockError));
+
+    component.ionViewWillEnter();
+
+    expect(component.showErrorToast).toHaveBeenCalledWith('Failed to load rits');
+  });
+
+  it('should render the Show all button for rits', () => {
+    fixture.componentInstance.ionViewWillEnter();
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('[data-testid="show-all-rits"]');
+    expect(button).toBeTruthy();
+  });
+  
+  it('should call goToRitsTab() when Show all button is clicked', () => {
+    fixture.componentInstance.ionViewWillEnter();
+    fixture.detectChanges();
+    
+    spyOn(component, 'goToRitsTab');
+    const button = fixture.nativeElement.querySelector('[data-testid="show-all-rits"]');
+    button.click();
+    expect(component.goToRitsTab).toHaveBeenCalled();
   });
 
 });

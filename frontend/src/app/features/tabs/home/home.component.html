@@ -4,10 +4,22 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="isLoggedIn$ | async" class="ion-padding">
+<ion-content *ngIf="isLoggedIn$ | async" class="ion-padding" scroll-y="false">
 
-  <ion-fab data-testid="rit-create-button" slot="fixed" vertical="bottom" horizontal="end" vertical="bottom"
-    horizontal="end">
+  <div class="rits-header-row ion-margin-bottom">
+    <ion-label>Your Rits</ion-label>
+    <ion-button size="small" (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button" data-testid="show-all-rits">
+      Show all
+      <ion-icon slot="end" name="chevron-forward"></ion-icon>
+    </ion-button>
+  </div>  
+
+  <ion-list class="scrollable-list">
+    <app-rit-list-item *ngFor="let rit of latestRits()" [rit]="rit">
+    </app-rit-list-item>
+  </ion-list>
+
+  <ion-fab data-testid="rit-create-button" slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>

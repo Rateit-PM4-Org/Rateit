@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActionSheetController, IonModal, ToastController } from '@ionic/angular/standalone';
+import { Component, ViewChild } from '@angular/core';
+import { ActionSheetController, IonModal, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { Observable } from 'rxjs';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
+import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,16 +16,21 @@ import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
   styleUrls: ['./home.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ...IonicStandaloneStandardImports, RitCreateComponent
-  ],
+    CommonModule,
+    ...IonicStandaloneStandardImports,
+    RitCreateComponent,
+    RitListItemComponent
+],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements ViewWillEnter {
 
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild('ritCreate') ritCreateComponent!: RitCreateComponent;
 
   presentingElement!: HTMLElement | null;
-  data: any[] = [];
+
+  rits: Rit[] = [];
+  numberOfLatestRitsToShow: number = 10;
 
   isLoggedIn$!: Observable<boolean>;
 
@@ -31,12 +38,14 @@ export class HomeComponent implements OnInit {
     private readonly actionSheetCtrl: ActionSheetController,
     private readonly ritService: RitService,
     private readonly toastController: ToastController,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly router: Router,
   ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.presentingElement = document.querySelector('.ion-page');
     this.isLoggedIn$ = this.userService.isLoggedIn();
+    this.loadRits();
   }
 
   async showSuccessToast(message: string) {
@@ -135,4 +144,41 @@ export class HomeComponent implements OnInit {
     return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
   }
 
+  private loadRits(): void {
+    this.ritService.getAllRits().subscribe({
+      next: (data) => {
+        this.handleLoadLatestRitsSuccess(data);
+      },
+      error: (err) => {
+        this.handleLoadLatestRitsError(err);
+      }
+    });
+  }
+
+  private handleLoadLatestRitsSuccess(data: Rit[]) {
+    if (data.length === 0) {
+      return;
+    }
+    // sotr by lastInteractionAt descending
+    data.sort((a, b) => {
+      const dateA = new Date(a.lastInteractionAt ?? 0);
+      const dateB = new Date(b.lastInteractionAt ?? 0);
+      return dateB.getTime() - dateA.getTime();
+    });
+    this.rits = data;
+  }
+
+  private handleLoadLatestRitsError(err: any) {
+    this.rits = [];
+    const baseError = err.error?.error ?? 'Unknown error';
+    this.showErrorToast(baseError);
+  }
+
+  latestRits(): Rit[] {
+    return this.rits.slice(0, this.numberOfLatestRitsToShow);
+  }
+
+  goToRitsTab() {
+    this.router.navigate(['/rits']);
+  }
 }
