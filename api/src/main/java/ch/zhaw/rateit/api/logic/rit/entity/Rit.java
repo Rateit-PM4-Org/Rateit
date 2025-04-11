@@ -1,9 +1,7 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
 import ch.zhaw.rateit.api.logic.user.entity.User;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
@@ -33,6 +31,9 @@ public class Rit {
 
     @LastModifiedDate
     private Instant updatedAt;
+
+    @Transient
+    private Instant lastInteractionAt;
 
     public Rit() {
     }
@@ -93,4 +94,7 @@ public class Rit {
         return updatedAt;
     }
 
+    public Instant getLastInteractionAt() {
+        return updatedAt; // For now, return the same value as updatedAt
+    }
 }

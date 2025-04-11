@@ -163,10 +163,10 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     if (data.length === 0) {
       return;
     }
-    // sotr by lastModifiedAt descending
+    // sotr by lastInteractionAt descending
     data.sort((a, b) => {
-      const dateA = new Date(a.lastModifiedAt ?? 0);
-      const dateB = new Date(b.lastModifiedAt ?? 0);
+      const dateA = new Date(a.lastInteractionAt ?? 0);
+      const dateB = new Date(b.lastInteractionAt ?? 0);
       return dateB.getTime() - dateA.getTime();
     });
     this.rits = data;

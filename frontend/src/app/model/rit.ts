@@ -11,6 +11,6 @@ export type Rit = {
     published?: boolean;
     createdAt?: string;
     updatedAt?: string;
-    lastModifiedAt?: string;
+    lastInteractionAt?: string;
   };
   

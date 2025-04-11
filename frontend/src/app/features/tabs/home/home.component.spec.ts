@@ -231,13 +231,13 @@ describe('HomeComponent', () => {
     userServiceMock.isLoggedIn = () => of(true)
   });
 
-  it('should return the latest 10 rits sorted by lastModifiedAt descending', () => {
+  it('should return the latest 10 rits sorted by lastInteractionAt descending', () => {
     const now = new Date().getTime();
     const ritsMock = Array.from({ length: 15 }, (_, i) => ({
       name: `rit-${i}`,
       details: '',
       tags: [],
-      lastModifiedAt: now + i * 1000
+      lastInteractionAt: now + i * 1000
     })) as any[];
   
     component['rits'] = ritsMock;
@@ -257,7 +257,7 @@ describe('HomeComponent', () => {
       name: `Rit ${i}`,
       details: `Details ${i}`,
       tags: [],
-      lastModifiedAt: new Date(now.getTime() - i * 1000).toISOString(),
+      lastInteractionAt: new Date(now.getTime() - i * 1000).toISOString(),
     }));
   
     ritServiceSpy.getAllRits = jasmine.createSpy().and.returnValue(of(rits));
