@@ -6,6 +6,14 @@
 
 <ion-content *ngIf="isLoggedIn$ | async" class="ion-padding">
 
+  <div class="rits-header-row">
+    <ion-label>Your Rits</ion-label>
+    <ion-button fill="clear" size="small" (click)="goToRitsTab()" class="show-all-button" data-testid="show-all-rits">
+      Show all
+      <ion-icon slot="end" name="chevron-forward"></ion-icon>
+    </ion-button>
+  </div>  
+
   <ion-list>
     <app-rit-list-item *ngFor="let rit of latestRits()" [rit]="rit">
     </app-rit-list-item>

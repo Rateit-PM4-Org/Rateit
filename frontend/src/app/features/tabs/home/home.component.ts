@@ -8,6 +8,7 @@ import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -37,7 +38,8 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     private readonly actionSheetCtrl: ActionSheetController,
     private readonly ritService: RitService,
     private readonly toastController: ToastController,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly router: Router,
   ) { }
 
   ionViewWillEnter() {
@@ -180,4 +182,7 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     return this.rits.slice(0, this.numberOfLatestRitsToShow);
   }
 
+  goToRitsTab() {
+    this.router.navigate(['/rits']);
+  }
 }

@@ -275,6 +275,21 @@ describe('HomeComponent', () => {
     component.ionViewWillEnter();
 
     expect(component.showErrorToast).toHaveBeenCalledWith('Failed to load rits');
-  });  
+  });
+
+  it('should render the Show all button for rits', () => {
+
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('[data-testid="show-all-rits"]');
+    expect(button).toBeTruthy();
+  });
+  
+  it('should call goToRitsTab() when Show all button is clicked', () => {
+    spyOn(component, 'goToRitsTab');
+    const button = fixture.nativeElement.querySelector('[data-testid="show-all-rits"]');
+    button.nativeElement.click();
+    expect(component.goToRitsTab).toHaveBeenCalled();
+  });
 
 });
