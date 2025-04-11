@@ -3,12 +3,14 @@ package ch.zhaw.rateit.api.exceptions.handler;
 import ch.zhaw.rateit.api.exceptions.types.ValidationExceptionWithField;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +49,21 @@ public class ExceptionHandlers {
 
 
         return formatErrorResponse("Validation failed", errors);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public Map<String, Object> handleAccessDeniedException(AccessDeniedException ex) {
+        return formatErrorResponse("Access denied", Map.of("permission", List.of(ex.getMessage())));
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ResponseStatusException.class)
+    public Map<String, Object> handleResponseStatusException(ResponseStatusException ex) {
+        return formatErrorResponse(
+                ex.getReason() != null ? ex.getReason() : "Unexpected error",
+                Map.of("status", List.of(ex.getStatusCode().toString()))
+        );
     }
 
     private Map<String, Object> formatErrorResponse(String error, Map<?, ?> errors){
