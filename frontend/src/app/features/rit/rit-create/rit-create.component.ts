@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { CommonModule } from '@angular/common';
-import { RateComponent } from '../rate/rate.component';
-import { ModalController } from '@ionic/angular/standalone';
+import { Component } from '@angular/core';
+import { IonInput } from '@ionic/angular/standalone';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 
 @Component({
   selector: 'app-rit-create',
@@ -13,78 +12,45 @@ import { ModalController } from '@ionic/angular/standalone';
 })
 export class RitCreateComponent {
 
-  constructor(private readonly modalCtrl: ModalController) { }
+  constructor() { }
 
-  selectedImage: any
-  tags: any[] = ['ABC', '123']
-
+  tags: string[] = []
+  tagsErrorMessage?: string
   ritName?: string
+  ritNameErrorMessage?: string
   details?: string
+  detailsErrorMessage?: string
+
   newTag?: string
 
-  selectImage() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (e: any) => {
-      const file = e.target.files[0]
-      const reader = new FileReader()
-      reader.onload = () => {
-        this.selectedImage = reader.result as string
-      };
-      reader.readAsDataURL(file)
-    };
-    input.click()
-  }
-
-  async openRateComponent() {
-    const modal = await this.modalCtrl.create({
-      component: RateComponent,
-      breakpoints: [0, 0.25, 0.85],
-      initialBreakpoint: 0.85,
-      showBackdrop: true,
-      canDismiss: true,
-    });
-
-    await modal.present();
-  }
-
-  onRatingButtonClick(event: Event) {
-    event.stopPropagation();
-    this.openRateComponent();
-  }
-
   setRitName(event: any) {
-    let input = event.target.value
-    if (event.target.value) {
-      this.ritName = input
-    }
+    this.ritName = event.target.value
   }
 
   setDetails(event: any) {
-    let input = event.target.value
-    if (event.target.value) {
-      this.details = input
-    }
+    this.details = event.target.value
   }
 
   setNewTag(event: any) {
     let input = event.target.value
-    if (event.target.value) {
+    if (input) {
       this.newTag = input
     }
   }
 
-  addTag() {
+  addTag(inputEl: IonInput, action: string) {
     const tag = this.newTag?.trim();
-    if (tag) {
-      this.tags.push(tag);
-      this.newTag = '';
+    if (tag && !this.tags.includes(tag)) {
+      this.tags.push(tag)
+      if (action === 'enter') {
+        setTimeout(() => inputEl.setFocus(), 100)
+      }
     }
+    this.newTag = ''
   }
 
   removeTag(index: number) {
-    this.tags.splice(index, 1);
+    this.tags.splice(index, 1)
   }
 
 }

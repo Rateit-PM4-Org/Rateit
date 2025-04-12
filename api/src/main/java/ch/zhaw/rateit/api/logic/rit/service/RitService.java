@@ -10,6 +10,8 @@ import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * Service to handle interactions with rits.
@@ -31,14 +33,14 @@ public class RitService {
         Rit rit = new Rit(
                 request.name(),
                 request.details(),
-                request.images(),
-                request.published(),
+                request.tags(),
                 user
         );
 
         ritRepository.save(rit);
         return ritRepository.getRitById(rit.getId());
     }
+
 
     public Rating rate(User owner, RatingCreateRequest request) {
         Rit rit = ritRepository.getRitById(request.rit().getId());
@@ -56,6 +58,10 @@ public class RitService {
         );
 
         return ratingRepository.save(rating);
+
+    public List<Rit> getAll(User user) {
+        return ritRepository.findAllByOwner(user);
+
     }
 
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -9,11 +9,11 @@ import { AuthService } from './auth.service';
 export class UserService {
   private readonly profile = new BehaviorSubject<any>(null);
 
-  constructor(private readonly apiService: ApiService, authService: AuthService) { 
+  constructor(private readonly apiService: ApiService, authService: AuthService) {
     authService.getAuthenticationStatusObservable().subscribe(authenticated => {
-      if(authenticated){
+      if (authenticated) {
         this.reloadProfile();
-      }else{
+      } else {
         this.profile.next(null);
       }
     });
@@ -21,6 +21,12 @@ export class UserService {
 
   getProfile(): Observable<any> {
     return this.profile.asObservable();
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.profile.pipe(
+      map(profile => profile !== null)
+    );
   }
 
   private reloadProfile(): void {

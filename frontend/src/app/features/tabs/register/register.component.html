@@ -4,19 +4,32 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-label>Email</ion-label>
-    <ion-input type="email" (ionInput)="setEmail($event)"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Display-Name</ion-label>
-    <ion-input type="text" (ionInput)="setDisplayName($event)"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Password</ion-label>
-    <ion-input type="password" (ionInput)="setPassword($event)"></ion-input>
-  </ion-item>
-  <ion-button (click)="register()" (keydown.enter)="register()">Submit</ion-button>
-  <ion-ripple-effect></ion-ripple-effect>
+<ion-content class="ion-padding" *ngIf="!registrationSuccess" scroll-y="false">
+  <form [formGroup]="form" (ngSubmit)="register()">
+      <ion-input label="Email" type="email" formControlName="email"></ion-input>
+
+    <ion-text color="danger" *ngIf="registrationErrorFields['email']">
+      <p *ngFor="let message of registrationErrorFields['email']">{{message}}</p>
+    </ion-text>
+      <ion-input label="Display-Name" type="text" formControlName="displayName"></ion-input>
+
+    <ion-text color="danger" *ngIf="registrationErrorFields['displayName']">
+      <p *ngFor="let message of registrationErrorFields['displayName']">{{message}}</p>
+    </ion-text>
+      <ion-input label="Password" type="password" formControlName="password"></ion-input>
+
+    <ion-text color="danger" *ngIf="registrationErrorFields['password']">
+      <p *ngFor="let message of registrationErrorFields['password']">{{message}}</p>
+    </ion-text>
+    <ion-button type="submit" [disabled]="!form.valid">Submit</ion-button>
+    <ion-ripple-effect></ion-ripple-effect>
+  </form>
+</ion-content>
+<ion-content class="ion-padding" *ngIf="registrationSuccess" scroll-y="false">
+  <ion-text>
+    <p>Registration successful.</p>
+  </ion-text>
+  <ion-text>
+    <p>You will receive an email to verify your account shortly.</p>
+  </ion-text>
 </ion-content>

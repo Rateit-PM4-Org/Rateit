@@ -1,10 +1,7 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
-import ch.zhaw.rateit.api.logic.attachment.entity.Attachment;
 import ch.zhaw.rateit.api.logic.user.entity.User;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
@@ -13,8 +10,6 @@ import java.util.List;
 
 /**
  * Dataclass for rits in the MongoDB database.
- * Represents an item that can be rated, with optional image and details.
- * Owned by a owner and can be published or private.
  *
  * @author Micha Mettler
  */
@@ -26,12 +21,10 @@ public class Rit {
     @DocumentReference(lazy = true)
     private User owner;
 
-    @DocumentReference(lazy = true)
-    private List<Attachment> images;
-
     private String name;
     private String details;
     private boolean published;
+    private List<String> tags;
 
     @CreatedDate
     private Instant createdAt;
@@ -42,24 +35,16 @@ public class Rit {
     public Rit() {
     }
 
-    public Rit(String name, String details, List<Attachment> images, boolean published, User owner) {
+    public Rit(String name, String details, List<String> tags, User owner) {
         this.name = name;
         this.details = details;
-        this.images = images;
-        this.published = published;
+        this.tags = tags;
+        this.published = false;
         this.owner = owner;
     }
 
     public String getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public User getOwner() {
@@ -70,12 +55,12 @@ public class Rit {
         this.owner = owner;
     }
 
-    public List<Attachment> getImages() {
-        return images;
+    public String getName() {
+        return name;
     }
 
-    public void setImages(List<Attachment> images) {
-        this.images = images;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDetails() {
@@ -90,8 +75,12 @@ public class Rit {
         return published;
     }
 
-    public void setPublished(boolean published) {
-        this.published = published;
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public Instant getCreatedAt() {
@@ -104,5 +93,8 @@ public class Rit {
 
     public void setId(String s) {
         this.id = s;
+
+    public Instant getLastInteractionAt() {
+        return updatedAt; // For now, return the same value as updatedAt
     }
 }

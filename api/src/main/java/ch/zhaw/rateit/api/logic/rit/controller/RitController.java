@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Controller to handle interactions with rits.
@@ -37,6 +40,10 @@ public class RitController {
         return ritService.create(user, request);
     }
 
+    @GetMapping(path = "/rits")
+    public List<Rit> rits(@AuthenticationPrincipal User user) {
+        return ritService.getAll(user);
+  
     @PostMapping(path = "/rate")
     public Rating rate(@AuthenticationPrincipal User user, @RequestBody @Validated RatingCreateRequest request) {
         return ritService.rate(user, request);

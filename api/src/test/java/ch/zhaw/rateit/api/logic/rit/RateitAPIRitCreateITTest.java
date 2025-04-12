@@ -1,7 +1,6 @@
 package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
-import ch.zhaw.rateit.api.logic.attachment.entity.Attachment;
 import ch.zhaw.rateit.api.logic.attachment.repository.AttachmentRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
@@ -24,8 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,6 +48,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     private ObjectMapper objectMapper;
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
+    private final List<String> tags = List.of("tag1", "tag2");
 
     @BeforeEach
     void setup() {
@@ -62,35 +61,48 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     private static Stream<Arguments> provideValidRitCreateParams() {
         return Stream.of(
-                Arguments.of("TestRit", "Details", true), // published
-                Arguments.of("TestRit", "Details", false), // not published
-                Arguments.of("TestRit", null, true) // details null
+                Arguments.of("TestRit", "Details", List.of()),
+                Arguments.of("TestRit", "Details", List.of("tag1")),
+                Arguments.of("TestRit", null, List.of("tag1", "tag2"))
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideValidRitCreateParams")
-    void createRit_positive_returnsStatusOk(String name, String details, Boolean published) throws Exception {
-        String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, null, published));
+    void createRit_positive_returnsStatusOk(String name, String details, List<String> tags) throws Exception {
+        String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags));
 
-        mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
-                        .with(user(testUser)))
-                .andExpect(status().is2xxSuccessful());
+        var resultActions = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
+                .with(user(testUser)));
+        String result = resultActions
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        resultActions.andExpect(status().is2xxSuccessful());
+        Rit rit = objectMapper.readValue(result, Rit.class);
+        assertNotNull(rit, "Rit must be present in the database");
+        assertEquals(name, rit.getName(), "Rit name must be equal to the input name");
+        assertEquals(details, rit.getDetails(), "Rit details must be equal to the input details");
+        assertEquals(tags, rit.getTags(), "Rit tags must be equal to the input tags");
+        assertFalse(rit.isPublished(), "Rit must not be published");
+        assertEquals(testUser.getId(), rit.getOwner().getId(), "Rit owner must be equal to the input owner");
     }
 
     private static Stream<Arguments> provideInvalidRitCreateParams() {
         return Stream.of(
-                Arguments.of("", "Details", false), // name blank
-                Arguments.of("   ", "Details", false), // name blank with spaces
-                Arguments.of(null, "Details", false), // name null
-                Arguments.of("TestRit", "Details", null) // published null
+                Arguments.of("", "Details", List.of()), // name blank
+                Arguments.of("   ", "Details", List.of()), // name blank with spaces
+                Arguments.of(null, "Details", List.of()), // name null
+                Arguments.of("TestRit", "Details", null) // tags null
+
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidRitCreateParams")
-    void createRit_negative_returnsBadRequest(String name, String details, Boolean published) throws Exception {
-        String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, null, published));
+    void createRit_negative_returnsBadRequest(String name, String details, List<String> tags) throws Exception {
+        String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags));
 
         mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
@@ -99,7 +111,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void createRit_negative_unauthorized_returnsForbidden() throws Exception {
-        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", null, false));
+        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", List.of()));
 
         mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -107,7 +119,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void createRit_positive_setsTimestamps() throws Exception {
-        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", null, false));
+        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", tags));
 
         String response = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
@@ -122,23 +134,4 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
         assertEquals(rit.getCreatedAt(), rit.getUpdatedAt(), "createdAt and updatedAt must be equal after creation");
     }
 
-    @Test
-    void createRit_positive_withImages() throws Exception {
-        Attachment attachment = attachmentRepository.save(new Attachment("TEST_URL", Attachment.AttachmentType.IMAGE, testUser));
-
-        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", List.of(attachment), false));
-
-        String response = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
-                        .with(user(testUser)))
-                .andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
-
-        String id = objectMapper.readTree(response).get("id").asText();
-        Rit rit = ritRepository.findById(id).orElseThrow();
-
-        assertNotNull(rit, "Rit must be present in the database");
-        assertNotNull(rit.getImages(), "images must be set");
-        assertEquals(1, rit.getImages().size(), "images size must be 1");
-        assertEquals(attachment.getId(), rit.getImages().get(0).getId(), "images must be the same");
-        assertEquals(attachment.getUrl(), rit.getImages().get(0).getUrl(), "images must be the same");
-    }
 }

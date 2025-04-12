@@ -43,5 +43,23 @@ describe('UserService', () => {
       expect(response).toEqual(mockResponse);
     });
   });
+
+  it('should return true if profile is set', (done) => {
+    (service as any).profile.next({ name: 'Test User' });
+  
+    service.isLoggedIn().pipe(first()).subscribe(result => {
+      expect(result).toBeTrue();
+      done();
+    });
+  });
+  
+  it('should return false if profile is null', (done) => {
+    (service as any).profile.next(null);
+  
+    service.isLoggedIn().pipe(first()).subscribe(result => {
+      expect(result).toBeFalse();
+      done();
+    });
+  });
   
 });
