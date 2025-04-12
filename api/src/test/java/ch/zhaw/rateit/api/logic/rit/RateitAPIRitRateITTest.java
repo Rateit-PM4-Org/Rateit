@@ -95,7 +95,8 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
     private static Stream<Arguments> provideInvalidRatingParams() {
         return Stream.of(
                 Arguments.of(7, null, null), // value is too high
-                Arguments.of(0, null, "something bad") // value is too low
+                Arguments.of(0, null, "something bad"), // value is too low
+                Arguments.of(3.5, null, null) //float number
         );
     }
 
@@ -134,6 +135,8 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         assertNotNull(rating.getCreatedAt(), "createdAt must be set");
         assertNotNull(rating.getUpdatedAt(), "updatedAt must be set");
         assertEquals(rating.getCreatedAt(), rating.getUpdatedAt(), "createdAt and updatedAt must be equal after creation");
+        //testcase if rit is not null
+        assertNotNull(rating.getId(), "Rit must be present in the database");
     }
 
 }
