@@ -13,7 +13,7 @@ import jakarta.validation.constraints.*;
  * @param negativeComment Optional comment for negativeComment feedback.
  * @author Michèle Berger
  */
-public record RatingRequest(
+public record RatingCreateRequest(
         @NotEmpty Rit rit,
         @Digits(integer = 1, fraction = 0) @NotNull @Min(1) @Max(5) int value,
         String positiveComment,

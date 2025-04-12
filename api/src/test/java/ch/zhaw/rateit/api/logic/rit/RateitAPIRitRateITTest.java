@@ -2,7 +2,7 @@ package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
 import ch.zhaw.rateit.api.logic.rating.entity.Rating;
-import ch.zhaw.rateit.api.logic.rating.entity.RatingRequest;
+import ch.zhaw.rateit.api.logic.rating.entity.RatingCreateRequest;
 import ch.zhaw.rateit.api.logic.rating.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
@@ -73,7 +73,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
     @MethodSource("provideValidRatingParams")
     void createRit_positive_returnsStatusOk(int value, String positive, String negative) throws Exception {
         var rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingRequest(rit.getId(), value, positive, negative));
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, value, positive, negative));
 
         var resultActions = mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
                 .with(user(testUser)));
@@ -103,7 +103,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
     @MethodSource("provideInvalidRatingParams")
     void createRit_negative_returnsBadRequest(int value, String positive, String negative) throws Exception {
         var rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingRequest(rit.getId(), value, positive, negative));
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, value, positive, negative));
 
         mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
@@ -114,7 +114,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
     @Test
     void createRit_negative_unauthorized_returnsForbidden() throws Exception {
         var rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingRequest(rit.getId(), 4, "test", "test"));
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
 
         mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -123,7 +123,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
     @Test
     void createRit_positive_setsTimestamps() throws Exception {
         var rating = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingRequest(rating.getId(), 4, "test", "test"));
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rating, 4, "test", "test"));
         String response = mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
