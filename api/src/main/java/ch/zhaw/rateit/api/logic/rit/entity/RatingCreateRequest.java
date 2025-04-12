@@ -1,7 +1,6 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
 
-import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import jakarta.validation.constraints.*;
 
 

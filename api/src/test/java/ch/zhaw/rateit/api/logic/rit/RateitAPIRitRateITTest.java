@@ -122,13 +122,15 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void createRit_positive_setsTimestamps() throws Exception {
-        var rating = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rating, 4, "test", "test"));
+        var rit = ritRepository.save(testRit);
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
         String response = mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
 
         String id = objectMapper.readTree(response).get("id").asText();
+        Rating rating = ratingRepository.findById(id).get();
+
 
         assertNotNull(rating, "Rating must be present in the database");
         assertNotNull(rating.getCreatedAt(), "createdAt must be set");
