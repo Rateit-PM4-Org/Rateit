@@ -3,11 +3,11 @@
     <ion-title>Rits</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding" scroll-y="false">
-  <div class="header-row">
+<div class="ion-padding" scroll-y="false">
+  <div>
     <ion-searchbar [(ngModel)]="searchText" placeholder="Search..." class="searchbar"></ion-searchbar>
 
-    <div class="tags-input-container ion-margin-bottom">
+    <div class="tags-input-container">
       <ion-label>Tag:</ion-label>
       <div class="tags-container">
         <ion-chip color="primary">
@@ -17,7 +17,9 @@
       </div>
     </div>
   </div>
-  <ion-list class="scrollable-list" scrollY="true">
+</div>
+<ion-content class="ion-padding-horizontal" scroll-y="true">
+  <ion-list>
     <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit">
     </app-rit-list-item>
   </ion-list>
