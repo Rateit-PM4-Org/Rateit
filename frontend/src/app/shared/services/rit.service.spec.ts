@@ -33,5 +33,11 @@ describe('RitService', () => {
       });
     });
 
+  it('should initialize rits as an empty array', (done) => {
+    service.getRits().pipe(first()).subscribe(rits => {
+      expect(rits).toEqual([]);
+      done();
+    });
+  });
 
 });
