@@ -1,8 +1,8 @@
 package ch.zhaw.rateit.api.logic.rit.service;
 
-import ch.zhaw.rateit.api.logic.rating.entity.Rating;
-import ch.zhaw.rateit.api.logic.rating.entity.RatingCreateRequest;
-import ch.zhaw.rateit.api.logic.rating.repository.RatingRepository;
+import ch.zhaw.rateit.api.logic.rit.entity.Rating;
+import ch.zhaw.rateit.api.logic.rit.entity.RatingCreateRequest;
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;

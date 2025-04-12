@@ -1,9 +1,9 @@
 package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
-import ch.zhaw.rateit.api.logic.rating.entity.Rating;
-import ch.zhaw.rateit.api.logic.rating.entity.RatingCreateRequest;
-import ch.zhaw.rateit.api.logic.rating.repository.RatingRepository;
+import ch.zhaw.rateit.api.logic.rit.entity.Rating;
+import ch.zhaw.rateit.api.logic.rit.entity.RatingCreateRequest;
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
