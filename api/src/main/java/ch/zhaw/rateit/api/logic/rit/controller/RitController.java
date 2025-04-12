@@ -38,7 +38,7 @@ public class RitController {
 
     @GetMapping(path = "/read/{id}")
     public Rit read(@AuthenticationPrincipal User user, @PathVariable String id) {
-        return ritService.findRitById(user, id);
+        return ritService.getRitById(user, id);
     }
 
     @PutMapping(path = "/update/{id}")

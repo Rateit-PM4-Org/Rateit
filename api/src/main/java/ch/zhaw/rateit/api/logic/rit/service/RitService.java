@@ -1,11 +1,10 @@
 package ch.zhaw.rateit.api.logic.rit.service;
 
-import ch.zhaw.rateit.api.exceptions.types.ValidationExceptionWithField;
 import ch.zhaw.rateit.api.logic.rit.entity.Rating;
 import ch.zhaw.rateit.api.logic.rit.entity.RatingCreateRequest;
-import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,28 +32,24 @@ public class RitService {
         this.ratingRepository = ratingRepository;
     }
 
-    public Rit create(User user, RitCreateRequest request) {
+    public Rit create(User owner, RitCreateRequest request) {
         Rit rit = new Rit(
                 request.name(),
                 request.details(),
                 request.tags(),
-                user
+                owner
         );
 
         ritRepository.save(rit);
         return ritRepository.getRitById(rit.getId());
     }
 
-
     public Rating rate(User owner, RatingCreateRequest request) {
-        Rit rit = ritRepository.getRitById(request.rit().getId());
-        if (rit == null) {
-            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("rit", "Rit with id " + request.rit().getId() + " does not exist"));
-        }
-        if (!rit.getOwner().getId().equals(owner.getId())) {
-            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("rit", "You are not the owner of this rit"));
-        }
+        Rit rit = getRitById(request.rit().getId());
 
+        if (!canUserViewRit(owner, rit)) {
+            throw new AccessDeniedException("You don't have access to this rit");
+        }
 
         Rating rating = new Rating(
                 request.value(),
@@ -67,24 +62,24 @@ public class RitService {
         return ratingRepository.save(rating);
     }
 
-    public List<Rit> getAll(User user) {
-        return ritRepository.findAllByOwner(user);
+    public List<Rit> getAll(User owner) {
+        return ritRepository.findAllByOwner(owner);
     }
 
-    public Rit findRitById(User user, String id) {
-        Rit rit = findRitById(id);
+    public Rit getRitById(User owner, String id) {
+        Rit rit = getRitById(id);
 
-        if (!canUserViewRit(user, rit)) {
+        if (!canUserViewRit(owner, rit)) {
             throw new AccessDeniedException("You don't have access to this rit");
         }
 
         return rit;
     }
 
-    public Rit update(User user, String id, RitCreateRequest request) {
-        Rit rit = findRitById(id);
+    public Rit update(User owner, String id, RitCreateRequest request) {
+        Rit rit = getRitById(id);
 
-        if (!canUserUpdateRit(user, rit)) {
+        if (!canUserUpdateRit(owner, rit)) {
             throw new AccessDeniedException("You don't have access to this rit");
         }
 
@@ -94,7 +89,7 @@ public class RitService {
         return ritRepository.save(rit);
     }
 
-    private Rit findRitById(String id) {
+    private Rit getRitById(String id) {
         return ritRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rit not found"));
     }
