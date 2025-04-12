@@ -15,7 +15,7 @@
     </ion-button>
   </div>
 </div>
-<ion-content class="ion-padding-horizontal" scroll-y="true">
+<ion-content *ngIf="isLoggedIn$ | async" class="ion-padding-horizontal" scroll-y="true">
   <ion-list>
     <app-rit-list-item *ngFor="let rit of latestRits()" [rit]="rit">
     </app-rit-list-item>
