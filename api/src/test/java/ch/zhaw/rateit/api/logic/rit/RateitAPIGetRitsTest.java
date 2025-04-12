@@ -2,6 +2,7 @@ package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.rit.service.RitService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
@@ -25,13 +26,16 @@ import static org.mockito.Mockito.when;
     @Mock
     private RitRepository ritRepository;
 
+    @Mock
+    private RatingRepository ratingRepository;
+
     private RitService ritService;
 
     private final User testUser = new User("test@test.ch", "TestUser", "someHashedPassword");
 
     @BeforeEach
     void setUp() {
-        ritService = new RitService(ritRepository);
+        ritService = new RitService(ritRepository, ratingRepository);
     }
 
     @Test
