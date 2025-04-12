@@ -2,7 +2,6 @@ package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
-import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
@@ -29,9 +28,6 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private RatingRepository ratingRepository;
-
-    @Autowired
     private RitRepository ritRepository;
 
     @Autowired
@@ -47,14 +43,13 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
     @BeforeEach
     void setup() {
         userRepository.deleteAll();
-        ratingRepository.deleteAll();
         testUser.setEmailVerified(true);
         userRepository.save(testUser);
     }
 
     @Test
     void readRit_positive_returnsStatusOk() throws Exception {
-        var inputRit = ritRepository.save(testRit);
+        Rit inputRit = ritRepository.save(testRit);
 
         var resultActions = mockMvc.perform(get("/rit/read/" + inputRit.getId()).with(user(testUser)));
         String result = resultActions
