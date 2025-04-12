@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 
     @BeforeEach
     void setUp() {
-        ritService = new RitService(ritRepository);
+        ritService = new RitService(ritRepository, null);
     }
 
     @Test

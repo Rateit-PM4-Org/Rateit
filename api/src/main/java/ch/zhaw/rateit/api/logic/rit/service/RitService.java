@@ -1,5 +1,6 @@
 package ch.zhaw.rateit.api.logic.rit.service;
 
+import ch.zhaw.rateit.api.exceptions.types.ValidationExceptionWithField;
 import ch.zhaw.rateit.api.logic.rit.entity.Rating;
 import ch.zhaw.rateit.api.logic.rit.entity.RatingCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
@@ -45,7 +46,10 @@ public class RitService {
     public Rating rate(User owner, RatingCreateRequest request) {
         Rit rit = ritRepository.getRitById(request.rit().getId());
         if (rit == null) {
-            throw new IllegalArgumentException("Rit not found");
+            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("rit", "Rit with id " + request.rit().getId() + " does not exist"));
+        }
+        if (!rit.getOwner().getId().equals(owner.getId())) {
+            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("rit", "You are not the owner of this rit"));
         }
 
 
@@ -58,6 +62,7 @@ public class RitService {
         );
 
         return ratingRepository.save(rating);
+    }
 
     public List<Rit> getAll(User user) {
         return ritRepository.findAllByOwner(user);

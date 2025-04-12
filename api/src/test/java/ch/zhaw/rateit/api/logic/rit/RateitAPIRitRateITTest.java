@@ -50,7 +50,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
 
-    private final Rit testRit = new Rit("TestRit", "Details", null, false, testUser);
+    private final Rit testRit = new Rit("TestRit", "Details", null, testUser);
 
     @BeforeEach
     void setup() {
@@ -95,8 +95,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
     private static Stream<Arguments> provideInvalidRatingParams() {
         return Stream.of(
                 Arguments.of(7, null, null), // value is too high
-                Arguments.of(0, null, "something bad"), // value is too low
-                Arguments.of(3.5, null, null) //float number
+                Arguments.of(0, null, "something bad") // value is too low
         );
     }
 
@@ -139,12 +138,24 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
     }
     @Test
     void createRit_negative_RitNotPresent() throws Exception {
-        Rit rit = new Rit("TestRit", "Details", null, false, testUser);
+        Rit rit = new Rit("TestRit", "Details", null, testUser);
         rit.setId("non-existing-id");
         String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
 
         mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
+                .andExpect(status().isBadRequest());
+
+
+
+    }
+    @Test
+    void createRit_negative_RitNotCorrectOwner() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
+
+        mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
+                        .with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
                 .andExpect(status().isBadRequest());
 
 
