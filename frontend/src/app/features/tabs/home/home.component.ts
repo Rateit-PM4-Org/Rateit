@@ -115,6 +115,7 @@ export class HomeComponent implements ViewWillEnter {
   private handleSuccess() {
     this.showSuccessToast('Rit created successfully!');
     this.modal.dismiss(null, 'confirm');
+    this.loadRits();
   }
 
   private handleError(err: any) {
