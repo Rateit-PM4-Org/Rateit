@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { Rit } from '../../model/rit';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
@@ -21,13 +21,11 @@ export class RitService {
   }
 
   createRit(rit: Rit): Observable<any> {
-    let observable = this.apiService.post('/rit/create', rit);
-    observable.subscribe({
-      next: () => {
+    return this.apiService.post('/rit/create', rit).pipe(
+      tap(() => {
         this.triggerRitsReload();
-      }
-    });
-    return observable;
+      })
+    )
   }
 
   getRits(): Observable<Rit[]> {
