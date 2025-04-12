@@ -41,7 +41,11 @@ public class RitService {
     }
 
     public Rating rate(User owner, RatingRequest request) {
-        Rit rit = ritRepository.getRitById(request.ritId());
+        Rit rit = ritRepository.getRitById(request.rit().getId());
+        if (rit == null) {
+            throw new IllegalArgumentException("Rit not found");
+        }
+
 
         Rating rating = new Rating(
                 request.value(),
