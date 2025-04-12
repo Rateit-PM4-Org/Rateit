@@ -45,7 +45,7 @@ public class RitService {
     }
 
     public Rating rate(User owner, RatingCreateRequest request) {
-        Rit rit = getRitById(request.rit().getId());
+        Rit rit = findRitById(request.rit().getId());
 
         if (!canUserViewRit(owner, rit)) {
             throw new AccessDeniedException("You don't have access to this rit");
@@ -67,7 +67,7 @@ public class RitService {
     }
 
     public Rit getRitById(User owner, String id) {
-        Rit rit = getRitById(id);
+        Rit rit = findRitById(id);
 
         if (!canUserViewRit(owner, rit)) {
             throw new AccessDeniedException("You don't have access to this rit");
@@ -77,7 +77,7 @@ public class RitService {
     }
 
     public Rit update(User owner, String id, RitCreateRequest request) {
-        Rit rit = getRitById(id);
+        Rit rit = findRitById(id);
 
         if (!canUserUpdateRit(owner, rit)) {
             throw new AccessDeniedException("You don't have access to this rit");
@@ -89,7 +89,7 @@ public class RitService {
         return ritRepository.save(rit);
     }
 
-    private Rit getRitById(String id) {
+    private Rit findRitById(String id) {
         return ritRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rit not found"));
     }
