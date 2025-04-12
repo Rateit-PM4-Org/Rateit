@@ -66,7 +66,6 @@ public class RitService {
 
     public List<Rit> getAll(User user) {
         return ritRepository.findAllByOwner(user);
-
     }
 
 }
