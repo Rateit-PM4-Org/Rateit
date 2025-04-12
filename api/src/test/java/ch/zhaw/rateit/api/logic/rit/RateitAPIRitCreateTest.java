@@ -1,5 +1,6 @@
 package ch.zhaw.rateit.api.logic.rit;
 
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +26,8 @@ class RateitAPIRitCreateTest {
 
     @Mock
     private RitRepository ritRepository;
+    @Mock
+    private RatingRepository ratingRepository;
 
     private RitService ritService;
 
@@ -31,7 +36,7 @@ class RateitAPIRitCreateTest {
 
     @BeforeEach
     void setUp() {
-        ritService = new RitService(ritRepository);
+        ritService = new RitService(ritRepository, ratingRepository);
     }
 
     @Test

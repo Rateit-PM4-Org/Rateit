@@ -91,6 +91,10 @@ public class Rit {
         return updatedAt;
     }
 
+    public void setId(String s) {
+        this.id = s;
+    }
+
     public Instant getLastInteractionAt() {
         return updatedAt; // For now, return the same value as updatedAt
     }

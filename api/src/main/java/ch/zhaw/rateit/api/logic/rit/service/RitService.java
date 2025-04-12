@@ -1,5 +1,9 @@
 package ch.zhaw.rateit.api.logic.rit.service;
 
+import ch.zhaw.rateit.api.exceptions.types.ValidationExceptionWithField;
+import ch.zhaw.rateit.api.logic.rit.entity.Rating;
+import ch.zhaw.rateit.api.logic.rit.entity.RatingCreateRequest;
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
@@ -18,10 +22,12 @@ import java.util.List;
 @Service
 public class RitService {
     private final RitRepository ritRepository;
+    private final RatingRepository ratingRepository;
 
     @Autowired
-    public RitService(RitRepository ritRepository) {
+    public RitService(RitRepository ritRepository, RatingRepository ratingRepository) {
         this.ritRepository = ritRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     public Rit create(User user, RitCreateRequest request) {
@@ -34,6 +40,28 @@ public class RitService {
 
         ritRepository.save(rit);
         return ritRepository.getRitById(rit.getId());
+    }
+
+
+    public Rating rate(User owner, RatingCreateRequest request) {
+        Rit rit = ritRepository.getRitById(request.rit().getId());
+        if (rit == null) {
+            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("rit", "Rit with id " + request.rit().getId() + " does not exist"));
+        }
+        if (!rit.getOwner().getId().equals(owner.getId())) {
+            throw new ValidationExceptionWithField(new ValidationExceptionWithField.ValidationError("rit", "You are not the owner of this rit"));
+        }
+
+
+        Rating rating = new Rating(
+                request.value(),
+                request.positiveComment(),
+                request.negativeComment(),
+                rit,
+                owner
+        );
+
+        return ratingRepository.save(rating);
     }
 
     public List<Rit> getAll(User user) {
