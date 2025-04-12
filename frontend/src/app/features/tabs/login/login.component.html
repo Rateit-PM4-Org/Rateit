@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" scroll-y="false">
   <form [formGroup]="form" (ngSubmit)="login()">
       <ion-input label="Email" type="email" formControlName="email" ngModel></ion-input>
       <ion-text color="danger" *ngIf="loginErrorFields['email']">

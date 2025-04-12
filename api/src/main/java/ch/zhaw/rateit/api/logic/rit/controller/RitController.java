@@ -1,5 +1,7 @@
 package ch.zhaw.rateit.api.logic.rit.controller;
 
+import ch.zhaw.rateit.api.logic.rit.entity.Rating;
+import ch.zhaw.rateit.api.logic.rit.entity.RatingCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.service.RitService;
@@ -50,6 +52,11 @@ public class RitController {
     @GetMapping(path = "/rits")
     public List<Rit> rits(@AuthenticationPrincipal User user) {
         return ritService.getAll(user);
+    }
+  
+    @PostMapping(path = "/rate")
+    public Rating rate(@AuthenticationPrincipal User user, @RequestBody @Validated RatingCreateRequest request) {
+        return ritService.rate(user, request);
     }
 
 }
