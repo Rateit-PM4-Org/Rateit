@@ -7,6 +7,7 @@ import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.comp
 import { Rit } from '../../../model/rit';
 import { RitService } from '../../../shared/services/rit.service';
 import { ViewWillEnter } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-all-rits',
@@ -20,6 +21,7 @@ export class AllRitsComponent implements ViewWillEnter {
   searchText = '';
   selectedTag: string = '';
   rits: Rit[] = [];
+  ritSubscription: Subscription | null = null;
 
   constructor(
     private readonly ritService: RitService,
@@ -27,11 +29,7 @@ export class AllRitsComponent implements ViewWillEnter {
   ) { }
 
   ionViewWillEnter(): void {
-    this.loadRits();
-  }
-
-  private loadRits(): void {
-    this.ritService.getAllRits().subscribe({
+    this.ritSubscription = this.ritService.getRits().subscribe({
       next: (data) => {
         this.handleSuccess(data);
       },
@@ -39,6 +37,10 @@ export class AllRitsComponent implements ViewWillEnter {
         this.handleError(err);
       }
     });
+  }
+
+  ionViewWillLeave() {
+    this.ritSubscription?.unsubscribe();
   }
 
   filteredRits(): Rit[] {
@@ -55,13 +57,7 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   private handleError(err: any) {
-    this.rits = [];
     const baseError = err.error?.error ?? 'Unknown error';
-    const fields = err.error?.fields;
-
-    // if (fields) {
-      // Handle field-specific errors
-    // }
     this.showErrorToast(baseError);
   }
 

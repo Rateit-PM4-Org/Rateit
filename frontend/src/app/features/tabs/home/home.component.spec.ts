@@ -21,8 +21,8 @@ describe('HomeComponent', () => {
   let actionSheetControllerSpy: jasmine.SpyObj<ActionSheetController>;
 
   beforeEach(async () => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getAllRits']);
-    ritServiceSpy.getAllRits.and.returnValue(of([]));
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits']);
+    ritServiceSpy.getRits.and.returnValue(of([]));
     const toastSpy = jasmine.createSpyObj('ToastController', ['create']);
     const actionSheetSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
 
@@ -263,7 +263,7 @@ describe('HomeComponent', () => {
       lastInteractionAt: new Date(now.getTime() - i * 1000).toISOString(),
     }));
   
-    ritServiceSpy.getAllRits = jasmine.createSpy().and.returnValue(of(rits));
+    ritServiceSpy.getRits = jasmine.createSpy().and.returnValue(of(rits));
     component.ionViewWillEnter();
   
     expect(component.latestRits().length).toBe(10);
@@ -273,7 +273,7 @@ describe('HomeComponent', () => {
     spyOn(component, 'showErrorToast');
 
     const mockError = { error: { error: 'Failed to load rits' } };
-    ritServiceSpy.getAllRits = jasmine.createSpy().and.returnValue(throwError(() => mockError));
+    ritServiceSpy.getRits = jasmine.createSpy().and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
 

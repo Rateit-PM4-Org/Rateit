@@ -18,8 +18,8 @@ describe('AllRitsComponent', () => {
   let ritServiceSpy: jasmine.SpyObj<RitService>;
 
   beforeEach(waitForAsync(() => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['getAllRits']);
-    ritServiceSpy.getAllRits.and.returnValue(of([]));
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRits']);
+    ritServiceSpy.getRits.and.returnValue(of([]));
 
     TestBed.configureTestingModule({
       imports: [AllRitsComponent, IonicModule.forRoot()],
@@ -44,7 +44,7 @@ describe('AllRitsComponent', () => {
       { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'] },
       { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'] }
     ];
-    ritServiceSpy.getAllRits.and.returnValue(of(mockRits));
+    ritServiceSpy.getRits.and.returnValue(of(mockRits));
 
     component.ionViewWillEnter();
 
@@ -53,7 +53,7 @@ describe('AllRitsComponent', () => {
 
   it('should handle show empty list when loading rits fails', () => {
     const mockError = { error: { error: 'Failed to load rits' } };
-    ritServiceSpy.getAllRits.and.returnValue(throwError(() => mockError));
+    ritServiceSpy.getRits.and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
 
@@ -77,7 +77,7 @@ describe('AllRitsComponent', () => {
     spyOn(component, 'showErrorToast');
 
     const mockError = { error: { error: 'Failed to load rits' } };
-    ritServiceSpy.getAllRits.and.returnValue(throwError(() => mockError));
+    ritServiceSpy.getRits.and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
 
