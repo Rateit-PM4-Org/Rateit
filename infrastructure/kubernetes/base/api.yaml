@@ -36,10 +36,10 @@ spec:
           resources: 
             limits:
               memory: 2048Mi
-              cpu: 1000m
+              cpu: 2000m
             requests:
               memory: 1024Mi
-              cpu: 500m  
+              cpu: 1000m  
           env:
             - name: SPRING_DATA_MONGODB_HOST
               valueFrom:
