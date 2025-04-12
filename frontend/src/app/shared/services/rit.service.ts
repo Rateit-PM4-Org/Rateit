@@ -41,7 +41,6 @@ export class RitService {
         this.rits.next(data);
       },
       error: () => {
-        this.rits.next([]);
         this.rits.error({
           error: {
             error: 'Error loading rits',
