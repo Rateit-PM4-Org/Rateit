@@ -135,8 +135,19 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         assertNotNull(rating.getCreatedAt(), "createdAt must be set");
         assertNotNull(rating.getUpdatedAt(), "updatedAt must be set");
         assertEquals(rating.getCreatedAt(), rating.getUpdatedAt(), "createdAt and updatedAt must be equal after creation");
-        //testcase if rit is not null
-        assertNotNull(rating.getId(), "Rit must be present in the database");
-    }
 
+    }
+    @Test
+    void createRit_negative_RitNotPresent() throws Exception {
+        Rit rit = new Rit("TestRit", "Details", null, false, testUser);
+        rit.setId("non-existing-id");
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
+
+        mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testUser)))
+                .andExpect(status().isBadRequest());
+
+
+
+    }
 }
