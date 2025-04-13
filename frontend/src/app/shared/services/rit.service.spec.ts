@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockApiService, provideMockAuthService } from '../test-util/test-util';
 import { RitService } from './rit.service';
 import { ApiService } from './api.service';
-import { first, of, skip, throwError } from 'rxjs';
+import { first, of, skip, throwError, Subject } from 'rxjs';
 import { Rit } from '../../model/rit';
 import { AuthService } from './auth.service';
 
@@ -106,6 +106,102 @@ describe('RitService', () => {
     service.triggerRitsReload().subscribe({
       error: () => { } // Handle error to avoid unhandled rejection
     });
+  });
+
+  it('should trigger rits reload when user becomes authenticated', () => {
+    const authServiceMock = {
+      getAuthenticationStatusObservable: jasmine.createSpy().and.returnValue(of(true))
+    };
+
+    spyOn(RitService.prototype, 'triggerRitsReload').and.returnValue(of([]));
+
+    TestBed.configureTestingModule({
+      providers: [
+        RitService,
+        { provide: AuthService, useValue: authServiceMock },
+        provideMockApiService()
+      ]
+    });
+
+    const service = TestBed.inject(RitService);
+    expect(service.triggerRitsReload).toHaveBeenCalled();
+  });
+
+  it('should reset rits to empty array when user becomes unauthenticated', (done) => {
+    const authSubject = new Subject<boolean>();
+    const authServiceMock = {
+      getAuthenticationStatusObservable: jasmine.createSpy().and.returnValue(authSubject.asObservable())
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        RitService,
+        { provide: AuthService, useValue: authServiceMock },
+        provideMockApiService()
+      ]
+    });
+
+    const service = TestBed.inject(RitService);
+    const apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+
+    // First set some data by faking being authenticated
+    const mockRits = [{ name: 'testRit', details: 'details', tags: ['tag'] }];
+    apiServiceSpy.get.and.returnValue(of(mockRits));
+
+    // Send authenticated=true
+    authSubject.next(true);
+
+    // Verify data is loaded
+    service.getRits().pipe(first()).subscribe(rits => {
+      expect(rits).toEqual(mockRits);
+
+      // Now simulate logout
+      authSubject.next(false);
+
+      // Verify data is cleared
+      service.getRits().pipe(first()).subscribe(emptyRits => {
+        expect(emptyRits).toEqual([]);
+        done();
+      });
+    });
+  });
+
+  it('should handle error when creating a rit', (done) => {
+    let service = TestBed.inject(RitService);
+    const apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+
+    const mockError = { error: 'Failed to create rit' };
+    apiServiceSpy.post.and.returnValue(throwError(() => mockError));
+
+    const rit: Rit = { name: 'testRit', details: 'some details', tags: ['tag1'] };
+
+    service.createRit(rit).subscribe({
+      error: err => {
+        expect(err).toEqual(mockError);
+        expect(apiServiceSpy.post).toHaveBeenCalledWith('/rit/create', rit);
+        done();
+      }
+    });
+  });
+
+  it('should reload rits without emitting errors on successful reload', (done) => {
+    let service = TestBed.inject(RitService);
+    const apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+    
+    const mockRits = [{ name: 'newRit', details: 'fresh details', tags: ['tag3', 'tag4'] }];
+    apiServiceSpy.get.and.returnValue(of(mockRits));
+    
+    const errorSpy = jasmine.createSpy('errorSpy');
+    service.getRitsErrorStream().subscribe(errorSpy);
+    
+    service.getRits().pipe(skip(1)).subscribe(rits => {
+      expect(rits).toEqual(mockRits);
+      
+      expect(errorSpy).not.toHaveBeenCalled();
+      done();
+    });
+    
+    service.triggerRitsReload().subscribe();
   });
 
 });
