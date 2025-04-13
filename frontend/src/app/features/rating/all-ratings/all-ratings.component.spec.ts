@@ -41,8 +41,8 @@ describe('AllRatingsComponent', () => {
 
   it('should load ratings on initialization', () => {
     const mockRatings: Rating[] = [
-      { id: '1', value: 'Test Rating 1' },
-      { id: '2', value: 'Test Rating 2' }
+      { id: '1', value: 1 },
+      { id: '2', value: 2 }
     ];
     ratingServiceSpy.getAllRatings.and.returnValue(of(mockRatings));
 
