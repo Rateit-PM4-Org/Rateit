@@ -146,9 +146,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
         mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
-                .andExpect(status().isBadRequest());
-
-
+                .andExpect(status().isNotFound());
 
     }
     @Test
@@ -158,7 +156,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
         mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isForbidden());
 
 
 

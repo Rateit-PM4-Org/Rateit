@@ -19,6 +19,9 @@
   </div>
 </div>
 <ion-content class="ion-padding-horizontal" scroll-y="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list>
     <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit">
     </app-rit-list-item>

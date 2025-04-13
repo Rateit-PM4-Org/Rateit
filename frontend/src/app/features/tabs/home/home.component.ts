@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheetController, IonModal, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
     ...IonicStandaloneStandardImports,
     RitCreateComponent,
     RitListItemComponent
-],
+  ],
 })
 export class HomeComponent implements ViewWillEnter {
 
@@ -34,6 +34,9 @@ export class HomeComponent implements ViewWillEnter {
 
   isLoggedIn$!: Observable<boolean>;
 
+  ritSubscription: Subscription | null = null;
+  ritsErrorSubscription: Subscription | null = null;
+
   constructor(
     private readonly actionSheetCtrl: ActionSheetController,
     private readonly ritService: RitService,
@@ -45,13 +48,31 @@ export class HomeComponent implements ViewWillEnter {
   ionViewWillEnter() {
     this.presentingElement = document.querySelector('.ion-page');
     this.isLoggedIn$ = this.userService.isLoggedIn();
-    this.loadRits();
+    this.ritSubscription = this.ritService.getRits().subscribe({
+      next: (data) => {
+        this.handleLoadRitsSuccess(data);
+      },
+      error: (err) => {
+        this.handleLoadRitsError(err);
+      }
+    });
+
+    this.ritsErrorSubscription = this.ritService.getRitsErrorStream().subscribe({
+      next: (err) => {
+        this.handleLoadRitsError(err);
+      }
+    });
+  }
+
+  ionViewWillLeave() {
+    this.ritSubscription?.unsubscribe();
+    this.ritsErrorSubscription?.unsubscribe();
   }
 
   async showSuccessToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: 1000,
       position: 'top',
       color: 'success',
     });
@@ -62,7 +83,7 @@ export class HomeComponent implements ViewWillEnter {
   async showErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 4000,
+      duration: 2000,
       position: 'top',
       color: 'danger',
     });
@@ -99,8 +120,8 @@ export class HomeComponent implements ViewWillEnter {
     const request = this.buildRequest();
 
     this.ritService.createRit(request).subscribe({
-      next: () => this.handleSuccess(),
-      error: (err) => this.handleError(err),
+      next: () => this.handleRitCreateSuccess(),
+      error: (err) => this.handleRitCreateError(err),
     });
   }
 
@@ -112,13 +133,12 @@ export class HomeComponent implements ViewWillEnter {
     };
   }
 
-  private handleSuccess() {
+  private handleRitCreateSuccess() {
     this.showSuccessToast('Rit created successfully!');
     this.modal.dismiss(null, 'confirm');
-    this.loadRits();
   }
 
-  private handleError(err: any) {
+  private handleRitCreateError(err: any) {
     const baseError = err.error?.error ?? 'Unknown error';
     const fields = err.error?.fields;
 
@@ -145,32 +165,18 @@ export class HomeComponent implements ViewWillEnter {
     return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
   }
 
-  private loadRits(): void {
-    this.ritService.getAllRits().subscribe({
-      next: (data) => {
-        this.handleLoadLatestRitsSuccess(data);
-      },
-      error: (err) => {
-        this.handleLoadLatestRitsError(err);
-      }
-    });
-  }
-
-  private handleLoadLatestRitsSuccess(data: Rit[]) {
-    if (data.length === 0) {
-      return;
-    }
+  private handleLoadRitsSuccess(data: Rit[]) {
+    this.rits = [...data];
     // sotr by lastInteractionAt descending
-    data.sort((a, b) => {
+    this.rits.sort((a, b) => {
       const dateA = new Date(a.lastInteractionAt ?? 0);
       const dateB = new Date(b.lastInteractionAt ?? 0);
       return dateB.getTime() - dateA.getTime();
     });
-    this.rits = data;
   }
+  
 
-  private handleLoadLatestRitsError(err: any) {
-    this.rits = [];
+  private handleLoadRitsError(err: any) {
     const baseError = err.error?.error ?? 'Unknown error';
     this.showErrorToast(baseError);
   }
@@ -181,5 +187,16 @@ export class HomeComponent implements ViewWillEnter {
 
   goToRitsTab() {
     this.router.navigate(['/rits']);
+  }
+  handleRefresh(event: CustomEvent) {
+    this.ritService.triggerRitsReload().subscribe({
+      next: () => {
+        (event.target as HTMLIonRefresherElement).complete();
+        this.showSuccessToast('Rits loaded successfully!');
+      },
+      error: () => {
+        (event.target as HTMLIonRefresherElement).complete();
+      }
+    });
   }
 }

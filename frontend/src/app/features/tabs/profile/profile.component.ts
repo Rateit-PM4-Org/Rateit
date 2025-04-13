@@ -19,7 +19,10 @@ export class ProfileComponent {
   private profileSubscription: Subscription|null = null;
   profile: any;
 
-  constructor(private readonly userService: UserService, private readonly authService: AuthService, private readonly router: Router) {
+  constructor(
+    private readonly userService: UserService, 
+    private readonly authService: AuthService, 
+    private readonly router: Router) {
   }
 
   ionViewWillEnter() {
