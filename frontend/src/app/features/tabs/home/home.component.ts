@@ -174,6 +174,7 @@ export class HomeComponent implements ViewWillEnter {
       return dateB.getTime() - dateA.getTime();
     });
   }
+  
 
   private handleLoadRitsError(err: any) {
     const baseError = err.error?.error ?? 'Unknown error';
