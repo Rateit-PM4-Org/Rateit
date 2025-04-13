@@ -11,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,6 +34,19 @@ public class RitController {
     @PostMapping(path = "/create")
     public Rit create(@AuthenticationPrincipal User user, @RequestBody @Validated RitCreateRequest request) {
         return ritService.create(user, request);
+    }
+
+    @GetMapping(path = "/read/{id}")
+    public Rit read(@AuthenticationPrincipal User user, @PathVariable String id) {
+        return ritService.getRitById(user, id);
+    }
+
+    @PutMapping(path = "/update/{id}")
+    public Rit update(
+            @AuthenticationPrincipal User user,
+            @PathVariable String id,
+            @RequestBody @Validated RitCreateRequest request) {
+        return ritService.update(user, id, request);
     }
 
     @GetMapping(path = "/rits")
