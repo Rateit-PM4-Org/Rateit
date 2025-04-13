@@ -3,6 +3,7 @@ package ch.zhaw.rateit.api.exceptions.handler;
 import ch.zhaw.rateit.api.exceptions.types.ValidationExceptionWithField;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -51,20 +52,26 @@ public class ExceptionHandlers {
         return formatErrorResponse("Validation failed", errors);
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
-    public Map<String, Object> handleAccessDeniedException(AccessDeniedException ex) {
-        return formatErrorResponse("Access denied", Map.of("permission", List.of(ex.getMessage())));
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(formatErrorResponse(
+                        "Access denied",
+                        Map.of("permission", List.of(ex.getMessage()))
+                ));
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResponseStatusException.class)
-    public Map<String, Object> handleResponseStatusException(ResponseStatusException ex) {
-        return formatErrorResponse(
-                ex.getReason() != null ? ex.getReason() : "Unexpected error",
-                Map.of("status", List.of(ex.getStatusCode().toString()))
-        );
+    public ResponseEntity<Map<String, Object>> handleResponseStatusException(ResponseStatusException ex) {
+        return ResponseEntity
+                .status(ex.getStatusCode())
+                .body(formatErrorResponse(
+                        ex.getReason() != null ? ex.getReason() : "Unexpected error",
+                        Map.of("status", List.of(ex.getStatusCode().toString()))
+                ));
     }
+
 
     private Map<String, Object> formatErrorResponse(String error, Map<?, ?> errors){
         Map<String, Object> errorResponse = new HashMap<>();
