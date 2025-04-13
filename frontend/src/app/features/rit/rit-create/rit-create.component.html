@@ -10,8 +10,8 @@
         Rit Name
       </ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content class="name-error-container">
-      <ion-text color="danger" *ngIf="ritNameErrorMessage">
+    <ion-card-content *ngIf="ritNameErrorMessage" class="name-error-container">
+      <ion-text color="danger">
         <p>{{ritNameErrorMessage}}</p>
       </ion-text>
     </ion-card-content>
@@ -28,8 +28,8 @@
         placeholder="Enter Tag" (keyup.enter)="addTag(tagInput, 'enter')"
         (ionBlur)="addTag(tagInput, 'blur')"></ion-input>
     </ion-card-content>
-    <ion-card-content class="tags-error-container">
-      <ion-text color="danger" *ngIf="tagsErrorMessage">
+    <ion-card-content *ngIf="tagsErrorMessage" class="tags-error-container">
+      <ion-text color="danger">
         <p>{{tagsErrorMessage}}</p>
       </ion-text>
     </ion-card-content>
