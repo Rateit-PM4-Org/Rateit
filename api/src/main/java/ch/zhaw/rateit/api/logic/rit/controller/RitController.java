@@ -63,7 +63,7 @@ public class RitController {
     }
 
     @GetMapping(path = "/ratings")
-    public List<Rating> ratings(Rit rit) {
+    public List<Rating> ratings(@RequestBody Rit rit) {
         return ratingService.getAllRatingByRit(rit);
     }
 

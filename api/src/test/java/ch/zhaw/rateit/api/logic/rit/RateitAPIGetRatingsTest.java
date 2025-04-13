@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @AutoConfigureMockMvc
 @Import(WebsecurityConfig.class)
-public class RateitAPIGetRatingsTest extends AbstractBaseIntegrationTest {
+class RateitAPIGetRatingsTest extends AbstractBaseIntegrationTest {
     @Mock
     private RatingRepository ratingRepository;
     private RatingService ratingService;
@@ -29,7 +29,7 @@ public class RateitAPIGetRatingsTest extends AbstractBaseIntegrationTest {
     private Rit testRit = new Rit("test rit", "test details", new ArrayList<>(), testUser);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         ratingService = new RatingService(ratingRepository);
     }
 
