@@ -9,8 +9,9 @@ describe('RatingListItemComponent', () => {
   let fixture: ComponentFixture<RatingListItemComponent>;
 
   const testRating: Rating = {
-    id: '1',
-    value: 'rating',
+    value: 5,
+    positiveComment: 'positive',
+    negativeComment: 'negative'
   };
 
   beforeEach(async () => {
@@ -31,11 +32,11 @@ describe('RatingListItemComponent', () => {
 
   it('should render rating title and value', () => {
     const titleElement = fixture.debugElement.query(By.css('.title')).nativeElement;
-    const valueElements = fixture.debugElement.queryAll(By.css('ion-text'));
+    const positiveComment = fixture.debugElement.query(By.css('.rating-positive ion-text')).nativeElement;
+    const negativeComment = fixture.debugElement.query(By.css('.rating-negative ion-text')).nativeElement;
 
     expect(titleElement.textContent).toContain(testRating.id);
-    valueElements.forEach((valElement) => {
-      expect(valElement.nativeElement.textContent).toContain(testRating.value);
-    });
+    expect(positiveComment.textContent).toContain(testRating.positiveComment);
+    expect(negativeComment.textContent).toContain(testRating.negativeComment);
   });
 });

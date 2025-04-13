@@ -1,8 +1,11 @@
 <div class="list-item-card ion-margin-bottom">
   <ion-label class="content">
-    <h2 class="title">{{rating.id}}</h2>
-    <div class="rating-text">
-      <ion-text color="primary">{{rating.value}}</ion-text>
+    <h2 class="title">Rating: {{rating.value}}</h2>
+    <div class="rating-positive">
+      <ion-text color="primary">{{rating.positiveComment}}</ion-text>
+    </div>
+    <div class="rating-negative">
+      <ion-text color="primary">{{rating.negativeComment}}</ion-text>
     </div>
   </ion-label>
 </div>
