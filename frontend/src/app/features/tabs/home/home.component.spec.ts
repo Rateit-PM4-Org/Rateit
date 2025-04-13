@@ -299,4 +299,63 @@ describe('HomeComponent', () => {
     expect(component.goToRitsTab).toHaveBeenCalled();
   });
 
+  it('should handle refresh event and show success toast on successful reload', fakeAsync(() => {
+    // Mock the refresher element
+    const mockEvent = {
+      target: {
+        complete: jasmine.createSpy('complete')
+      }
+    };
+    
+    // Mock the toast
+    const toast = { present: jasmine.createSpy('present') };
+    toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
+    
+    // Setup ritService to return success
+    ritServiceSpy.triggerRitsReload = jasmine.createSpy().and.returnValue(of({}));
+    
+    // Call the method
+    component.handleRefresh(mockEvent as any);
+    tick();
+    
+    // Verify the behavior
+    expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
+    expect(mockEvent.target.complete).toHaveBeenCalled();
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        message: 'Rits loaded successfully!',
+        color: 'success'
+      })
+    );
+    expect(toast.present).toHaveBeenCalled();
+  }));
+
+  it('should handle refresh event and complete refresher on error', fakeAsync(() => {
+    // Mock the refresher element
+    const mockEvent = {
+      target: {
+        complete: jasmine.createSpy('complete')
+      }
+    };
+    
+    // Setup ritService to return error
+    ritServiceSpy.triggerRitsReload = jasmine.createSpy().and.returnValue(
+      throwError(() => new Error('Failed to reload'))
+    );
+    
+    // Call the method
+    component.handleRefresh(mockEvent as any);
+    tick();
+    
+    // Verify the behavior - refresher should complete even on error
+    expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
+    expect(mockEvent.target.complete).toHaveBeenCalled();
+    // Should not show success toast on error
+    expect(toastControllerSpy.create).not.toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        message: 'Rits loaded successfully!'
+      })
+    );
+  }));
+
 });
