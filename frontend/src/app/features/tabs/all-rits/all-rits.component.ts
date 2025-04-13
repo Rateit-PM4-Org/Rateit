@@ -65,7 +65,7 @@ export class AllRitsComponent implements ViewWillEnter {
     if (data.length === 0) {
       return;
     }
-    this.rits = data;
+    this.rits = [...data];
   }
 
   private handleError(err: any) {

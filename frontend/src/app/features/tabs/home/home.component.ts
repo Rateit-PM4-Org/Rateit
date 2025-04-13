@@ -166,13 +166,13 @@ export class HomeComponent implements ViewWillEnter {
   }
 
   private handleLoadRitsSuccess(data: Rit[]) {
+    this.rits = [...data];
     // sotr by lastInteractionAt descending
-    data.sort((a, b) => {
+    this.rits.sort((a, b) => {
       const dateA = new Date(a.lastInteractionAt ?? 0);
       const dateB = new Date(b.lastInteractionAt ?? 0);
       return dateB.getTime() - dateA.getTime();
     });
-    this.rits = data;
   }
 
   private handleLoadRitsError(err: any) {
