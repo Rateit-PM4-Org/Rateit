@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IonSearchbar, ToastController } from '@ionic/angular/standalone';
+import { IonSearchbar, ToastController, IonRefresher, IonRefresherContent, ViewWillEnter } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { FormsModule } from '@angular/forms';
 import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
 import { Rit } from '../../../model/rit';
 import { RitService } from '../../../shared/services/rit.service';
-import { ViewWillEnter } from '@ionic/angular';
+
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,7 +14,14 @@ import { Subscription } from 'rxjs';
   templateUrl: './all-rits.component.html',
   styleUrls: ['./all-rits.component.scss'],
   standalone: true,
-  imports: [CommonModule, ...IonicStandaloneStandardImports, IonSearchbar, FormsModule, RitListItemComponent],
+  imports: [CommonModule,
+    ...IonicStandaloneStandardImports,
+    IonSearchbar,
+    FormsModule,
+    RitListItemComponent,
+    IonRefresher,
+    IonRefresherContent,
+  ],
 })
 
 export class AllRitsComponent implements ViewWillEnter {
@@ -22,6 +29,7 @@ export class AllRitsComponent implements ViewWillEnter {
   selectedTag: string = '';
   rits: Rit[] = [];
   ritSubscription: Subscription | null = null;
+  ritsErrorSubscription: Subscription | null = null;
 
   constructor(
     private readonly ritService: RitService,
@@ -37,10 +45,17 @@ export class AllRitsComponent implements ViewWillEnter {
         this.handleError(err);
       }
     });
+
+    this.ritsErrorSubscription = this.ritService.getRitsErrorStream().subscribe({
+      next: (err) => {
+        this.handleError(err);
+      }
+    });
   }
 
   ionViewWillLeave() {
     this.ritSubscription?.unsubscribe();
+    this.ritsErrorSubscription?.unsubscribe();
   }
 
   filteredRits(): Rit[] {
@@ -61,15 +76,38 @@ export class AllRitsComponent implements ViewWillEnter {
     this.showErrorToast(baseError);
   }
 
-  async showErrorToast(message: string) {
+  async showSuccessToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 1000,
+      position: 'top',
+      color: 'success',
+    });
+
+    await toast.present();
+  }
+
+  async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
       position: 'top',
       color: 'danger',
     });
 
     await toast.present();
+  }
+
+  handleRefresh(event: CustomEvent) {
+    this.ritService.triggerRitsReload().subscribe({
+      next: () => {
+        (event.target as HTMLIonRefresherElement).complete();
+        this.showSuccessToast('Rits loaded successfully!');
+      },
+      error: () => {
+        (event.target as HTMLIonRefresherElement).complete();
+      }
+    });
   }
 
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { ActionSheetController, IonModal, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
+import { ActionSheetController, IonModal, IonRefresher, IonRefresherContent, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { Observable, Subscription } from 'rxjs';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
@@ -19,7 +19,9 @@ import { Router } from '@angular/router';
     CommonModule,
     ...IonicStandaloneStandardImports,
     RitCreateComponent,
-    RitListItemComponent
+    RitListItemComponent,
+    IonRefresher,
+    IonRefresherContent,
   ],
 })
 export class HomeComponent implements ViewWillEnter {
@@ -35,6 +37,7 @@ export class HomeComponent implements ViewWillEnter {
   isLoggedIn$!: Observable<boolean>;
 
   ritSubscription: Subscription | null = null;
+  ritsErrorSubscription: Subscription | null = null;
 
   constructor(
     private readonly actionSheetCtrl: ActionSheetController,
@@ -55,16 +58,23 @@ export class HomeComponent implements ViewWillEnter {
         this.handleLoadRitsError(err);
       }
     });
+
+    this.ritsErrorSubscription = this.ritService.getRitsErrorStream().subscribe({
+      next: (err) => {
+        this.handleLoadRitsError(err);
+      }
+    });
   }
 
   ionViewWillLeave() {
     this.ritSubscription?.unsubscribe();
+    this.ritsErrorSubscription?.unsubscribe();
   }
 
   async showSuccessToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 2000,
+      duration: 1000,
       position: 'top',
       color: 'success',
     });
@@ -75,7 +85,7 @@ export class HomeComponent implements ViewWillEnter {
   async showErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 4000,
+      duration: 2000,
       position: 'top',
       color: 'danger',
     });
@@ -178,5 +188,16 @@ export class HomeComponent implements ViewWillEnter {
 
   goToRitsTab() {
     this.router.navigate(['/rits']);
+  }
+  handleRefresh(event: CustomEvent) {
+    this.ritService.triggerRitsReload().subscribe({
+      next: () => {
+        (event.target as HTMLIonRefresherElement).complete();
+        this.showSuccessToast('Rits loaded successfully!');
+      },
+      error: () => {
+        (event.target as HTMLIonRefresherElement).complete();
+      }
+    });
   }
 }

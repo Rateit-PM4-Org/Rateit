@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Rit } from '../../model/rit';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
@@ -9,11 +9,12 @@ import { AuthService } from './auth.service';
 })
 export class RitService {
   private readonly rits = new BehaviorSubject<Rit[]>([]);
+  private readonly ritsErrorStream = new Subject<any>();
 
   constructor(private readonly apiService: ApiService, authService: AuthService) {
     authService.getAuthenticationStatusObservable().subscribe(authenticated => {
       if (authenticated) {
-        this.triggerRitsReload();
+        this.triggerRitsReload().subscribe({});
       } else {
         this.rits.next([]);
       }
@@ -23,7 +24,7 @@ export class RitService {
   createRit(rit: Rit): Observable<any> {
     return this.apiService.post('/rit/create', rit).pipe(
       tap(() => {
-        this.triggerRitsReload();
+        this.triggerRitsReload().subscribe({});
       })
     )
   }
@@ -32,20 +33,25 @@ export class RitService {
     return this.rits.asObservable();
   }
 
-  triggerRitsReload(): void {
-    let observable = this.apiService.get('/rit/rits');
-    observable.subscribe({
-      next: (data) => {
-        this.rits.next(data);
-      },
-      error: () => {
-        this.rits.error({
-          error: {
-            error: 'Error loading rits',
-            code: 'RITS_FETCH_FAIL'
-          }
-        });
-      }
-    });
+  getRitsErrorStream(): Observable<any> {
+    return this.ritsErrorStream.asObservable();
+  }
+
+  triggerRitsReload(): Observable<Rit[]> {
+    return this.apiService.get('/rit/rits').pipe(
+      tap({
+        next: (data) => {
+          this.rits.next(data);
+        },
+        error: (err) => {
+          this.ritsErrorStream.next({
+            error: {
+              error: 'Error loading Rits',
+              code: 'RITS_FETCH_FAIL'
+            }
+          });
+        }
+      })
+    );
   }
 }
