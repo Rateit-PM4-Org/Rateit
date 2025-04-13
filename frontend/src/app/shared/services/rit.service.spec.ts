@@ -15,7 +15,7 @@ describe('RitService', () => {
         provideMockApiService()
       ]
     });
-    
+
   });
 
   it('should be created', () => {
@@ -68,7 +68,7 @@ describe('RitService', () => {
       expect(rits).toEqual(mockRits);
       done();
     });
-    service.triggerRitsReload();
+    service.triggerRitsReload().subscribe({})
   });
 
   it('should update getRits on triggerRitsReload with empty array', (done) => {
@@ -80,29 +80,32 @@ describe('RitService', () => {
       expect(rits).toEqual(mockRits);
       done();
     });
-    service.triggerRitsReload();
+    service.triggerRitsReload().subscribe({})
   });
 
-  it('should handle error in getRits', (done) => {
+  it('error stream next should be called on API error', (done) => {
     let service = TestBed.inject(RitService);
     const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
     apiServiceSpy.get.and.returnValue(throwError(() => {
-      return { error: 'Error loading rits' };
+      return { error: 'Error loading rits' }
     }));
-    service.getRits().pipe(skip(1)).subscribe({
-      next: () => { },
-      error: (err) => {
+
+    service.getRitsErrorStream().subscribe(
+      err => {
         expect(err).toEqual({
           error: {
-            error: 'Error loading rits',
+            error: 'Error loading Rits',
             code: 'RITS_FETCH_FAIL'
           }
         });
         done();
       }
+    );
+
+    // Trigger the reload to invoke the error
+    service.triggerRitsReload().subscribe({
+      error: () => { } // Handle error to avoid unhandled rejection
     });
-    service.triggerRitsReload();
-  }
-  );
+  });
 
 });

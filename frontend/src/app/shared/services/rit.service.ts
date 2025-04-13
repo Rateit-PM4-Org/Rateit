@@ -43,7 +43,7 @@ export class RitService {
         next: (data) => {
           this.rits.next(data);
         },
-        error: (err) => {
+        error: () => {
           this.ritsErrorStream.next({
             error: {
               error: 'Error loading Rits',

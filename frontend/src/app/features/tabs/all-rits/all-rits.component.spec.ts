@@ -18,8 +18,9 @@ describe('AllRitsComponent', () => {
   let ritServiceSpy: jasmine.SpyObj<RitService>;
 
   beforeEach(waitForAsync(() => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRits']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRits', 'getRitsErrorStream']);
     ritServiceSpy.getRits.and.returnValue(of([]));
+    ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
 
     TestBed.configureTestingModule({
       imports: [AllRitsComponent, IonicModule.forRoot()],
@@ -51,7 +52,7 @@ describe('AllRitsComponent', () => {
     expect(component.rits).toEqual(mockRits);
   });
 
-  it('should handle show empty list when loading rits fails', () => {
+  it('should show previous rits list when loading rits fails', () => {
     const mockError = { error: { error: 'Failed to load rits' } };
     ritServiceSpy.getRits.and.returnValue(throwError(() => mockError));
 
