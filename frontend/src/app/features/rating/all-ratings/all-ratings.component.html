@@ -1,0 +1,11 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Ratings</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding-horizontal" scroll-y="true">
+  <ion-list>
+    <app-rating-list-item *ngFor="let rating of ratings" [rating]="rating">
+    </app-rating-list-item>
+  </ion-list>
+</ion-content>

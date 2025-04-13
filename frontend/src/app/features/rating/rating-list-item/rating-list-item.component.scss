@@ -1,0 +1,27 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  max-width: calc(100% - 80px); /* Adjust based on button size */
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.list-item-card {
+  display: flex;
+  width: 100%;
+  border-radius: 20px;
+  padding: 15px;
+  background-color: var(--ion-color-light-shade);
+  --background: var(--ion-color-light-shade);
+}
+
+ion-chip:first-child{
+  margin-left: 0;
+}
