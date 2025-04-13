@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { ActionSheetController, IonModal, IonRefresher, IonRefresherContent, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
+import { ActionSheetController, IonModal, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { Observable, Subscription } from 'rxjs';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
@@ -19,9 +19,7 @@ import { Router } from '@angular/router';
     CommonModule,
     ...IonicStandaloneStandardImports,
     RitCreateComponent,
-    RitListItemComponent,
-    IonRefresher,
-    IonRefresherContent,
+    RitListItemComponent
   ],
 })
 export class HomeComponent implements ViewWillEnter {

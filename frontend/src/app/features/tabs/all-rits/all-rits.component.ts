@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IonSearchbar, ToastController, IonRefresher, IonRefresherContent, ViewWillEnter } from '@ionic/angular/standalone';
+import { ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { FormsModule } from '@angular/forms';
 import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
@@ -16,11 +16,8 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule,
     ...IonicStandaloneStandardImports,
-    IonSearchbar,
     FormsModule,
     RitListItemComponent,
-    IonRefresher,
-    IonRefresherContent,
   ],
 })
 
