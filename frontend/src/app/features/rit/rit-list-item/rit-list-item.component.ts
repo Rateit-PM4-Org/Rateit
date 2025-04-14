@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports'; 
 import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { Rit } from '../../../model/rit';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 
 @Component({
   selector: 'app-rit-list-item',
@@ -13,4 +14,12 @@ import { Rit } from '../../../model/rit';
 
 export class RitListItemComponent {
   @Input() rit!: Rit;
+
+  constructor(
+    private readonly router: Router,
+  ) { }
+
+  goToRit() {
+    this.router.navigate(['/rits/view/' + this.rit.id]);
+  }
 }

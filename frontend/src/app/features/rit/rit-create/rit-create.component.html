@@ -1,10 +1,20 @@
+<ion-header *ngIf="mode !== 'create'">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/rits"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Rit</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="ion-padding">
 
   <ion-card>
     <ion-card-header>
       <ion-card-title>
-        <ion-input data-testid="rit-name-input" ngModel [required]="true" [value]="ritName"
-          (ionInput)="setRitName($event)" placeholder="Rit Name..."></ion-input>
+        <ion-input [readonly]="mode === 'view'" [value]="ritName" (ionInput)="setRitName($event)"
+          placeholder="Rit Name...">
+        </ion-input>
       </ion-card-title>
       <ion-card-subtitle>
         Rit Name
@@ -17,15 +27,15 @@
     </ion-card-content>
 
     <ion-card-content class="tags-container">
-      <ion-chip color="primary" *ngFor="let tag of tags; let i = index" (click)="removeTag(i)"
-        (keydown.enter)="removeTag(i)" [attr.data-testid]="'tag-chip-' + i">
+      <ion-chip [disabled]="mode === 'view'" color="primary" *ngFor="let tag of tags; let i = index"
+        (click)="removeTag(i)" (keydown.enter)="removeTag(i)" [attr.data-testid]="'tag-chip-' + i">
         <ion-icon name="pricetag-outline"></ion-icon>
         <ion-label>{{ tag }}</ion-label>
         <ion-icon name="close"></ion-icon>
       </ion-chip>
 
-      <ion-input #tagInput class="tag-input" data-testid="new-tag-input" [value]="newTag" (ionInput)="setNewTag($event)"
-        placeholder="Enter Tag" (keyup.enter)="addTag(tagInput, 'enter')"
+      <ion-input *ngIf="mode !== 'view'" #tagInput class="tag-input" data-testid="new-tag-input" [value]="newTag"
+        (ionInput)="setNewTag($event)" placeholder="Enter Tag" (keyup.enter)="addTag(tagInput, 'enter')"
         (ionBlur)="addTag(tagInput, 'blur')"></ion-input>
     </ion-card-content>
     <ion-card-content *ngIf="tagsErrorMessage" class="tags-error-container">
@@ -41,9 +51,9 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-textarea data-testid="details-textarea" [value]="details" (ionInput)="setDetails($event)"
-        label="Enter your Description" [autoGrow]="true" labelPlacement="floating" fill="outline"
-        placeholder="Enter text"></ion-textarea>
+      <ion-textarea [readonly]="mode === 'view'" [disabled]="mode === 'view'" [value]="details"
+        (ionInput)="setDetails($event)" placeholder="Enter text">
+      </ion-textarea>
       <ion-text color="danger" *ngIf="detailsErrorMessage">
         <p>{{detailsErrorMessage}}</p>
       </ion-text>

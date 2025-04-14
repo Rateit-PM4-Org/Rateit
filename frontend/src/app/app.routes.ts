@@ -41,6 +41,11 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'rits/view/:id',
+    loadComponent: () => import('./features/rit/rit-create/rit-create.component').then(m => m.RitCreateComponent),
+    data: { mode: 'view' }
+  },
+  {
     path: '',
     redirectTo: '/home',
     pathMatch: 'full',

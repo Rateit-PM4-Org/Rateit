@@ -17,4 +17,8 @@ export class RitService {
   getAllRits(): Observable<Rit[]> {
     return this.apiService.get('/rit/rits');
   }
+
+  getRit(ritId: string): Observable<Rit> {
+    return this.apiService.get('/rit/read/' + ritId);
+  }
 }

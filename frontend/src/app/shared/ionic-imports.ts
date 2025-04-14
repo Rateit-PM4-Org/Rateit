@@ -1,5 +1,4 @@
 import {
-  IonToast,
   IonBadge,
   IonButton,
   IonButtons,
@@ -23,6 +22,8 @@ import {
   IonLabel,
   IonList,
   IonModal,
+  IonNav,
+  IonNote,
   IonRippleEffect,
   IonRouterOutlet,
   IonRow,
@@ -37,11 +38,12 @@ import {
   IonTextarea,
   IonThumbnail,
   IonTitle,
+  IonToast,
   IonToolbar,
-  IonNote,
 } from '@ionic/angular/standalone';
 
 export const IonicStandaloneStandardImports = [
+  IonNav,
   IonToast,
   IonCardSubtitle,
   IonRippleEffect,

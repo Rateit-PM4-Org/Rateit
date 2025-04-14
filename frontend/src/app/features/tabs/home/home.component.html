@@ -32,7 +32,7 @@
     </ion-fab-list>
   </ion-fab>
 
-  <ion-modal #modal trigger="open-modal" [canDismiss]="canDismiss" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]">
+  <ion-modal #modal trigger="open-modal" [canDismiss]="canDismiss" [presentingElement]="presentingElement">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -52,7 +52,7 @@
       </ion-header>
 
       <ion-content class="ion-padding">
-        <app-rit-create #ritCreate></app-rit-create>
+        <app-rit-create #ritCreate [mode]="'create'"></app-rit-create>
       </ion-content>
     </ng-template>
   </ion-modal>
