@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Dataclass for rits in the MongoDB database.
@@ -20,6 +21,10 @@ public class Rit {
 
     @DocumentReference(lazy = true)
     private User owner;
+
+    @DocumentReference(lazy = true, lookup = "{'rit': ?#{#self._id}}")
+    @ReadOnlyProperty
+    private Set<Rating> ratings;
 
     private String name;
     private String details;
@@ -97,5 +102,9 @@ public class Rit {
 
     public Instant getLastInteractionAt() {
         return updatedAt; // For now, return the same value as updatedAt
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
     }
 }

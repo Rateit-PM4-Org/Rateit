@@ -1,6 +1,7 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
 import ch.zhaw.rateit.api.logic.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -22,6 +23,7 @@ public class Rating {
     private String id;
 
     @DocumentReference(lazy = true)
+    @JsonIgnore
     private Rit rit;
 
     @DocumentReference(lazy = true)
