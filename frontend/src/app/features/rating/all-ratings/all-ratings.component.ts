@@ -7,6 +7,7 @@ import {Rating} from '../../../model/rating';
 import {RatingListItemComponent} from '../rating-list-item/rating-list-item.component';
 import { Rit } from '../../../model/rit';
 import { RitService } from '../../../shared/services/rit.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-all-rating',
@@ -23,11 +24,12 @@ export class AllRatingsComponent {
 
   constructor(
     private readonly ritService: RitService,
-    private readonly toastController: ToastController
+    private readonly toastController: ToastController,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
 
   ionViewWillEnter(): void {
-    this.loadRatings("67f931999dbaf5070c4270b8");
+    this.loadRatings(this.activatedRoute.snapshot.params['ritId']);
   }
 
   loadRatings(ritId: string): void {
