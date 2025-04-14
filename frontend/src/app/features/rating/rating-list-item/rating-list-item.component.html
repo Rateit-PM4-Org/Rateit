@@ -15,11 +15,11 @@
       <ion-text color="medium">{{formatRelativeTime(rating.updatedAt)}}</ion-text>
     </div>
     <div class="rating-positive ion-margin-bottom">
-      <ion-label *ngIf="rating.positiveComment">Positive: </ion-label>
+      <ion-label *ngIf="rating.positiveComment"><b>Positive</b></ion-label>
       <ion-text>{{rating.positiveComment}}</ion-text>
     </div>
     <div class="rating-negative">
-      <ion-label *ngIf="rating.negativeComment">Negative: </ion-label>
+      <ion-label *ngIf="rating.negativeComment"><b>Negative</b></ion-label>
       <ion-text >{{rating.negativeComment}}</ion-text>
     </div>
   </div>
