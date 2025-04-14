@@ -117,8 +117,7 @@ export class HomeComponent implements ViewWillEnter {
   };
 
   async confirm() {
-    const success = await this.ritCreateComponent.createRit();
-    if (success) {
+    if (await this.ritCreateComponent.createRit()) {
       this.modal.dismiss(null, 'confirm');
     }
   }

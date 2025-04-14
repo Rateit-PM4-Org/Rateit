@@ -35,7 +35,7 @@ export class RitCreateComponent implements ViewWillEnter {
   newTag?: string
 
   ionViewWillEnter(): void {
-    this.ritId = this.route.snapshot.paramMap.get('id') ?? undefined;
+    this.ritId = this.route.snapshot.paramMap.get('ritId') ?? undefined;
 
     if (this.ritId) {
       this.mode = 'view';
@@ -63,7 +63,7 @@ export class RitCreateComponent implements ViewWillEnter {
         },
         error: (err) => {
           this.handleError(err);
-          reject(false);
+          resolve(false); 
         },
       });
     });

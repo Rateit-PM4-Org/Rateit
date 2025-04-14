@@ -17,6 +17,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'rits/view/:ritId',
+        loadComponent: () => import('./features/rit/rit-create/rit-create.component').then(m => m.RitCreateComponent),
+        data: { mode: 'view' }
+      },
+      {
         path: 'ratings/:ritId',
         pathMatch: 'full',
         loadComponent: () => import('./features/rating/all-ratings/all-ratings.component').then((m) => m.AllRatingsComponent),
@@ -45,11 +50,6 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
     ],
-  },
-  {
-    path: 'rits/view/:id',
-    loadComponent: () => import('./features/rit/rit-create/rit-create.component').then(m => m.RitCreateComponent),
-    data: { mode: 'view' }
   },
   {
     path: '',
