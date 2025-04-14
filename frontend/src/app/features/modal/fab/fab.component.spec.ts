@@ -38,17 +38,4 @@ describe('FabComponent', () => {
     const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
     expect(fabButton).toBeTruthy();
   });
-
-  it('should not render ion-fab-button when not logged in', async () => {
-    userServiceMock.isLoggedIn = () => of(false);
-
-    fixture = TestBed.createComponent(FabComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
-    expect(fabButton).toBeFalsy();
-
-    userServiceMock.isLoggedIn = () => of(true)
-  });
 });

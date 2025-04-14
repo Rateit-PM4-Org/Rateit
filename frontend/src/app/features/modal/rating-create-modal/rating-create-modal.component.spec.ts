@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RatingCreateModalComponent } from './rating-create-modal.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('RatingCreateModalComponent', () => {
   let component: RatingCreateModalComponent;
@@ -9,6 +10,9 @@ describe('RatingCreateModalComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RatingCreateModalComponent],
+      providers: [
+        provideHttpClient(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RatingCreateModalComponent);
