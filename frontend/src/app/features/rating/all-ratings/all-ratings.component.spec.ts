@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { UserService } from '../../../shared/services/user.service';
 import { provideHttpClient } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
-import {RatingService} from '../../../shared/services/rating.service';
 import {AllRatingsComponent} from './all-ratings.component';
 import {Rating} from '../../../model/rating';
 import { ActivatedRoute } from '@angular/router';
