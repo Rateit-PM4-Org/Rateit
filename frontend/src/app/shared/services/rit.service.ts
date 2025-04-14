@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subject, tap } from 'rxjs';
 import { Rit } from '../../model/rit';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
@@ -32,6 +32,14 @@ export class RitService {
   getRits(): Observable<Rit[]> {
     return this.rits.asObservable();
   }
+
+  getRitById(id: string): Observable<Rit|null> {
+    return this.getRits().pipe(
+      map(rits => rits.find(rit => rit.id === id)),
+      map(rit => rit ? rit : null)
+    );
+  }
+
 
   getRitsErrorStream(): Observable<any> {
     return this.ritsErrorStream.asObservable();

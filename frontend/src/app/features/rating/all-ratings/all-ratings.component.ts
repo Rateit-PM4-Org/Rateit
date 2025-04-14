@@ -4,8 +4,9 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { ToastController } from '@ionic/angular/standalone';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {Rating} from '../../../model/rating';
-import {RatingService} from '../../../shared/services/rating.service';
 import {RatingListItemComponent} from '../rating-list-item/rating-list-item.component';
+import { Rit } from '../../../model/rit';
+import { RitService } from '../../../shared/services/rit.service';
 
 @Component({
   selector: 'app-all-rating',
@@ -21,18 +22,18 @@ export class AllRatingsComponent {
   ratings: Rating[] = [];
 
   constructor(
-    private readonly ratingService: RatingService,
+    private readonly ritService: RitService,
     private readonly toastController: ToastController
   ) { }
 
   ionViewWillEnter(): void {
-    this.loadRatings();
+    this.loadRatings("67f931999dbaf5070c4270b8");
   }
 
-  loadRatings(): void {
-    this.ratingService.getAllRatings().subscribe({
+  loadRatings(ritId: string): void {
+    this.ritService.getRitById(ritId).subscribe({
       next: (data) => {
-        this.handleSuccess(data);
+        this.handleSuccess(data?.ratings ?? []);
       },
       error: (err) => {
         this.handleError(err);
