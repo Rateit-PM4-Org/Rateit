@@ -22,11 +22,7 @@ export class RitService {
   }
 
   createRit(rit: Rit): Observable<any> {
-    return this.apiService.post('/rit/create', rit).pipe(
-      tap(() => {
-        this.triggerRitsReload().subscribe({});
-      })
-    )
+    return this.apiService.post('/rit/create', rit);
   }
 
   updateRit(rit: Rit, ritId: string): Observable<Rit> {

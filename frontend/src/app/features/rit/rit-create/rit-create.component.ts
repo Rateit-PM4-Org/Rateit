@@ -49,7 +49,7 @@ export class RitCreateComponent implements ViewWillEnter {
 
   updateRit() {
     this.ritService.updateRit(this.buildRequest(), this.ritId!).subscribe({
-      next: (rit) => this.handleSuccess(rit, 'Rit updated sucessfully!'),
+      next: (rit) => this.handleSuccess(rit, 'Rit updated successfully!'),
       error: (err) => this.handleError(err),
     });
   }
@@ -58,12 +58,12 @@ export class RitCreateComponent implements ViewWillEnter {
     return new Promise((resolve, reject) => {
       this.ritService.createRit(this.buildRequest()).subscribe({
         next: (rit) => {
-          this.handleSuccess(rit, 'Rit created sucessfully!');
+          this.handleSuccess(rit, 'Rit created successfully!');
           resolve(true);
         },
         error: (err) => {
           this.handleError(err);
-          resolve(false); 
+          resolve(false);
         },
       });
     });

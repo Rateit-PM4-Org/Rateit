@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,9 @@ describe('RitCreateComponent', () => {
   let fixture: ComponentFixture<RitCreateComponent>;
   let modalCtrlSpy = jasmine.createSpyObj('ModalController', ['create']);
   let ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'updateRit', 'triggerRitsReload']);
+  ritServiceSpy.createRit.and.returnValue(of({}));
+  ritServiceSpy.updateRit.and.returnValue(of({}));
+  ritServiceSpy.triggerRitsReload.and.returnValue(of({}));
   let activatedRouteSpy = { snapshot: { paramMap: { get: () => null } } };
   let toastControllerSpy = jasmine.createSpyObj('ToastController', ['create']);
 
@@ -136,6 +139,30 @@ describe('RitCreateComponent', () => {
     expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'success' }));
     expect(toast.present).toHaveBeenCalled();
   });
+
+  it('should call updateRit and show success toast on success', fakeAsync(() => {
+    const toast = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+    toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
+  
+    component.ritId = '123';
+    component.ritName = 'Test Rit';
+    component.details = 'Details';
+    component.tags = ['tag1'];
+  
+    ritServiceSpy.updateRit.and.returnValue(of({
+      name: 'Test Rit',
+      details: 'Details',
+      tags: ['tag1']
+    }));
+  
+    component.updateRit();
+    tick();
+  
+    expect(ritServiceSpy.updateRit).toHaveBeenCalled();
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Rit updated successfully!' }));
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'success' }));
+    expect(toast.present).toHaveBeenCalled();
+  }));
 
   it('should call createRit and show error toast on unknown error', async () => {
     const toast = { present: jasmine.createSpy() };
