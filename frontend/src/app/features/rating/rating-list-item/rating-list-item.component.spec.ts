@@ -37,4 +37,18 @@ describe('RatingListItemComponent', () => {
     expect(positiveComment.textContent).toContain(testRating.positiveComment);
     expect(negativeComment.textContent).toContain(testRating.negativeComment);
   });
+
+  it('should format relative time correctly', () => {
+    let date = new Date(Date.now() - 1000 * 60 * 5); // 5 minutes ago
+    let formattedTime = component.formatRelativeTime(date);
+    expect(formattedTime).toContain('5 minutes ago');
+
+    date = new Date(Date.now() - 1000 * 60 * 60 * 2); // 2 hours ago
+    formattedTime = component.formatRelativeTime(date);
+    expect(formattedTime).toContain('2 hours ago');
+
+    date = new Date(Date.now() - 1000 * 60 * 60 * 24 * 3); // 3 days ago
+    formattedTime = component.formatRelativeTime(date);
+    expect(formattedTime).toContain('3 days ago');
+  });
 });

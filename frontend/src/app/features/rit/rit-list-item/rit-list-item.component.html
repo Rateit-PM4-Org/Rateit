@@ -9,7 +9,7 @@
         </ion-chip>
       </div>
     </ion-label>
-    <ion-button size="default" class="ratingButton" (click)="navigateToRatings()">
+    <ion-button size="default" class="ratingButton" (keydown.enter)="navigateToRatings()" (click)="navigateToRatings()">
       {{ latestRatingValue }}
       <ion-icon name="star" slot="end"></ion-icon>
     </ion-button>
