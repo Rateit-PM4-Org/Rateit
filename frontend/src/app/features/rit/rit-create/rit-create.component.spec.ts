@@ -225,11 +225,9 @@ describe('RitCreateComponent', () => {
       tags: ['tag1', 'tag2']
     };
   
-    // Patch ActivatedRoute to return a ritId
     const route = TestBed.inject(ActivatedRoute);
     spyOn(route.snapshot.paramMap, 'get').and.returnValue('test-id');
   
-    // Mock getRit
     ritServiceSpy.getRit = jasmine.createSpy().and.returnValue(of(mockRit));
   
     component.ionViewWillEnter();
