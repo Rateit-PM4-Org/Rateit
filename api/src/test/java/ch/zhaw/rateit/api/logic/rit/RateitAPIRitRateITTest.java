@@ -88,8 +88,10 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         assertEquals(value, rating.getValue(), "Rating value must be equal to the input value");
         assertEquals(positive, rating.getPositiveComment(), "Rating positiveComment must be equal to the input positiveComment");
         assertEquals(negative, rating.getNegativeComment(), "Rating negativeComment must be equal to the input negativeComment");
-        assertEquals(testRit.getId(), rating.getRit().getId(), "Rating rit must be equal to the input rit");
         assertEquals(testUser.getId(), rating.getOwner().getId(), "Rating owner must be equal to the input owner");
+
+        // hier muss neu in der DB überprüft werden, da wir das eigentliche Rit nicht mehr zurückgeben
+        assertEquals(testRit.getId(), ratingRepository.getRatingById(rating.getId()).getRit().getId(), "Rating rit must be equal to the input rit");
     }
 
     private static Stream<Arguments> provideInvalidRatingParams() {
