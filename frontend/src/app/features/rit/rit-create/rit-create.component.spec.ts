@@ -217,4 +217,29 @@ describe('RitCreateComponent', () => {
     expect(component.tagsErrorMessage).toEqual('invalid tag');
   });
 
+  it('should load rit data in ionViewWillEnter if ritId is present', () => {
+    const mockRit = {
+      id: 'test-id',
+      name: 'Loaded Rit',
+      details: 'Some loaded details',
+      tags: ['tag1', 'tag2']
+    };
+  
+    // Patch ActivatedRoute to return a ritId
+    const route = TestBed.inject(ActivatedRoute);
+    spyOn(route.snapshot.paramMap, 'get').and.returnValue('test-id');
+  
+    // Mock getRit
+    ritServiceSpy.getRit = jasmine.createSpy().and.returnValue(of(mockRit));
+  
+    component.ionViewWillEnter();
+  
+    expect(component.ritId).toBe('test-id');
+    expect(component.mode).toBe('view');
+    expect(ritServiceSpy.getRit).toHaveBeenCalledWith('test-id');
+    expect(component.ritName).toBe(mockRit.name);
+    expect(component.details).toBe(mockRit.details);
+    expect(component.tags).toEqual(mockRit.tags);
+  });
+
 });
