@@ -1,6 +1,6 @@
 <div class="list-item-card ion-margin-bottom">
   <div class="content">
-    <div class="header-row ion-margin-bottom">
+    <div class="header-row" [ngClass]="{ 'ion-margin-bottom': rating.positiveComment || rating.negativeComment }">
       <ion-label>
         <h2 class="title">
           <ion-grid class="ion-no-padding">
@@ -14,7 +14,7 @@
       </ion-label>
       <ion-text color="medium">{{formatRelativeTime(rating.updatedAt)}}</ion-text>
     </div>
-    <div class="rating-positive ion-margin-bottom">
+    <div class="rating-positive" [ngClass]="{ 'ion-margin-bottom': rating.positiveComment }">
       <ion-label *ngIf="rating.positiveComment"><b>Positive</b></ion-label>
       <ion-text>{{rating.positiveComment}}</ion-text>
     </div>
