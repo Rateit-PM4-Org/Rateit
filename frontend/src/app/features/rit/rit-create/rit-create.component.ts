@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonBackButton, IonInput, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
+import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
-import { Rit } from '../../../model/rit';
-import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-rit-create',

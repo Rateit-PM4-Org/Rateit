@@ -6,7 +6,7 @@
     <ion-title>Rit</ion-title>
 
     <ion-buttons slot="end" *ngIf="mode === 'edit'">
-      <ion-button [disabled]="!ritName?.trim()" (click)="updateRit()">
+      <ion-button [disabled]="!ritName?.trim()" (click)="updateRit()" (keydown.enter)="updateRit()">
         Confirm
       </ion-button>
     </ion-buttons>
@@ -67,7 +67,7 @@
   </ion-card>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="mode === 'view'">
-    <ion-fab-button class="edit-button" (click)="mode = 'edit'">
+    <ion-fab-button class="edit-button" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
       <ion-icon name="create-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>

@@ -143,21 +143,21 @@ describe('RitCreateComponent', () => {
   it('should call updateRit and show success toast on success', fakeAsync(() => {
     const toast = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
-  
+
     component.ritId = '123';
     component.ritName = 'Test Rit';
     component.details = 'Details';
     component.tags = ['tag1'];
-  
+
     ritServiceSpy.updateRit.and.returnValue(of({
       name: 'Test Rit',
       details: 'Details',
       tags: ['tag1']
     }));
-  
+
     component.updateRit();
     tick();
-  
+
     expect(ritServiceSpy.updateRit).toHaveBeenCalled();
     expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Rit updated successfully!' }));
     expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'success' }));
