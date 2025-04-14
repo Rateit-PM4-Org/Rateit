@@ -1,9 +1,5 @@
 .content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex-grow: 1;
-  max-width: calc(100% - 80px); /* Adjust based on button size */
+  width: 100%;
 }
 
 .title {
@@ -11,6 +7,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
 }
 
 .list-item-card {

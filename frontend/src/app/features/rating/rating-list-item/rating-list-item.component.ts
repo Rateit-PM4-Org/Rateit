@@ -13,4 +13,26 @@ import {Rating} from '../../../model/rating';
 
 export class RatingListItemComponent {
   @Input() rating!: Rating;
+
+  formatRelativeTime(date: any): string {
+    const now = new Date();
+    const diff = now.getTime() - new Date(date).getTime();
+
+    const minutes = Math.floor(diff / (1000 * 60));
+    if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+      return `${hours} hours ago`;
+    }
+
+    const days = Math.floor(hours / 24);
+    return `${days} days ago`;
+  }
+
+  isBelowRating(index: number): boolean {
+    return index < this.rating.value!;
+  }
 }
