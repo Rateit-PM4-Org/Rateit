@@ -23,7 +23,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-textarea label="Enter Pros" [autoGrow]="true" labelPlacement="floating" fill="outline"
-        placeholder="Enter text">
+        placeholder="Enter text" [value]="positiveComment" (ionInput)="setPositiveComment($event)">
       </ion-textarea>
     </ion-card-content>
   </ion-card>
@@ -34,7 +34,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-textarea label="Enter Cons" [autoGrow]="true" labelPlacement="floating" fill="outline"
-        placeholder="Enter text">
+        placeholder="Enter text" [value]="negativeComment" (ionInput)="setNegativeComment($event)">
       </ion-textarea>
     </ion-card-content>
   </ion-card>

@@ -100,6 +100,8 @@ async showSuccessToast(message: string) {
     return {
       rit: {id: this.currentRit?.id},
       value: this.rateComponent.rating,
+      positiveComment: this.rateComponent.positiveComment,
+      negativeComment: this.rateComponent.negativeComment,
     };
   }
 

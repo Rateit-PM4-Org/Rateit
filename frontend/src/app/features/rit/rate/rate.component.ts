@@ -18,9 +18,18 @@ export class RateComponent {
   constructor() { }
 
   rating: number = 0;
+  positiveComment: string = '';
+  negativeComment: string = '';
 
   setRating(value: number) {
     this.rating = this.rating === value ? 0 : value;
+  }
+
+  setPositiveComment(e: any) {
+    this.positiveComment = e.target.value;
+  }
+  setNegativeComment(e: any) {
+    this.negativeComment = e.target.value;
   }
 
 }
