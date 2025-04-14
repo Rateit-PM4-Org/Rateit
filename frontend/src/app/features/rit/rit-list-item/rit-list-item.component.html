@@ -1,15 +1,16 @@
-<div class="list-item-card ion-margin-bottom" (click)="goToRit()">
-  <ion-label class="content">
-    <h2 class="title">{{ rit.name }}</h2>
-    <div class="tags-container">
-      <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index">
-        <ion-icon name="pricetag-outline"></ion-icon>
-        <ion-label>{{ tag }}</ion-label>
-      </ion-chip>
-    </div>
-  </ion-label>
-  <!-- <ion-button size="default" class="ratingButton">
-      3
+
+  <div class="list-item-card ion-margin-bottom" (click)="goToRit()">
+    <ion-label class="content">
+      <h2 class="title">{{ rit.name }}</h2>
+      <div class="tags-container">
+        <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index">
+          <ion-icon name="pricetag-outline"></ion-icon>
+          <ion-label>{{ tag }}</ion-label>
+        </ion-chip>
+      </div>
+    </ion-label>
+    <ion-button size="default" class="ratingButton" (keydown.enter)="navigateToRatings()" (click)="navigateToRatings()">
+      {{ latestRatingValue }}
       <ion-icon name="star" slot="end"></ion-icon>
-    </ion-button> -->
-</div>
+    </ion-button>
+  </div>

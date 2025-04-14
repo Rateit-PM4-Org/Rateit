@@ -40,6 +40,10 @@ import {
   IonTitle,
   IonToast,
   IonToolbar,
+  IonNote,
+  IonSearchbar,
+  IonRefresher,
+  IonRefresherContent,
 } from '@ionic/angular/standalone';
 
 export const IonicStandaloneStandardImports = [
@@ -84,5 +88,9 @@ export const IonicStandaloneStandardImports = [
   IonRow,
   IonCol,
   IonText,
-  IonNote
+  IonNote,
+  IonSearchbar,
+  IonRefresher,
+  IonRefresherContent
+
 ];

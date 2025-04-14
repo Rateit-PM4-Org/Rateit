@@ -109,5 +109,4 @@ describe('App Routing', () => {
 
     expect(location.path()).toBe('/home');
   }));
-
 });
