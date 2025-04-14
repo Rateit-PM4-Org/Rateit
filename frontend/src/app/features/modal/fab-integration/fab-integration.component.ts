@@ -5,6 +5,7 @@ import { FabButton, FabComponent } from '../fab/fab.component';
 import { RitCreateModalComponent } from '../rit-create-modal/rit-create-modal.component';
 import { RatingCreateModalComponent } from '../rating-create-modal/rating-create-modal.component';
 import { Rit } from '../../../model/rit';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-fab-integration',
@@ -14,24 +15,42 @@ import { Rit } from '../../../model/rit';
   standalone: true,
 })
 export class FabIntegrationComponent  implements OnInit {
-  @Input() currentRit!: Rit|null;
+  @Input() rit!: Observable<Rit|null> | null;
+  private ritSubscription: any;
+  protected currentRit: Rit|null = null;
   @ViewChild(FabComponent) fabComponent!: FabComponent;
   @ViewChild(RitCreateModalComponent) ritCreateModalComponent!: RitCreateModalComponent;
   @ViewChild(RatingCreateModalComponent) ratingCreateModalComponent!: RitCreateModalComponent;
 
-  protected buttons: FabButton[] = [
-    {
-      icon: 'add-outline',
-      action: () => this.ritCreateModalComponent.modal.present(),
-    },
-    {
-      icon: 'add-outline',
-      action: () => this.ratingCreateModalComponent.modal.present(),
-    },
-  ];
+  protected buttons: FabButton[] = [];
+  
+  ngOnInit() {
+    this.updateButtons();
+    this.ritSubscription = this.rit?.subscribe((data) => {
+      this.currentRit = data;
+      this.updateButtons();
+    })
+  }
 
-  constructor() { }
+  ngOnDestroy() {
+    if (this.ritSubscription) {
+      this.ritSubscription.unsubscribe();
+    }
+  }
 
-  ngOnInit() {}
+  updateButtons() {
+    this.buttons = [
+      {
+        icon: 'add-outline',
+        action: () => this.ritCreateModalComponent.modal.present(),
+      },
+    ];
+    if (this.currentRit) {
+      this.buttons.push({
+        icon: 'star-outline',
+        action: () => this.ratingCreateModalComponent.modal.present(),
+      });
+    }
+  }
 
 }

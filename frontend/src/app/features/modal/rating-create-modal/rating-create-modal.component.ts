@@ -6,6 +6,7 @@ import { Rating } from '../../../model/rating';
 import { Rit } from '../../../model/rit';
 import { CommonModule } from '@angular/common';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-rating-create-modal',
@@ -15,7 +16,9 @@ import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
   standalone: true,
 })
 export class RatingCreateModalComponent  implements OnInit {
-  @Input() rit!: Rit;
+  @Input() rit!: Observable<Rit|null> | null;
+  private ritSubscription: any;
+  protected currentRit: Rit|null = null;
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild(RateComponent) rateComponent!: RateComponent
 
@@ -23,7 +26,17 @@ constructor(private readonly toastController: ToastController,
   private actionSheetCtrl: ActionSheetController,
 private readonly ritService: RitService) { }
 
-ngOnInit() {}
+ngOnInit() {
+  this.ritSubscription = this.rit?.subscribe((data) => {
+    this.currentRit = data;
+  })
+}
+
+ngOnDestroy() {
+  if (this.ritSubscription) {
+    this.ritSubscription.unsubscribe();
+  }
+}
 
 async showSuccessToast(message: string) {
     const toast = await this.toastController.create({
@@ -75,6 +88,8 @@ async showSuccessToast(message: string) {
   async confirm() {
     const request = this.buildRequest();
 
+    console.log(request);
+
     this.ritService.createRating(request).subscribe({
       next: () => this.handleRitCreateSuccess(),
       error: (err) => this.handleRitCreateError(err),
@@ -83,7 +98,7 @@ async showSuccessToast(message: string) {
 
   private buildRequest(): Rating {
     return {
-      rit: this.rit,
+      rit: {id: this.currentRit?.id},
       value: this.rateComponent.rating,
     };
   }

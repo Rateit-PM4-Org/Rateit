@@ -7,6 +7,9 @@ import {Rating} from '../../../model/rating';
 import {RatingListItemComponent} from '../rating-list-item/rating-list-item.component';
 import { RitService } from '../../../shared/services/rit.service';
 import { ActivatedRoute } from '@angular/router';
+import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
+import { Rit } from '../../../model/rit';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-all-rating',
@@ -14,18 +17,21 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./all-ratings.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports, RatingListItemComponent
+    CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports, RatingListItemComponent, FabIntegrationComponent
   ],
 })
 
 export class AllRatingsComponent {
+  rit: Observable<Rit | null>;
   ratings: Rating[] = [];
 
   constructor(
     private readonly ritService: RitService,
     private readonly toastController: ToastController,
     private readonly activatedRoute: ActivatedRoute,
-  ) { }
+  ) { 
+    this.rit = this.ritService.getRitById(this.activatedRoute.snapshot.params['ritId'])
+  }
 
   ionViewWillEnter(): void {
     this.loadRatings(this.activatedRoute.snapshot.params['ritId']);
