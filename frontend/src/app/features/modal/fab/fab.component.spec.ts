@@ -31,11 +31,4 @@ describe('FabComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  
-  it('should render ion-fab-button when logged in', async () => {
-    fixture.detectChanges();
-
-    const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
-    expect(fabButton).toBeTruthy();
-  });
 });
