@@ -21,11 +21,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -162,5 +163,16 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
 
 
+    }
+
+    @Test
+    void readRit_positive_showsRatings() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+        String result = mockMvc.perform(get("/rit/read/" + testRit.getId()).with(user(testUser))).andReturn().getResponse().getContentAsString();
+        Rit ritResponse = objectMapper.readValue(result, Rit.class);
+        assertNotNull(ritResponse.getRatings(), "Rit must have ratings");
+        assertFalse(ritResponse.getRatings().isEmpty());
     }
 }
