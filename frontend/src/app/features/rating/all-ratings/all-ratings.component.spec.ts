@@ -7,6 +7,9 @@ import { of, throwError } from 'rxjs';
 import {RatingService} from '../../../shared/services/rating.service';
 import {AllRatingsComponent} from './all-ratings.component';
 import {Rating} from '../../../model/rating';
+import { ActivatedRoute } from '@angular/router';
+import { RitService } from '../../../shared/services/rit.service';
+import { Rit } from '../../../model/rit';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -15,18 +18,27 @@ const userServiceMock = {
 describe('AllRatingsComponent', () => {
   let component: AllRatingsComponent;
   let fixture: ComponentFixture<AllRatingsComponent>;
-  let ratingServiceSpy: jasmine.SpyObj<RatingService>;
+  let ritServiceSpy: jasmine.SpyObj<RitService>;
 
   beforeEach(waitForAsync(() => {
-    ratingServiceSpy = jasmine.createSpyObj('RatingService', ['getAllRatings']);
-    ratingServiceSpy.getAllRatings.and.returnValue(of([]));
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRitById', 'getRitsErrorStream']);
+    ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
+
 
     TestBed.configureTestingModule({
       imports: [AllRatingsComponent, IonicModule.forRoot()],
       providers: [
         { provide: UserService, useValue: userServiceMock },
-        { provide: RatingService, useValue: ratingServiceSpy },
-        provideHttpClient()
+        { provide: RitService, useValue: ritServiceSpy },
+        provideHttpClient(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              params: { ritId: '1' }
+            }
+          }
+        }
       ]
     }).compileComponents();
 
@@ -41,10 +53,18 @@ describe('AllRatingsComponent', () => {
 
   it('should load ratings on initialization', () => {
     const mockRatings: Rating[] = [
-      { id: '1', value: 1 },
-      { id: '2', value: 2 }
+      { id: '1', value: 5 },
+      { id: '2', value: 4 }
     ];
-    ratingServiceSpy.getAllRatings.and.returnValue(of(mockRatings));
+    const mockRit: Rit = {
+      id: '1',
+      name: 'Test Rit',
+      details: 'Details',
+      tags: ['tag1'],
+      ratings: mockRatings
+    };
+
+    ritServiceSpy.getRitById.and.returnValue(of(mockRit));
 
     component.ionViewWillEnter();
 
@@ -53,7 +73,7 @@ describe('AllRatingsComponent', () => {
 
   it('should handle show empty list when loading ratings fails', () => {
     const mockError = { error: { error: 'Failed to load ratings' } };
-    ratingServiceSpy.getAllRatings.and.returnValue(throwError(() => mockError));
+    ritServiceSpy.getRitById.and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
 
@@ -64,7 +84,7 @@ describe('AllRatingsComponent', () => {
     spyOn(component, 'showErrorToast');
 
     const mockError = { error: { error: 'Failed to load ratings' } };
-    ratingServiceSpy.getAllRatings.and.returnValue(throwError(() => mockError));
+    ritServiceSpy.getRitById.and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
 

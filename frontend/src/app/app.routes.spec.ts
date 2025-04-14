@@ -109,14 +109,4 @@ describe('App Routing', () => {
 
     expect(location.path()).toBe('/home');
   }));
-
-  it('should navigate to /ratings', waitForAsync(async () => {
-    const fixture = TestBed.createComponent(TestHostComponent);
-    fixture.detectChanges();
-
-    await router.navigate(['/ratings']);
-    fixture.detectChanges();
-
-    expect(location.path()).toBe('/ratings');
-  }));
 });
