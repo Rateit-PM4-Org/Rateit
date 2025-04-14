@@ -4,6 +4,12 @@
       <ion-back-button defaultHref="/rits"></ion-back-button>
     </ion-buttons>
     <ion-title>Rit</ion-title>
+
+    <ion-buttons slot="end" *ngIf="mode === 'edit'">
+      <ion-button [disabled]="!ritName?.trim()" (click)="confirmEdit()">
+        Confirm
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +17,7 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>
+      <ion-card-title class="rit-title-container">
         <ion-input [readonly]="mode === 'view'" [value]="ritName" (ionInput)="setRitName($event)"
           placeholder="Rit Name...">
         </ion-input>
@@ -59,5 +65,11 @@
       </ion-text>
     </ion-card-content>
   </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="mode === 'view'">
+    <ion-fab-button class="edit-button" (click)="mode = 'edit'">
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
     ...IonicStandaloneStandardImports,
     RitCreateComponent,
     RitListItemComponent
-],
+  ],
 })
 export class HomeComponent implements ViewWillEnter {
 
@@ -123,26 +123,10 @@ export class HomeComponent implements ViewWillEnter {
     const fields = err.error?.fields;
 
     if (fields) {
-      this.setFieldErrorMessages(fields);
+      this.ritCreateComponent.setFieldErrorMessages(fields);
     } else {
       this.showErrorToast(baseError);
     }
-  }
-
-  private setFieldErrorMessages(fields: any) {
-    if (fields.name) {
-      this.ritCreateComponent.ritNameErrorMessage = this.formatFieldError(fields.name);
-    }
-    if (fields.details) {
-      this.ritCreateComponent.detailsErrorMessage = this.formatFieldError(fields.details);
-    }
-    if (fields.tags) {
-      this.ritCreateComponent.tagsErrorMessage = this.formatFieldError(fields.tags);
-    }
-  }
-
-  private formatFieldError(fieldError: string | string[]): string {
-    return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
   }
 
   private loadRits(): void {

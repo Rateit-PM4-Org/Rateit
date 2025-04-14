@@ -14,6 +14,10 @@ export class RitService {
     return this.apiService.post('/rit/create', rit);
   }
 
+  updateRit(rit: Rit, ritId: string): Observable<Rit> {
+    return this.apiService.put('/rit/update/' + ritId, rit);
+  }
+
   getAllRits(): Observable<Rit[]> {
     return this.apiService.get('/rit/rits');
   }
