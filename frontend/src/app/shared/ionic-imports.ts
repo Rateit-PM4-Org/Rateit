@@ -24,9 +24,12 @@ import {
   IonModal,
   IonNav,
   IonNote,
+  IonRefresher,
+  IonRefresherContent,
   IonRippleEffect,
   IonRouterOutlet,
   IonRow,
+  IonSearchbar,
   IonSegment,
   IonSegmentButton,
   IonSegmentContent,
@@ -40,10 +43,6 @@ import {
   IonTitle,
   IonToast,
   IonToolbar,
-  IonNote,
-  IonSearchbar,
-  IonRefresher,
-  IonRefresherContent,
 } from '@ionic/angular/standalone';
 
 export const IonicStandaloneStandardImports = [

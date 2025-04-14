@@ -5,6 +5,7 @@ import { IonBackButton, IonInput, ToastController, ViewWillEnter } from '@ionic/
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
 import { Rit } from '../../../model/rit';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-rit-create',
@@ -21,7 +22,7 @@ export class RitCreateComponent implements ViewWillEnter {
     private readonly toastController: ToastController,
   ) { }
 
-  mode?: 'create' | 'edit' | 'view';
+  mode?: 'create' | 'edit' | 'view' = 'create';
   @Input() ritId: string | undefined;
 
   tags: string[] = []
@@ -43,29 +44,50 @@ export class RitCreateComponent implements ViewWillEnter {
         this.details = rit.details ?? '';
         this.tags = [...(rit.tags ?? [])];
       });
-    } else {
-      this.mode = 'create';
     }
   }
 
-  confirmEdit() {
-    this.ritService.updateRit({
-      name: this.ritName,
-      details: this.details,
-      tags: this.tags
-    }, this.ritId!).subscribe({
-      next: (rit) => this.handleSuccess(rit),
+  updateRit() {
+    this.ritService.updateRit(this.buildRequest(), this.ritId!).subscribe({
+      next: (rit) => this.handleSuccess(rit, 'Rit updated sucessfully!'),
       error: (err) => this.handleError(err),
     });
   }
 
-  private handleSuccess(rit: Rit) {
+  createRit(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.ritService.createRit(this.buildRequest()).subscribe({
+        next: (rit) => {
+          this.handleSuccess(rit, 'Rit created sucessfully!');
+          resolve(true);
+        },
+        error: (err) => {
+          this.handleError(err);
+          reject(false);
+        },
+      });
+    });
+  }
+
+  private buildRequest(): Rit {
+    return {
+      name: this.ritName,
+      details: this.details,
+      tags: this.tags ?? [],
+    };
+  }
+
+  private handleSuccess(rit: Rit, toastMessage: string) {
     this.ritName = rit.name;
     this.details = rit.details ?? '';
     this.tags = [...(rit.tags ?? [])];
 
-    this.showSuccessToast('Rit created updated!');
-    this.mode = 'view';
+    this.showSuccessToast(toastMessage);
+    this.ritService.triggerRitsReload().subscribe({});
+
+    if (this.mode !== 'create') {
+      this.mode = 'view';
+    }
   }
 
   private handleError(err: any) {
@@ -76,6 +98,18 @@ export class RitCreateComponent implements ViewWillEnter {
       this.setFieldErrorMessages(fields);
     } else {
       this.showErrorToast(baseError);
+    }
+  }
+
+  private setFieldErrorMessages(fields: any) {
+    if (fields.name) {
+      this.ritNameErrorMessage = this.formatFieldError(fields.name);
+    }
+    if (fields.details) {
+      this.detailsErrorMessage = this.formatFieldError(fields.details);
+    }
+    if (fields.tags) {
+      this.tagsErrorMessage = this.formatFieldError(fields.tags);
     }
   }
 
@@ -99,18 +133,6 @@ export class RitCreateComponent implements ViewWillEnter {
     });
 
     await toast.present();
-  }
-
-  public setFieldErrorMessages(fields: any) {
-    if (fields.name) {
-      this.ritNameErrorMessage = this.formatFieldError(fields.name);
-    }
-    if (fields.details) {
-      this.detailsErrorMessage = this.formatFieldError(fields.details);
-    }
-    if (fields.tags) {
-      this.tagsErrorMessage = this.formatFieldError(fields.tags);
-    }
   }
 
   private formatFieldError(fieldError: string | string[]): string {

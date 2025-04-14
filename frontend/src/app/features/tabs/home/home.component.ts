@@ -117,35 +117,9 @@ export class HomeComponent implements ViewWillEnter {
   };
 
   async confirm() {
-    const request = this.buildRequest();
-
-    this.ritService.createRit(request).subscribe({
-      next: () => this.handleRitCreateSuccess(),
-      error: (err) => this.handleRitCreateError(err),
-    });
-  }
-
-  private buildRequest(): Rit {
-    return {
-      name: this.ritCreateComponent.ritName,
-      details: this.ritCreateComponent.details,
-      tags: this.ritCreateComponent.tags ?? [],
-    };
-  }
-
-  private handleRitCreateSuccess() {
-    this.showSuccessToast('Rit created successfully!');
-    this.modal.dismiss(null, 'confirm');
-  }
-
-  private handleRitCreateError(err: any) {
-    const baseError = err.error?.error ?? 'Unknown error';
-    const fields = err.error?.fields;
-
-    if (fields) {
-      this.ritCreateComponent.setFieldErrorMessages(fields);
-    } else {
-      this.showErrorToast(baseError);
+    const success = await this.ritCreateComponent.createRit();
+    if (success) {
+      this.modal.dismiss(null, 'confirm');
     }
   }
 
@@ -159,7 +133,6 @@ export class HomeComponent implements ViewWillEnter {
     });
   }
 
-
   private handleLoadRitsError(err: any) {
     const baseError = err.error?.error ?? 'Unknown error';
     this.showErrorToast(baseError);
@@ -172,6 +145,7 @@ export class HomeComponent implements ViewWillEnter {
   goToRitsTab() {
     this.router.navigate(['/rits']);
   }
+
   handleRefresh(event: CustomEvent) {
     this.ritService.triggerRitsReload().subscribe({
       next: () => {

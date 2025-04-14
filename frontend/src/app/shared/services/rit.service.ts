@@ -29,8 +29,16 @@ export class RitService {
     )
   }
 
+  updateRit(rit: Rit, ritId: string): Observable<Rit> {
+    return this.apiService.put('/rit/update/' + ritId, rit);
+  }
+
   getRits(): Observable<Rit[]> {
     return this.rits.asObservable();
+  }
+
+  getRit(ritId: string): Observable<Rit> {
+    return this.apiService.get('/rit/read/' + ritId);
   }
 
   getRitById(id: string): Observable<Rit|null> {
@@ -61,12 +69,5 @@ export class RitService {
       })
     );
   }
-
-  updateRit(rit: Rit, ritId: string): Observable<Rit> {
-    return this.apiService.put('/rit/update/' + ritId, rit);
-  }
-
-  getRit(ritId: string): Observable<Rit> {
-    return this.apiService.get('/rit/read/' + ritId);
-  }
+  
 }

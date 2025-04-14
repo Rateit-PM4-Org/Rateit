@@ -6,7 +6,7 @@
     <ion-title>Rit</ion-title>
 
     <ion-buttons slot="end" *ngIf="mode === 'edit'">
-      <ion-button [disabled]="!ritName?.trim()" (click)="confirmEdit()">
+      <ion-button [disabled]="!ritName?.trim()" (click)="updateRit()">
         Confirm
       </ion-button>
     </ion-buttons>

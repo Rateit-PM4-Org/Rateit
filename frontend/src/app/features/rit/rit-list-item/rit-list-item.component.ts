@@ -40,7 +40,7 @@ export class RitListItemComponent {
     this.router.navigate(['/ratings', this.rit.id]);
   }
 
-  goToRit() {
+  navigateToRit(): void {
     this.router.navigate(['/rits/view/' + this.rit.id]);
   }
 
