@@ -5,6 +5,9 @@ export type Rating = {
     email: string;
     displayName: string;
   };
+  rit?: {
+    id?: string|undefined;
+  };
   value?: number;
   positiveComment?: string;
   negativeComment?: string;

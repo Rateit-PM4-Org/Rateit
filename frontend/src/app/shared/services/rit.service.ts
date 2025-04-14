@@ -3,11 +3,13 @@ import { BehaviorSubject, map, Observable, Subject, tap } from 'rxjs';
 import { Rit } from '../../model/rit';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
+import { Rating } from '../../model/rating';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RitService {
+
   private readonly rits = new BehaviorSubject<Rit[]>([]);
   private readonly ritsErrorStream = new Subject<any>();
 
@@ -23,6 +25,14 @@ export class RitService {
 
   createRit(rit: Rit): Observable<any> {
     return this.apiService.post('/rit/create', rit).pipe(
+      tap(() => {
+        this.triggerRitsReload().subscribe({});
+      })
+    )
+  }
+
+  createRating(rating: Rating): Observable<any> {
+    return this.apiService.post('/rit/rate', { rating}).pipe(
       tap(() => {
         this.triggerRitsReload().subscribe({});
       })

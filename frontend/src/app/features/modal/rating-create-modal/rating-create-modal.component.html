@@ -1,0 +1,24 @@
+<ion-modal [canDismiss]="canDismiss" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="modal.dismiss(null, 'cancel')" (keydown.enter)="modal.dismiss(null, 'cancel')">
+            Cancel
+          </ion-button>
+        </ion-buttons>
+        <ion-title>Rit Create</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="confirm()" (keydown.enter)="confirm()"
+            [strong]="true">
+            Confirm
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <app-rate #rateCreate></app-rate>
+    </ion-content>
+  </ng-template>
+</ion-modal>
