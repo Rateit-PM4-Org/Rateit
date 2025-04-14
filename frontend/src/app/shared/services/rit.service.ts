@@ -36,7 +36,7 @@ export class RitService {
   getRitById(id: string): Observable<Rit|null> {
     return this.getRits().pipe(
       map(rits => rits.find(rit => rit.id === id)),
-      map(rit => rit ? rit : null)
+      map(rit => rit ?? null)
     );
   }
 

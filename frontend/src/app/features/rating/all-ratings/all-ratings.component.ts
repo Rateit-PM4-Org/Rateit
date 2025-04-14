@@ -5,7 +5,6 @@ import { ToastController } from '@ionic/angular/standalone';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {Rating} from '../../../model/rating';
 import {RatingListItemComponent} from '../rating-list-item/rating-list-item.component';
-import { Rit } from '../../../model/rit';
 import { RitService } from '../../../shared/services/rit.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -53,11 +52,6 @@ export class AllRatingsComponent {
   private handleError(err: any) {
     this.ratings = [];
     const baseError = err.error?.error ?? 'Unknown error';
-    const fields = err.error?.fields;
-
-    // if (fields) {
-    // Handle field-specific errors
-    // }
     this.showErrorToast(baseError);
   }
 

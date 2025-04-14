@@ -31,7 +31,7 @@ export class RitListItemComponent {
       return new Date(prev.createdAt!) > new Date(current.createdAt!) ? prev : current;
     });
 
-    return latestRating.value || 0;
+    return latestRating.value ?? 0;
   }
 
   navigateToRatings(): void {
