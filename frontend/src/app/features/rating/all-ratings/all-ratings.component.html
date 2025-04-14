@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Ratings</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding-horizontal ion-padding-top" scroll-y="true">
+  <ion-text *ngIf="ratings.length==0">
+    No ratings present for this Rit.
+  </ion-text>
+  <ion-list>
+    <app-rating-list-item *ngFor="let rating of ratings" [rating]="rating">
+    </app-rating-list-item>
+  </ion-list>
+</ion-content>

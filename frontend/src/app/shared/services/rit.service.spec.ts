@@ -187,21 +187,55 @@ describe('RitService', () => {
   it('should reload rits without emitting errors on successful reload', (done) => {
     let service = TestBed.inject(RitService);
     const apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
-    
+
     const mockRits = [{ name: 'newRit', details: 'fresh details', tags: ['tag3', 'tag4'] }];
     apiServiceSpy.get.and.returnValue(of(mockRits));
-    
+
     const errorSpy = jasmine.createSpy('errorSpy');
     service.getRitsErrorStream().subscribe(errorSpy);
-    
+
     service.getRits().pipe(skip(1)).subscribe(rits => {
       expect(rits).toEqual(mockRits);
-      
+
       expect(errorSpy).not.toHaveBeenCalled();
       done();
     });
-    
+
     service.triggerRitsReload().subscribe();
   });
+
+  it('should return specific rit by ID from getRitById', (done) => {
+    let service = TestBed.inject(RitService);
+    const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
+
+    const mockRit: Rit = { id: '1', name: 'testRit', details: 'some details', tags: ['tag1'] };
+    const mockRits = [mockRit, { id: '2', name: 'anotherRit', details: 'other details', tags: ['tag2'] }];
+    apiServiceSpy.get.and.returnValue(of(mockRits));
+
+    service.getRitById("1").pipe(skip(1)).subscribe(rits => {
+      expect(rits).toEqual(mockRit);
+      done();
+    });
+
+    service.triggerRitsReload().subscribe();
+  }
+  );
+
+  it('should return null if id not present from getRitById', (done) => {
+    let service = TestBed.inject(RitService);
+    const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
+
+    const mockRit: Rit = { id: '1', name: 'testRit', details: 'some details', tags: ['tag1'] };
+    const mockRits = [mockRit, { id: '2', name: 'anotherRit', details: 'other details', tags: ['tag2'] }];
+    apiServiceSpy.get.and.returnValue(of(mockRits));
+
+    service.getRitById("10").pipe(skip(1)).subscribe(rits => {
+      expect(rits).toEqual(null);
+      done();
+    });
+
+    service.triggerRitsReload().subscribe();
+  }
+  );
 
 });

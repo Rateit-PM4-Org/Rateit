@@ -17,6 +17,12 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'ratings/:ritId',
+        pathMatch: 'full',
+        loadComponent: () => import('./features/rating/all-ratings/all-ratings.component').then((m) => m.AllRatingsComponent),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'login',
         loadComponent: () => import('./features/tabs/login/login.component').then((m) => m.LoginComponent),
       },
