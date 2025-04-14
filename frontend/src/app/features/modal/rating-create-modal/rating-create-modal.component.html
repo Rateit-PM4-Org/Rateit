@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-title>Rit Create</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="confirm()" (keydown.enter)="confirm()"
+          <ion-button [disabled]="rateComponent?rateComponent.rating===0:true" (click)="confirm()" (keydown.enter)="confirm()"
             [strong]="true">
             Confirm
           </ion-button>

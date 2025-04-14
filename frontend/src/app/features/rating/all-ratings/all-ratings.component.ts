@@ -9,7 +9,7 @@ import { RitService } from '../../../shared/services/rit.service';
 import { ActivatedRoute } from '@angular/router';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
 import { Rit } from '../../../model/rit';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-all-rating',
@@ -25,6 +25,8 @@ export class AllRatingsComponent {
   rit: Observable<Rit | null>;
   ratings: Rating[] = [];
 
+  private ritSubscription: Subscription | null = null;
+
   constructor(
     private readonly ritService: RitService,
     private readonly toastController: ToastController,
@@ -36,6 +38,13 @@ export class AllRatingsComponent {
   ionViewWillEnter(): void {
     this.loadRatings(this.activatedRoute.snapshot.params['ritId']);
   }
+
+  ionViewDidLeave(): void {
+    if (this.ritSubscription) {
+      this.ritSubscription.unsubscribe();
+    }
+  }
+
 
   loadRatings(ritId: string): void {
     this.ritService.getRitById(ritId).subscribe({
