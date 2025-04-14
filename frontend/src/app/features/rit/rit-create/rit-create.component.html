@@ -58,7 +58,7 @@
 
     <ion-card-content>
       <ion-textarea [readonly]="mode === 'view'" [disabled]="mode === 'view'" [value]="details"
-        (ionInput)="setDetails($event)">
+        (ionInput)="setDetails($event)" placeholder="Details..." [autoGrow]="true">
       </ion-textarea>
       <ion-text color="danger" *ngIf="detailsErrorMessage">
         <p>{{detailsErrorMessage}}</p>
