@@ -4,7 +4,6 @@ import ch.zhaw.rateit.api.logic.rit.entity.Rating;
 import ch.zhaw.rateit.api.logic.rit.entity.RatingCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
-import ch.zhaw.rateit.api.logic.rit.service.RatingService;
 import ch.zhaw.rateit.api.logic.rit.service.RitService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +25,10 @@ import java.util.List;
 public class RitController {
 
     private final RitService ritService;
-    private final RatingService ratingService;
 
     @Autowired
-    public RitController(RitService ritService, RatingService ratingService) {
+    public RitController(RitService ritService) {
         this.ritService = ritService;
-        this.ratingService = ratingService;
     }
 
     @PostMapping(path = "/create")
@@ -61,10 +58,4 @@ public class RitController {
     public Rating rate(@AuthenticationPrincipal User user, @RequestBody @Validated RatingCreateRequest request) {
         return ritService.rate(user, request);
     }
-
-    @GetMapping(path = "/ratings")
-    public List<Rating> ratings(@RequestBody Rit rit) {
-        return ratingService.getAllRatingByRit(rit);
-    }
-
 }

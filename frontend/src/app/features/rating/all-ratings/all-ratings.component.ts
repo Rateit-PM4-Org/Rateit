@@ -52,7 +52,14 @@ export class AllRatingsComponent {
     if (data.length === 0) {
       return;
     }
-    this.ratings = data;
+    this.ratings = [...data];
+    // sort by updatedAt descending
+    this.ratings.sort((a, b) => {
+      const dateA = new Date(a.updatedAt ?? 0);
+      const dateB = new Date(b.updatedAt ?? 0);
+      return dateB.getTime() - dateA.getTime();
+    });
+
   }
 
   private handleError(err: any) {
