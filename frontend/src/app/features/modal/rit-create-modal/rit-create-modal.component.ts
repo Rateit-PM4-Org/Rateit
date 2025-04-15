@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular/standalone';
 import { IonModal, ToastController } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
@@ -16,7 +16,8 @@ import { Rit } from '../../../model/rit';
 })
 export class RitCreateModalComponent implements OnInit {
     @ViewChild(IonModal) modal!: IonModal;
-    @ViewChild('ritCreate') ritCreateComponent!: RitCreateComponent;
+    @ViewChild('content') content!: ModalContent;
+    protected isDisabled: boolean = true;
     protected presentingElement!: HTMLElement | null;
 
   constructor(private readonly toastController: ToastController, 
@@ -75,9 +76,19 @@ export class RitCreateModalComponent implements OnInit {
     };
   
     async confirm() {
-      if (await this.ritCreateComponent.createRit()) {
+      if (await this.content.submit()) {
         this.modal.dismiss(null, 'confirm');
       }
     }
 
+    setDisabled(isDisabled: boolean) {
+      this.isDisabled = isDisabled;
+    }
+
+
+}
+
+export interface ModalContent {
+  submit: () => Promise<boolean>,
+  isDisabled: EventEmitter<boolean>,
 }

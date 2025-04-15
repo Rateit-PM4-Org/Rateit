@@ -54,8 +54,8 @@ describe('RitCreateModalComponent', () => {
     const dismissSpy = jasmine.createSpy();
     component.modal = { dismiss: dismissSpy } as any;
 
-    component.ritCreateComponent = {
-      createRit: () => Promise.resolve(true)
+    component.content = {
+      submit: () => Promise.resolve(true)
     } as any;
 
     await component.confirm();
@@ -67,8 +67,8 @@ describe('RitCreateModalComponent', () => {
     const dismissSpy = jasmine.createSpy();
     component.modal = { dismiss: dismissSpy } as any;
 
-    component.ritCreateComponent = {
-      createRit: () => Promise.resolve(false)
+    component.content = {
+      submit: () => Promise.resolve(false)
     } as any;
 
     await component.confirm();
@@ -132,8 +132,8 @@ describe('RitCreateModalComponent', () => {
     const dismissSpy = jasmine.createSpy();
     component.modal = { dismiss: dismissSpy } as any;
 
-    component.ritCreateComponent = {
-      createRit: () => Promise.resolve(true)
+    component.content = {
+      submit: () => Promise.resolve(true)
     } as any;
 
     await component.confirm();
@@ -145,8 +145,8 @@ describe('RitCreateModalComponent', () => {
     const dismissSpy = jasmine.createSpy();
     component.modal = { dismiss: dismissSpy } as any;
 
-    component.ritCreateComponent = {
-      createRit: () => Promise.resolve(false)
+    component.content = {
+      submit: () => Promise.resolve(false)
     } as any;
 
     await component.confirm();
