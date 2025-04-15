@@ -46,7 +46,7 @@ export class HomeComponent implements ViewWillEnter {
   ) { }
 
   ionViewWillEnter() {
-    this.presentingElement = document.querySelector('.ion-page');
+    this.presentingElement = document.querySelector('ion-page');
     this.isLoggedIn$ = this.userService.isLoggedIn();
     this.ritSubscription = this.ritService.getRits().subscribe({
       next: (data) => {
