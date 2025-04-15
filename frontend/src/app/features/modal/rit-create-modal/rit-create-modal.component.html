@@ -1,4 +1,4 @@
-<ion-modal [canDismiss]="canDismiss" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]">
+<ion-modal [canDismiss]="canDismiss" [presentingElement]="presentingElement">
   <ng-template>
     <ion-header>
       <ion-toolbar>
@@ -17,7 +17,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content>
       <app-rit-create #ritCreate></app-rit-create>
     </ion-content>
   </ng-template>

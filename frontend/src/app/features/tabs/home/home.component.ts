@@ -86,37 +86,6 @@ export class HomeComponent implements ViewWillEnter {
   }
 
 
-  canDismiss = async (data: any, role: string) => {
-    if (role === 'cancel') {
-      const actionSheet = await this.actionSheetCtrl.create({
-        header: 'Are you sure you want to cancel?',
-        buttons: [
-          {
-            text: 'Yes',
-            role: 'confirm',
-          },
-          {
-            text: 'No',
-            role: 'cancel',
-          },
-        ],
-      });
-
-      await actionSheet.present();
-      const { role: actionRole } = await actionSheet.onWillDismiss();
-
-      return actionRole === 'confirm';
-    }
-
-    return true;
-  };
-
-  async confirm() {
-    if (await this.ritCreateComponent.createRit()) {
-      this.modal.dismiss(null, 'confirm');
-    }
-  }
-
   private handleLoadRitsSuccess(data: Rit[]) {
     this.rits = [...data];
     // sotr by lastInteractionAt descending

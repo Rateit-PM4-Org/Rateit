@@ -19,6 +19,7 @@ export class RatingCreateModalComponent  implements OnInit {
   @Input() rit!: Observable<Rit|null> | null;
   private ritSubscription: any;
   protected currentRit: Rit|null = null;
+  protected presentingElement!: HTMLElement | null;
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild(RateComponent) rateComponent!: RateComponent
 
@@ -30,6 +31,7 @@ ngOnInit() {
   this.ritSubscription = this.rit?.subscribe((data) => {
     this.currentRit = data;
   })
+  this.presentingElement = document.querySelector('ion-page');
 }
 
 ngOnDestroy() {
