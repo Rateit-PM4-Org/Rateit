@@ -19,6 +19,7 @@ export const routes: Routes = [
       {
         path: 'rits/view/:ritId',
         loadComponent: () => import('./features/rit/rit-create/rit-create.component').then(m => m.RitCreateComponent),
+        canActivate: [AuthGuard],
         data: { mode: 'view' }
       },
       {
