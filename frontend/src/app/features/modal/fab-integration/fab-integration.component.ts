@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { FabButton, FabComponent } from '../fab/fab.component';
-import { RitCreateModalComponent } from '../rit-create-modal/rit-create-modal.component';
+import { ModalViewComponent } from '../modal-view/modal-view.component';
 import { RatingCreateModalComponent } from '../rating-create-modal/rating-create-modal.component';
 import { Rit } from '../../../model/rit';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   selector: 'app-fab-integration',
   templateUrl: './fab-integration.component.html',
   styleUrls: ['./fab-integration.component.scss'],
-  imports: [CommonModule, ...IonicStandaloneStandardImports, FabComponent, RitCreateModalComponent, RatingCreateModalComponent],
+  imports: [CommonModule, ...IonicStandaloneStandardImports, FabComponent, ModalViewComponent, RatingCreateModalComponent],
   standalone: true,
 })
 export class FabIntegrationComponent  implements OnInit {
@@ -19,8 +19,8 @@ export class FabIntegrationComponent  implements OnInit {
   private ritSubscription: any;
   protected currentRit: Rit|null = null;
   @ViewChild(FabComponent) fabComponent!: FabComponent;
-  @ViewChild(RitCreateModalComponent) ritCreateModalComponent!: RitCreateModalComponent;
-  @ViewChild(RatingCreateModalComponent) ratingCreateModalComponent!: RitCreateModalComponent;
+  @ViewChild(ModalViewComponent) ritCreateModalComponent!: ModalViewComponent;
+  @ViewChild(RatingCreateModalComponent) ratingCreateModalComponent!: RatingCreateModalComponent;
 
   protected buttons: FabButton[] = [];
   

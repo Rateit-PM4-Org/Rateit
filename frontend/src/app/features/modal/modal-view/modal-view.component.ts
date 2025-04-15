@@ -3,18 +3,16 @@ import { ActionSheetController } from '@ionic/angular/standalone';
 import { IonModal, ToastController } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { CommonModule } from '@angular/common';
-import { RitService } from '../../../shared/services/rit.service';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
-import { Rit } from '../../../model/rit';
 
 @Component({
-  selector: 'app-rit-create-modal',
-  templateUrl: './rit-create-modal.component.html',
-  styleUrls: ['./rit-create-modal.component.scss'],
+  selector: 'app-modal-view',
+  templateUrl: './modal-view.component.html',
+  styleUrls: ['./modal-view.component.scss'],
   imports: [CommonModule, ...IonicStandaloneStandardImports, RitCreateComponent],
   standalone: true,
 })
-export class RitCreateModalComponent implements OnInit {
+export class ModalViewComponent implements OnInit {
     @ViewChild(IonModal) modal!: IonModal;
     @ViewChild('content') content!: ModalContent;
     protected isDisabled: boolean = true;

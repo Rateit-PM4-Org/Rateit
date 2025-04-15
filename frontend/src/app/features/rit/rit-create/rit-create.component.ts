@@ -5,7 +5,7 @@ import { IonBackButton, IonInput, ToastController, ViewWillEnter } from '@ionic/
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
-import { ModalContent } from '../../modal/rit-create-modal/rit-create-modal.component';
+import { ModalContent } from '../../modal/modal-view/modal-view.component';
 
 @Component({
   selector: 'app-rit-create',

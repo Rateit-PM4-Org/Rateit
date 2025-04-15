@@ -7,14 +7,14 @@ import { of, throwError } from 'rxjs';
 import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
-import { RitCreateModalComponent } from './rit-create-modal.component';
+import { ModalViewComponent } from './modal-view.component';
 const userServiceMock = {
   isLoggedIn: () => of(true)
 };
 
-describe('RitCreateModalComponent', () => {
-  let component: RitCreateModalComponent;
-  let fixture: ComponentFixture<RitCreateModalComponent>;
+describe('ModalViewComponent', () => {
+  let component: ModalViewComponent;
+  let fixture: ComponentFixture<ModalViewComponent>;
   let ritServiceSpy: jasmine.SpyObj<RitService>;
   let toastControllerSpy: jasmine.SpyObj<ToastController>;
   let actionSheetControllerSpy: jasmine.SpyObj<ActionSheetController>;
@@ -27,7 +27,7 @@ describe('RitCreateModalComponent', () => {
     const actionSheetSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
 
     TestBed.configureTestingModule({
-      imports: [RitCreateModalComponent, IonicModule.forRoot(),
+      imports: [ModalViewComponent, IonicModule.forRoot(),
         NoopAnimationsModule],
       providers: [
         { provide: UserService, useValue: userServiceMock },
@@ -38,7 +38,7 @@ describe('RitCreateModalComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(RitCreateModalComponent);
+    fixture = TestBed.createComponent(ModalViewComponent);
     component = fixture.componentInstance;
     ritServiceSpy = TestBed.inject(RitService) as jasmine.SpyObj<RitService>;
     toastControllerSpy = TestBed.inject(ToastController) as jasmine.SpyObj<ToastController>;
