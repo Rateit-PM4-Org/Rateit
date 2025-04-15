@@ -24,11 +24,11 @@ export class RitService {
   }
 
   createRit(rit: Rit): Observable<any> {
-    return this.apiService.post('/rit/create', rit).pipe(
-      tap(() => {
-        this.triggerRitsReload().subscribe({});
-      })
-    )
+    return this.apiService.post('/rit/create', rit);
+  }
+
+  updateRit(rit: Rit, ritId: string): Observable<Rit> {
+    return this.apiService.put('/rit/update/' + ritId, rit);
   }
 
   createRating(rating: Rating): Observable<any> {
@@ -43,13 +43,16 @@ export class RitService {
     return this.rits.asObservable();
   }
 
+  getRit(ritId: string): Observable<Rit> {
+    return this.apiService.get('/rit/read/' + ritId);
+  }
+
   getRitById(id: string): Observable<Rit|null> {
     return this.getRits().pipe(
       map(rits => rits.find(rit => rit.id === id)),
       map(rit => rit ?? null)
     );
   }
-
 
   getRitsErrorStream(): Observable<any> {
     return this.ritsErrorStream.asObservable();
@@ -72,4 +75,5 @@ export class RitService {
       })
     );
   }
+  
 }

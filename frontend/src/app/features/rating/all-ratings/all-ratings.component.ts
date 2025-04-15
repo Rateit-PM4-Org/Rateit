@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
-import { ToastController } from '@ionic/angular/standalone';
+import { IonBackButton,ToastController } from '@ionic/angular/standalone';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {Rating} from '../../../model/rating';
 import {RatingListItemComponent} from '../rating-list-item/rating-list-item.component';
@@ -17,7 +17,7 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./all-ratings.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports, RatingListItemComponent, FabIntegrationComponent
+    CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports, RatingListItemComponent, FabIntegrationComponent, IonBackButton
   ],
 })
 

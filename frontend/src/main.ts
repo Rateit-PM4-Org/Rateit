@@ -4,7 +4,7 @@ import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { addIcons } from 'ionicons';
-import { addOutline, chevronForward, close, home, homeOutline, logInOutline, personOutline, pricetagOutline, star, starOutline } from 'ionicons/icons';
+import { addOutline, chevronForward, close, createOutline, home, homeOutline, logInOutline, personOutline, pricetagOutline, star, starOutline } from 'ionicons/icons';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
@@ -22,13 +22,14 @@ bootstrapApplication(AppComponent, {
 
 addIcons({
   home,
-  homeOutline, 
+  homeOutline,
   personOutline,
   addOutline,
   pricetagOutline,
   star,
-  starOutline, 
+  starOutline,
   close,
   logInOutline,
-  chevronForward
+  chevronForward,
+  createOutline
 });

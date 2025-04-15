@@ -3,10 +3,12 @@ import { IonicModule } from '@ionic/angular';
 import { RitListItemComponent } from './rit-list-item.component';
 import { Rit } from '../../../model/rit';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 describe('RitListItemComponent', () => {
   let component: RitListItemComponent;
   let fixture: ComponentFixture<RitListItemComponent>;
+  let routerSpy: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigate']);
 
   const testRit: Rit = {
     id: '1',
@@ -19,6 +21,7 @@ describe('RitListItemComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [RitListItemComponent, IonicModule.forRoot()],
+      providers: [{ provide: Router, useValue: routerSpy }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RitListItemComponent);
@@ -61,6 +64,16 @@ describe('RitListItemComponent', () => {
   it('should return 0 if no ratings are provided', () => {
     const latestRatingValue = component.calculateLatestRatingValue([]);
     expect(latestRatingValue).toBe(0);
+  });
+
+  it('should navigate to ratings with correct ID', () => {
+    component.navigateToRatings();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/rits/ratings', testRit.id]);
+  });
+
+  it('should navigate to rit view with correct ID', () => {
+    component.navigateToRit();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/rits/view', testRit.id]);
   });
 
 

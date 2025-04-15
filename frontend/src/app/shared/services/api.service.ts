@@ -35,6 +35,17 @@ export class ApiService {
     );
   }
 
+  put(path: string, body: Object): Observable<any> {
+    return this.http.put<any>(this.baseEndpoint + path, body, this.addTokenHeader()).pipe(
+      catchError(error => {
+        if (error.status === 403) {
+          this.authService.logout();
+        }
+        throw error;
+      })
+    );
+  }
+
   addTokenHeader() {
     if (this.authService.getToken() != null) {
       return { headers: { Authorization: `Bearer ${this.authService.getToken()}` } };

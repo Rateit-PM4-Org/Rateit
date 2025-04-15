@@ -6,7 +6,6 @@ import { ActionSheetController, ToastController } from '@ionic/angular/standalon
 import { of, throwError } from 'rxjs';
 import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
-import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 import { HomeComponent } from './home.component';
 
 const userServiceMock = {
@@ -61,6 +60,106 @@ describe('HomeComponent', () => {
     expect(title?.textContent).toContain('Home');
   });
 
+
+  it('should dismiss modal if createRit returns true', async () => {
+    const dismissSpy = jasmine.createSpy();
+    component.modal = { dismiss: dismissSpy } as any;
+
+    component.ritCreateComponent = {
+      createRit: () => Promise.resolve(true)
+    } as any;
+
+    await component.confirm();
+
+    expect(dismissSpy).toHaveBeenCalledWith(null, 'confirm');
+  });
+
+  it('should not dismiss modal if createRit returns false', async () => {
+    const dismissSpy = jasmine.createSpy();
+    component.modal = { dismiss: dismissSpy } as any;
+
+    component.ritCreateComponent = {
+      createRit: () => Promise.resolve(false)
+    } as any;
+
+    await component.confirm();
+
+    expect(dismissSpy).not.toHaveBeenCalled();
+  });
+
+  it('should call modal.dismiss with null and "cancel" when Cancel button logic is used', async () => {
+    let dismissCalled = false;
+    let receivedData = null;
+    let receivedRole = '';
+
+    component.modal = {
+      dismiss: async (data: any, role: string) => {
+        dismissCalled = true;
+        receivedData = data;
+        receivedRole = role;
+      }
+    } as any;
+
+    await component.modal.dismiss(null, 'cancel');
+
+    expect(dismissCalled).toBeTrue();
+    expect(receivedData).toBeNull();
+    expect(receivedRole).toBe('cancel');
+  });
+
+  it('canDismiss returns true if role is not cancel', async () => {
+    const result = await component.canDismiss({}, 'confirm');
+    expect(result).toBeTrue();
+  });
+
+  it('canDismiss returns true if actionSheet returns confirm', async () => {
+    const present = jasmine.createSpy().and.returnValue(Promise.resolve());
+    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({ role: 'confirm' }));
+    actionSheetControllerSpy.create.and.returnValue(Promise.resolve({
+      present,
+      onWillDismiss
+    } as any));
+
+    const result = await component.canDismiss({}, 'cancel');
+    expect(result).toBeTrue();
+    expect(present).toHaveBeenCalled();
+    expect(onWillDismiss).toHaveBeenCalled();
+  });
+
+  it('canDismiss returns false if actionSheet returns cancel', async () => {
+    const present = jasmine.createSpy().and.returnValue(Promise.resolve());
+    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({ role: 'cancel' }));
+    actionSheetControllerSpy.create.and.returnValue(Promise.resolve({
+      present,
+      onWillDismiss
+    } as any));
+
+    const result = await component.canDismiss({}, 'cancel');
+    expect(result).toBeFalse();
+  });
+
+  it('should render ion-fab-button when logged in', async () => {
+    fixture.componentInstance.ionViewWillEnter();
+    fixture.detectChanges();
+
+    const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
+    expect(fabButton).toBeTruthy();
+  });
+
+  it('should not render ion-fab-button when not logged in', async () => {
+    userServiceMock.isLoggedIn = () => of(false);
+
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+    fixture.componentInstance.ionViewWillEnter();
+    fixture.detectChanges();
+
+    const fabButton = fixture.nativeElement.querySelector('[data-testid="rit-create-button"]');
+    expect(fabButton).toBeFalsy();
+
+    userServiceMock.isLoggedIn = () => of(true)
+  });
+
   it('should return the latest 10 rits sorted by lastInteractionAt descending', () => {
     const now = new Date().getTime();
     const ritsMock = Array.from({ length: 15 }, (_, i) => ({
@@ -69,12 +168,12 @@ describe('HomeComponent', () => {
       tags: [],
       lastInteractionAt: now + i * 1000
     })) as any[];
-  
+
     component['rits'] = ritsMock;
     component.numberOfLatestRitsToShow = 10;
-  
+
     const latest = component.latestRits();
-  
+
     expect(latest.length).toBe(10);
     expect(latest[0].name).toBe('rit-0');
     expect(latest[9].name).toBe('rit-9');
@@ -89,10 +188,10 @@ describe('HomeComponent', () => {
       tags: [],
       lastInteractionAt: new Date(now.getTime() - i * 1000).toISOString(),
     }));
-  
+
     ritServiceSpy.getRits = jasmine.createSpy().and.returnValue(of(rits));
     component.ionViewWillEnter();
-  
+
     expect(component.latestRits().length).toBe(10);
   });
 
@@ -114,11 +213,11 @@ describe('HomeComponent', () => {
     const button = fixture.nativeElement.querySelector('[data-testid="show-all-rits"]');
     expect(button).toBeTruthy();
   });
-  
+
   it('should call goToRitsTab() when Show all button is clicked', () => {
     fixture.componentInstance.ionViewWillEnter();
     fixture.detectChanges();
-    
+
     spyOn(component, 'goToRitsTab');
     const button = fixture.nativeElement.querySelector('[data-testid="show-all-rits"]');
     button.click();
@@ -132,18 +231,18 @@ describe('HomeComponent', () => {
         complete: jasmine.createSpy('complete')
       }
     };
-    
+
     // Mock the toast
     const toast = { present: jasmine.createSpy('present') };
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
-    
+
     // Setup ritService to return success
     ritServiceSpy.triggerRitsReload = jasmine.createSpy().and.returnValue(of({}));
-    
+
     // Call the method
     component.handleRefresh(mockEvent as any);
     tick();
-    
+
     // Verify the behavior
     expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
     expect(mockEvent.target.complete).toHaveBeenCalled();
@@ -163,16 +262,16 @@ describe('HomeComponent', () => {
         complete: jasmine.createSpy('complete')
       }
     };
-    
+
     // Setup ritService to return error
     ritServiceSpy.triggerRitsReload = jasmine.createSpy().and.returnValue(
       throwError(() => new Error('Failed to reload'))
     );
-    
+
     // Call the method
     component.handleRefresh(mockEvent as any);
     tick();
-    
+
     // Verify the behavior - refresher should complete even on error
     expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
     expect(mockEvent.target.complete).toHaveBeenCalled();

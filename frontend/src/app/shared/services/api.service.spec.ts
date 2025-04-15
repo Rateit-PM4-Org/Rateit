@@ -61,6 +61,21 @@ describe('ApiService', () => {
     req.flush(mockResponse);
   });
 
+  it('should perform a PUT request with the correct headers and body', () => {
+    const mockBody = { key: 'value' };
+    const mockResponse = { success: true };
+
+    service.put('/test/12', mockBody).pipe(first()).subscribe(response => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/test/12`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.headers.get('Authorization')).toBe('Bearer token');
+    expect(req.request.body).toEqual(mockBody);
+    req.flush(mockResponse);
+  });
+
   it('should call AuthService.logout on 403 error for GET request', () => {
     const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     service.get('/test').pipe(first()).subscribe({

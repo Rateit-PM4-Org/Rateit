@@ -41,7 +41,7 @@ export class HomeComponent implements ViewWillEnter {
 
   ionViewWillEnter() {
     this.isLoggedIn$ = this.userService.isLoggedIn();
-    this.presentingElement = document.querySelector('.ion-page');
+    this.presentingElement = document.querySelector('ion-page');
     this.ritSubscription = this.ritService.getRits().subscribe({
       next: (data) => {
         this.handleLoadRitsSuccess(data);
@@ -85,6 +85,38 @@ export class HomeComponent implements ViewWillEnter {
     await toast.present();
   }
 
+
+  canDismiss = async (data: any, role: string) => {
+    if (role === 'cancel') {
+      const actionSheet = await this.actionSheetCtrl.create({
+        header: 'Are you sure you want to cancel?',
+        buttons: [
+          {
+            text: 'Yes',
+            role: 'confirm',
+          },
+          {
+            text: 'No',
+            role: 'cancel',
+          },
+        ],
+      });
+
+      await actionSheet.present();
+      const { role: actionRole } = await actionSheet.onWillDismiss();
+
+      return actionRole === 'confirm';
+    }
+
+    return true;
+  };
+
+  async confirm() {
+    if (await this.ritCreateComponent.createRit()) {
+      this.modal.dismiss(null, 'confirm');
+    }
+  }
+
   private handleLoadRitsSuccess(data: Rit[]) {
     this.rits = [...data];
     // sotr by lastInteractionAt descending
@@ -94,7 +126,6 @@ export class HomeComponent implements ViewWillEnter {
       return dateB.getTime() - dateA.getTime();
     });
   }
-  
 
   private handleLoadRitsError(err: any) {
     const baseError = err.error?.error ?? 'Unknown error';
@@ -108,6 +139,7 @@ export class HomeComponent implements ViewWillEnter {
   goToRitsTab() {
     this.router.navigate(['/rits']);
   }
+
   handleRefresh(event: CustomEvent) {
     this.ritService.triggerRitsReload().subscribe({
       next: () => {
