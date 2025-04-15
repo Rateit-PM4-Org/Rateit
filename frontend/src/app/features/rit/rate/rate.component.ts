@@ -58,7 +58,7 @@ export class RateComponent implements ModalContent{
     return new Promise((resolve, reject) => {
       this.ritService.createRating(this.buildRequest()).subscribe({
         next: (rit) => {
-          this.handleSuccess(rit, 'Rit created successfully!');
+          this.handleSuccess(rit, 'Rating created successfully!');
           resolve(true);
         },
         error: (err) => {
