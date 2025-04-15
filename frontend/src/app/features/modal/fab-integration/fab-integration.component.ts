@@ -18,12 +18,12 @@ import { RateComponent } from '../../rit/rate/rate.component';
 export class FabIntegrationComponent  implements OnInit {
   @Input() rit!: Observable<Rit|null> | null;
   private ritSubscription: any;
-  protected currentRit: Rit|null = null;
+  currentRit: Rit|null = null;
   @ViewChild(FabComponent) fabComponent!: FabComponent;
   @ViewChild("ritCreateModal") ritCreateModalComponent!: ModalViewComponent;
   @ViewChild("rateModal") ratingCreateModalComponent!: ModalViewComponent;
 
-  protected buttons: FabButton[] = [];
+  buttons: FabButton[] = [];
   
   ngOnInit() {
     this.updateButtons();
