@@ -1,0 +1,33 @@
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tag-input:focus-within {
+  border-bottom: 2px solid var(--ion-color-primary);
+}
+
+ion-chip {
+  white-space: nowrap;
+}
+
+.tag-input {
+  flex: 1 1 150px;
+  margin-left: 1vw;
+}
+
+.rit-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-button {
+  --background: var(--custom-color-accent);
+  --background-hover: var(--custom-color-accent-darker);
+  --background-activated: var(--custom-color-accent-darker);
+  --background-focused: var(--custom-color-accent-darker);
+
+  --color: var(--ion-text-color);
+}

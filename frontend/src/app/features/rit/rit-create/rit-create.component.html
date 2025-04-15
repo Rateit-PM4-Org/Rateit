@@ -1,0 +1,74 @@
+<ion-header *ngIf="mode !== 'create'">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/rits"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Rit</ion-title>
+
+    <ion-buttons slot="end" *ngIf="mode === 'edit'">
+      <ion-button [disabled]="!ritName?.trim()" (click)="updateRit()" (keydown.enter)="updateRit()">
+        Confirm
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="rit-title-container">
+        <ion-input [readonly]="mode === 'view'" [value]="ritName" (ionInput)="setRitName($event)"
+          placeholder="Rit Name...">
+        </ion-input>
+      </ion-card-title>
+      <ion-card-subtitle>
+        Rit Name
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content *ngIf="ritNameErrorMessage" class="name-error-container">
+      <ion-text color="danger">
+        <p>{{ritNameErrorMessage}}</p>
+      </ion-text>
+    </ion-card-content>
+
+    <ion-card-content class="tags-container">
+      <ion-chip [disabled]="mode === 'view'" color="primary" *ngFor="let tag of tags; let i = index"
+        (click)="removeTag(i)" (keydown.enter)="removeTag(i)" [attr.data-testid]="'tag-chip-' + i">
+        <ion-icon name="pricetag-outline"></ion-icon>
+        <ion-label>{{ tag }}</ion-label>
+        <ion-icon name="close"></ion-icon>
+      </ion-chip>
+
+      <ion-input *ngIf="mode !== 'view'" #tagInput class="tag-input" data-testid="new-tag-input" [value]="newTag"
+        (ionInput)="setNewTag($event)" placeholder="Enter Tag" (keyup.enter)="addTag(tagInput, 'enter')"
+        (ionBlur)="addTag(tagInput, 'blur')"></ion-input>
+    </ion-card-content>
+    <ion-card-content *ngIf="tagsErrorMessage" class="tags-error-container">
+      <ion-text color="danger">
+        <p>{{tagsErrorMessage}}</p>
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Details</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-textarea [readonly]="mode === 'view'" [disabled]="mode === 'view'" [value]="details"
+        (ionInput)="setDetails($event)" placeholder="Details..." [autoGrow]="true">
+      </ion-textarea>
+      <ion-text color="danger" *ngIf="detailsErrorMessage">
+        <p>{{detailsErrorMessage}}</p>
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="mode === 'view'">
+    <ion-fab-button class="edit-button" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

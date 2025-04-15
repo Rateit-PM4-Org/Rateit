@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Rits</ion-title>
+  </ion-toolbar>
+</ion-header>
+<div class="ion-padding" scroll-y="false">
+  <div>
+    <ion-searchbar [(ngModel)]="searchText" placeholder="Search..." class="searchbar"></ion-searchbar>
+
+    <div class="tags-input-container">
+      <ion-label>Tag:</ion-label>
+      <div class="tags-container">
+        <ion-chip color="primary">
+          <ion-icon name="pricetag-outline"></ion-icon>
+          <ion-label>{{ selectedTag || 'All' }}</ion-label>
+        </ion-chip>
+      </div>
+    </div>
+  </div>
+</div>
+<ion-content class="ion-padding-horizontal" scroll-y="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit">
+    </app-rit-list-item>
+  </ion-list>
+</ion-content>
+
+<app-fab-integration></app-fab-integration>

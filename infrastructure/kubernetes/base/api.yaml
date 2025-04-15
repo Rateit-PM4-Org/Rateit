@@ -36,10 +36,10 @@ spec:
           resources: 
             limits:
               memory: 2048Mi
-              cpu: 1000m
+              cpu: 2000m
             requests:
               memory: 1024Mi
-              cpu: 500m  
+              cpu: 1000m  
           env:
             - name: SPRING_DATA_MONGODB_HOST
               valueFrom:
@@ -61,6 +61,21 @@ spec:
                 secretKeyRef:
                   name: rateit-secret
                   key: mongo-password
+            - name: SECURITY_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: rateit-secret
+                  key: jwt-secret
+            - name: SPRING_MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rateit-secret
+                  key: mail-password
+            - name: APP_FRONTEND-URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rateit-env
+                  key: FRONTEND_URL
           volumeMounts:
             - name: api-props
               mountPath: /config

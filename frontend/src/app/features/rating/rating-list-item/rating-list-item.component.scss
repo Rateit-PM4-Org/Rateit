@@ -1,0 +1,38 @@
+.content {
+  width: 100%;
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.rating-positive {
+  display: flex;
+  flex-direction: column;
+}
+.rating-negative {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item-card {
+  display: flex;
+  width: 100%;
+  border-radius: 20px;
+  padding: 15px;
+  background-color: var(--ion-color-light-shade);
+  --background: var(--ion-color-light-shade);
+}
+
+ion-chip:first-child{
+  margin-left: 0;
+}

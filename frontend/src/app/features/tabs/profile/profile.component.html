@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" scroll-y="false">
+  <ion-list *ngIf="profile != null">
+    <ion-item>
+      <ion-label>Email</ion-label>
+      <ion-text>{{ profile.email }}</ion-text>
+    </ion-item>
+  </ion-list>
+  <ion-button (click)="logout()" (keydown.enter)="logout()">Logout</ion-button>
+</ion-content>
