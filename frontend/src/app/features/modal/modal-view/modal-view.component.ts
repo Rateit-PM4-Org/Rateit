@@ -1,15 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
-import { ActionSheetController } from '@ionic/angular/standalone';
-import { IonModal, ToastController } from '@ionic/angular/standalone';
+import { ActionSheetController, IonModal, ToastController } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { CommonModule } from '@angular/common';
-import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 
 @Component({
   selector: 'app-modal-view',
   templateUrl: './modal-view.component.html',
   styleUrls: ['./modal-view.component.scss'],
-  imports: [CommonModule, ...IonicStandaloneStandardImports, RitCreateComponent],
+  imports: [CommonModule, ...IonicStandaloneStandardImports],
   standalone: true,
 })
 export class ModalViewComponent implements OnInit {
@@ -20,7 +18,7 @@ export class ModalViewComponent implements OnInit {
     private subscription: any;
 
   constructor(private readonly toastController: ToastController, 
-    private actionSheetCtrl: ActionSheetController) { }
+    private readonly actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
     this.presentingElement = document.querySelector('ion-page');

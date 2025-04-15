@@ -25,5 +25,5 @@ export class FabComponent implements OnInit {
 
 export type FabButton = {
   icon: string;
-  action: () => void;
+  action: () => Promise<void>;
 };

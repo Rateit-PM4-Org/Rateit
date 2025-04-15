@@ -122,9 +122,7 @@ export class RateComponent implements ModalContent{
   }
 
   private setFieldErrorMessages(fields: any) {
-    /*if (fields.name) {
-      this.ritCreateComponent.ritNameErrorMessage = this.formatFieldError(fields.name);
-    }*/
+    // TODO: Handle field errors show in the UI
   }
 
   private formatFieldError(fieldError: string | string[]): string {

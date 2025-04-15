@@ -6,7 +6,7 @@ export type Rating = {
     displayName: string;
   };
   rit?: {
-    id?: string|undefined;
+    id?: string;
   };
   value?: number;
   positiveComment?: string;

@@ -25,7 +25,7 @@ export class AllRatingsComponent {
   rit: Observable<Rit | null>;
   ratings: Rating[] = [];
 
-  private ritSubscription: Subscription | null = null;
+  private readonly ritSubscription: Subscription | null = null;
 
   constructor(
     private readonly ritService: RitService,
