@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular/standalone';
 import { IonModal, ToastController } from '@ionic/angular/standalone';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
@@ -14,7 +14,7 @@ import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 })
 export class ModalViewComponent implements OnInit {
     @ViewChild(IonModal) modal!: IonModal;
-    @ViewChild('content') content!: ModalContent;
+    @Input() content!: ModalContent;
     protected isDisabled: boolean = true;
     protected presentingElement!: HTMLElement | null;
 
@@ -23,6 +23,13 @@ export class ModalViewComponent implements OnInit {
 
   ngOnInit() {
     this.presentingElement = document.querySelector('ion-page');
+    this.content.isDisabled.subscribe((isDisabled: boolean) => {
+      this.isDisabled = isDisabled;
+    })
+  }
+
+  ngOnDestroy() {
+    this.content.isDisabled.unsubscribe();
   }
 
   async showSuccessToast(message: string) {

@@ -1,4 +1,5 @@
 <app-fab [buttons]="buttons"></app-fab>
-<app-modal-view></app-modal-view>
-<app-rating-create-modal [rit]="rit" *ngIf="currentRit != null"></app-rating-create-modal>
+<app-modal-view [content]="ritCreate" #ritCreateModal><app-rit-create #ritCreate></app-rit-create></app-modal-view>
+<app-modal-view *ngIf="currentRit != null"  [content]="rate" #rateModal><app-rate [rit]="rit" #rate></app-rate></app-modal-view>
+
 
