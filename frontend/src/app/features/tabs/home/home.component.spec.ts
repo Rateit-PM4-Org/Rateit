@@ -7,6 +7,7 @@ import { of, throwError } from 'rxjs';
 import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
 import { HomeComponent } from './home.component';
+import { ActivatedRoute } from '@angular/router';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -37,6 +38,7 @@ describe('HomeComponent', () => {
         { provide: RitService, useValue: ritServiceSpy },
         { provide: ToastController, useValue: toastSpy },
         { provide: ActionSheetController, useValue: actionSheetSpy },
+        { provide: ActivatedRoute, useValue: { params: of({}) } },
         provideHttpClient()
       ]
     }).compileComponents();

@@ -7,6 +7,7 @@ import { RitService } from '../../../shared/services/rit.service';
 import { provideHttpClient } from '@angular/common/http';
 import { Rit } from '../../../model/rit';
 import { of, throwError } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -27,6 +28,7 @@ describe('AllRitsComponent', () => {
       providers: [
         { provide: UserService, useValue: userServiceMock },
         { provide: RitService, useValue: ritServiceSpy },
+        { provide: ActivatedRoute, useValue: { params: of({}) } },
         provideHttpClient()
       ]
     }).compileComponents();

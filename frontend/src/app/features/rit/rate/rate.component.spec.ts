@@ -1,21 +1,35 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { RateComponent } from './rate.component';
+import { provideHttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
+import { RitService } from '../../../shared/services/rit.service';
+import { ActivatedRoute } from '@angular/router';
 
 describe('RateComponent', () => {
   let component: RateComponent;
   let fixture: ComponentFixture<RateComponent>;
   let element: HTMLElement;
+  let ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'updateRit', 'triggerRitsReload']);
+  ritServiceSpy.createRit.and.returnValue(of({}));
+  ritServiceSpy.updateRit.and.returnValue(of({}));
+  ritServiceSpy.triggerRitsReload.and.returnValue(of({}));
+  let toastControllerSpy = jasmine.createSpyObj('ToastController', ['create']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RateComponent, IonicModule.forRoot()]
+      imports: [RateComponent, IonicModule.forRoot()],
+      providers: [
+        provideHttpClient(),
+        { provide: RitService, useValue: ritServiceSpy },
+        { provide: ToastController, useValue: toastControllerSpy }
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RateComponent);
+    fixture.detectChanges();
     component = fixture.componentInstance;
     element = fixture.debugElement.nativeElement;
-    fixture.detectChanges();
   });
 
   it('should create component', () => {

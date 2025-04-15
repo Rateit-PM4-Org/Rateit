@@ -5,6 +5,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { UserService } from '../../../shared/services/user.service';
 import { of } from 'rxjs';
 import { RitService } from '../../../shared/services/rit.service';
+import { ActivatedRoute } from '@angular/router';
 const userServiceMock = {
   isLoggedIn: () => of(true)
 };
@@ -22,7 +23,8 @@ describe('FabIntegrationComponent', () => {
       imports: [FabIntegrationComponent],
       providers: [
         { provide: UserService, useValue: userServiceMock },
-                  { provide: RitService, useValue: ritServiceSpy },
+        { provide: RitService, useValue: ritServiceSpy },
+        { provide: ActivatedRoute, useValue: { params: of({}) } },
         provideHttpClient(),
       ]
     }).compileComponents();

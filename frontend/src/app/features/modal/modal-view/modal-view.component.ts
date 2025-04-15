@@ -17,19 +17,22 @@ export class ModalViewComponent implements OnInit {
     @Input() content!: ModalContent;
     protected isDisabled: boolean = true;
     protected presentingElement!: HTMLElement | null;
+    private subscription: any;
 
   constructor(private readonly toastController: ToastController, 
     private actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
     this.presentingElement = document.querySelector('ion-page');
-    this.content.isDisabled.subscribe((isDisabled: boolean) => {
+    this.subscription = this.content.isDisabled.subscribe((isDisabled: boolean) => {
       this.isDisabled = isDisabled;
     })
   }
 
   ngOnDestroy() {
-    this.content.isDisabled.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   async showSuccessToast(message: string) {
