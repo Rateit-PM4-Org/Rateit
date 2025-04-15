@@ -5,6 +5,7 @@ import { provideMockApiService, provideMockAuthService } from '../test-util/test
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
 import { RitService } from './rit.service';
+import { Rating } from '../../model/rating';
 
 describe('RitService', () => {
 
@@ -33,6 +34,20 @@ describe('RitService', () => {
     service.createRit(rit).pipe(first()).subscribe(response => {
       expect(response).toEqual(mockResponse);
       expect(apiServiceSpy.post).toHaveBeenCalledWith('/rit/create', rit);
+      expect(apiServiceSpy.post).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('should create a new rating', () => {
+    let service = TestBed.inject(RitService);
+    const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
+    apiServiceSpy.post.and.returnValue(of({ success: true }));
+    const mockResponse = { success: true };
+    const rating: Rating = { rit:{ id: '123'}, value: 5 };
+
+    service.createRating(rating).pipe(first()).subscribe(response => {
+      expect(response).toEqual(mockResponse);
+      expect(apiServiceSpy.post).toHaveBeenCalledWith('/rit/rate', rating);
       expect(apiServiceSpy.post).toHaveBeenCalledTimes(1);
     });
   });

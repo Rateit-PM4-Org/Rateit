@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonBackButton, IonInput, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
+import { ModalContent } from '../../modal/modal-view/modal-view.component';
 
 @Component({
   selector: 'app-rit-create',
@@ -13,7 +14,7 @@ import { RitService } from '../../../shared/services/rit.service';
   standalone: true,
   imports: [IonBackButton, CommonModule, ...IonicStandaloneStandardImports],
 })
-export class RitCreateComponent implements ViewWillEnter {
+export class RitCreateComponent implements ViewWillEnter, ModalContent {
 
   constructor(
     private readonly ritService: RitService,
@@ -23,6 +24,7 @@ export class RitCreateComponent implements ViewWillEnter {
 
   mode?: 'create' | 'edit' | 'view' = 'create';
   @Input() ritId: string | undefined;
+  @Output() isDisabled = new EventEmitter<boolean>();
 
   tags: string[] = []
   tagsErrorMessage?: string
@@ -51,6 +53,10 @@ export class RitCreateComponent implements ViewWillEnter {
       next: (rit) => this.handleSuccess(rit, 'Rit updated successfully!'),
       error: (err) => this.handleError(err),
     });
+  }
+
+  submit(): Promise<boolean> {
+    return this.createRit();
   }
 
   createRit(): Promise<boolean> {
@@ -140,6 +146,7 @@ export class RitCreateComponent implements ViewWillEnter {
 
   setRitName(event: any) {
     this.ritName = event.target.value
+    this.validateFields()
   }
 
   setDetails(event: any) {
@@ -166,6 +173,10 @@ export class RitCreateComponent implements ViewWillEnter {
 
   removeTag(index: number) {
     this.tags.splice(index, 1)
+  }
+
+  validateFields() {
+    this.isDisabled.emit(!this.ritName);
   }
 
 }
