@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { provideMockApiService, provideMockAuthService } from '../test-util/test-util';
-import { RitService } from './rit.service';
-import { ApiService } from './api.service';
-import { first, of, skip, throwError, Subject } from 'rxjs';
+import { first, of, skip, Subject, throwError } from 'rxjs';
 import { Rit } from '../../model/rit';
+import { provideMockApiService, provideMockAuthService } from '../test-util/test-util';
+import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
+import { RitService } from './rit.service';
 
 describe('RitService', () => {
 
@@ -237,5 +237,39 @@ describe('RitService', () => {
     service.triggerRitsReload().subscribe();
   }
   );
+
+  it('should update an existing rit', (done) => {
+    let service = TestBed.inject(RitService);
+    const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
+
+    const rit: Rit = { name: 'updatedRit', details: 'updated details', tags: ['tag1'] };
+    const ritId = '123';
+
+    apiServiceSpy.put.and.returnValue(of(rit));
+
+    service.updateRit(rit, ritId).subscribe(response => {
+      expect(response).toEqual(rit);
+      expect(apiServiceSpy.put).toHaveBeenCalledWith('/rit/update/123', rit);
+      expect(apiServiceSpy.put).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it('should get a specific rit by ID from API', (done) => {
+    let service = TestBed.inject(RitService);
+    const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
+
+    const ritId = 'abc';
+    const expectedRit: Rit = { id: ritId, name: 'fetchedRit', details: 'details', tags: ['tag1'] };
+
+    apiServiceSpy.get.and.returnValue(of(expectedRit));
+
+    service.getRit(ritId).subscribe(response => {
+      expect(response).toEqual(expectedRit);
+      expect(apiServiceSpy.get).toHaveBeenCalledWith('/rit/read/abc');
+      expect(apiServiceSpy.get).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
 
 });

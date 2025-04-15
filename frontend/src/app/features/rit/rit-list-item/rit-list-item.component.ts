@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports'; 
-import { CommonModule } from '@angular/common';
-import { Rit } from '../../../model/rit';
-import { Rating } from '../../../model/rating';
-import { Router } from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {Component, Input} from '@angular/core';
+import {Router} from '@angular/router';
+import {Rit} from '../../../model/rit';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {Rating} from '../../../model/rating';
 
 @Component({
   selector: 'app-rit-list-item',
@@ -18,7 +18,9 @@ export class RitListItemComponent {
 
   protected latestRatingValue: number = 0;
 
-  constructor(private readonly router: Router) { }
+  constructor(private readonly router: Router) {
+  }
+
   ngOnInit() {
     this.latestRatingValue = this.calculateLatestRatingValue(this.rit.ratings ?? []);
   }
@@ -35,7 +37,11 @@ export class RitListItemComponent {
   }
 
   navigateToRatings(): void {
-    this.router.navigate(['/ratings', this.rit.id]);
+    this.router.navigate(['/rits/ratings', this.rit.id]);
+  }
+
+  navigateToRit(): void {
+    this.router.navigate(['/rits/view', this.rit.id]);
   }
 
 }

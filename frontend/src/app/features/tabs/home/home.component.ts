@@ -46,7 +46,7 @@ export class HomeComponent implements ViewWillEnter {
   ) { }
 
   ionViewWillEnter() {
-    this.presentingElement = document.querySelector('.ion-page');
+    this.presentingElement = document.querySelector('ion-page');
     this.isLoggedIn$ = this.userService.isLoggedIn();
     this.ritSubscription = this.ritService.getRits().subscribe({
       next: (data) => {
@@ -117,52 +117,9 @@ export class HomeComponent implements ViewWillEnter {
   };
 
   async confirm() {
-    const request = this.buildRequest();
-
-    this.ritService.createRit(request).subscribe({
-      next: () => this.handleRitCreateSuccess(),
-      error: (err) => this.handleRitCreateError(err),
-    });
-  }
-
-  private buildRequest(): Rit {
-    return {
-      name: this.ritCreateComponent.ritName,
-      details: this.ritCreateComponent.details,
-      tags: this.ritCreateComponent.tags ?? [],
-    };
-  }
-
-  private handleRitCreateSuccess() {
-    this.showSuccessToast('Rit created successfully!');
-    this.modal.dismiss(null, 'confirm');
-  }
-
-  private handleRitCreateError(err: any) {
-    const baseError = err.error?.error ?? 'Unknown error';
-    const fields = err.error?.fields;
-
-    if (fields) {
-      this.setFieldErrorMessages(fields);
-    } else {
-      this.showErrorToast(baseError);
+    if (await this.ritCreateComponent.createRit()) {
+      this.modal.dismiss(null, 'confirm');
     }
-  }
-
-  private setFieldErrorMessages(fields: any) {
-    if (fields.name) {
-      this.ritCreateComponent.ritNameErrorMessage = this.formatFieldError(fields.name);
-    }
-    if (fields.details) {
-      this.ritCreateComponent.detailsErrorMessage = this.formatFieldError(fields.details);
-    }
-    if (fields.tags) {
-      this.ritCreateComponent.tagsErrorMessage = this.formatFieldError(fields.tags);
-    }
-  }
-
-  private formatFieldError(fieldError: string | string[]): string {
-    return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
   }
 
   private handleLoadRitsSuccess(data: Rit[]) {
@@ -174,7 +131,6 @@ export class HomeComponent implements ViewWillEnter {
       return dateB.getTime() - dateA.getTime();
     });
   }
-  
 
   private handleLoadRitsError(err: any) {
     const baseError = err.error?.error ?? 'Unknown error';
@@ -188,6 +144,7 @@ export class HomeComponent implements ViewWillEnter {
   goToRitsTab() {
     this.router.navigate(['/rits']);
   }
+
   handleRefresh(event: CustomEvent) {
     this.ritService.triggerRitsReload().subscribe({
       next: () => {

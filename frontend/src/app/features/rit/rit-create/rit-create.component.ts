@@ -1,18 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { IonInput } from '@ionic/angular/standalone';
+import { Component, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { IonBackButton, IonInput, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
+import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { RitService } from '../../../shared/services/rit.service';
 
 @Component({
   selector: 'app-rit-create',
   templateUrl: './rit-create.component.html',
   styleUrls: ['./rit-create.component.scss'],
   standalone: true,
-  imports: [CommonModule, ...IonicStandaloneStandardImports],
+  imports: [IonBackButton, CommonModule, ...IonicStandaloneStandardImports],
 })
-export class RitCreateComponent {
+export class RitCreateComponent implements ViewWillEnter {
 
-  constructor() { }
+  constructor(
+    private readonly ritService: RitService,
+    private readonly route: ActivatedRoute,
+    private readonly toastController: ToastController,
+  ) { }
+
+  mode?: 'create' | 'edit' | 'view' = 'create';
+  @Input() ritId: string | undefined;
 
   tags: string[] = []
   tagsErrorMessage?: string
@@ -22,6 +32,111 @@ export class RitCreateComponent {
   detailsErrorMessage?: string
 
   newTag?: string
+
+  ionViewWillEnter(): void {
+    this.ritId = this.route.snapshot.paramMap.get('ritId') ?? undefined;
+
+    if (this.ritId) {
+      this.mode = 'view';
+      this.ritService.getRit(this.ritId).subscribe((rit) => {
+        this.ritName = rit.name;
+        this.details = rit.details ?? '';
+        this.tags = [...(rit.tags ?? [])];
+      });
+    }
+  }
+
+  updateRit() {
+    this.ritService.updateRit(this.buildRequest(), this.ritId!).subscribe({
+      next: (rit) => this.handleSuccess(rit, 'Rit updated successfully!'),
+      error: (err) => this.handleError(err),
+    });
+  }
+
+  createRit(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.ritService.createRit(this.buildRequest()).subscribe({
+        next: (rit) => {
+          this.handleSuccess(rit, 'Rit created successfully!');
+          resolve(true);
+        },
+        error: (err) => {
+          this.handleError(err);
+          resolve(false);
+        },
+      });
+    });
+  }
+
+  private buildRequest(): Rit {
+    return {
+      name: this.ritName,
+      details: this.details,
+      tags: this.tags ?? [],
+    };
+  }
+
+  private handleSuccess(rit: Rit, toastMessage: string) {
+    this.ritName = rit.name;
+    this.details = rit.details ?? '';
+    this.tags = [...(rit.tags ?? [])];
+
+    this.showSuccessToast(toastMessage);
+    this.ritService.triggerRitsReload().subscribe({});
+
+    if (this.mode !== 'create') {
+      this.mode = 'view';
+    }
+  }
+
+  private handleError(err: any) {
+    const baseError = err.error?.error ?? 'Unknown error';
+    const fields = err.error?.fields;
+
+    if (fields) {
+      this.setFieldErrorMessages(fields);
+    } else {
+      this.showErrorToast(baseError);
+    }
+  }
+
+  private setFieldErrorMessages(fields: any) {
+    if (fields.name) {
+      this.ritNameErrorMessage = this.formatFieldError(fields.name);
+    }
+    if (fields.details) {
+      this.detailsErrorMessage = this.formatFieldError(fields.details);
+    }
+    if (fields.tags) {
+      this.tagsErrorMessage = this.formatFieldError(fields.tags);
+    }
+  }
+
+  async showSuccessToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      color: 'success',
+    });
+
+    await toast.present();
+  }
+
+  async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 4000,
+      position: 'top',
+      color: 'danger',
+    });
+
+    await toast.present();
+  }
+
+  private formatFieldError(fieldError: string | string[]): string {
+    return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
+  }
 
   setRitName(event: any) {
     this.ritName = event.target.value
