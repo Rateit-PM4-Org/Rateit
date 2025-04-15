@@ -109,6 +109,7 @@ async showSuccessToast(message: string) {
 
   private handleRitCreateSuccess() {
     this.showSuccessToast('Rating created successfully!');
+    this.ritService.triggerRitsReload().subscribe();
     this.modal.dismiss(null, 'confirm');
   }
 

@@ -32,11 +32,7 @@ export class RitService {
   }
 
   createRating(rating: Rating): Observable<any> {
-    return this.apiService.post('/rit/rate', rating).pipe(
-      tap(() => {
-        this.triggerRitsReload().subscribe({});
-      })
-    )
+    return this.apiService.post('/rit/rate', rating);
   }
 
   getRits(): Observable<Rit[]> {
