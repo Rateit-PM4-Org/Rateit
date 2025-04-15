@@ -68,12 +68,12 @@ describe('RitListItemComponent', () => {
 
   it('should navigate to ratings with correct ID', () => {
     component.navigateToRatings();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/ratings', testRit.id]);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/rits/ratings', testRit.id]);
   });
 
   it('should navigate to rit view with correct ID', () => {
     component.navigateToRit();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/rits/view/' + testRit.id]);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/rits/view', testRit.id]);
   });
 
 

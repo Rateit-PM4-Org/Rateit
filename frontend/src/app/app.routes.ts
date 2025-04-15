@@ -23,7 +23,7 @@ export const routes: Routes = [
         data: { mode: 'view' }
       },
       {
-        path: 'ratings/:ritId',
+        path: 'rits/ratings/:ritId',
         pathMatch: 'full',
         loadComponent: () => import('./features/rating/all-ratings/all-ratings.component').then((m) => m.AllRatingsComponent),
         canActivate: [AuthGuard],
