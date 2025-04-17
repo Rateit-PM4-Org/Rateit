@@ -8,6 +8,7 @@ import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
 import { HomeComponent } from './home.component';
 import { ActivatedRoute } from '@angular/router';
+import { Rit } from '../../../model/rit';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -90,27 +91,28 @@ describe('HomeComponent', () => {
       name: `rit-${i}`,
       details: '',
       tags: [],
-      lastInteractionAt: now + i * 1000
+      updatedAt: new Date(now + i * 1000).toISOString()
     })) as any[];
 
-    component['rits'] = ritsMock;
+    component['handleLoadRitsSuccess'](ritsMock);
     component.numberOfLatestRitsToShow = 10;
 
     const latest = component.latestRits();
 
     expect(latest.length).toBe(10);
-    expect(latest[0].name).toBe('rit-0');
-    expect(latest[9].name).toBe('rit-9');
+    //  0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+    // 14, 13, 12, 11, 10, 9, 8, 7, 6, 5,  4,  3,  2,  1,  0
+    expect(latest[0].name).toBe('rit-14');
+    expect(latest[3].name).toBe('rit-11');
+    expect(latest[9].name).toBe('rit-5');
   });
 
   it('should return 10 latest rits when more than 10 are available', () => {
-    const now = new Date();
     const rits = Array.from({ length: 20 }, (_, i) => ({
       id: i.toString(),
       name: `Rit ${i}`,
       details: `Details ${i}`,
       tags: [],
-      lastInteractionAt: new Date(now.getTime() - i * 1000).toISOString(),
     }));
 
     ritServiceSpy.getRits = jasmine.createSpy().and.returnValue(of(rits));
@@ -207,4 +209,69 @@ describe('HomeComponent', () => {
     );
   }));
 
+  it('should sort rits by lastInteractionAt descending on handleLoadRitsSuccess', () => {
+    const ritsMock = [
+      { updatedAt: '2023-01-01T00:00:00Z', ratings: [{ createdAt: '2023-01-03T00:00:00Z' }] },
+      { updatedAt: '2023-01-02T00:00:00Z', ratings: [] },
+      { updatedAt: '2023-01-04T00:00:00Z', ratings: [{ createdAt: '2023-01-01T00:00:00Z' }] },
+    ] as Rit[];
+
+    component['handleLoadRitsSuccess'](ritsMock);
+
+    expect(component.rits[0].updatedAt).toBe('2023-01-04T00:00:00Z');
+    expect(component.rits[1].updatedAt).toBe('2023-01-01T00:00:00Z');
+    expect(component.rits[2].updatedAt).toBe('2023-01-02T00:00:00Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - rating newer', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:00Z',
+      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+    } as Rit;
+
+    const result = component['calculateLastInteractionAt'](ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:01.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - updatedAt newer', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:02Z',
+      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+    } as Rit;
+
+    const result = component['calculateLastInteractionAt'](ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:02.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - no ratings', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:00Z',
+    } as Rit;
+
+    const result = component['calculateLastInteractionAt'](ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:00.000Z');
+  });
+  it('should calculate lastInteractionAt correctly - no updatedAt', () => {
+    const ritMock = {
+      updatedAt: undefined,
+      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+    } as Rit;
+
+    const result = component['calculateLastInteractionAt'](ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:01.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - no ratings and updatedAt', () => {
+    const ritMock = {
+      updatedAt: undefined,
+    } as Rit;
+
+    const result = component['calculateLastInteractionAt'](ritMock);
+
+    expect(result.toISOString()).toBe('1970-01-01T00:00:00.000Z');
+  });
 });
