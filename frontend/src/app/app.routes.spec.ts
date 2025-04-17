@@ -29,7 +29,7 @@ describe('App Routing', () => {
         provideRouter(routes),
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideMockAuthService(false)
+        provideMockAuthService(true)
       ],
     }).compileComponents();
 
@@ -38,6 +38,9 @@ describe('App Routing', () => {
   }));
 
   it('should not navigate to /profile (empty instead) if not authenticated', waitForAsync(async () => {
+    const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    authServiceSpy.isAuthenticated.and.returnValue(false);
+    
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
@@ -110,4 +113,33 @@ describe('App Routing', () => {
     expect(location.path()).toBe('/home');
   }));
 
+  it('should navigate to /rits', waitForAsync(async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/rits']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/rits');
+  }));
+
+  it('should navigate to /rits/view/12', waitForAsync(async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/rits/view/12']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/rits/view/12');
+  }));
+
+  it('should navigate to /rits/ratings/12', waitForAsync(async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/rits/ratings/12']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/rits/ratings/12');
+  }));
 });

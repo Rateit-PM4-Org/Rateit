@@ -1,6 +1,6 @@
 
   <div class="list-item-card ion-margin-bottom">
-    <ion-label class="content">
+    <ion-label (click)="navigateToRit()" (keydown.enter)="navigateToRit()" class="content">
       <h2 class="title">{{ rit.name }}</h2>
       <div class="tags-container">
         <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index">
@@ -9,8 +9,8 @@
         </ion-chip>
       </div>
     </ion-label>
-    <!-- <ion-button size="default" class="ratingButton">
-      3
+    <ion-button size="default" class="ratingButton" (keydown.enter)="navigateToRatings()" (click)="navigateToRatings()">
+      {{ latestRatingValue }}
       <ion-icon name="star" slot="end"></ion-icon>
-    </ion-button> -->
+    </ion-button>
   </div>

@@ -8,6 +8,7 @@ import { Rit } from '../../../model/rit';
 import { RitService } from '../../../shared/services/rit.service';
 
 import { Subscription } from 'rxjs';
+import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
 
 @Component({
   selector: 'app-all-rits',
@@ -18,6 +19,7 @@ import { Subscription } from 'rxjs';
     ...IonicStandaloneStandardImports,
     FormsModule,
     RitListItemComponent,
+    FabIntegrationComponent
   ],
 })
 

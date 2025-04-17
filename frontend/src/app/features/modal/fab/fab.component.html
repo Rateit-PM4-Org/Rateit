@@ -1,0 +1,11 @@
+<ion-fab *ngIf="(isLoggedIn$ | async) && buttons.length!=0" data-testid="rit-create-button" slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="add-outline"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button *ngFor="let button of buttons; index as i;" (click)="button.action()" (keydown.enter)="button.action()">
+      <ion-icon name="{{button.icon}}"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>
+
