@@ -29,6 +29,7 @@ export class HomeComponent implements ViewWillEnter {
 
   rits: Rit[] = [];
   numberOfLatestRitsToShow: number = 10;
+  numberOfTopTagsToShow: number = 6;
   isLoggedIn$!: Observable<boolean>;
 
   ritSubscription: Subscription | null = null;
@@ -124,15 +125,31 @@ export class HomeComponent implements ViewWillEnter {
   }
 
   topTags() {
-    return [
-      { name: 'Tag Name 1', ritCount: 32 },
-      { name: 'Tag Name 2', ritCount: 28 },
-      { name: 'Tag Name 3', ritCount: 15 },
-      { name: 'Tag Name 4', ritCount: 12 },
-      { name: 'Tag Name 5', ritCount: 8 },
-      { name: 'Tag Name 6', ritCount: 5 },
-      { name: 'Tag Name 6', ritCount: 5 },
-      { name: 'Tag Name 6', ritCount: 5 },
-    ];
+    const tagMap: { [tagName: string]: { ritCount: number; latestInteraction: Date } } = {};
+
+    // Iterate through the sorted Rits and track the latest interaction and count for each tag
+    this.rits.forEach(rit => {
+      const ritDate = new Date(rit.lastInteractionAt ?? 0);
+      rit.tags?.forEach(tag => {
+        if (!tagMap[tag]) {
+          tagMap[tag] = { ritCount: 0, latestInteraction: ritDate };
+        }
+        tagMap[tag].ritCount += 1;
+        if (ritDate > tagMap[tag].latestInteraction) {
+          tagMap[tag].latestInteraction = ritDate;
+        }
+      });
+    });
+
+    // Convert the tag map to an array and sort by latest interaction, then by rit count
+    const sortedTags = Object.entries(tagMap)
+      .map(([name, { ritCount, latestInteraction }]) => ({ name, ritCount, latestInteraction }))
+      .sort((a, b) => {
+        const dateDiff = b.latestInteraction.getTime() - a.latestInteraction.getTime();
+        return dateDiff !== 0 ? dateDiff : b.ritCount - a.ritCount;
+      });
+
+    // Return the top tags
+    return sortedTags.slice(0, this.numberOfTopTagsToShow).map(({ name, ritCount }) => ({ name, ritCount }));
   }
 }
