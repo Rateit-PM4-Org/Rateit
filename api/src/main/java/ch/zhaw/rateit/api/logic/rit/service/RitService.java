@@ -63,7 +63,7 @@ public class RitService {
     }
 
     public List<Rit> getAll(User owner) {
-        return ritRepository.findAllByOwner(owner);
+        return ritRepository.findAllByOwnerOrderByUpdatedAtDesc(owner);
     }
 
     public Rit getRitById(User owner, String id) {
