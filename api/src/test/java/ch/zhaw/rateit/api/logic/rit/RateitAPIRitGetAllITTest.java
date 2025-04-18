@@ -70,6 +70,9 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
 
         assertEquals(2, rits.size(), "Only Rits owned by the testUser should be returned");
         assertTrue(rits.stream().allMatch(r -> r.getOwner().getId().equals(testUser.getId())));
+        // Check that the order is correct
+        assertEquals("Rit2", rits.get(0).getName(), "First rit should be Rit2 (as it was updated last)");
+        assertEquals("Rit1", rits.get(1).getName(), "Second rit should be Rit1");
     }
 
     @Test
