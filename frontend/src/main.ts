@@ -7,6 +7,8 @@ import { addIcons } from 'ionicons';
 import { addOutline, chevronForward, close, createOutline, home, homeOutline, logInOutline, personOutline, pricetagOutline, star, starOutline } from 'ionicons/icons';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
+import { isDevMode } from '@angular/core';
+import { provideServiceWorker } from '@angular/service-worker';
 
 // Call the element loader before the bootstrapModule/bootstrapApplication call
 defineCustomElements(window);
@@ -16,7 +18,10 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideHttpClient(),
     provideIonicAngular({ mode: 'ios' }),
-    provideRouter(routes),
+    provideRouter(routes), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
   ],
 });
 
