@@ -1,16 +1,17 @@
-
-  <div class="list-item-card ion-margin-bottom">
-    <ion-label (click)="navigateToRit()" (keydown.enter)="navigateToRit()" class="content">
-      <h2 class="title">{{ rit.name }}</h2>
-      <div class="tags-container">
-        <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index">
-          <ion-icon name="pricetag-outline"></ion-icon>
-          <ion-label>{{ tag }}</ion-label>
-        </ion-chip>
-      </div>
-    </ion-label>
-    <ion-button size="default" class="ratingButton" (keydown.enter)="navigateToRatings()" (click)="navigateToRatings()">
+<div class="list-item-card ion-margin-bottom">
+  <ion-label (click)="navigateToRit()" (keydown.enter)="navigateToRit()" class="content">
+    <h2 class="title">{{ rit.name }}</h2>
+    <div class="tags-container">
+      <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index">
+        <ion-icon name="pricetag-outline"></ion-icon>
+        <ion-label>{{ tag }}</ion-label>
+      </ion-chip>
+    </div>
+  </ion-label>
+  <ion-button size="default" class="ratingButton" (keydown.enter)="navigateToRatings()" (click)="navigateToRatings()">
+    <ng-container *ngIf="latestRatingValue > 0">
       {{ latestRatingValue }}
-      <ion-icon name="star" slot="end"></ion-icon>
-    </ion-button>
-  </div>
+    </ng-container>
+    <ion-icon name="star" slot="end" [class.centered]="latestRatingValue <= 0"></ion-icon>
+  </ion-button>
+</div>
