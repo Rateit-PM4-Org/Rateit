@@ -234,6 +234,28 @@ describe('HomeComponent', () => {
     expect(result.toISOString()).toBe('2023-01-01T00:00:01.000Z');
   });
 
+  it('should calculate lastInteractionAt correctly - multiple ratings', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:00Z',
+      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }, { createdAt: '2023-01-02T00:00:01Z' }]
+    } as Rit;
+
+    const result = component['calculateLastInteractionAt'](ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-02T00:00:01.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - ratings without date', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:00Z',
+      ratings: [{ }, {  }]
+    } as Rit;
+
+    const result = component['calculateLastInteractionAt'](ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:00.000Z');
+  });
+
   it('should calculate lastInteractionAt correctly - updatedAt newer', () => {
     const ritMock = {
       updatedAt: '2023-01-01T00:00:02Z',
