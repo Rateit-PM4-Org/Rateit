@@ -9,6 +9,7 @@ import { UserService } from '../../../shared/services/user.service';
 import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
 import { Router } from '@angular/router';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
+import { TagListItemComponent } from "../../tag/tag-list-item/tag-list-item.component";
 
 @Component({
   selector: 'app-home',
@@ -19,8 +20,9 @@ import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integra
     CommonModule,
     ...IonicStandaloneStandardImports,
     RitListItemComponent,
-    FabIntegrationComponent
-  ],
+    FabIntegrationComponent,
+    TagListItemComponent
+],
 })
 export class HomeComponent implements ViewWillEnter {
   presentingElement!: HTMLElement | null;
@@ -119,5 +121,18 @@ export class HomeComponent implements ViewWillEnter {
         (event.target as HTMLIonRefresherElement).complete();
       }
     });
+  }
+
+  topTags() {
+    return [
+      { name: 'Tag Name 1', ritCount: 32 },
+      { name: 'Tag Name 2', ritCount: 28 },
+      { name: 'Tag Name 3', ritCount: 15 },
+      { name: 'Tag Name 4', ritCount: 12 },
+      { name: 'Tag Name 5', ritCount: 8 },
+      { name: 'Tag Name 6', ritCount: 5 },
+      { name: 'Tag Name 6', ritCount: 5 },
+      { name: 'Tag Name 6', ritCount: 5 },
+    ];
   }
 }

@@ -5,7 +5,25 @@
 </ion-header>
 
 <div *ngIf="isLoggedIn$ | async" class="ion-padding" scroll-y="false">
+  <ion-label>Your top Tags</ion-label>
+</div>
 
+<ion-content *ngIf="isLoggedIn$ | async" class="" scroll-y="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid class="ion-no-padding" scroll-y="true">
+    <ion-row>
+      <ion-col size="6" *ngFor="let tag of topTags()">
+        <app-tag-list-item [tag]="tag"></app-tag-list-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+
+
+<div *ngIf="isLoggedIn$ | async" class="ion-padding" scroll-y="false">
   <div class="rits-header-row">
     <ion-label>Your latest Rits</ion-label>
     <ion-button size="small" (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button" data-testid="show-all-rits">
