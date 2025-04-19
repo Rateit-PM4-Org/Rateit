@@ -18,7 +18,7 @@ java {
 }
 
 gitProperties {
-	dotGitDirectory = file("${project.rootDir}/../.git")
+	dotGitDirectory = file("./../.git")
 }
 
 springBoot{
