@@ -142,4 +142,14 @@ describe('App Routing', () => {
 
     expect(location.path()).toBe('/rits/ratings/12');
   }));
+
+  it('should navigate to /build-info', waitForAsync(async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/build-info']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/build-info');
+  }));
 });
