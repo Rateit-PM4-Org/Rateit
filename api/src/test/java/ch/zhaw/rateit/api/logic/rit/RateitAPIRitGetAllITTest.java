@@ -44,7 +44,7 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
     private final User otherUser = new User("other@test.ch", "OtherUser", "$2a$12$hashed");
 
     @BeforeEach
-    void setup() {
+    void setup() throws InterruptedException {
         userRepository.deleteAll();
         ritRepository.deleteAll();
         testUser.setEmailVerified(true);
@@ -53,9 +53,11 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
 
         ritRepository.saveAll(List.of(
                 new Rit("Rit1", "Details1", List.of("tag1"), testUser),
-                new Rit("Rit2", "Details2", List.of("tag2"), testUser),
                 new Rit("OtherUserRit", "OtherDetails", List.of("tag3"), otherUser)
         ));
+        // Simulate a delay to ensure the second rit is created after the first one
+        Thread.sleep(1000);
+        ritRepository.save(new Rit("Rit2", "Details2", List.of("tag2"), testUser));
     }
 
     @Test
