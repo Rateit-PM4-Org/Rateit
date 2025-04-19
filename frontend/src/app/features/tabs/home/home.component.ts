@@ -90,10 +90,19 @@ export class HomeComponent implements ViewWillEnter {
     this.rits = [...data];
     // sotr by lastInteractionAt descending
     this.rits.sort((a, b) => {
-      const dateA = new Date(a.lastInteractionAt ?? 0);
-      const dateB = new Date(b.lastInteractionAt ?? 0);
+      const dateA = this.calculateLastInteractionAt(a);
+      const dateB = this.calculateLastInteractionAt(b);
       return dateB.getTime() - dateA.getTime();
     });
+  }
+  private calculateLastInteractionAt(rit: Rit): Date {
+    const latestRatingDate = rit.ratings?.reduce((latest, rating) => {
+      const ratingDate = new Date(rating.createdAt ?? 0);
+      return ratingDate > latest ? ratingDate : latest;
+    }, new Date(0)) ?? new Date(0);
+    
+    const lastModified = new Date(rit.updatedAt ?? 0);
+    return latestRatingDate > lastModified ? latestRatingDate : lastModified;
   }
 
   private handleLoadRitsError(err: any) {

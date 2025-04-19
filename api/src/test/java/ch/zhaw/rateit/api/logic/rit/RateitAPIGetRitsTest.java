@@ -46,8 +46,7 @@ import static org.mockito.Mockito.when;
         expectedRits.add(rit1);
         expectedRits.add(rit2);
 
-        // Explicit cast to help type inference
-        when(ritRepository.findAllByOwner(testUser)).thenReturn(expectedRits);
+        when(ritRepository.findAllByOwnerOrderByUpdatedAtDesc(testUser)).thenReturn(expectedRits);
 
         List<Rit> result = ritService.getAll(testUser);
 

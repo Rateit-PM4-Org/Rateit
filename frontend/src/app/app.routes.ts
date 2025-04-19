@@ -46,6 +46,10 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'build-info',
+        loadComponent: () => import('./features/tabs/app-build-info/app-build-info.component').then((m) => m.AppBuildInfoComponent),
+      },
+      {
         path: '',
         redirectTo: '/home',
         pathMatch: 'full',
