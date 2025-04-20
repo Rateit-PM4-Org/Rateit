@@ -41,7 +41,7 @@ describe('AuthGuard', () => {
 
   it('should deny activation and redirect to login if user is not authenticated', () => {
     expect(authGuard.canActivate(new ActivatedRouteSnapshot(), <RouterStateSnapshot>{url: 'testUrl'})).toBeFalse();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login'], Object({ queryParams: Object({ returnUrl: "testUrl" }) }));
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/login'], Object({ queryParams: Object({ returnUrl: "testUrl" }) }));
   });
 });
 

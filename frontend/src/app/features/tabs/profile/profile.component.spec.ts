@@ -52,7 +52,7 @@ describe('ProfileComponent', () => {
     expect(component.profile).toEqual(mockProfile);
   });
 
-  it('should call AuthService.logout and navigate to /home on logout', () => {
+  it('should call AuthService.logout and navigate to /tabs/home on logout', () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
 
@@ -65,7 +65,7 @@ describe('ProfileComponent', () => {
     component.logout();
 
     expect(authServiceSpy.logout).toHaveBeenCalled();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/home']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/home']);
   });
 
 });

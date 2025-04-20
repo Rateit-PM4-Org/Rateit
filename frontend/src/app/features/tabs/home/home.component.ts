@@ -115,7 +115,7 @@ export class HomeComponent implements ViewWillEnter {
   }
 
   goToRitsTab() {
-    this.router.navigate(['/rits']);
+    this.router.navigate(['/tabs/rits']);
   }
 
   handleRefresh(event: CustomEvent) {
