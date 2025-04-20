@@ -12,6 +12,18 @@ export const routes: Routes = [
         loadComponent: () => import('./features/tabs/home/home.component').then((m) => m.HomeComponent),
       },
       {
+        path: 'home/rits/view/:ritId',
+        loadComponent: () => import('./features/rit/rit-create/rit-create.component').then(m => m.RitCreateComponent),
+        canActivate: [AuthGuard],
+        data: { mode: 'view' }
+      },
+      {
+        path: 'home/rits/ratings/:ritId',
+        pathMatch: 'full',
+        loadComponent: () => import('./features/rating/all-ratings/all-ratings.component').then((m) => m.AllRatingsComponent),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'rits',
         loadComponent: () => import('./features/tabs/all-rits/all-rits.component').then((m) => m.AllRitsComponent),
         canActivate: [AuthGuard],

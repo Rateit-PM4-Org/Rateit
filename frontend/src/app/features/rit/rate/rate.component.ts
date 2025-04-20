@@ -8,7 +8,7 @@ import { Rit } from '../../../model/rit';
 import { Rating } from '../../../model/rating';
 import { RitService } from '../../../shared/services/rit.service';
 import { ModalContent } from '../../modal/modal-view/modal-view.component';
-import { ToastController } from '@ionic/angular/standalone';
+import { ToastController, IonBackButton } from '@ionic/angular/standalone';
 
 addIcons({ star, 'star-outline': starOutline });
 
@@ -16,7 +16,7 @@ addIcons({ star, 'star-outline': starOutline });
   selector: 'app-rate',
   templateUrl: './rate.component.html',
   styleUrls: ['./rate.component.scss'],
-  imports: [CommonModule, ...IonicStandaloneStandardImports],
+  imports: [IonBackButton, CommonModule, ...IonicStandaloneStandardImports],
   standalone: true,
 })
 export class RateComponent implements ModalContent{

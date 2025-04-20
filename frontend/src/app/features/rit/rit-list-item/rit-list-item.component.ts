@@ -1,9 +1,9 @@
-import {CommonModule} from '@angular/common';
-import {Component, Input} from '@angular/core';
-import {Router} from '@angular/router';
-import {Rit} from '../../../model/rit';
-import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
-import {Rating} from '../../../model/rating';
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { Rating } from '../../../model/rating';
+import { Rit } from '../../../model/rit';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 
 @Component({
   selector: 'app-rit-list-item',
@@ -15,6 +15,7 @@ import {Rating} from '../../../model/rating';
 
 export class RitListItemComponent {
   @Input() rit!: Rit;
+  @Input() currentPage!: string;
 
   protected latestRatingValue: number = 0;
 
@@ -37,11 +38,11 @@ export class RitListItemComponent {
   }
 
   navigateToRatings(): void {
-    this.router.navigate(['/rits/ratings', this.rit.id]);
+    this.router.navigate(this.currentPage === 'home' ? ['home/rits/ratings', this.rit.id] : ['/rits/ratings', this.rit.id]);
   }
 
   navigateToRit(): void {
-    this.router.navigate(['/rits/view', this.rit.id]);
+    this.router.navigate(this.currentPage === 'home' ? ['/home/rits/view', this.rit.id] : ['/rits/view', this.rit.id]);
   }
 
 }
