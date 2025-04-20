@@ -4,7 +4,6 @@ const { resolve, relative } = require('path');
 const { writeFileSync, existsSync, mkdirSync } = require('fs-extra');
 
 getLastCommit((err, gitInfo) => {    
-
     gitInfo.version = version;
     gitInfo.authoredOn = new Date(parseInt(gitInfo.authoredOn) * 1000);
     gitInfo.committedOn = new Date(parseInt(gitInfo.committedOn) * 1000);
