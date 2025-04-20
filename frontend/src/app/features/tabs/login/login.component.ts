@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   ionViewWillEnter() {
     this.route.snapshot.queryParams['emailConfirmed'] && this.showSuccessToast('Email confirmed successfully!');
-    this.router.navigate(['/login'], { queryParams: { emailConfirmed: null } });
+    this.router.navigate(['/tabs/login'], { queryParams: { emailConfirmed: null } });
     this.reset();
   }
 
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
   }
 
   register() {
-    this.router.navigate(['/register']);
+    this.router.navigate(['/tabs/register']);
   }
 
   async showSuccessToast(message: string) {

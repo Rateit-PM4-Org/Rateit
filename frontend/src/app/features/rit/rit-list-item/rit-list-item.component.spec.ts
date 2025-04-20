@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';
 import { RitListItemComponent } from './rit-list-item.component';
 import { Rit } from '../../../model/rit';
 import { By } from '@angular/platform-browser';
@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 describe('RitListItemComponent', () => {
   let component: RitListItemComponent;
   let fixture: ComponentFixture<RitListItemComponent>;
-  let routerSpy: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigate']);
+  let routerSpy: jasmine.SpyObj<Router>;
+  let navCtrlSpy: jasmine.SpyObj<NavController>;
 
   const testRit: Rit = {
     id: '1',
@@ -18,10 +19,15 @@ describe('RitListItemComponent', () => {
   };
 
   beforeEach(async () => {
+    routerSpy = jasmine.createSpyObj('Router', ['navigate'], { url: '/tabs/rits' });
+    navCtrlSpy = jasmine.createSpyObj('NavController', ['navigateForward']);
 
     await TestBed.configureTestingModule({
       imports: [RitListItemComponent, IonicModule.forRoot()],
-      providers: [{ provide: Router, useValue: routerSpy }],
+      providers: [
+        { provide: Router, useValue: routerSpy },
+        { provide: NavController, useValue: navCtrlSpy }
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RitListItemComponent);
@@ -35,10 +41,10 @@ describe('RitListItemComponent', () => {
   });
 
   it('should render rit name and tags', () => {
-    const titleEl = fixture.debugElement.query(By.css('.title')).nativeElement;
+    const titleEl = fixture.debugElement.query(By.css('.title'))?.nativeElement;
     const chipElements = fixture.debugElement.queryAll(By.css('ion-chip'));
 
-    expect(titleEl.textContent).toContain(testRit.name);
+    expect(titleEl?.textContent).toContain(testRit.name);
     expect(chipElements.length).toBe(testRit.tags.length);
     chipElements.forEach((chipEl, index) => {
       expect(chipEl.nativeElement.textContent).toContain(testRit.tags[index]);
@@ -68,13 +74,11 @@ describe('RitListItemComponent', () => {
 
   it('should navigate to ratings with correct ID', () => {
     component.navigateToRatings();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/rits/ratings', testRit.id]);
+    expect(navCtrlSpy.navigateForward).toHaveBeenCalledWith('/tabs/rits/ratings/1');
   });
 
   it('should navigate to rit view with correct ID', () => {
     component.navigateToRit();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/rits/view', testRit.id]);
+    expect(navCtrlSpy.navigateForward).toHaveBeenCalledWith('/tabs/rits/view/1');
   });
-
-
 });
