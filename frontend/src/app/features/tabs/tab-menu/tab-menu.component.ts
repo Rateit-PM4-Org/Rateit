@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { AuthService } from '../../../shared/services/auth.service';
-import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-tab-menu',
