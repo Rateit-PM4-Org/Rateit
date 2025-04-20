@@ -39,14 +39,8 @@ export class TabMenuComponent {
 
   navigateToTab(tab: string) {
     const currentUrl = this.router.url;
-
     const tabRootPath = `/tabs/${tab}`;
-
-    if (!currentUrl.startsWith(tabRootPath)) {
-      this.navCtrl.navigateRoot(tabRootPath);
-      return;
-    }
-
+    
     if (currentUrl !== tabRootPath) {
       this.navCtrl.navigateRoot(tabRootPath);
     }

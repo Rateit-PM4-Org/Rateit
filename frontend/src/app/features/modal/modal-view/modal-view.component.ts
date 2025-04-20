@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 export class ModalViewComponent implements OnInit {
     @ViewChild(IonModal) modal!: IonModal;
     @Input() content!: ModalContent;
+    @Input() title!: string;
+    
     protected isDisabled: boolean = true;
     protected presentingElement!: HTMLElement | null;
     private subscription: any;
