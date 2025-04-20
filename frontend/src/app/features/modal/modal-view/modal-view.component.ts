@@ -21,7 +21,7 @@ export class ModalViewComponent implements OnInit {
     private readonly actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
-    this.presentingElement = document.querySelector('ion-page');
+    this.presentingElement = document.querySelector('ion-router-outlet');
     this.subscription = this.content.isDisabled.subscribe((isDisabled: boolean) => {
       this.isDisabled = isDisabled;
     })
