@@ -17,6 +17,7 @@ COPY .git/ .git/
 RUN npm run build -- --output-path=dist/browser
 
 FROM nginx:1.27.5
+USER nginx
 
 WORKDIR /usr/share/nginx/html
 
