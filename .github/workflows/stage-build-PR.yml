@@ -30,7 +30,7 @@ jobs:
           id-token: write
         with:
           imageName: rateit-frontend
-          imageTag: ${{ github.event.pull_request.number }}
+          imageTag: pr-${{ github.event.pull_request.number }}
           dockerFilePath: frontend/Dockerfile
           buildPath: .
   comment-on-pr:
