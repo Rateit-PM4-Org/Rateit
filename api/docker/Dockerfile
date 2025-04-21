@@ -8,11 +8,8 @@ WORKDIR /app
 
 RUN gradle bootJar --no-daemon
 
-FROM eclipse-temurin:21 AS run
-RUN addgroup nonroot && useradd -g nonroot nonroot
+FROM eclipse-temurin:21-jre-alpine AS run
 COPY --from=build /app/build/libs/*.jar /app/app.jar
 EXPOSE 8080
-
-USER nonroot
 
 CMD ["java", "-jar", "/app/app.jar"]
