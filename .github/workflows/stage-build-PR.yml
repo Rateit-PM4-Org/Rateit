@@ -1,11 +1,8 @@
-name: CD Stage
+name: PR Build and Push Docker Images
 on: 
   workflow_dispatch:
   workflow_call:
   pull_request:
-      paths:
-        - 'api/**'
-        - 'frontend/**'
       branches:
         - stage
 
