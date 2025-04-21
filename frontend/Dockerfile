@@ -12,6 +12,7 @@ COPY frontend/tsconfig.json ./
 COPY frontend/tsconfig.app.json ./
 COPY frontend/tsconfig.spec.json ./
 COPY frontend/git-version.js ./
+COPY frontend/ngsw-config.json ./ngsw-config.json
 COPY .git/ .git/
 
 RUN npm run build -- --output-path=dist/browser
