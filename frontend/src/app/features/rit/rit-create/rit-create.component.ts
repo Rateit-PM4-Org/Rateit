@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonBackButton, IonInput, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
+import { IonBackButton, IonInput, NavController, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
@@ -19,6 +19,7 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
   constructor(
     private readonly ritService: RitService,
     private readonly route: ActivatedRoute,
+    private readonly navController: NavController,
     private readonly toastController: ToastController,
   ) { }
 
@@ -181,6 +182,10 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
 
   validateFields() {
     this.isDisabled.emit(!this.ritName);
+  }
+
+  goBack() {
+    this.navController.back({ animated: false });
   }
 
 }

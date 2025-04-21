@@ -1,15 +1,15 @@
-import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ReactiveFormsModule} from '@angular/forms';
-import { IonBackButton,ToastController } from '@ionic/angular/standalone';
-import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
-import {Rating} from '../../../model/rating';
-import {RatingListItemComponent} from '../rating-list-item/rating-list-item.component';
-import { RitService } from '../../../shared/services/rit.service';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
-import { Rit } from '../../../model/rit';
+import { IonBackButton, NavController, ToastController } from '@ionic/angular/standalone';
 import { Observable, Subscription } from 'rxjs';
+import { Rating } from '../../../model/rating';
+import { Rit } from '../../../model/rit';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { RitService } from '../../../shared/services/rit.service';
+import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
+import { RatingListItemComponent } from '../rating-list-item/rating-list-item.component';
 
 @Component({
   selector: 'app-all-rating',
@@ -31,6 +31,7 @@ export class AllRatingsComponent {
     private readonly ritService: RitService,
     private readonly toastController: ToastController,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly navController: NavController,
   ) { 
     this.rit = this.ritService.getRitById(this.activatedRoute.snapshot.params['ritId'])
   }
@@ -86,5 +87,9 @@ export class AllRatingsComponent {
     });
 
     await toast.present();
+  }
+
+  goBack() {
+    this.navController.back({ animated: false });
   }
 }
