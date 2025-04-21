@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button (click)="goBack()"></ion-back-button>
+      <ion-back-button (click)="goBack()" (keydown.enter)="goBack()"></ion-back-button>
     </ion-buttons>
     <ion-title>Ratings</ion-title>
   </ion-toolbar>

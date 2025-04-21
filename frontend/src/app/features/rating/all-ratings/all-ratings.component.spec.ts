@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';
 
-import { UserService } from '../../../shared/services/user.service';
 import { provideHttpClient } from '@angular/common/http';
-import { of, throwError } from 'rxjs';
-import {AllRatingsComponent} from './all-ratings.component';
-import {Rating} from '../../../model/rating';
 import { ActivatedRoute } from '@angular/router';
-import { RitService } from '../../../shared/services/rit.service';
+import { of, throwError } from 'rxjs';
+import { Rating } from '../../../model/rating';
 import { Rit } from '../../../model/rit';
+import { RitService } from '../../../shared/services/rit.service';
+import { UserService } from '../../../shared/services/user.service';
+import { AllRatingsComponent } from './all-ratings.component';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -18,6 +18,7 @@ describe('AllRatingsComponent', () => {
   let component: AllRatingsComponent;
   let fixture: ComponentFixture<AllRatingsComponent>;
   let ritServiceSpy: jasmine.SpyObj<RitService>;
+  let navControllerSpy = jasmine.createSpyObj('NavController', ['back']);
 
   beforeEach(waitForAsync(() => {
     ritServiceSpy = jasmine.createSpyObj('RitService', ['getRitById', 'getRitsErrorStream']);
@@ -29,6 +30,7 @@ describe('AllRatingsComponent', () => {
       providers: [
         { provide: UserService, useValue: userServiceMock },
         { provide: RitService, useValue: ritServiceSpy },
+        { provide: NavController, useValue: navControllerSpy },
         provideHttpClient(),
         {
           provide: ActivatedRoute,
@@ -89,4 +91,10 @@ describe('AllRatingsComponent', () => {
 
     expect(component.showErrorToast).toHaveBeenCalledWith('Failed to load ratings');
   });
+
+  it('should navigate back when goBack is called', () => {
+    component.goBack();
+    expect(navControllerSpy.back).toHaveBeenCalledWith({ animated: false });
+  });
+
 });

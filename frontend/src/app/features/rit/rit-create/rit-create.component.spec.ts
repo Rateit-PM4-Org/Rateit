@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { ModalController, ToastController } from '@ionic/angular/standalone';
+import { ModalController, NavController, ToastController } from '@ionic/angular/standalone';
 import { of } from 'rxjs/internal/observable/of';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { RitService } from '../../../shared/services/rit.service';
@@ -19,7 +19,7 @@ describe('RitCreateComponent', () => {
   ritServiceSpy.triggerRitsReload.and.returnValue(of({}));
   let activatedRouteSpy = { snapshot: { paramMap: { get: () => null } } };
   let toastControllerSpy = jasmine.createSpyObj('ToastController', ['create']);
-
+  let navControllerSpy = jasmine.createSpyObj('NavController', ['back']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -28,8 +28,8 @@ describe('RitCreateComponent', () => {
         { provide: ModalController, useValue: modalCtrlSpy },
         { provide: RitService, useValue: ritServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRouteSpy },
-        { provide: ToastController, useValue: toastControllerSpy }
-
+        { provide: ToastController, useValue: toastControllerSpy },
+        { provide: NavController, useValue: navControllerSpy }
       ]
     }).compileComponents();
 
@@ -238,6 +238,11 @@ describe('RitCreateComponent', () => {
     expect(component.ritName).toBe(mockRit.name);
     expect(component.details).toBe(mockRit.details);
     expect(component.tags).toEqual(mockRit.tags);
+  });
+
+  it('should navigate back when goBack is called', () => {
+    component.goBack();
+    expect(navControllerSpy.back).toHaveBeenCalledWith({ animated: false });
   });
 
 });
