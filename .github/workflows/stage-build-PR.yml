@@ -37,13 +37,14 @@ jobs:
         needs:  [build-and-push-image-frontend, build-and-push-image-api]
         name: Comment on PR
         runs-on: ubuntu-latest
+        permissions:
+          pull-requests: write
         steps:
           - name: Checkout repository
             uses: actions/checkout@v4
           - name: Comment on PR
             uses: marocchino/sticky-pull-request-comment@v2
             with:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               header: 'Docker Image Digest'
               message: |
                 API Image Digest: `${{needs.build-and-push-image-api.outputs.imageDigest}}`
