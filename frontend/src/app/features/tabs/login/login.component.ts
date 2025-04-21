@@ -42,14 +42,14 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.form.value.email, this.form.value.password).subscribe({
       next: response => {
         this.form.reset();
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] ?? '/';
         this.router.navigateByUrl(returnUrl);
       },
       error: err => {
-        this.showErrorToast(err.error?.error || 'Login Error');
+        this.showErrorToast(err.error?.error ?? 'Login Error');
         this.form.get("password")?.setValue('');
         this.form.get("password")?.markAsPristine();
-        this.loginErrorFields = err.error?.fields || {};
+        this.loginErrorFields = err.error?.fields ?? {};
         console.error('Login Error:', err);
       }
     })
