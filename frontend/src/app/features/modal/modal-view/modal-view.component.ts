@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 export class ModalViewComponent implements OnInit {
     @ViewChild(IonModal) modal!: IonModal;
     @Input() content!: ModalContent;
+    @Input() title!: string;
+    
     protected isDisabled: boolean = true;
     protected presentingElement!: HTMLElement | null;
     private subscription: any;
@@ -21,7 +23,7 @@ export class ModalViewComponent implements OnInit {
     private readonly actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {
-    this.presentingElement = document.querySelector('ion-page');
+    this.presentingElement = document.querySelector('ion-router-outlet');
     this.subscription = this.content.isDisabled.subscribe((isDisabled: boolean) => {
       this.isDisabled = isDisabled;
     })

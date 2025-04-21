@@ -21,7 +21,7 @@ export class MailConfirmationComponent  implements OnInit {
       {
         next: (response) => {
           console.log('Email confirmed successfully:', response);
-          this.router.navigate(['/login'], { queryParams: { emailConfirmed: true } });
+          this.router.navigate(['/tabs/login'], { queryParams: { emailConfirmed: true } });
         },
         error: (error) => {
           console.error('Error confirming email:', error.error);

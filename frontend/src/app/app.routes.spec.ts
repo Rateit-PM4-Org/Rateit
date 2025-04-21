@@ -44,102 +44,112 @@ describe('App Routing', () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/profile']);
+    await router.navigate(['/tabs/profile']);
     fixture.detectChanges();
 
     expect(location.path()).toBe('');
   }));
 
-  it('should navigate to /profile if authenticated', waitForAsync(async () => {
+  it('should navigate to /tabs/profile if authenticated', waitForAsync(async () => {
     const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     authServiceSpy.isAuthenticated.and.returnValue(true);
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/profile']);
+    await router.navigate(['/tabs/profile']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/profile');
+    expect(location.path()).toBe('/tabs/profile');
   }));
 
-  it('should navigate to /home', waitForAsync(async () => {
+  it('should navigate to /tabs/home', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/home']);
+    await router.navigate(['/tabs/home']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/home');
+    expect(location.path()).toBe('/tabs/home');
   }));
 
-  it('should navigate to /user/mail-confirmation', waitForAsync(async () => {
+  it('should navigate to /tabs/user/mail-confirmation', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/user/mail-confirmation']);
+    await router.navigate(['/tabs/user/mail-confirmation']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/user/mail-confirmation');
+    expect(location.path()).toBe('/tabs/user/mail-confirmation');
   }
   ));
 
-  it('should navigate to /login', waitForAsync(async () => {
+  it('should navigate to /tabs/login', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/login']);
+    await router.navigate(['/tabs/login']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/login');
+    expect(location.path()).toBe('/tabs/login');
   }));
 
-  it('should navigate to /register', waitForAsync(async () => {
+  it('should navigate to /tabs/register', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/register']);
+    await router.navigate(['/tabs/register']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/register');
+    expect(location.path()).toBe('/tabs/register');
   }));
 
-  it('should navigate "" to /home', waitForAsync(async () => {
+  it('should navigate "" to /tabs/home', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
     await router.navigate(['/']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/home');
+    expect(location.path()).toBe('/tabs/home');
   }));
 
-  it('should navigate to /rits', waitForAsync(async () => {
+  it('should navigate to /tabs/rits', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/rits']);
+    await router.navigate(['/tabs/rits']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/rits');
+    expect(location.path()).toBe('/tabs/rits');
   }));
 
-  it('should navigate to /rits/view/12', waitForAsync(async () => {
+  it('should navigate to /tabs/rits/view/12', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/rits/view/12']);
+    await router.navigate(['/tabs/rits/view/12']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/rits/view/12');
+    expect(location.path()).toBe('/tabs/rits/view/12');
   }));
 
-  it('should navigate to /rits/ratings/12', waitForAsync(async () => {
+  it('should navigate to /tabs/rits/ratings/12', waitForAsync(async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
-    await router.navigate(['/rits/ratings/12']);
+    await router.navigate(['/tabs/rits/ratings/12']);
     fixture.detectChanges();
 
-    expect(location.path()).toBe('/rits/ratings/12');
+    expect(location.path()).toBe('/tabs/rits/ratings/12');
+  }));
+
+  it('should navigate to /tabs/build-info', waitForAsync(async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    await router.navigate(['/build-info']);
+    fixture.detectChanges();
+
+    expect(location.path()).toBe('/tabs/build-info');
   }));
 });

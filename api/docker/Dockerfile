@@ -1,8 +1,9 @@
 FROM gradle:8.13.0-jdk-alpine AS build
 
-COPY --chown=gradle:gradle --chmod=755 settings.gradle /app/settings.gradle
-COPY --chown=gradle:gradle --chmod=755 build.gradle /app/build.gradle
-COPY --chown=gradle:gradle --chmod=755 src /app/src
+COPY --chown=gradle:gradle --chmod=744 api/settings.gradle /app/settings.gradle
+COPY --chown=gradle:gradle --chmod=744 api/build.gradle /app/build.gradle
+COPY --chown=gradle:gradle --chmod=744 api/src /app/src
+COPY --chown=gradle:gradle --chmod=744 .git/ /.git/
 WORKDIR /app
 
 RUN gradle bootJar --no-daemon
