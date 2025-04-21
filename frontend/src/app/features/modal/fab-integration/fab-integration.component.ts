@@ -15,16 +15,16 @@ import { RateComponent } from '../../rit/rate/rate.component';
   imports: [CommonModule, ...IonicStandaloneStandardImports, FabComponent, ModalViewComponent, RitCreateComponent, RateComponent],
   standalone: true,
 })
-export class FabIntegrationComponent  implements OnInit {
-  @Input() rit!: Observable<Rit|null> | null;
+export class FabIntegrationComponent implements OnInit {
+  @Input() rit!: Observable<Rit | null> | null;
   private ritSubscription: any;
-  currentRit: Rit|null = null;
+  currentRit: Rit | null = null;
   @ViewChild(FabComponent) fabComponent!: FabComponent;
   @ViewChild("ritCreateModal") ritCreateModalComponent!: ModalViewComponent;
   @ViewChild("rateModal") ratingCreateModalComponent!: ModalViewComponent;
 
   buttons: FabButton[] = [];
-  
+
   ngOnInit() {
     this.updateButtons();
     this.ritSubscription = this.rit?.subscribe((data) => {
@@ -40,17 +40,20 @@ export class FabIntegrationComponent  implements OnInit {
   }
 
   updateButtons() {
-    this.buttons = [
-      {
-        icon: 'add-outline',
-        action: () => this.ritCreateModalComponent.modal.present(),
-      },
-    ];
-    if (this.currentRit) {
-      this.buttons.push({
-        icon: 'star-outline',
-        action: () => this.ratingCreateModalComponent.modal.present(),
-      });
+    if (!this.currentRit) {
+      this.buttons = [
+        {
+          icon: 'add-outline',
+          action: () => this.ritCreateModalComponent.modal.present(),
+        },
+      ];
+    } else {
+      this.buttons = [
+        {
+          icon: 'star-outline',
+          action: () => this.ratingCreateModalComponent.modal.present()
+        },
+      ];
     }
   }
 

@@ -100,10 +100,6 @@ public class Rit {
         this.id = s;
     }
 
-    public Instant getLastInteractionAt() {
-        return updatedAt; // For now, return the same value as updatedAt
-    }
-
     public Set<Rating> getRatings() {
         return ratings;
     }

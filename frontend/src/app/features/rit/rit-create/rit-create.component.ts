@@ -64,6 +64,10 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
       this.ritService.createRit(this.buildRequest()).subscribe({
         next: (rit) => {
           this.handleSuccess(rit, 'Rit created successfully!');
+          this.ritId = undefined;
+          this.ritName = undefined;
+          this.details = undefined;
+          this.tags = [];
           resolve(true);
         },
         error: (err) => {

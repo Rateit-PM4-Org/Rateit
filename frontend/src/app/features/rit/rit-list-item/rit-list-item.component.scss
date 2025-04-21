@@ -20,6 +20,11 @@
   min-width: 70px;
 }
 
+.ratingButton ion-icon.centered {
+  margin: 0 auto;
+  display: block;
+}
+
 .content {
   display: flex;
   flex-direction: column;

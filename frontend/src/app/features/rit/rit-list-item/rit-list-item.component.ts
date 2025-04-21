@@ -1,9 +1,10 @@
-import {CommonModule} from '@angular/common';
-import {Component, Input} from '@angular/core';
-import {Router} from '@angular/router';
-import {Rit} from '../../../model/rit';
-import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
-import {Rating} from '../../../model/rating';
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { Rating } from '../../../model/rating';
+import { Rit } from '../../../model/rit';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-rit-list-item',
@@ -18,7 +19,7 @@ export class RitListItemComponent {
 
   protected latestRatingValue: number = 0;
 
-  constructor(private readonly router: Router) {
+  constructor(private readonly router: Router, private readonly navCtrl: NavController) {
   }
 
   ngOnInit() {
@@ -36,12 +37,22 @@ export class RitListItemComponent {
     return latestRating.value ?? 0;
   }
 
+  private isInHomeTab(): boolean {
+    return this.router.url.includes('/tabs/home');
+  }
+
   navigateToRatings(): void {
-    this.router.navigate(['/rits/ratings', this.rit.id]);
+    const path = this.isInHomeTab()
+      ? `/tabs/home/rits/ratings/${this.rit.id}`
+      : `/tabs/rits/ratings/${this.rit.id}`;
+    this.navCtrl.navigateForward(path);
   }
 
   navigateToRit(): void {
-    this.router.navigate(['/rits/view', this.rit.id]);
+    const path = this.isInHomeTab()
+      ? `/tabs/home/rits/view/${this.rit.id}`
+      : `/tabs/rits/view/${this.rit.id}`;
+    this.navCtrl.navigateForward(path);
   }
 
 }
