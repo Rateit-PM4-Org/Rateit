@@ -16,7 +16,7 @@ COPY .git/ .git/
 
 RUN npm run build -- --output-path=dist/browser
 
-FROM nginx:latest
+FROM nginx:1.27.5-alpine-slim
 
 WORKDIR /usr/share/nginx/html
 
