@@ -58,4 +58,13 @@ public class RitController {
     public Rating rate(@AuthenticationPrincipal User user, @RequestBody @Validated RatingCreateRequest request) {
         return ritService.rate(user, request);
     }
+
+    @DeleteMapping(path = "/deleteRating/{id}")
+    public void deleteRating(@AuthenticationPrincipal User user, @PathVariable String id) {
+        ritService.deleteRating(user, id);
+    }
+
+
+
+
 }

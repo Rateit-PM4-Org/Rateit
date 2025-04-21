@@ -62,6 +62,16 @@ public class RitService {
         return ratingRepository.save(rating);
     }
 
+    public void deleteRating(User owner, String id) {
+        Rating rating = ratingRepository.getRatingById(id);
+
+        if (!rating.getOwner().getId().equals(owner.getId())) {
+            throw new AccessDeniedException("You don't have access to this rating");
+        }
+
+        ratingRepository.delete(rating);
+    }
+
     public List<Rit> getAll(User owner) {
         return ritRepository.findAllByOwnerOrderByUpdatedAtDesc(owner);
     }
