@@ -19,7 +19,7 @@ on:
       imageDigest:
         value: ${{ jobs.build-and-push-image.outputs.imageDigest }}     
       image:
-        value: ${{ vars.REGISTRY}}/${{ vars.ORG_NAME}}/${{ inputs.imageName }}:${{ inputs.imageTag }}  
+        value: ${{ inputs.imageName }}:${{ inputs.imageTag }}  
   workflow_dispatch:
     inputs:
       imageName:

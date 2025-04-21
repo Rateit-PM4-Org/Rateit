@@ -46,6 +46,7 @@ jobs:
             uses: marocchino/sticky-pull-request-comment@v2
             with:
               header: 'Docker Image Digest'
+              recreate: true
               message: |
                 Docker images have been built and pushed successfully.
                 API Image: `${{needs.build-and-push-image-api.outputs.image}}`
