@@ -71,5 +71,17 @@ export class RitService {
       })
     );
   }
-  
+
+  deleteRating(ratingId: string | undefined) {
+    return this.apiService.delete('/rit/deleteRating/' + ratingId).pipe(
+      tap({
+        next: () => {
+          this.triggerRitsReload().subscribe();
+        },
+        error: (err) => {
+          this.ritsErrorStream.next(err);
+        }
+      })
+    );
+  }
 }

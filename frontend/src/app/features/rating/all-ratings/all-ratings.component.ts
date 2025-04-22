@@ -31,7 +31,7 @@ export class AllRatingsComponent {
     private readonly ritService: RitService,
     private readonly toastController: ToastController,
     private readonly activatedRoute: ActivatedRoute,
-  ) { 
+  ) {
     this.rit = this.ritService.getRitById(this.activatedRoute.snapshot.params['ritId'])
   }
 
@@ -86,5 +86,18 @@ export class AllRatingsComponent {
     });
 
     await toast.present();
+  }
+
+  deleteRating(ratingId: string|undefined) {
+
+    this.ritService.deleteRating(ratingId).subscribe({
+      next: (data) => {
+        this.loadRatings(this.activatedRoute.snapshot.params['ritId']);
+        this.handleSuccess(data?.ratings ?? []);
+      },
+      error: (err) => {
+        this.handleError(err);
+      }
+    });
   }
 }

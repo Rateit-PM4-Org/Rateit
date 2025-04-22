@@ -10,10 +10,18 @@
   <ion-text *ngIf="ratings.length==0">
     No ratings present for this Rit.
   </ion-text>
-  <ion-list>
-    <app-rating-list-item *ngFor="let rating of ratings" [rating]="rating">
-    </app-rating-list-item>
-  </ion-list>
+  <ion-item-sliding *ngFor="let rating of ratings">
+    <ion-item lines="none">
+      <div class="full-width-wrapper">
+        <app-rating-list-item [rating]="rating"></app-rating-list-item>
+      </div>
+    </ion-item>
+    <ion-item-options side="end">
+      <ion-item-option color="danger" (click)="deleteRating(rating.id)" expandable style="--min-width: 100px; --padding-start: 12px; --padding-end: 12px;">
+        <ion-icon name="trash"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
 </ion-content>
 
 <app-fab-integration [rit]="rit"></app-fab-integration>

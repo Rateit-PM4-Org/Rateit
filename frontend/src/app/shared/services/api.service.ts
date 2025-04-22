@@ -45,6 +45,16 @@ export class ApiService {
       })
     );
   }
+  delete(path: string): Observable<any> {
+    return this.http.delete<any>(this.baseEndpoint + path, this.addTokenHeader()).pipe(
+      catchError(error => {
+        if (error.status === 403) {
+          this.authService.logout();
+        }
+        throw error;
+      })
+    );
+  }
 
   addTokenHeader() {
     if (this.authService.getToken() != null) {
