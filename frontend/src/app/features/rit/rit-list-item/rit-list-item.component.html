@@ -2,7 +2,8 @@
   <ion-label (click)="navigateToRit()" (keydown.enter)="navigateToRit()" class="content">
     <h2 class="title">{{ rit.name }}</h2>
     <div class="tags-container">
-      <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index">
+      <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index" (click)="navigateToTag(tag, $event)"
+        (keydown.enter)="navigateToTag(tag, $event)" class="tag-chip">
         <ion-icon name="pricetag-outline"></ion-icon>
         <ion-label>{{ tag }}</ion-label>
       </ion-chip>

@@ -55,4 +55,11 @@ export class RitListItemComponent {
     this.navCtrl.navigateForward(path);
   }
 
+  navigateToTag(tagNme: string, event: Event): void {
+    this.router.navigate(['/tabs/rits'], {
+      queryParams: { tag: tagNme }
+    });
+    event.stopPropagation();
+  }
+
 }

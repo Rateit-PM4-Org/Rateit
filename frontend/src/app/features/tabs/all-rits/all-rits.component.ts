@@ -142,7 +142,6 @@ export class AllRitsComponent implements ViewWillEnter {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: queryParams,
-      queryParamsHandling: 'merge'
     });
   }
 

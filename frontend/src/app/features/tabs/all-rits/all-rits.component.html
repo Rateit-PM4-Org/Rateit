@@ -10,7 +10,7 @@
     <div class="tags-input-container">
       <ion-label>Tag:</ion-label>
       <div class="tags-container">
-        <ion-chip color="primary">
+        <ion-chip color="primary" (click)="clearTagFilter()" (keypress)="clearTagFilter()">
           <ion-icon name="pricetag-outline"></ion-icon>
           <ion-label>{{ selectedTag || 'All' }}</ion-label>
         </ion-chip>
