@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {Router} from '@angular/router';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 
 @Component({
@@ -9,8 +10,10 @@ import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
   imports: [CommonModule, ...IonicStandaloneStandardImports],
 })
 export class TagListItemComponent {
+  constructor(private readonly router: Router) {}
+
   navigateToTag() {
-    console.log('Navigating to tag:', this.tag.name);
+    this.router.navigate(['/rits']);//, this.tag.name]);
   }
   @Input() tag!: { name: string; ritCount: number };
 }

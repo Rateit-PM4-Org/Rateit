@@ -29,7 +29,7 @@ export class HomeComponent implements ViewWillEnter {
 
   rits: Rit[] = [];
   numberOfLatestRitsToShow: number = 10;
-  numberOfTopTagsToShow: number = 6;
+  numberOfTopTagsToShow: number = 4;
   isLoggedIn$!: Observable<boolean>;
 
   ritSubscription: Subscription | null = null;
@@ -138,7 +138,7 @@ export class HomeComponent implements ViewWillEnter {
 
     // Iterate through the sorted Rits and track the latest interaction and count for each tag
     this.rits.forEach(rit => {
-      const ritDate = new Date(rit.lastInteractionAt ?? 0);
+      const ritDate = new Date(rit.updatedAt ?? 0);
       rit.tags?.forEach(tag => {
         if (!tagMap[tag]) {
           tagMap[tag] = { ritCount: 0, latestInteraction: ritDate };

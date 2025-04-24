@@ -209,6 +209,64 @@ describe('HomeComponent', () => {
     );
   }));
 
+  it('should return top tags sorted by latest interaction and rit count', () => {
+    const ritsMock = [
+      { tags: ['tag1', 'tag2'], updatedAt: '2023-01-02T12:00:00Z' },
+      { tags: ['tag1'], updatedAt: '2023-01-01T12:00:00Z' },
+      { tags: ['tag2'], updatedAt: '2023-01-03T12:00:00Z' }
+    ] as Rit[];
+
+    component['rits'] = ritsMock;
+
+    const topTags = component.topTags();
+
+    expect(topTags).toEqual([
+      { name: 'tag2', ritCount: 2 },
+      { name: 'tag1', ritCount: 2 }
+    ]);
+  });
+
+  it('should return an empty array when there are no rits for topTags()', () => {
+    component['rits'] = [];
+    const topTags = component.topTags();
+    expect(topTags).toEqual([]);
+  });
+
+  it('should render top tags in ion-grid', () => {
+    const ritsMock = [
+      { tags: ['tag1', 'tag2'], updatedAt: '2023-01-02T12:00:00Z' },
+      { tags: ['tag1'], updatedAt: '2023-01-01T12:00:00Z' },
+      { tags: ['tag2'], updatedAt: '2023-01-03T12:00:00Z' }
+    ] as Rit[];
+
+    component['rits'] = ritsMock;
+
+    component.ionViewWillEnter();
+    fixture.detectChanges();
+
+    const gridItems = fixture.nativeElement.querySelectorAll('[data-testid="tag-item"]');
+
+    expect(gridItems).toBeTruthy();
+    expect(gridItems.length).toBe(2); // TODO: FAILING HERE (expecting 2 but getting 0)
+    expect(gridItems[0].getAttribute('ng-reflect-tag')).toContain('tag2');
+    expect(gridItems[1].getAttribute('ng-reflect-tag')).toContain('tag1');
+  });
+
+  it('should call topTags() when ionViewWillEnter is called', () => {
+    spyOn(component, 'topTags');
+    component.ionViewWillEnter();
+    fixture.detectChanges();
+    expect(component.topTags).toHaveBeenCalled();
+  });
+
+  it('should not render ion-grid when there are no top tags', () => {
+    component['rits'] = [];
+    fixture.detectChanges();
+
+    const grid = fixture.nativeElement.querySelector('ion-grid');
+    expect(grid).toBeFalsy();
+  });
+
   it('should sort rits by lastInteractionAt descending on handleLoadRitsSuccess', () => {
     const ritsMock = [
       { updatedAt: '2023-01-01T00:00:00Z', ratings: [{ createdAt: '2023-01-03T00:00:00Z' }] },
