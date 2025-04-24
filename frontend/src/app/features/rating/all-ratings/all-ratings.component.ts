@@ -32,7 +32,7 @@ export class AllRatingsComponent {
     private readonly toastController: ToastController,
     private readonly activatedRoute: ActivatedRoute,
     private readonly navController: NavController,
-  ) { 
+  ) {
     this.rit = this.ritService.getRitById(this.activatedRoute.snapshot.params['ritId'])
   }
 
@@ -87,9 +87,5 @@ export class AllRatingsComponent {
     });
 
     await toast.present();
-  }
-
-  goBack() {
-    this.navController.back({ animated: false });
   }
 }

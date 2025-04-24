@@ -184,8 +184,4 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     this.isDisabled.emit(!this.ritName);
   }
 
-  goBack() {
-    this.navController.back({ animated: false });
-  }
-
 }
