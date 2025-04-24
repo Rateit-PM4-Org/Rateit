@@ -5,7 +5,7 @@
 </ion-header>
 <div class="ion-padding" scroll-y="false">
   <div>
-    <ion-searchbar [(ngModel)]="searchText" placeholder="Search..." class="searchbar"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="searchText" (ionChange)="onSearchChange($event)" placeholder="Search..." class="searchbar"></ion-searchbar>
 
     <div class="tags-input-container">
       <ion-label>Tag:</ion-label>

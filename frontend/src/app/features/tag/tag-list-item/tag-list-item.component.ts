@@ -13,7 +13,9 @@ export class TagListItemComponent {
   constructor(private readonly router: Router) {}
 
   navigateToTag() {
-    this.router.navigate(['/rits']);//, this.tag.name]);
+    this.router.navigate(['/tabs/rits'], {
+      queryParams: { tag: this.tag.name }
+    });
   }
   @Input() tag!: { name: string; ritCount: number };
 }
