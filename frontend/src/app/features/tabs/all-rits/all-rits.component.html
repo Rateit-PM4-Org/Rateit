@@ -13,6 +13,7 @@
         <ion-chip color="primary" (click)="clearTagFilter()" (keypress)="clearTagFilter()">
           <ion-icon name="pricetag-outline"></ion-icon>
           <ion-label>{{ selectedTag || 'All' }}</ion-label>
+          <ion-icon *ngIf="selectedTag" name="close"></ion-icon>
         </ion-chip>
       </div>
     </div>
