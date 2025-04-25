@@ -8,21 +8,20 @@ describe('TagListItemComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TagListItemComponent],
-            imports: [IonicModule.forRoot()],
+            imports: [TagListItemComponent],
         }).compileComponents();
 
         fixture = TestBed.createComponent(TagListItemComponent);
         component = fixture.componentInstance;
+        component.tag = { name: 'Test Tag', ritCount: 4 };
         fixture.detectChanges();
     });
 
     it('should create the component', () => {
-        expect(component).toBeFalsy();
+        expect(component).toBeTruthy();
     });
 
     it('should render the tag name and ritCount in the template', () => {
-        component.tag = { name: 'Test Tag', ritCount: 5 };
         const compiled = fixture.nativeElement as HTMLElement;
         expect(compiled.textContent).toContain('Test Tag');
         expect(compiled.textContent).toContain('4');
