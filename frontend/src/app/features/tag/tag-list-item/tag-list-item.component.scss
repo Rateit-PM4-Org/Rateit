@@ -4,6 +4,9 @@ ion-card {
 
 ion-card-title {
   font-size: 1.5em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 ion-card-header {
