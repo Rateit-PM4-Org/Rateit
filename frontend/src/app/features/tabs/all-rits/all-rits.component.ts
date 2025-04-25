@@ -6,9 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
 import { Rit } from '../../../model/rit';
 import { RitService } from '../../../shared/services/rit.service';
-
 import { Subscription } from 'rxjs';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-rits',
@@ -32,10 +32,18 @@ export class AllRitsComponent implements ViewWillEnter {
 
   constructor(
     private readonly ritService: RitService,
-    private readonly toastController: ToastController
+    private readonly toastController: ToastController,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) { }
 
   ionViewWillEnter(): void {
+    // Get query parameters from URL
+    this.route.queryParams.subscribe(params => {
+      this.searchText = params['search'] ?? '';
+      this.selectedTag = params['tag'] ?? '';
+    });
+
     this.ritSubscription = this.ritService.getRits().subscribe({
       next: (data) => {
         this.handleSuccess(data);
@@ -58,9 +66,15 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   filteredRits(): Rit[] {
-    return this.rits.filter(rit =>
-      rit.name?.toLowerCase().includes(this.searchText.toLowerCase())
-    );
+    return this.rits.filter(rit => {
+      const matchesSearch = !this.searchText ||
+        rit.name?.toLowerCase().includes(this.searchText.toLowerCase());
+
+      const matchesTag = !this.selectedTag ||
+        (rit.tags?.some(tag => tag.toLowerCase() === this.selectedTag.toLowerCase()));
+
+      return matchesSearch && matchesTag;
+    });
   }
 
   private handleSuccess(data: Rit[]) {
@@ -109,4 +123,44 @@ export class AllRitsComponent implements ViewWillEnter {
     });
   }
 
+  onSearchChange(event: any): void {
+    this.searchText = event.target.value;
+    this.updateFilters();
+  }
+
+  updateFilters(): void {
+    const queryParams: any = {};
+
+    if (this.searchText) {
+      queryParams.search = this.searchText;
+    }
+
+    if (this.selectedTag) {
+      queryParams.tag = this.selectedTag;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+    });
+  }
+
+  setTagFilter(tag: string): void {
+    this.selectedTag = tag;
+    this.updateFilters();
+  }
+
+  clearFilters(): void {
+    this.searchText = '';
+    this.selectedTag = '';
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {}
+    });
+  }
+
+  clearTagFilter(): void {
+    this.selectedTag = '';
+    this.updateFilters();
+  }
 }

@@ -9,6 +9,7 @@ import { UserService } from '../../../shared/services/user.service';
 import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
 import { Router } from '@angular/router';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
+import { TagListItemComponent } from "../../tag/tag-list-item/tag-list-item.component";
 
 @Component({
   selector: 'app-home',
@@ -19,14 +20,16 @@ import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integra
     CommonModule,
     ...IonicStandaloneStandardImports,
     RitListItemComponent,
-    FabIntegrationComponent
-  ],
+    FabIntegrationComponent,
+    TagListItemComponent
+],
 })
 export class HomeComponent implements ViewWillEnter {
   presentingElement!: HTMLElement | null;
 
   rits: Rit[] = [];
   numberOfLatestRitsToShow: number = 10;
+  numberOfTopTagsToShow: number = 4;
   isLoggedIn$!: Observable<boolean>;
 
   ritSubscription: Subscription | null = null;
@@ -128,5 +131,34 @@ export class HomeComponent implements ViewWillEnter {
         (event.target as HTMLIonRefresherElement).complete();
       }
     });
+  }
+
+  topTags() {
+    const tagMap: { [tagName: string]: { ritCount: number; latestInteraction: Date } } = {};
+
+    // Iterate through the sorted Rits and track the latest interaction and count for each tag
+    this.rits.forEach(rit => {
+      const ritDate = new Date(rit.updatedAt ?? 0);
+      rit.tags?.forEach(tag => {
+        if (!tagMap[tag]) {
+          tagMap[tag] = { ritCount: 0, latestInteraction: ritDate };
+        }
+        tagMap[tag].ritCount += 1;
+        if (ritDate > tagMap[tag].latestInteraction) {
+          tagMap[tag].latestInteraction = ritDate;
+        }
+      });
+    });
+
+    // Convert the tag map to an array and sort by latest interaction, then by rit count
+    const sortedTags = Object.entries(tagMap)
+      .map(([name, { ritCount, latestInteraction }]) => ({ name, ritCount, latestInteraction }))
+      .sort((a, b) => {
+        const dateDiff = b.latestInteraction.getTime() - a.latestInteraction.getTime();
+        return dateDiff !== 0 ? dateDiff : b.ritCount - a.ritCount;
+      });
+
+    // Return the top tags
+    return sortedTags.slice(0, this.numberOfTopTagsToShow).map(({ name, ritCount }) => ({ name, ritCount }));
   }
 }
