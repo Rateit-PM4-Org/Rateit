@@ -20,7 +20,7 @@
       </ion-item>
 
       <ion-item-options slot="end">
-        <ion-item-option color="danger" expandable="true" (click)="deleteRating(rating.id)">
+        <ion-item-option color="danger" expandable="true" (click)="deleteRating(rating.id)" (keydown.enter)="deleteRating(rating.id)">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-item-option>
       </ion-item-options>
