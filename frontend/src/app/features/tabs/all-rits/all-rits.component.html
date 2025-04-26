@@ -5,14 +5,15 @@
 </ion-header>
 <div class="ion-padding" scroll-y="false">
   <div>
-    <ion-searchbar [(ngModel)]="searchText" placeholder="Search..." class="searchbar"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="searchText" (ionChange)="onSearchChange($event)" placeholder="Search..." class="searchbar"></ion-searchbar>
 
     <div class="tags-input-container">
       <ion-label>Tag:</ion-label>
       <div class="tags-container">
-        <ion-chip color="primary">
+        <ion-chip color="primary" (click)="clearTagFilter()" (keypress)="clearTagFilter()">
           <ion-icon name="pricetag-outline"></ion-icon>
           <ion-label>{{ selectedTag || 'All' }}</ion-label>
+          <ion-icon *ngIf="selectedTag" name="close"></ion-icon>
         </ion-chip>
       </div>
     </div>

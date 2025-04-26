@@ -81,4 +81,11 @@ describe('RitListItemComponent', () => {
     component.navigateToRit();
     expect(navCtrlSpy.navigateForward).toHaveBeenCalledWith('/tabs/rits/view/1');
   });
+
+  it('should navigate to rits-list with tagname', () => {
+    component.navigateToTag('tag1', new Event('click'));
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/rits'], {
+      queryParams: { tag: 'tag1' }
+    });
+  });
 });
