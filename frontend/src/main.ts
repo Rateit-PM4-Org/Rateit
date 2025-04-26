@@ -16,7 +16,7 @@ import {
   pricetagOutline,
   star,
   starOutline,
-  trash
+  trashOutline
 } from 'ionicons/icons';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
@@ -50,5 +50,5 @@ addIcons({
   logInOutline,
   chevronForward,
   createOutline,
-  trash
+  trashOutline
 });

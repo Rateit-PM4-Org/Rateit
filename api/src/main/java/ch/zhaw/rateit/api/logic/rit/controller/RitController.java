@@ -64,7 +64,4 @@ public class RitController {
         ritService.deleteRating(user, id);
     }
 
-
-
-
 }

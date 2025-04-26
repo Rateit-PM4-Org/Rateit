@@ -6,22 +6,26 @@
     <ion-title>Ratings</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding-horizontal ion-padding-top" scroll-y="true">
-  <ion-text *ngIf="ratings.length==0">
-    No ratings present for this Rit.
-  </ion-text>
-  <ion-item-sliding *ngFor="let rating of ratings">
-    <ion-item lines="none">
-      <div class="full-width-wrapper">
-        <app-rating-list-item [rating]="rating"></app-rating-list-item>
-      </div>
-    </ion-item>
-    <ion-item-options side="end">
-      <ion-item-option color="danger" (click)="deleteRating(rating.id)" expandable style="--min-width: 100px; --padding-start: 12px; --padding-end: 12px;">
-        <ion-icon name="trash"></ion-icon>
-      </ion-item-option>
-    </ion-item-options>
-  </ion-item-sliding>
+<ion-content scroll-y="true">
+  <ion-list [inset]="true">
+    <ion-text *ngIf="ratings.length === 0">
+      No ratings present for this Rit.
+    </ion-text>
+
+    <ion-item-sliding class="rating-item" *ngFor="let rating of ratings">
+      <ion-item [button]="true" lines="none">
+        <div class="full-width-wrapper">
+          <app-rating-list-item [rating]="rating"></app-rating-list-item>
+        </div>
+      </ion-item>
+
+      <ion-item-options slot="end">
+        <ion-item-option color="danger" expandable="true" (click)="deleteRating(rating.id)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>
 
 <app-fab-integration [rit]="rit$"></app-fab-integration>
