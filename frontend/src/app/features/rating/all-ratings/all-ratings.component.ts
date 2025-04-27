@@ -1,15 +1,15 @@
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
-import { IonBackButton,ToastController } from '@ionic/angular/standalone';
+import {IonBackButton, ToastController, ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {Rating} from '../../../model/rating';
 import {RatingListItemComponent} from '../rating-list-item/rating-list-item.component';
-import { RitService } from '../../../shared/services/rit.service';
-import { ActivatedRoute } from '@angular/router';
-import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
-import { Rit } from '../../../model/rit';
-import { Observable, Subscription } from 'rxjs';
+import {RitService} from '../../../shared/services/rit.service';
+import {ActivatedRoute} from '@angular/router';
+import {FabIntegrationComponent} from '../../modal/fab-integration/fab-integration.component';
+import {Rit} from '../../../model/rit';
+import {Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-all-rating',
@@ -21,8 +21,8 @@ import { Observable, Subscription } from 'rxjs';
   ],
 })
 
-export class AllRatingsComponent {
-  rit: Observable<Rit | null>;
+export class AllRatingsComponent implements ViewWillEnter, ViewWillLeave {
+  rit$: Observable<Rit | null>;
   ratings: Rating[] = [];
 
   private readonly ritSubscription: Subscription | null = null;
@@ -31,20 +31,19 @@ export class AllRatingsComponent {
     private readonly ritService: RitService,
     private readonly toastController: ToastController,
     private readonly activatedRoute: ActivatedRoute,
-  ) { 
-    this.rit = this.ritService.getRitById(this.activatedRoute.snapshot.params['ritId'])
+  ) {
+    this.rit$ = this.ritService.getRitById(this.activatedRoute.snapshot.params['ritId'])
   }
 
   ionViewWillEnter(): void {
     this.loadRatings(this.activatedRoute.snapshot.params['ritId']);
   }
 
-  ionViewDidLeave(): void {
+  ionViewWillLeave(): void {
     if (this.ritSubscription) {
       this.ritSubscription.unsubscribe();
     }
   }
-
 
   loadRatings(ritId: string): void {
     this.ritService.getRitById(ritId).subscribe({
@@ -58,17 +57,15 @@ export class AllRatingsComponent {
   }
 
   private handleSuccess(data: Rating[]) {
-    if (data.length === 0) {
-      return;
-    }
     this.ratings = [...data];
     // sort by updatedAt descending
-    this.ratings.sort((a, b) => {
-      const dateA = new Date(a.updatedAt ?? 0);
-      const dateB = new Date(b.updatedAt ?? 0);
-      return dateB.getTime() - dateA.getTime();
-    });
-
+    if (this.ratings.length > 0) {
+      this.ratings.sort((a, b) => {
+        const dateA = new Date(a.updatedAt ?? 0);
+        const dateB = new Date(b.updatedAt ?? 0);
+        return dateB.getTime() - dateA.getTime();
+      });
+    }
   }
 
   private handleError(err: any) {
@@ -86,5 +83,29 @@ export class AllRatingsComponent {
     });
 
     await toast.present();
+  }
+
+  async showSuccessToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      color: 'success',
+    });
+
+    await toast.present();
+  }
+
+  deleteRating(ratingId: string | undefined) {
+    this.ritService.deleteRating(ratingId).subscribe({
+      next: () => {
+        this.showSuccessToast('Rating deleted successfully!');
+        this.ritService.triggerRitsReload().subscribe({});
+        this.loadRatings(this.activatedRoute.snapshot.params['ritId']);
+      },
+      error: (err) => {
+        this.handleError(err);
+      }
+    });
   }
 }

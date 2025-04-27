@@ -18,7 +18,7 @@ import {
   IonIcon,
   IonImg,
   IonInput,
-  IonItem,
+  IonItem, IonItemOption, IonItemOptions, IonItemSliding,
   IonLabel,
   IonList,
   IonModal,
@@ -90,6 +90,9 @@ export const IonicStandaloneStandardImports = [
   IonNote,
   IonSearchbar,
   IonRefresher,
-  IonRefresherContent
+  IonRefresherContent,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption
 
 ];

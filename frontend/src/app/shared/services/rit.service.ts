@@ -71,5 +71,8 @@ export class RitService {
       })
     );
   }
-  
+
+  deleteRating(ratingId: string | undefined): Observable<any> {
+    return this.apiService.delete('/rit/deleteRating/' + ratingId);
+  }
 }

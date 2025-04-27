@@ -25,8 +25,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -174,4 +173,28 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         assertNotNull(ritResponse.getRatings(), "Rit must have ratings");
         assertFalse(ritResponse.getRatings().isEmpty());
     }
+    @Test
+    void deleteRating_positive() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        Rating rating = ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+        mockMvc.perform(delete("/rit/deleteRating/" + rating.getId()).with(user(testUser)))
+                .andExpect(status().is2xxSuccessful());
+
+        assertFalse(ratingRepository.existsById(rating.getId()), "Rating must be deleted");
+    }
+
+    @Test
+    void deleteRating_negative() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        Rating rating = ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+
+        mockMvc.perform(delete("/rit/deleteRating/" + "non-existing-id").with(user(testUser)))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(delete("/rit/deleteRating/" + rating.getId()).with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
+                .andExpect(status().isForbidden());
+    }
+
 }

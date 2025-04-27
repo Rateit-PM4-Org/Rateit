@@ -62,6 +62,16 @@ public class RitService {
         return ratingRepository.save(rating);
     }
 
+    public void deleteRating(User owner, String id) {
+        Rating rating = findRatingById(id);
+
+        if (!rating.getOwner().getId().equals(owner.getId())) {
+            throw new AccessDeniedException("You don't have access to this rating");
+        }
+
+        ratingRepository.delete(rating);
+    }
+
     public List<Rit> getAll(User owner) {
         return ritRepository.findAllByOwnerOrderByUpdatedAtDesc(owner);
     }
@@ -92,6 +102,11 @@ public class RitService {
     private Rit findRitById(String id) {
         return ritRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rit not found"));
+    }
+
+    private Rating findRatingById(String id) {
+        return ratingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rating not found"));
     }
 
     private boolean canUserViewRit(User user, Rit rit) {
