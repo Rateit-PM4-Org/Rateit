@@ -38,7 +38,7 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
 
-    private final Rit testRit = new Rit("TestRit", "Details", null, testUser);
+    private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
 
     @BeforeEach
     void setup() {

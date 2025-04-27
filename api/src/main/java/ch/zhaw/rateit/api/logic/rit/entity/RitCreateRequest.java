@@ -15,6 +15,7 @@ import java.util.List;
 public record RitCreateRequest(
         @NotBlank String name,
         String details,
-        @NotNull List<String> tags
+        @NotNull List<String> tags,
+        List<Integer> codes
 ) {
 }
