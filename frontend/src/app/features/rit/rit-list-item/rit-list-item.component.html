@@ -1,18 +1,36 @@
-<div class="list-item-card ion-margin-bottom">
-  <ion-label (click)="navigateToRit()" (keydown.enter)="navigateToRit()" class="content">
-    <h2 class="title">{{ rit.name }}</h2>
-    <div class="tags-container">
-      <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index" (click)="navigateToTag(tag, $event)"
-        (keydown.enter)="navigateToTag(tag, $event)" class="tag-chip">
-        <ion-icon name="pricetag-outline"></ion-icon>
-        <ion-label>{{ tag }}</ion-label>
-      </ion-chip>
+<ion-item-sliding class="rit-item ion-margin-bottom">
+  <ion-item lines="none" class="ion-no-padding">
+    <div class="list-item-card full-width-wrapper">
+      <ion-label (click)="navigateToRit()" (keydown.enter)="navigateToRit()" class="content">
+        <h2 class="title">{{ rit.name }}</h2>
+        <div class="tags-container">
+          <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index"
+                    (click)="navigateToTag(tag, $event)"
+                    (keydown.enter)="navigateToTag(tag, $event)"
+                    class="tag-chip">
+            <ion-icon name="pricetag-outline"></ion-icon>
+            <ion-label>{{ tag }}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-label>
+      <ion-button size="default" class="ratingButton"
+                  (keydown.enter)="navigateToRatings()"
+                  (click)="navigateToRatings()">
+        <ng-container *ngIf="latestRatingValue > 0">
+          {{ latestRatingValue }}
+        </ng-container>
+        <ion-icon name="star" slot="end" [class.centered]="latestRatingValue <= 0"></ion-icon>
+      </ion-button>
     </div>
-  </ion-label>
-  <ion-button size="default" class="ratingButton" (keydown.enter)="navigateToRatings()" (click)="navigateToRatings()">
-    <ng-container *ngIf="latestRatingValue > 0">
-      {{ latestRatingValue }}
-    </ng-container>
-    <ion-icon name="star" slot="end" [class.centered]="latestRatingValue <= 0"></ion-icon>
-  </ion-button>
-</div>
+  </ion-item>
+
+  <ion-item-options side="end" class="ion-padding-start">
+    <ion-item-option color="danger"
+                     (click)="deleteRit(rit.id)"
+                     (keydown.enter)="deleteRit(rit.id)"
+                     expandable
+                     style="--min-width: 80px;">
+      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>
