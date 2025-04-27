@@ -2,6 +2,15 @@
   width: 100%;
 }
 
-.rating-item {
-  margin-bottom: 20px;
+ion-item{
+  --inner-padding-end: 0px;
+}
+
+ion-item-option{
+  border-radius: 20px;
+  padding: 15px;
+}
+
+ion-item-options {
+  border: 0;
 }
