@@ -28,6 +28,7 @@ export class HomeComponent implements ViewWillEnter {
   presentingElement!: HTMLElement | null;
 
   rits: Rit[] = [];
+  tags: any[] = [];
   numberOfLatestRitsToShow: number = 10;
   numberOfTopTagsToShow: number = 4;
   isLoggedIn$!: Observable<boolean>;
@@ -97,7 +98,9 @@ export class HomeComponent implements ViewWillEnter {
       const dateB = this.calculateLastInteractionAt(b);
       return dateB.getTime() - dateA.getTime();
     });
+    this.tags = this.topTags();
   }
+
   private calculateLastInteractionAt(rit: Rit): Date {
     const latestRatingDate = rit.ratings?.reduce((latest, rating) => {
       const ratingDate = new Date(rating.createdAt ?? 0);
