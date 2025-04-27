@@ -64,6 +64,7 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
         assertEquals(inputRit.getName(), rit.getName(), "Rit name must be equal");
         assertEquals(inputRit.getDetails(), rit.getDetails(), "Rit details must be equal");
         assertEquals(inputRit.getTags(), rit.getTags(), "Rit tags must be equal");
+        assertEquals(inputRit.getCodes(), rit.getCodes(), "Rit codes must be equal");
         assertEquals(inputRit.isPublished(), rit.isPublished(), "Rit isPublished must be equal");
         assertEquals(inputRit.getOwner().getId(), rit.getOwner().getId(), "Rit owner must be equal");
 

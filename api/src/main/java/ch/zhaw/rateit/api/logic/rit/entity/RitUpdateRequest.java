@@ -16,6 +16,6 @@ public record RitUpdateRequest(
         @NotBlank String name,
         String details,
         @NotNull List<String> tags,
-        List<Integer> codes
+        @NotNull List<Integer> codes
 ) {
 }

@@ -58,6 +58,7 @@ class RateitAPIRitCreateTest {
         assertEquals(request.name(), result.getName());
         assertEquals(request.details(), result.getDetails());
         assertEquals(request.tags(), result.getTags());
+        assertEquals(request.codes(), result.getCodes());
         assertFalse(result.isPublished());
         assertEquals(testUser.getId(), result.getOwner().getId());
         verify(ritRepository).save(any());
