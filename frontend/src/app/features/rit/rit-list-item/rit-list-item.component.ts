@@ -68,25 +68,12 @@ export class RitListItemComponent {
     });
     event.stopPropagation();
   }
-  private loadRits(): void {
-    this.ritService.getRits().subscribe({
-      next: (rits) => {
-        this.handleSuccess(rits);
-      },
-      error: (err: any) => {
-        this.handleError(err);
-      }
-    });
-  }
-  //handle success withount triggering reload
-  private handleSuccess(data: Rit[]) {
-
-  }
 
   private handleError(err: any) {
     const baseError = err.error?.error ?? 'Unknown error';
     this.showErrorToast(baseError);
   }
+  
   async showErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -114,9 +101,7 @@ export class RitListItemComponent {
     this.ritService.deleteRit(ritId).subscribe({
       next: () => {
         this.showSuccessToast('Rit deleted successfully!');
-        this.ritService.triggerRitsReload().subscribe(() => {
-          this.loadRits();
-        });
+        this.ritService.triggerRitsReload().subscribe(() => {});
       },
       error: (err: any) => {
         this.handleError(err);
