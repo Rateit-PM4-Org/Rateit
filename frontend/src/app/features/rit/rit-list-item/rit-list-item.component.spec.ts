@@ -5,12 +5,17 @@ import { Rit } from '../../../model/rit';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { ToastController } from '@ionic/angular/standalone';
+import { RitService } from '../../../shared/services/rit.service';
+import { of } from 'rxjs';
 
 describe('RitListItemComponent', () => {
   let component: RitListItemComponent;
   let fixture: ComponentFixture<RitListItemComponent>;
   let routerSpy: jasmine.SpyObj<Router>;
   let navCtrlSpy: jasmine.SpyObj<NavController>;
+  let ritServiceSpy: jasmine.SpyObj<RitService>;
+  let toastControllerSpy: jasmine.SpyObj<ToastController>;
 
   const testRit: Rit = {
     id: '1',
@@ -22,12 +27,16 @@ describe('RitListItemComponent', () => {
   beforeEach(async () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate'], { url: '/tabs/rits' });
     navCtrlSpy = jasmine.createSpyObj('NavController', ['navigateForward']);
+    toastControllerSpy = jasmine.createSpyObj('ToastController', ['create']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['deleteRit', 'triggerRitsReload']);
 
     await TestBed.configureTestingModule({
       imports: [RitListItemComponent, IonicModule.forRoot()],
       providers: [
         { provide: Router, useValue: routerSpy },
         { provide: NavController, useValue: navCtrlSpy },
+        { provide: ToastController, useValue: toastControllerSpy},
+        { provide: RitService, useValue: ritServiceSpy },
         provideHttpClient(),
       ],
     }).compileComponents();
@@ -88,6 +97,21 @@ describe('RitListItemComponent', () => {
     component.navigateToTag('tag1', new Event('click'));
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/rits'], {
       queryParams: { tag: 'tag1' }
+    });
+  });
+
+  it('should show toast when rit is successfully deleted', async () => {
+    ritServiceSpy.deleteRit.and.returnValue(of({}));
+    ritServiceSpy.triggerRitsReload.and.returnValue(of([]));
+
+    component.deleteRit(testRit.id);
+    expect(ritServiceSpy.deleteRit).toHaveBeenCalledWith(testRit.id);
+    expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
+    expect(toastControllerSpy.create).toHaveBeenCalledWith({
+      message: 'Rit deleted successfully!',
+      duration: 2000,
+      position: 'top',  
+      color: 'success',
     });
   });
 });
