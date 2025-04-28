@@ -73,7 +73,7 @@ export class RitListItemComponent {
     const baseError = err.error?.error ?? 'Unknown error';
     this.showErrorToast(baseError);
   }
-  
+
   async showErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -105,6 +105,7 @@ export class RitListItemComponent {
       },
       error: (err: any) => {
         this.handleError(err);
+        this.ritService.triggerRitsReload().subscribe(() => {});
       }
     });
   }

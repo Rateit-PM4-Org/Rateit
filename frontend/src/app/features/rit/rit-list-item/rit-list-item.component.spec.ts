@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { ToastController } from '@ionic/angular/standalone';
 import { RitService } from '../../../shared/services/rit.service';
-import { of } from 'rxjs';
+import {of, throwError} from 'rxjs';
 
 describe('RitListItemComponent', () => {
   let component: RitListItemComponent;
@@ -110,8 +110,18 @@ describe('RitListItemComponent', () => {
     expect(toastControllerSpy.create).toHaveBeenCalledWith({
       message: 'Rit deleted successfully!',
       duration: 2000,
-      position: 'top',  
+      position: 'top',
       color: 'success',
     });
+  });
+  it('should show error toast on error', async () => {
+    spyOn(component, 'showErrorToast');
+    const mockError = { error: { error: 'Failed to delete rit' } };
+    ritServiceSpy.deleteRit.and.returnValue(throwError(() => mockError));
+    ritServiceSpy.triggerRitsReload.and.returnValue(of([]));
+    component.deleteRit(testRit.id);
+    expect(ritServiceSpy.deleteRit).toHaveBeenCalledWith(testRit.id);
+    expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
+    expect(component.showErrorToast).toHaveBeenCalledWith('Failed to delete rit');
   });
 });
