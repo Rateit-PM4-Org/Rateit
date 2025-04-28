@@ -69,14 +69,14 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
                 Arguments.of("TestRit-Updated", null, List.of("tag1"), List.of()), // details and name updated
                 Arguments.of("TestRit-Updated", null, List.of("tag1", "tag2, tag3"), List.of()), // all updated
                 Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of()), // none updated
-                Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of(1)), // single code set
-                Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of(1, 2)) // multiple codes set
+                Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of("code1")), // single code set
+                Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of("code1", "code2")) // multiple codes set
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideValidRitUpdateParams")
-    void updateRit_positive_returnsStatusOk(String name, String details, List<String> tags, List<Integer> codes) throws Exception {
+    void updateRit_positive_returnsStatusOk(String name, String details, List<String> tags, List<String> codes) throws Exception {
         String input = objectMapper.writeValueAsString(new RitUpdateRequest(name, details, tags, codes));
 
         var resultActions = mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON)
@@ -109,7 +109,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
     @ParameterizedTest
     @MethodSource("provideInvalidRitUpdateParams")
-    void updateRit_negative_returnsBadRequest(String name, String details, List<String> tags, List<Integer> codes) throws Exception {
+    void updateRit_negative_returnsBadRequest(String name, String details, List<String> tags, List<String> codes) throws Exception {
         String input = objectMapper.writeValueAsString(new RitUpdateRequest(name, details, tags, codes));
 
         mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +119,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void updateRit_negative_unauthorized_returnsForbidden() throws Exception {
-        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of(1)));
+        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
 
         mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -127,7 +127,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void updateRit_negative_RitNotPresent() throws Exception {
-        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of(1)));
+        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
 
         mockMvc.perform(put("/rit/update/123").content(input).contentType(MediaType.APPLICATION_JSON).with(user(testUser)))
                 .andExpect(status().isNotFound());
@@ -141,7 +141,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
         testRit.setOwner(otherOwner);
         Rit rit = ritRepository.save(testRit);
 
-        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of(1)));
+        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
 
         mockMvc.perform(put("/rit/update/" + rit.getId()).content(input).contentType(MediaType.APPLICATION_JSON).with(user(testUser)))
                 .andExpect(status().isForbidden());

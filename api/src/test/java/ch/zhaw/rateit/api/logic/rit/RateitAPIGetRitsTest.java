@@ -40,8 +40,8 @@ import static org.mockito.Mockito.when;
 
     @Test
     void findAllByOwner_existingUser_returnsOwnedRits() {
-        Rit rit1 = new Rit("Rit 1", "Details 1", List.of("tag1"), List.of(1), testUser);
-        Rit rit2 = new Rit("Rit 2", "Details 2", List.of("tag2"), List.of(2), testUser);
+        Rit rit1 = new Rit("Rit 1", "Details 1", List.of("tag1"), List.of("code1"), testUser);
+        Rit rit2 = new Rit("Rit 2", "Details 2", List.of("tag2"), List.of("code2"), testUser);
         List<Rit> expectedRits = new ArrayList<>();
         expectedRits.add(rit1);
         expectedRits.add(rit2);

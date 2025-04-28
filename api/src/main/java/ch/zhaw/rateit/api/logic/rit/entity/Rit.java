@@ -30,7 +30,7 @@ public class Rit {
     private String details;
     private boolean published;
     private List<String> tags;
-    private List<Integer> codes;
+    private List<String> codes;
 
     @CreatedDate
     private Instant createdAt;
@@ -41,7 +41,7 @@ public class Rit {
     public Rit() {
     }
 
-    public Rit(String name, String details, List<String> tags, List<Integer> codes, User owner) {
+    public Rit(String name, String details, List<String> tags, List<String> codes, User owner) {
         this.name = name;
         this.details = details;
         this.codes = codes;
@@ -78,9 +78,9 @@ public class Rit {
         this.details = details;
     }
 
-    public List<Integer> getCodes() {return codes;}
+    public List<String> getCodes() {return codes;}
 
-    public void setCodes(List<Integer> codes) {this.codes = codes;}
+    public void setCodes(List<String> codes) {this.codes = codes;}
 
     public boolean isPublished() {
         return published;

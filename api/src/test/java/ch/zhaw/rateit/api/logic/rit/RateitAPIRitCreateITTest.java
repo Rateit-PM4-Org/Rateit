@@ -49,7 +49,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
     private final List<String> tags = List.of("tag1", "tag2");
-    private final List<Integer> codes = List.of(1, 2, 3);
+    private final List<String> codes = List.of("code1", "code2", "code3");
 
     @BeforeEach
     void setup() {
@@ -65,14 +65,14 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
                 Arguments.of("TestRit", "Details", List.of(), List.of()),
                 Arguments.of("TestRit", "Details", List.of("tag1"), List.of()),
                 Arguments.of("TestRit", null, List.of("tag1", "tag2"), List.of()),
-                Arguments.of("TestRit", null, List.of(), List.of(1)),
-                Arguments.of("TestRit", null, List.of(), List.of(1, 2))
+                Arguments.of("TestRit", null, List.of(), List.of("code1")),
+                Arguments.of("TestRit", null, List.of(), List.of("code1", "code2"))
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideValidRitCreateParams")
-    void createRit_positive_returnsStatusOk(String name, String details, List<String> tags, List<Integer> codes) throws Exception {
+    void createRit_positive_returnsStatusOk(String name, String details, List<String> tags, List<String> codes) throws Exception {
         String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags, codes));
 
         var resultActions = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     @ParameterizedTest
     @MethodSource("provideInvalidRitCreateParams")
-    void createRit_negative_returnsBadRequest(String name, String details, List<String> tags, List<Integer> codes) throws Exception {
+    void createRit_negative_returnsBadRequest(String name, String details, List<String> tags, List<String> codes) throws Exception {
         String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags, codes));
 
         mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
