@@ -4,6 +4,7 @@ import { RitListItemComponent } from './rit-list-item.component';
 import { Rit } from '../../../model/rit';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('RitListItemComponent', () => {
   let component: RitListItemComponent;
@@ -26,7 +27,8 @@ describe('RitListItemComponent', () => {
       imports: [RitListItemComponent, IonicModule.forRoot()],
       providers: [
         { provide: Router, useValue: routerSpy },
-        { provide: NavController, useValue: navCtrlSpy }
+        { provide: NavController, useValue: navCtrlSpy },
+        provideHttpClient(),
       ],
     }).compileComponents();
 
