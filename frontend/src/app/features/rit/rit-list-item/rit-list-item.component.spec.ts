@@ -124,4 +124,13 @@ describe('RitListItemComponent', () => {
     expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
     expect(component.showErrorToast).toHaveBeenCalledWith('Failed to delete rit');
   });
+  it('should show error on error', async () => {
+    const mockError = { error: { error: 'Failed to delete rit' } };
+    ritServiceSpy.deleteRit.and.returnValue(throwError(() => mockError));
+    ritServiceSpy.triggerRitsReload.and.returnValue(of([]));
+    component.deleteRit(testRit.id);
+    expect(ritServiceSpy.deleteRit).toHaveBeenCalledWith(testRit.id);
+    expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
+
+  });
 });
