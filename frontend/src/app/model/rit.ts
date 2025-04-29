@@ -5,6 +5,7 @@ export type Rit = {
     name?: string;
     details?: string;
     tags: string[];
+    codes: string[];
     ratings?: Rating[];
     owner?: {
       id: string;
@@ -15,4 +16,3 @@ export type Rit = {
     createdAt?: string;
     updatedAt?: string;
   };
-  

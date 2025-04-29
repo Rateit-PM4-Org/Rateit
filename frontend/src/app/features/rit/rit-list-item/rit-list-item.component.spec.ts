@@ -16,6 +16,7 @@ describe('RitListItemComponent', () => {
     name: 'Test Rit',
     details: 'Some details',
     tags: ['tag1', 'tag2'],
+    codes: ['code1', 'code2'],
   };
 
   beforeEach(async () => {
