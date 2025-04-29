@@ -207,7 +207,7 @@ describe('RitCreateComponent', () => {
           name: ['must not be empty'],
           details: ['too short'],
           tags: ['invalid tag'],
-          code: ['invalid code']
+          codes: ['invalid code']
         }
       }
     };
