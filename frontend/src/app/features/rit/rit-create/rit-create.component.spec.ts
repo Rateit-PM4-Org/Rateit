@@ -128,6 +128,7 @@ describe('RitCreateComponent', () => {
     component.ritName = 'Test Rit';
     component.details = 'Details';
     component.tags = ['tag1'];
+    component.codes = ['code1'];
 
     ritServiceSpy.createRit.and.returnValue(of({}));
 
@@ -148,11 +149,13 @@ describe('RitCreateComponent', () => {
     component.ritName = 'Test Rit';
     component.details = 'Details';
     component.tags = ['tag1'];
+    component.codes = ['code1'];
 
     ritServiceSpy.updateRit.and.returnValue(of({
       name: 'Test Rit',
       details: 'Details',
-      tags: ['tag1']
+      tags: ['tag1'],
+      codes: ['code1']
     }));
 
     component.updateRit();
@@ -171,6 +174,7 @@ describe('RitCreateComponent', () => {
     component.ritName = 'Test Rit';
     component.details = 'Details';
     component.tags = ['tag1'];
+    component.codes = ['code1'];
 
     const mockErrorResponse = {
       error: {
@@ -194,6 +198,7 @@ describe('RitCreateComponent', () => {
     component.ritName = '';
     component.details = 'Details';
     component.tags = ['tag1'];
+    component.codes = ['code1'];
 
     const mockValidationError = {
       error: {
@@ -201,7 +206,8 @@ describe('RitCreateComponent', () => {
         fields: {
           name: ['must not be empty'],
           details: ['too short'],
-          tags: ['invalid tag']
+          tags: ['invalid tag'],
+          code: ['invalid code']
         }
       }
     };
@@ -215,6 +221,7 @@ describe('RitCreateComponent', () => {
     expect(component.ritNameErrorMessage).toEqual('must not be empty');
     expect(component.detailsErrorMessage).toEqual('too short');
     expect(component.tagsErrorMessage).toEqual('invalid tag');
+    expect(component.codesErrorMessage).toEqual('invalid code');
   });
 
   it('should load rit data in ionViewWillEnter if ritId is present', () => {
@@ -222,7 +229,8 @@ describe('RitCreateComponent', () => {
       id: 'test-id',
       name: 'Loaded Rit',
       details: 'Some loaded details',
-      tags: ['tag1', 'tag2']
+      tags: ['tag1', 'tag2'],
+      codes: ['code1']
     };
 
     const route = TestBed.inject(ActivatedRoute);
@@ -238,6 +246,7 @@ describe('RitCreateComponent', () => {
     expect(component.ritName).toBe(mockRit.name);
     expect(component.details).toBe(mockRit.details);
     expect(component.tags).toEqual(mockRit.tags);
+    expect(component.codes).toEqual(mockRit.codes);
   });
 
 });
