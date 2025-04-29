@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Rating } from '../../../model/rating';
+import {RitService} from '../../../shared/services/rit.service';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { NavController } from '@ionic/angular';
+import {ToastController} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-rit-list-item',
@@ -19,7 +21,12 @@ export class RitListItemComponent {
 
   protected latestRatingValue: number = 0;
 
-  constructor(private readonly router: Router, private readonly navCtrl: NavController) {
+
+  constructor(private readonly router: Router,
+              private readonly navCtrl: NavController,
+              private readonly ritService: RitService,
+              private readonly toastController: ToastController,
+              ) {
   }
 
   ngOnInit() {
@@ -60,6 +67,47 @@ export class RitListItemComponent {
       queryParams: { tag: tagName }
     });
     event.stopPropagation();
+  }
+
+  private handleError(err: any) {
+    const baseError = err.error?.error ?? 'Unknown error';
+    this.showErrorToast(baseError);
+  }
+
+  async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      color: 'danger',
+    });
+
+    await toast.present();
+  }
+
+
+  async showSuccessToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      color: 'success',
+    });
+
+    await toast.present();
+  }
+
+  deleteRit(ritId: string | undefined): void {
+    this.ritService.deleteRit(ritId).subscribe({
+      next: () => {
+        this.showSuccessToast('Rit deleted successfully!');
+        this.ritService.triggerRitsReload().subscribe(() => {});
+      },
+      error: (err: any) => {
+        this.handleError(err);
+        this.ritService.triggerRitsReload().subscribe(() => {});
+      }
+    });
   }
 
 }

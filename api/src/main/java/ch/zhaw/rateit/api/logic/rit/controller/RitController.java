@@ -64,4 +64,9 @@ public class RitController {
         ritService.deleteRating(user, id);
     }
 
+    @DeleteMapping(path = "/deleteRit/{id}")
+    public void deleteRit(@AuthenticationPrincipal User user, @PathVariable String id) {
+        ritService.deleteRit(user, id);
+    }
+
 }
