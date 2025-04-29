@@ -44,7 +44,7 @@ describe('FabIntegrationComponent', () => {
   });
 
   it('should add rating Button if currentRit is not null', () => {
-    component.currentRit = {id: '1', name: 'Test Rit', details: 'Some details', tags: ['tag1', 'tag2']};
+    component.currentRit = {id: '1', name: 'Test Rit', details: 'Some details', tags: ['tag1', 'tag2'], codes: ['code1', 'code2']};
     component.updateButtons();
     expect(component.buttons.length).toBe(1);
   });

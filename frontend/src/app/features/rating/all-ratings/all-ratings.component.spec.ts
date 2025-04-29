@@ -60,6 +60,7 @@ describe('AllRatingsComponent', () => {
       name: 'Test Rit',
       details: 'Details',
       tags: ['tag1'],
+      codes: ['code1'],
       ratings: mockRatings
     };
 

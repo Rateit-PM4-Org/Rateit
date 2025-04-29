@@ -224,14 +224,14 @@ describe('RitCreateComponent', () => {
       details: 'Some loaded details',
       tags: ['tag1', 'tag2']
     };
-  
+
     const route = TestBed.inject(ActivatedRoute);
     spyOn(route.snapshot.paramMap, 'get').and.returnValue('test-id');
-  
+
     ritServiceSpy.getRit = jasmine.createSpy().and.returnValue(of(mockRit));
-  
+
     component.ionViewWillEnter();
-  
+
     expect(component.ritId).toBe('test-id');
     expect(component.mode).toBe('view');
     expect(ritServiceSpy.getRit).toHaveBeenCalledWith('test-id');
