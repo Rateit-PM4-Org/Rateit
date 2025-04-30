@@ -306,4 +306,23 @@ describe('RitService', () => {
     });
   });
 
+  it('should delete a rit', (done) => {
+    const service = TestBed.inject(RitService);
+    const apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+    (apiServiceSpy.delete as jasmine.Spy) = jasmine.createSpy('delete').and.returnValue(of({}));
+
+    const ritId = 'testRitId';
+    const mockResponse = {success: true};
+
+    apiServiceSpy.delete.and.returnValue(of(mockResponse));
+
+    service.deleteRit(ritId).pipe(first()).subscribe(response => {
+      expect(response).toEqual(mockResponse);
+      expect(apiServiceSpy.delete).toHaveBeenCalledWith('/rit/deleteRit/' + ritId);
+      expect(apiServiceSpy.delete).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+
 });
