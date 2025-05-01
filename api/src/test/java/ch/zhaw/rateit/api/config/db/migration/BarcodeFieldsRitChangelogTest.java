@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BarcodeFieldsRitChangelogTest extends AbstractBaseIntegrationTest {
@@ -36,7 +37,9 @@ public class BarcodeFieldsRitChangelogTest extends AbstractBaseIntegrationTest {
         Rit ritNotChanged = ritRepository.findById(testRitNotChanged.getId()).get();
 
         assertNotNull(rit.getCodes());
+        assertEquals(0, rit.getCodes().size());
         assertNotNull(ritNotChanged.getCodes());
+        assertEquals(2, ritNotChanged.getCodes().size());
 
         ritRepository.deleteAll();
     }

@@ -19,8 +19,10 @@ public class BarcodeFieldsRitChangelog {
     public void addBarcodeFields(RitRepository ritRepository) {
         // Add barcode fields to rits
         ritRepository.findAll().forEach(rit -> {
-            rit.setCodes(List.of());
-            ritRepository.save(rit);
+            if(rit.getCodes() == null){
+                rit.setCodes(List.of());
+                ritRepository.save(rit);
+            }
         });
     }
 
