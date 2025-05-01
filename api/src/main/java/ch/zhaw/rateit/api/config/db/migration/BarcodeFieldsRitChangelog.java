@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Nicolas Zillig
  */
-@ChangeUnit(id = "barcodeFieldsRitChangelog", order = "002", author = "Nicolas Zillig")
+@ChangeUnit(id = "barcodeFieldsRitChangelog", order = "003", author = "Nicolas Zillig")
 public class BarcodeFieldsRitChangelog {
     @Execution
     public void addBarcodeFields(RitRepository ritRepository) {
