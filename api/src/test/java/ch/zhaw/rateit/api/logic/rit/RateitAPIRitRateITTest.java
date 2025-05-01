@@ -196,5 +196,27 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         mockMvc.perform(delete("/rit/deleteRating/" + rating.getId()).with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
                 .andExpect(status().isForbidden());
     }
+    @Test
+    void deleteRit_positive() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+        mockMvc.perform(delete("/rit/deleteRit/" + rit.getId()).with(user(testUser)))
+                .andExpect(status().is2xxSuccessful());
+
+        assertFalse(ritRepository.existsById(rit.getId()), "Rit must be deleted");
+        assertFalse(ratingRepository.existsById(rit.getId()), "All ratings must be deleted");
+    }
+    @Test
+    void deleteRit_negative() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+        mockMvc.perform(delete("/rit/deleteRit/" + "non-existing-id").with(user(testUser)))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(delete("/rit/deleteRit/" + rit.getId()).with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
+                .andExpect(status().isForbidden());
+    }
 
 }
