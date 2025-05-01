@@ -30,12 +30,12 @@ describe('AllRitsComponent', () => {
       providers: [
         { provide: UserService, useValue: userServiceMock },
         { provide: RitService, useValue: ritServiceSpy },
-        { 
-          provide: ActivatedRoute, 
-          useValue: { 
+        {
+          provide: ActivatedRoute,
+          useValue: {
             params: of({}),
-            queryParams: of({}) 
-          } 
+            queryParams: of({})
+          }
         },
         { provide: Router, useValue: routerSpy },
         provideHttpClient()
@@ -53,8 +53,8 @@ describe('AllRitsComponent', () => {
 
   it('should load rits on initialization', () => {
     const mockRits: Rit[] = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'] }
+      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
+      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2'] }
     ];
     ritServiceSpy.getRits.and.returnValue(of(mockRits));
 
@@ -74,8 +74,8 @@ describe('AllRitsComponent', () => {
 
   it('should filter rits based on search text', () => {
     component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'] },
-      { id: '2', name: 'Another Rit', details: 'Details 2', tags: ['tag2'] }
+      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
+      { id: '2', name: 'Another Rit', details: 'Details 2', tags: ['tag2'], codes: ['code2'] }
     ];
     component.searchText = 'Test';
 
@@ -98,8 +98,8 @@ describe('AllRitsComponent', () => {
 
   it('should filter rits based on selected tag', () => {
     component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1', 'common'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2', 'common'] }
+      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1', 'common'], codes: ['code1'] },
+      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2', 'common'], codes: ['code2'] }
     ];
     component.selectedTag = 'tag1';
 
@@ -111,9 +111,9 @@ describe('AllRitsComponent', () => {
 
   it('should filter rits based on both search text and tag', () => {
     component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'] },
-      { id: '3', name: 'Another Rit', details: 'Details 3', tags: ['tag1'] }
+      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
+      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2'] },
+      { id: '3', name: 'Another Rit', details: 'Details 3', tags: ['tag1'], codes: ['code3'] }
     ];
     component.searchText = 'Test';
     component.selectedTag = 'tag1';
@@ -126,19 +126,19 @@ describe('AllRitsComponent', () => {
 
   it('should read query parameters from URL on initialization', () => {
     TestBed.resetTestingModule();
-    
+
     // Setup with specific query params
     TestBed.configureTestingModule({
       imports: [AllRitsComponent, IonicModule.forRoot()],
       providers: [
         { provide: UserService, useValue: userServiceMock },
         { provide: RitService, useValue: ritServiceSpy },
-        { 
-          provide: ActivatedRoute, 
-          useValue: { 
+        {
+          provide: ActivatedRoute,
+          useValue: {
             params: of({}),
             queryParams: of({ tag: 'testTag', search: 'testSearch' })
-          } 
+          }
         },
         { provide: Router, useValue: routerSpy },
         provideHttpClient()
@@ -147,16 +147,16 @@ describe('AllRitsComponent', () => {
 
     fixture = TestBed.createComponent(AllRitsComponent);
     component = fixture.componentInstance;
-    
+
     component.ionViewWillEnter();
-    
+
     expect(component.selectedTag).toBe('testTag');
     expect(component.searchText).toBe('testSearch');
   });
 
   it('should update URL when setting a tag filter', () => {
     component.setTagFilter('newTag');
-    
+
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
@@ -169,9 +169,9 @@ describe('AllRitsComponent', () => {
   it('should clear URL parameters when clearing all filters', () => {
     component.selectedTag = 'someTag';
     component.searchText = 'someSearch';
-    
+
     component.clearFilters();
-    
+
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
@@ -185,9 +185,9 @@ describe('AllRitsComponent', () => {
   it('should remove only tag parameter when clearing tag filter', () => {
     component.selectedTag = 'someTag';
     component.searchText = 'someSearch';
-    
+
     component.clearTagFilter();
-    
+
     expect(routerSpy.navigate).toHaveBeenCalled();
     expect(component.selectedTag).toBe('');
     expect(component.searchText).toBe('someSearch');

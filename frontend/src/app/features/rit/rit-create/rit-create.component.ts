@@ -28,6 +28,8 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
 
   tags: string[] = []
   tagsErrorMessage?: string
+  codes: string[] = []
+  codesErrorMessage?: string
   ritName?: string
   ritNameErrorMessage?: string
   details?: string
@@ -44,6 +46,7 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
         this.ritName = rit.name;
         this.details = rit.details ?? '';
         this.tags = [...(rit.tags ?? [])];
+        this.codes = [...(rit.codes ?? [])];
       });
     }
   }
@@ -68,6 +71,7 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
           this.ritName = undefined;
           this.details = undefined;
           this.tags = [];
+          this.codes = [];
           resolve(true);
         },
         error: (err) => {
@@ -83,6 +87,7 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
       name: this.ritName,
       details: this.details,
       tags: this.tags ?? [],
+      codes: this.codes ?? [],
     };
   }
 
@@ -90,6 +95,7 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     this.ritName = rit.name;
     this.details = rit.details ?? '';
     this.tags = [...(rit.tags ?? [])];
+    this.codes = [...(rit.codes ?? [])];
 
     this.showSuccessToast(toastMessage);
     this.ritService.triggerRitsReload().subscribe({});
@@ -119,6 +125,9 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     }
     if (fields.tags) {
       this.tagsErrorMessage = this.formatFieldError(fields.tags);
+    }
+    if (fields.codes) {
+      this.codesErrorMessage = this.formatFieldError(fields.codes);
     }
   }
 

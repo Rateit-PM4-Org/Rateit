@@ -37,6 +37,7 @@ public class RitService {
                 request.name(),
                 request.details(),
                 request.tags(),
+                request.codes(),
                 owner
         );
 
@@ -107,6 +108,7 @@ public class RitService {
         rit.setName(request.name());
         rit.setDetails(request.details());
         rit.setTags(request.tags());
+        rit.setCodes(request.codes());
         return ritRepository.save(rit);
     }
 

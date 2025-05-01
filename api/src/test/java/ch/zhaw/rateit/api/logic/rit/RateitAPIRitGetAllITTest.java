@@ -52,12 +52,12 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
         userRepository.saveAll(List.of(testUser, otherUser));
 
         ritRepository.saveAll(List.of(
-                new Rit("Rit1", "Details1", List.of("tag1"), testUser),
-                new Rit("OtherUserRit", "OtherDetails", List.of("tag3"), otherUser)
+                new Rit("Rit1", "Details1", List.of("tag1"), List.of("code1"), testUser),
+                new Rit("OtherUserRit", "OtherDetails", List.of("tag3"), List.of("code3"), otherUser)
         ));
         // Simulate a delay to ensure the second rit is created after the first one
         Thread.sleep(1000);
-        ritRepository.save(new Rit("Rit2", "Details2", List.of("tag2"), testUser));
+        ritRepository.save(new Rit("Rit2", "Details2", List.of("tag2"), List.of("code2"), testUser));
     }
 
     @Test

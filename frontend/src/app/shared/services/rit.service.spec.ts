@@ -29,7 +29,7 @@ describe('RitService', () => {
     const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
     apiServiceSpy.post.and.returnValue(of({success: true}));
     const mockResponse = {success: true};
-    const rit: Rit = {name: 'testRit', details: 'some details', tags: ['tag1', 'tag2']};
+    const rit: Rit = {name: 'testRit', details: 'some details', tags: ['tag1', 'tag2'], codes: ['code1', 'code2']};
 
     service.createRit(rit).pipe(first()).subscribe(response => {
       expect(response).toEqual(mockResponse);
@@ -64,7 +64,7 @@ describe('RitService', () => {
   it('should load getRits with API-Data if authenticated', (done) => {
       TestBed.overrideProvider(AuthService, provideMockAuthService(true));
       const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
-      const mockRits = [{name: 'testRit', details: 'some details', tags: ['tag1', 'tag2']}];
+      const mockRits = [{name: 'testRit', details: 'some details', tags: ['tag1', 'tag2'], codes: ['code1', 'code2']}];
       apiServiceSpy.get.and.returnValue(of(mockRits));
       let service = TestBed.inject(RitService);
       service.getRits().pipe(first()).subscribe(rits => {
@@ -77,7 +77,7 @@ describe('RitService', () => {
   it('should update getRits on triggerRitsReload', (done) => {
     let service = TestBed.inject(RitService);
     const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
-    const mockRits = [{name: 'testRit', details: 'some details', tags: ['tag1', 'tag2']}];
+    const mockRits = [{name: 'testRit', details: 'some details', tags: ['tag1', 'tag2'], codes: ['code1', 'code2']}];
     apiServiceSpy.get.and.returnValue(of(mockRits));
     service.getRits().pipe(skip(1)).subscribe(rits => {
       expect(rits).toEqual(mockRits);
@@ -161,7 +161,7 @@ describe('RitService', () => {
     const apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
 
     // First set some data by faking being authenticated
-    const mockRits = [{name: 'testRit', details: 'details', tags: ['tag']}];
+    const mockRits = [{name: 'testRit', details: 'details', tags: ['tag'], codes: ['code1']}];
     apiServiceSpy.get.and.returnValue(of(mockRits));
 
     // Send authenticated=true
@@ -189,7 +189,7 @@ describe('RitService', () => {
     const mockError = {error: 'Failed to create rit'};
     apiServiceSpy.post.and.returnValue(throwError(() => mockError));
 
-    const rit: Rit = {name: 'testRit', details: 'some details', tags: ['tag1']};
+    const rit: Rit = {name: 'testRit', details: 'some details', tags: ['tag1'], codes: ['code1']};
 
     service.createRit(rit).subscribe({
       error: err => {
@@ -204,7 +204,7 @@ describe('RitService', () => {
     let service = TestBed.inject(RitService);
     const apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
 
-    const mockRits = [{name: 'newRit', details: 'fresh details', tags: ['tag3', 'tag4']}];
+    const mockRits = [{name: 'newRit', details: 'fresh details', tags: ['tag3', 'tag4'], codes: ['code1', 'code2']}];
     apiServiceSpy.get.and.returnValue(of(mockRits));
 
     const errorSpy = jasmine.createSpy('errorSpy');
@@ -224,8 +224,8 @@ describe('RitService', () => {
       let service = TestBed.inject(RitService);
       const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
 
-      const mockRit: Rit = {id: '1', name: 'testRit', details: 'some details', tags: ['tag1']};
-      const mockRits = [mockRit, {id: '2', name: 'anotherRit', details: 'other details', tags: ['tag2']}];
+      const mockRit: Rit = {id: '1', name: 'testRit', details: 'some details', tags: ['tag1'], codes: ['code1']};
+      const mockRits = [mockRit, {id: '2', name: 'anotherRit', details: 'other details', tags: ['tag2'], codes: ['code2']}];
       apiServiceSpy.get.and.returnValue(of(mockRits));
 
       service.getRitById("1").pipe(skip(1)).subscribe(rits => {
@@ -241,8 +241,8 @@ describe('RitService', () => {
       let service = TestBed.inject(RitService);
       const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
 
-      const mockRit: Rit = {id: '1', name: 'testRit', details: 'some details', tags: ['tag1']};
-      const mockRits = [mockRit, {id: '2', name: 'anotherRit', details: 'other details', tags: ['tag2']}];
+      const mockRit: Rit = {id: '1', name: 'testRit', details: 'some details', tags: ['tag1'], codes: ['code1']};
+      const mockRits = [mockRit, {id: '2', name: 'anotherRit', details: 'other details', tags: ['tag2'], codes: ['code2']}];
       apiServiceSpy.get.and.returnValue(of(mockRits));
 
       service.getRitById("10").pipe(skip(1)).subscribe(rits => {
@@ -258,7 +258,7 @@ describe('RitService', () => {
     let service = TestBed.inject(RitService);
     const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
 
-    const rit: Rit = {name: 'updatedRit', details: 'updated details', tags: ['tag1']};
+    const rit: Rit = {name: 'updatedRit', details: 'updated details', tags: ['tag1'], codes: ['code1']};
     const ritId = '123';
 
     apiServiceSpy.put.and.returnValue(of(rit));
@@ -276,7 +276,7 @@ describe('RitService', () => {
     const apiServiceSpy = (TestBed.inject(ApiService)) as jasmine.SpyObj<ApiService>;
 
     const ritId = 'abc';
-    const expectedRit: Rit = {id: ritId, name: 'fetchedRit', details: 'details', tags: ['tag1']};
+    const expectedRit: Rit = {id: ritId, name: 'fetchedRit', details: 'details', tags: ['tag1'], codes: ['code1']};
 
     apiServiceSpy.get.and.returnValue(of(expectedRit));
 
