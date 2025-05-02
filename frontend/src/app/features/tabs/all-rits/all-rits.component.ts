@@ -227,7 +227,7 @@ export class AllRitsComponent implements ViewWillEnter {
     this.updateFilters();
   }
 
-  clearFilters(): void {
+  clearFilters(event: Event): void {
     this.searchText = '';
     this.selectedTags = [];
     this.ratingFilter = 0;
@@ -235,6 +235,7 @@ export class AllRitsComponent implements ViewWillEnter {
       relativeTo: this.route,
       queryParams: {}
     });
+    event.stopPropagation();
   }
 
   setRatingFilter(value: number): void {

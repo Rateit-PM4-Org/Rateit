@@ -1,4 +1,6 @@
 import {
+  IonAccordion,
+  IonAccordionGroup,
   IonBadge,
   IonButton,
   IonButtons,
@@ -96,4 +98,6 @@ export const IonicStandaloneStandardImports = [
   IonItemOptions,
   IonItemOption,
   IonSelectOption,
+  IonAccordion,
+  IonAccordionGroup
 ];
