@@ -25,7 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 export class AllRitsComponent implements ViewWillEnter {
   searchText = '';
-  selectedTag: string = '';
+  selectedTags: string[] = [];
   rits: Rit[] = [];
   ritSubscription: Subscription | null = null;
   ritsErrorSubscription: Subscription | null = null;
@@ -41,7 +41,17 @@ export class AllRitsComponent implements ViewWillEnter {
     // Get query parameters from URL
     this.route.queryParams.subscribe(params => {
       this.searchText = params['search'] ?? '';
-      this.selectedTag = params['tag'] ?? '';
+      
+      // Handle tags from query params (using 'tag' parameter)
+      if (params['tag']) {
+        if (Array.isArray(params['tag'])) {
+          this.selectedTags = params['tag'];
+        } else {
+          this.selectedTags = [params['tag']];
+        }
+      } else {
+        this.selectedTags = [];
+      }
     });
 
     this.ritSubscription = this.ritService.getRits().subscribe({
@@ -70,10 +80,14 @@ export class AllRitsComponent implements ViewWillEnter {
       const matchesSearch = !this.searchText ||
         rit.name?.toLowerCase().includes(this.searchText.toLowerCase());
 
-      const matchesTag = !this.selectedTag ||
-        (rit.tags?.some(tag => tag.toLowerCase() === this.selectedTag.toLowerCase()));
+      // If no tags selected, show all rits
+      const matchesTags = this.selectedTags.length === 0 ||
+        // Otherwise, check if rit has all selected tags
+        this.selectedTags.every(selectedTag => 
+          rit.tags?.some(tag => tag.toLowerCase() === selectedTag.toLowerCase())
+        );
 
-      return matchesSearch && matchesTag;
+      return matchesSearch && matchesTags;
     });
   }
 
@@ -135,8 +149,8 @@ export class AllRitsComponent implements ViewWillEnter {
       queryParams.search = this.searchText;
     }
 
-    if (this.selectedTag) {
-      queryParams.tag = this.selectedTag;
+    if (this.selectedTags.length > 0) {
+      queryParams.tag = this.selectedTags;
     }
 
     this.router.navigate([], {
@@ -145,22 +159,35 @@ export class AllRitsComponent implements ViewWillEnter {
     });
   }
 
-  setTagFilter(tag: string): void {
-    this.selectedTag = tag;
+  addTagToFilter(tag: string): void {
+    if (!this.selectedTags.includes(tag)) {
+      this.selectedTags.push(tag);
+      this.updateFilters();
+    }
+  }
+
+  removeTagFromFilter(tag: string): void {
+    this.selectedTags = this.selectedTags.filter(t => t !== tag);
+    this.updateFilters();
+  }
+
+  clearTagFilter(): void {
+    this.selectedTags = [];
     this.updateFilters();
   }
 
   clearFilters(): void {
     this.searchText = '';
-    this.selectedTag = '';
+    this.selectedTags = [];
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {}
     });
   }
 
-  clearTagFilter(): void {
-    this.selectedTag = '';
-    this.updateFilters();
+  handleTagClick = (tagName: string, event: Event): void => {
+    this.addTagToFilter(tagName);
+    event.stopPropagation();
   }
+
 }

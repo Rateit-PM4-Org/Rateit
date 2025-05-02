@@ -33,7 +33,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <app-rit-list-item *ngFor="let rit of latestRits()" [rit]="rit">
+    <app-rit-list-item *ngFor="let rit of latestRits()" [rit]="rit" [onTagClick]="handleTagNavigation">
     </app-rit-list-item>
   </ion-list>
 </ion-content>

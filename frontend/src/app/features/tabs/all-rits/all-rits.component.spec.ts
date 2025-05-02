@@ -101,7 +101,7 @@ describe('AllRitsComponent', () => {
       { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1', 'common'], codes: ['code1'] },
       { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2', 'common'], codes: ['code2'] }
     ];
-    component.selectedTag = 'tag1';
+    component.selectedTags = ['tag1'];
 
     const filteredRits = component.filteredRits();
 
@@ -116,7 +116,7 @@ describe('AllRitsComponent', () => {
       { id: '3', name: 'Another Rit', details: 'Details 3', tags: ['tag1'], codes: ['code3'] }
     ];
     component.searchText = 'Test';
-    component.selectedTag = 'tag1';
+    component.selectedTags = ['tag1'];
 
     const filteredRits = component.filteredRits();
 
@@ -150,24 +150,25 @@ describe('AllRitsComponent', () => {
 
     component.ionViewWillEnter();
 
-    expect(component.selectedTag).toBe('testTag');
+    expect(component.selectedTags).toEqual(['testTag']);
     expect(component.searchText).toBe('testSearch');
   });
 
-  it('should update URL when setting a tag filter', () => {
-    component.setTagFilter('newTag');
+
+  it('should update URL when adding a tag filter', () => {
+    component.addTagToFilter('newTag');
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
-        queryParams: jasmine.objectContaining({ tag: 'newTag' })
+        queryParams: jasmine.objectContaining({ tag: ['newTag'] })
       })
     );
-    expect(component.selectedTag).toBe('newTag');
+    expect(component.selectedTags).toEqual(['newTag']);
   });
 
   it('should clear URL parameters when clearing all filters', () => {
-    component.selectedTag = 'someTag';
+    component.selectedTags = ['someTag'];
     component.searchText = 'someSearch';
 
     component.clearFilters();
@@ -178,18 +179,178 @@ describe('AllRitsComponent', () => {
         queryParams: {}
       })
     );
-    expect(component.selectedTag).toBe('');
+    expect(component.selectedTags).toEqual([]);
     expect(component.searchText).toBe('');
   });
 
   it('should remove only tag parameter when clearing tag filter', () => {
-    component.selectedTag = 'someTag';
+    component.selectedTags = ['someTag'];
     component.searchText = 'someSearch';
 
     component.clearTagFilter();
 
     expect(routerSpy.navigate).toHaveBeenCalled();
-    expect(component.selectedTag).toBe('');
+    expect(component.selectedTags).toEqual([]);
     expect(component.searchText).toBe('someSearch');
   });
+
+  it('should read multiple tag parameters from URL on initialization', () => {
+    TestBed.resetTestingModule();
+
+    // Setup with multiple tag query params
+    TestBed.configureTestingModule({
+      imports: [AllRitsComponent, IonicModule.forRoot()],
+      providers: [
+        { provide: UserService, useValue: userServiceMock },
+        { provide: RitService, useValue: ritServiceSpy },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({}),
+            queryParams: of({ tag: ['tag1', 'tag2'], search: 'testSearch' })
+          }
+        },
+        { provide: Router, useValue: routerSpy },
+        provideHttpClient()
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AllRitsComponent);
+    component = fixture.componentInstance;
+
+    component.ionViewWillEnter();
+
+    expect(component.selectedTags).toEqual(['tag1', 'tag2']);
+    expect(component.searchText).toBe('testSearch');
+  });
+
+  it('should add a tag to existing tags when addTagToFilter is called', () => {
+    component.selectedTags = ['existingTag'];
+    component.addTagToFilter('newTag');
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({ tag: ['existingTag', 'newTag'] })
+      })
+    );
+    expect(component.selectedTags).toEqual(['existingTag', 'newTag']);
+  });
+
+  it('should not add duplicate tags when addTagToFilter is called with existing tag', () => {
+    component.selectedTags = ['existingTag'];
+    component.addTagToFilter('existingTag');
+
+    expect(component.selectedTags).toEqual(['existingTag']);
+    // Verify that router.navigate was not called again with the same tag
+    expect(routerSpy.navigate).not.toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({ tag: ['existingTag', 'existingTag'] })
+      })
+    );
+  });
+
+  it('should remove a specific tag when removeTagFromFilter is called', () => {
+    component.selectedTags = ['tag1', 'tag2', 'tag3'];
+    component.removeTagFromFilter('tag2');
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({ tag: ['tag1', 'tag3'] })
+      })
+    );
+    expect(component.selectedTags).toEqual(['tag1', 'tag3']);
+  });
+
+  it('should filter rits that match all selected tags', () => {
+    component.rits = [
+      {
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: ['tag1', 'tag2', 'tag3'],
+        codes: []
+      },
+      {
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: ['tag1', 'tag3'],
+        codes: []
+      },
+      {
+        id: '3', name: 'Rit 3', details: 'Details 3', tags: ['tag2', 'tag3'],
+        codes: []
+      }
+    ];
+    component.selectedTags = ['tag1', 'tag3'];
+
+    const filteredRits = component.filteredRits();
+
+    expect(filteredRits.length).toBe(2);
+    expect(filteredRits[0].id).toBe('1');
+    expect(filteredRits[1].id).toBe('2');
+  });
+
+  it('should show all rits when no tags are selected', () => {
+    component.rits = [
+      {
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: ['tag1'],
+        codes: []
+      },
+      {
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: ['tag2'],
+        codes: []
+      }
+    ];
+    component.selectedTags = [];
+
+    const filteredRits = component.filteredRits();
+
+    expect(filteredRits.length).toBe(2);
+  });
+
+  it('should call addTagToFilter when handleTagClick is called', () => {
+    spyOn(component, 'addTagToFilter');
+    const event = new Event('click');
+
+    component.handleTagClick('testTag', event);
+
+    expect(component.addTagToFilter).toHaveBeenCalledWith('testTag');
+  });
+
+  it('should prevent event propagation when handleTagClick is called', () => {
+    const event = jasmine.createSpyObj('Event', ['stopPropagation']);
+
+    component.handleTagClick('testTag', event as unknown as Event);
+
+    expect(event.stopPropagation).toHaveBeenCalled();
+  });
+
+  it('should read query parameters from URL on initialization', () => {
+    TestBed.resetTestingModule();
+
+    // Setup with specific query params
+    TestBed.configureTestingModule({
+      imports: [AllRitsComponent, IonicModule.forRoot()],
+      providers: [
+        { provide: UserService, useValue: userServiceMock },
+        { provide: RitService, useValue: ritServiceSpy },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({}),
+            queryParams: of({ tag: 'testTag', search: 'testSearch' })
+          }
+        },
+        { provide: Router, useValue: routerSpy },
+        provideHttpClient()
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AllRitsComponent);
+    component = fixture.componentInstance;
+
+    component.ionViewWillEnter();
+
+    expect(component.selectedTags).toEqual(['testTag']);
+    expect(component.searchText).toBe('testSearch');
+  });
+
 });

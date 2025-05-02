@@ -8,12 +8,22 @@
     <ion-searchbar [(ngModel)]="searchText" (ionChange)="onSearchChange($event)" placeholder="Search..." class="searchbar"></ion-searchbar>
 
     <div class="tags-input-container">
-      <ion-label>Tag:</ion-label>
+      <ion-label>Tags:</ion-label>
       <div class="tags-container">
-        <ion-chip color="primary" (click)="clearTagFilter()" (keypress)="clearTagFilter()">
+        <ng-container *ngIf="selectedTags.length === 0">
+          <ion-chip color="primary">
+            <ion-icon name="pricetag-outline"></ion-icon>
+            <ion-label>All</ion-label>
+          </ion-chip>
+        </ng-container>
+        <ion-chip color="primary" *ngFor="let tag of selectedTags" (click)="removeTagFromFilter(tag)" (keypress)="removeTagFromFilter(tag)">
           <ion-icon name="pricetag-outline"></ion-icon>
-          <ion-label>{{ selectedTag || 'All' }}</ion-label>
-          <ion-icon *ngIf="selectedTag" name="close"></ion-icon>
+          <ion-label>{{ tag }}</ion-label>
+          <ion-icon name="close"></ion-icon>
+        </ion-chip>
+        <ion-chip *ngIf="selectedTags.length > 1" color="medium" (click)="clearTagFilter()" (keypress)="clearTagFilter()">
+          <ion-label>Clear</ion-label>
+          <ion-icon name="close"></ion-icon>
         </ion-chip>
       </div>
     </div>
@@ -24,7 +34,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit">
+    <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit" [onTagClick]="handleTagClick">
     </app-rit-list-item>
   </ion-list>
 </ion-content>
