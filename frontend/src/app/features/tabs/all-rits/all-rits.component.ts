@@ -227,15 +227,22 @@ export class AllRitsComponent implements ViewWillEnter {
     this.updateFilters();
   }
 
-  clearFilters(event: Event): void {
-    this.searchText = '';
+  clearFilters(event?: Event): void {
     this.selectedTags = [];
     this.ratingFilter = 0;
+
+
+    const queryParams: any = {};
+
+    if (this.searchText) {
+      queryParams.search = this.searchText;
+    }
+
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {}
+      queryParams: queryParams,
     });
-    event.stopPropagation();
+    event?.stopPropagation();
   }
 
   setRatingFilter(value: number): void {
@@ -266,8 +273,7 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   hasFilter(): boolean {
-    return this.searchText.length > 0 ||
-      this.selectedTags.length > 0 ||
+    return this.selectedTags.length > 0 ||
       this.ratingFilter > 0;
   }
 }

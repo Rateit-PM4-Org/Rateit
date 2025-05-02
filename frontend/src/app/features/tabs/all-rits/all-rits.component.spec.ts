@@ -176,11 +176,11 @@ describe('AllRitsComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
-        queryParams: {}
+        queryParams: {search: 'someSearch'}
       })
     );
     expect(component.selectedTags).toEqual([]);
-    expect(component.searchText).toBe('');
+    expect(component.searchText).toBe('someSearch');
   });
 
   it('should remove only tag parameter when clearing tag filter', () => {
@@ -525,11 +525,11 @@ describe('AllRitsComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
-        queryParams: {}
+        queryParams: {search: 'search'}
       })
     );
     expect(component.selectedTags).toEqual([]);
-    expect(component.searchText).toBe('');
+    expect(component.searchText).toBe('search');
     expect(component.ratingFilter).toBe(0);
   });
 
