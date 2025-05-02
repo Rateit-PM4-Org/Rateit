@@ -92,6 +92,13 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'scanner',
+    loadComponent: () =>
+      import('./features/scanner/scanner.component').then(
+        (m) => m.ScannerComponent
+      )
+  },
+  {
     path: 'build-info',
     redirectTo: '/tabs/build-info',
     pathMatch: 'full',
