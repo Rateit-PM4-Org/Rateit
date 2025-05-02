@@ -24,7 +24,7 @@ services:
 
 # Kann ausgeführt werden, um Dumps aus dem dumps-Ordner in die MongoDB zu importieren
   mongo-import-dump:
-    image: mongo:8.0.6
+    image: mongo:8.0.9
     restart: "no"
     volumes:
       - ./dumps:/dumps
