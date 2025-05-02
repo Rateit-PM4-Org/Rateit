@@ -141,9 +141,6 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   private handleSuccess(data: Rit[]) {
-    if (data.length === 0) {
-      return;
-    }
     this.rits = [...data];
   }
 
