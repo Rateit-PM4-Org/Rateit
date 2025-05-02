@@ -288,22 +288,279 @@ describe('AllRitsComponent', () => {
     expect(filteredRits[1].id).toBe('2');
   });
 
-  it('should show all rits when no tags are selected', () => {
+  it('should filter rits by rating with Greater Than Or Equal operator', () => {
     component.rits = [
       {
-        id: '1', name: 'Rit 1', details: 'Details 1', tags: ['tag1'],
-        codes: []
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
+        ratings: [{ value: 4, createdAt: '2023-01-01' }]
       },
       {
-        id: '2', name: 'Rit 2', details: 'Details 2', tags: ['tag2'],
-        codes: []
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
+        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
+        ratings: [{ value: 2, createdAt: '2023-01-01' }]
       }
     ];
-    component.selectedTags = [];
+    component.ratingFilter = 3;
+    component.ratingComparisonOperator = component.RatingComparisonOperator.GreaterThanOrEqual;
 
     const filteredRits = component.filteredRits();
 
     expect(filteredRits.length).toBe(2);
+    expect(filteredRits[0].id).toBe('1');
+    expect(filteredRits[1].id).toBe('2');
+  });
+
+  it('should filter rits by rating with Equal operator', () => {
+    component.rits = [
+      {
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
+        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
+        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
+        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+      }
+    ];
+    component.ratingFilter = 3;
+    component.ratingComparisonOperator = component.RatingComparisonOperator.Equal;
+
+    const filteredRits = component.filteredRits();
+
+    expect(filteredRits.length).toBe(2);
+    expect(filteredRits[0].id).toBe('2');
+    expect(filteredRits[1].id).toBe('3');
+  });
+
+  it('should filter rits by rating with Less Than Or Equal operator', () => {
+    component.rits = [
+      {
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
+        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
+        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
+        ratings: [{ value: 2, createdAt: '2023-01-01' }]
+      }
+    ];
+    component.ratingFilter = 3;
+    component.ratingComparisonOperator = component.RatingComparisonOperator.LessThanOrEqual;
+
+    const filteredRits = component.filteredRits();
+
+    expect(filteredRits.length).toBe(2);
+    expect(filteredRits[0].id).toBe('2');
+    expect(filteredRits[1].id).toBe('3');
+  });
+
+  it('should filter by the latest rating when multiple ratings exist', () => {
+    component.rits = [
+      {
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
+        ratings: [
+          { value: 2, createdAt: '2023-01-01' },
+          { value: 5, createdAt: '2023-03-01' }, // Latest should be used
+          { value: 3, createdAt: '2023-02-01' }
+        ]
+      },
+      {
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
+        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+      }
+    ];
+    component.ratingFilter = 4;
+    component.ratingComparisonOperator = component.RatingComparisonOperator.GreaterThanOrEqual;
+
+    const filteredRits = component.filteredRits();
+
+    expect(filteredRits.length).toBe(1);
+    expect(filteredRits[0].id).toBe('1');
+  });
+
+  it('should handle rits with no ratings when filtering by rating', () => {
+    component.rits = [
+      {
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
+        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
+        ratings: []
+      },
+      {
+        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: []
+      }
+    ];
+    component.ratingFilter = 1;
+    component.ratingComparisonOperator = component.RatingComparisonOperator.GreaterThanOrEqual;
+
+    const filteredRits = component.filteredRits();
+
+    expect(filteredRits.length).toBe(1);
+    expect(filteredRits[0].id).toBe('1');
+  });
+
+  it('should update URL when setting a rating filter', () => {
+    component.setRatingFilter(4);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({
+          rating: 4,
+          ratingOp: component.RatingComparisonOperator.GreaterThanOrEqual
+        })
+      })
+    );
+    expect(component.ratingFilter).toBe(4);
+  });
+
+  it('should toggle off rating filter when clicking the same value', () => {
+    component.ratingFilter = 3;
+    component.setRatingFilter(3);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+    expect(component.ratingFilter).toBe(0);
+  });
+
+  it('should update URL when changing rating operator', () => {
+    component.ratingFilter = 3;
+    component.setRatingOperator(component.RatingComparisonOperator.Equal);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({
+          rating: 3,
+          ratingOp: component.RatingComparisonOperator.Equal
+        })
+      })
+    );
+    expect(component.ratingComparisonOperator).toBe(component.RatingComparisonOperator.Equal);
+  });
+
+  it('should reset rating filter when changing to the same operator', () => {
+    component.ratingFilter = 3;
+    component.ratingComparisonOperator = component.RatingComparisonOperator.GreaterThanOrEqual;
+    component.setRatingOperator(component.RatingComparisonOperator.GreaterThanOrEqual);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+    expect(component.ratingFilter).toBe(0);
+    expect(component.ratingComparisonOperator).toBe(component.RatingComparisonOperator.GreaterThanOrEqual);
+  });
+
+  it('should read rating parameters from URL on initialization', () => {
+    TestBed.resetTestingModule();
+
+    // Setup with rating query params
+    TestBed.configureTestingModule({
+      imports: [AllRitsComponent, IonicModule.forRoot()],
+      providers: [
+        { provide: UserService, useValue: userServiceMock },
+        { provide: RitService, useValue: ritServiceSpy },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({}),
+            queryParams: of({
+              rating: '4',
+              ratingOp: component.RatingComparisonOperator.Equal
+            })
+          }
+        },
+        { provide: Router, useValue: routerSpy },
+        provideHttpClient()
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AllRitsComponent);
+    component = fixture.componentInstance;
+
+    component.ionViewWillEnter();
+
+    expect(component.ratingFilter).toBe(4);
+    expect(component.ratingComparisonOperator).toBe(component.RatingComparisonOperator.Equal);
+  });
+
+  it('should clear rating filter when clearRatingFilter is called', () => {
+    component.ratingFilter = 3;
+    component.clearRatingFilter();
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+    expect(component.ratingFilter).toBe(0);
+  });
+
+  it('should clear rating filter when clearFilters is called', () => {
+    component.selectedTags = ['tag1'];
+    component.searchText = 'search';
+    component.ratingFilter = 3;
+
+    component.clearFilters();
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+    expect(component.selectedTags).toEqual([]);
+    expect(component.searchText).toBe('');
+    expect(component.ratingFilter).toBe(0);
+  });
+
+  it('should handle combined filtering with search, tags and rating', () => {
+    component.rits = [
+      {
+        id: '1', name: 'Test Rit', details: 'Details 1',
+        tags: ['tag1', 'tag2'], codes: [],
+        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '2', name: 'Test Rit 2', details: 'Details 2',
+        tags: ['tag1'], codes: [],
+        ratings: [{ value: 2, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '3', name: 'Another Rit', details: 'Details 3',
+        tags: ['tag1', 'tag2'], codes: [],
+        ratings: [{ value: 5, createdAt: '2023-01-01' }]
+      }
+    ];
+
+    component.searchText = 'Test';
+    component.selectedTags = ['tag1'];
+    component.ratingFilter = 3;
+    component.ratingComparisonOperator = component.RatingComparisonOperator.GreaterThanOrEqual;
+
+    const filteredRits = component.filteredRits();
+
+    expect(filteredRits.length).toBe(1);
+    expect(filteredRits[0].id).toBe('1');
   });
 
   it('should call addTagToFilter when handleTagClick is called', () => {

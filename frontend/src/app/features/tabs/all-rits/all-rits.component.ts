@@ -10,6 +10,12 @@ import { Subscription } from 'rxjs';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
 import { ActivatedRoute, Router } from '@angular/router';
 
+export enum RatingComparisonOperator {
+  GreaterThanOrEqual = 'gte',
+  LessThanOrEqual = 'lte',
+  Equal = 'eq'
+}
+
 @Component({
   selector: 'app-all-rits',
   templateUrl: './all-rits.component.html',
@@ -26,6 +32,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AllRitsComponent implements ViewWillEnter {
   searchText = '';
   selectedTags: string[] = [];
+  ratingFilter: number = 0; // 0 means no filter
+  ratingComparisonOperator: RatingComparisonOperator = RatingComparisonOperator.GreaterThanOrEqual;
+  RatingComparisonOperator = RatingComparisonOperator;
   rits: Rit[] = [];
   ritSubscription: Subscription | null = null;
   ritsErrorSubscription: Subscription | null = null;
@@ -51,6 +60,16 @@ export class AllRitsComponent implements ViewWillEnter {
         }
       } else {
         this.selectedTags = [];
+      }
+
+      // Handle rating filter params
+      this.ratingFilter = params['rating'] ? parseInt(params['rating']) : 0;
+
+      const ratingOp = params['ratingOp'];
+      if (ratingOp && Object.values(RatingComparisonOperator).includes(ratingOp as RatingComparisonOperator)) {
+        this.ratingComparisonOperator = ratingOp as RatingComparisonOperator;
+      } else {
+        this.ratingComparisonOperator = RatingComparisonOperator.GreaterThanOrEqual;
       }
     });
 
@@ -83,12 +102,42 @@ export class AllRitsComponent implements ViewWillEnter {
       // If no tags selected, show all rits
       const matchesTags = this.selectedTags.length === 0 ||
         // Otherwise, check if rit has all selected tags
-        this.selectedTags.every(selectedTag => 
+        this.selectedTags.every(selectedTag =>
           rit.tags?.some(tag => tag.toLowerCase() === selectedTag.toLowerCase())
         );
 
-      return matchesSearch && matchesTags;
+      // Rating filter logic
+      let matchesRating = true;
+      if (this.ratingFilter > 0) {
+        const latestRatingValue = this.calculateLatestRatingValue(rit.ratings ?? []);
+
+        switch (this.ratingComparisonOperator) {
+          case RatingComparisonOperator.GreaterThanOrEqual:
+            matchesRating = latestRatingValue >= this.ratingFilter;
+            break;
+          case RatingComparisonOperator.LessThanOrEqual:
+            matchesRating = latestRatingValue <= this.ratingFilter;
+            break;
+          case RatingComparisonOperator.Equal:
+            matchesRating = latestRatingValue === this.ratingFilter;
+            break;
+        }
+      }
+
+      return matchesSearch && matchesTags && matchesRating;
     });
+  }
+
+  // Helper function to calculate the latest rating value for a rit
+  private calculateLatestRatingValue(ratings: any[]): number {
+    if (ratings.length === 0) {
+      return 0;
+    }
+    const latestRating = ratings.reduce((prev, current) => {
+      return new Date(prev.createdAt!) > new Date(current.createdAt!) ? prev : current;
+    }, ratings[0]);
+
+    return latestRating.value ?? 0;
   }
 
   private handleSuccess(data: Rit[]) {
@@ -153,6 +202,11 @@ export class AllRitsComponent implements ViewWillEnter {
       queryParams.tag = this.selectedTags;
     }
 
+    if (this.ratingFilter > 0) {
+      queryParams.rating = this.ratingFilter;
+      queryParams.ratingOp = this.ratingComparisonOperator;
+    }
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: queryParams,
@@ -179,10 +233,33 @@ export class AllRitsComponent implements ViewWillEnter {
   clearFilters(): void {
     this.searchText = '';
     this.selectedTags = [];
+    this.ratingFilter = 0;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {}
     });
+  }
+
+  setRatingFilter(value: number): void {
+    // Toggle off if the same value is clicked
+    this.ratingFilter = this.ratingFilter === value ? 0 : value;
+    this.updateFilters();
+  }
+
+  setRatingOperator(operator: RatingComparisonOperator): void {
+    if (this.ratingComparisonOperator === operator) {
+      this.ratingComparisonOperator = RatingComparisonOperator.GreaterThanOrEqual;
+      this.ratingFilter = 0;
+      this.updateFilters();
+    } else {
+      this.ratingComparisonOperator = operator;
+    }
+    this.updateFilters();
+  }
+
+  clearRatingFilter(): void {
+    this.ratingFilter = 0;
+    this.updateFilters();
   }
 
   handleTagClick = (tagName: string, event: Event): void => {
@@ -190,4 +267,9 @@ export class AllRitsComponent implements ViewWillEnter {
     event.stopPropagation();
   }
 
+  hasFilter(): boolean {
+    return this.searchText.length > 0 ||
+      this.selectedTags.length > 0 ||
+      this.ratingFilter > 0;
+  }
 }
