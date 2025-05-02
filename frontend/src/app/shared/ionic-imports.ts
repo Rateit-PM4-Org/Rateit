@@ -33,6 +33,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonSegmentContent,
+  IonSelectOption,
   IonSpinner,
   IonTabBar,
   IonTabButton,
@@ -93,6 +94,6 @@ export const IonicStandaloneStandardImports = [
   IonRefresherContent,
   IonItemSliding,
   IonItemOptions,
-  IonItemOption
-
+  IonItemOption,
+  IonSelectOption,
 ];
