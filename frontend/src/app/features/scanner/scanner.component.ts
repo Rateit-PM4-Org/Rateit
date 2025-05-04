@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, Input, Output, EventEmitter} from '@angular/core';
 import Quagga from 'quagga';
 import {CommonModule} from '@angular/common';
-import {IonicStandaloneStandardImports} from '../../shared/ionic-imports';
 
 
 @Component({
@@ -9,13 +8,13 @@ import {IonicStandaloneStandardImports} from '../../shared/ionic-imports';
   templateUrl: './scanner.component.html',
   styleUrls: ['./scanner.component.scss'],
   standalone: true,
-  imports: [CommonModule, ...IonicStandaloneStandardImports],
+  imports: [CommonModule],
 })
 export class ScannerComponent implements OnDestroy, AfterViewInit {
   @ViewChild('videoElement', { static: false }) videoElement!: ElementRef<HTMLDivElement>;
-  @Input() MAX_HISTORY = 5;
-  @Input() CONFIRM_THRESHOLD = 3;
-  @Output() scannedCode = new EventEmitter();
+  @Input() MAX_HISTORY = 10;
+  @Input() CONFIRM_THRESHOLD = 7;
+  @Output() scannedCodeEmitter = new EventEmitter();
 
   scannedCodes = new Set<string>();
   recentCodes: string[] = [];
@@ -95,8 +94,7 @@ export class ScannerComponent implements OnDestroy, AfterViewInit {
     if (occurrences >= this.CONFIRM_THRESHOLD && !this.scannedCodes.has(code)) {
       this.scannedCodes.add(code);
       this.recentCodes = [];
-      this.scannedCode.emit(code);
-      Quagga.stop();
+      this.scannedCodeEmitter.emit(this.scannedCodes);
     }
   }
 }
