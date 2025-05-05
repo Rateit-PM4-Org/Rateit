@@ -164,4 +164,11 @@ export class HomeComponent implements ViewWillEnter {
     // Return the top tags
     return sortedTags.slice(0, this.numberOfTopTagsToShow).map(({ name, ritCount }) => ({ name, ritCount }));
   }
+
+  handleTagNavigation = (tagName: string, event: Event): void => {
+    this.router.navigate(['/tabs/rits'], {
+      queryParams: { tag: [tagName] }
+    });
+    event.stopPropagation();
+  }
 }

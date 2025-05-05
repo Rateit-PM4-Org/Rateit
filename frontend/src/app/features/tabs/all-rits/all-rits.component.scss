@@ -14,3 +14,64 @@
 .searchbar{
   padding: 0;
 }
+
+.rating-filter-container {
+  
+  .rating-filter-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    
+    ion-label {
+      margin-right: 12px;
+    }
+    
+    .comparison-toggle {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--ion-color-medium);
+      margin-right: 8px;
+      
+      &.disabled {
+        opacity: 0.5;
+      }
+      
+      .toggle-button {
+        margin: 0;
+        --padding-start: 8px;
+        --padding-end: 8px;
+        height: 24px;
+        font-weight: bold;
+        
+        &.active {
+          background-color: var(--ion-color-primary);
+          color: white;
+        }
+      }
+    }
+    
+    .clear-rating {
+      margin-left: 8px;
+    }
+  }
+  
+  .stars-container {
+    
+    .rating-star {
+      font-size: 24px;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+      color: var( --custom-color-accent);
+    
+      &.filled {
+        color: var( --custom-color-accent);
+      }
+    
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+    
+  }
+}
