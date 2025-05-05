@@ -458,6 +458,447 @@ describe('getDefaultFilterOptions', () => {
       sortDirection: SortDirection.Descending,
     });
   });
+});
 
-  // TODO: Add tests for sonting options
+describe('RitFilterService - Sorting Tests', () => {
+  it('should sort rits by date created in descending order', () => {
+    const rits: Rit[] = [
+      {
+        id: '1',
+        name: 'Rit 1',
+        details: 'Details 1',
+        tags: [],
+        codes: [],
+        createdAt: '2023-01-01T10:00:00Z'
+      },
+      {
+        id: '2',
+        name: 'Rit 2',
+        details: 'Details 2',
+        tags: [],
+        codes: [],
+        createdAt: '2023-03-01T10:00:00Z'
+      },
+      {
+        id: '3',
+        name: 'Rit 3',
+        details: 'Details 3',
+        tags: [],
+        codes: [],
+        createdAt: '2023-02-01T10:00:00Z'
+      }
+    ];
+
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
+    };
+
+    const sortedRits = RitFilterService.filterRits(rits, options);
+
+    expect(sortedRits.length).toBe(3);
+    expect(sortedRits[0].id).toBe('2'); // Newest
+    expect(sortedRits[1].id).toBe('3');
+    expect(sortedRits[2].id).toBe('1'); // Oldest
+  });
+
+  it('should sort rits by date created in ascending order', () => {
+    const rits: Rit[] = [
+      {
+        id: '1',
+        name: 'Rit 1',
+        details: 'Details 1',
+        tags: [],
+        codes: [],
+        createdAt: '2023-01-01T10:00:00Z'
+      },
+      {
+        id: '2',
+        name: 'Rit 2',
+        details: 'Details 2',
+        tags: [],
+        codes: [],
+        createdAt: '2023-03-01T10:00:00Z'
+      },
+      {
+        id: '3',
+        name: 'Rit 3',
+        details: 'Details 3',
+        tags: [],
+        codes: [],
+        createdAt: '2023-02-01T10:00:00Z'
+      }
+    ];
+
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Ascending,
+    };
+
+    const sortedRits = RitFilterService.filterRits(rits, options);
+
+    expect(sortedRits.length).toBe(3);
+    expect(sortedRits[0].id).toBe('1'); // Oldest
+    expect(sortedRits[1].id).toBe('3');
+    expect(sortedRits[2].id).toBe('2'); // Newest
+  });
+
+  it('should sort rits by last updated in descending order', () => {
+    const rits: Rit[] = [
+      {
+        id: '1',
+        name: 'Rit 1',
+        details: 'Details 1',
+        tags: [],
+        codes: [],
+        updatedAt: '2023-01-01T10:00:00Z'
+      },
+      {
+        id: '2',
+        name: 'Rit 2',
+        details: 'Details 2',
+        tags: [],
+        codes: [],
+        updatedAt: '2023-03-01T10:00:00Z'
+      },
+      {
+        id: '3',
+        name: 'Rit 3',
+        details: 'Details 3',
+        tags: [],
+        codes: [],
+        updatedAt: '2023-02-01T10:00:00Z'
+      }
+    ];
+
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.LastUpdated,
+      sortDirection: SortDirection.Descending,
+    };
+
+    const sortedRits = RitFilterService.filterRits(rits, options);
+
+    expect(sortedRits.length).toBe(3);
+    expect(sortedRits[0].id).toBe('2'); // Most recently updated
+    expect(sortedRits[1].id).toBe('3');
+    expect(sortedRits[2].id).toBe('1'); // Least recently updated
+  });
+
+  it('should sort rits by last updated in ascending order', () => {
+    const rits: Rit[] = [
+      {
+        id: '1',
+        name: 'Rit 1',
+        details: 'Details 1',
+        tags: [],
+        codes: [],
+        updatedAt: '2023-01-01T10:00:00Z'
+      },
+      {
+        id: '2',
+        name: 'Rit 2',
+        details: 'Details 2',
+        tags: [],
+        codes: [],
+        updatedAt: '2023-03-01T10:00:00Z'
+      },
+      {
+        id: '3',
+        name: 'Rit 3',
+        details: 'Details 3',
+        tags: [],
+        codes: [],
+        updatedAt: '2023-02-01T10:00:00Z'
+      }
+    ];
+
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.LastUpdated,
+      sortDirection: SortDirection.Ascending,
+    };
+
+    const sortedRits = RitFilterService.filterRits(rits, options);
+
+    expect(sortedRits.length).toBe(3);
+    expect(sortedRits[0].id).toBe('1'); // Least recently updated
+    expect(sortedRits[1].id).toBe('3');
+    expect(sortedRits[2].id).toBe('2'); // Most recently updated
+  });
+
+  it('should sort rits by rating in descending order', () => {
+    const rits: Rit[] = [
+      {
+        id: '1',
+        name: 'Rit 1',
+        details: 'Details 1',
+        tags: [],
+        codes: [],
+        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '2',
+        name: 'Rit 2',
+        details: 'Details 2',
+        tags: [],
+        codes: [],
+        ratings: [{ value: 5, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '3',
+        name: 'Rit 3',
+        details: 'Details 3',
+        tags: [],
+        codes: [],
+        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+      }
+    ];
+
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.Rating,
+      sortDirection: SortDirection.Descending,
+    };
+
+    const sortedRits = RitFilterService.filterRits(rits, options);
+
+    expect(sortedRits.length).toBe(3);
+    expect(sortedRits[0].id).toBe('2'); // Highest rating
+    expect(sortedRits[1].id).toBe('3');
+    expect(sortedRits[2].id).toBe('1'); // Lowest rating
+  });
+
+  it('should sort rits by rating in ascending order', () => {
+    const rits: Rit[] = [
+      {
+        id: '1',
+        name: 'Rit 1',
+        details: 'Details 1',
+        tags: [],
+        codes: [],
+        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '2',
+        name: 'Rit 2',
+        details: 'Details 2',
+        tags: [],
+        codes: [],
+        ratings: [{ value: 5, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '3',
+        name: 'Rit 3',
+        details: 'Details 3',
+        tags: [],
+        codes: [],
+        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+      }
+    ];
+
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.Rating,
+      sortDirection: SortDirection.Ascending,
+    };
+
+    const sortedRits = RitFilterService.filterRits(rits, options);
+
+    expect(sortedRits.length).toBe(3);
+    expect(sortedRits[0].id).toBe('1'); // Lowest rating
+    expect(sortedRits[1].id).toBe('3');
+    expect(sortedRits[2].id).toBe('2'); // Highest rating
+  });
+
+  it('should handle rits with mixed ratings and sort them correctly', () => {
+    const rits: Rit[] = [
+      {
+        id: '1',
+        name: 'Rit 1',
+        details: 'Details 1',
+        tags: [],
+        codes: [],
+        ratings: [
+          { value: 2, createdAt: '2023-01-01' },
+          { value: 4, createdAt: '2023-03-01' } // Latest should be used
+        ]
+      },
+      {
+        id: '2',
+        name: 'Rit 2',
+        details: 'Details 2',
+        tags: [],
+        codes: [],
+        ratings: [{ value: 5, createdAt: '2023-01-01' }]
+      },
+      {
+        id: '3',
+        name: 'Rit 3',
+        details: 'Details 3',
+        tags: [],
+        codes: [] // No ratings
+      }
+    ];
+
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.Rating,
+      sortDirection: SortDirection.Descending,
+    };
+
+    const sortedRits = RitFilterService.filterRits(rits, options);
+
+    expect(sortedRits.length).toBe(3);
+    expect(sortedRits[0].id).toBe('2'); // Rating 5
+    expect(sortedRits[1].id).toBe('1'); // Latest rating 4
+    expect(sortedRits[2].id).toBe('3'); // No rating (0)
+  });
+
+  it('should handle filtering and sorting together', () => {
+    const rits: Rit[] = [
+      {
+        id: '1',
+        name: 'Test Rit 1',
+        details: 'Details 1',
+        tags: ['tag1'],
+        codes: [],
+        ratings: [{ value: 3, createdAt: '2023-01-01' }],
+        createdAt: '2023-01-15T10:00:00Z'
+      },
+      {
+        id: '2',
+        name: 'Test Rit 2',
+        details: 'Details 2',
+        tags: ['tag2'],
+        codes: [],
+        ratings: [{ value: 5, createdAt: '2023-01-01' }],
+        createdAt: '2023-01-10T10:00:00Z'
+      },
+      {
+        id: '3',
+        name: 'Another Rit',
+        details: 'Details 3',
+        tags: ['tag1'],
+        codes: [],
+        ratings: [{ value: 4, createdAt: '2023-01-01' }],
+        createdAt: '2023-01-20T10:00:00Z'
+      }
+    ];
+
+    const options: RitSortAndFilterOptions = {
+      searchText: 'Test',
+      tags: [],
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Ascending,
+    };
+
+    const filteredAndSortedRits = RitFilterService.filterRits(rits, options);
+
+    expect(filteredAndSortedRits.length).toBe(2);
+    expect(filteredAndSortedRits[0].id).toBe('2'); // Older creation date
+    expect(filteredAndSortedRits[1].id).toBe('1'); // Newer creation date
+  });
+
+
+
+  it('should calculate lastInteractionAt correctly - rating newer', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:00Z',
+      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+    } as Rit;
+
+    const result = RitFilterService.calculateLastInteractionAt(ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:01.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - multiple ratings', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:00Z',
+      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }, { createdAt: '2023-01-02T00:00:01Z' }]
+    } as Rit;
+
+    const result = RitFilterService.calculateLastInteractionAt(ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-02T00:00:01.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - ratings without date', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:00Z',
+      ratings: [{}, {}]
+    } as Rit;
+
+    const result = RitFilterService.calculateLastInteractionAt(ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:00.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - updatedAt newer', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:02Z',
+      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+    } as Rit;
+
+    const result = RitFilterService.calculateLastInteractionAt(ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:02.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - no ratings', () => {
+    const ritMock = {
+      updatedAt: '2023-01-01T00:00:00Z',
+    } as Rit;
+
+    const result = RitFilterService.calculateLastInteractionAt(ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:00.000Z');
+  });
+  it('should calculate lastInteractionAt correctly - no updatedAt', () => {
+    const ritMock = {
+      updatedAt: undefined,
+      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+    } as Rit;
+
+    const result = RitFilterService.calculateLastInteractionAt(ritMock);
+
+    expect(result.toISOString()).toBe('2023-01-01T00:00:01.000Z');
+  });
+
+  it('should calculate lastInteractionAt correctly - no ratings and updatedAt', () => {
+    const ritMock = {
+      updatedAt: undefined,
+    } as Rit;
+
+    const result = RitFilterService.calculateLastInteractionAt(ritMock);
+
+    expect(result.toISOString()).toBe('1970-01-01T00:00:00.000Z');
+  });
+
 });

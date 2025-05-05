@@ -10,7 +10,8 @@ export enum RatingComparisonOperator {
 export enum SortOptionOperator {
   DateCreated = 'dateCreated',
   LastUpdated = 'lastUpdated',
-  Rating = 'rating'
+  Rating = 'rating',
+  Name = 'name'
 }
 
 export enum SortDirection {
@@ -34,9 +35,9 @@ export class RitFilterService {
 
   constructor() { }
 
-
   public static filterRits(rits: Rit[], options: RitSortAndFilterOptions): Rit[] {
-    return rits.filter(rit => {
+    // Filter the rits first
+    const filteredRits = rits.filter(rit => {
       const matchesSearch = !options.searchText ||
         rit.name?.toLowerCase().includes(options.searchText.toLowerCase());
 
@@ -65,6 +66,67 @@ export class RitFilterService {
 
       return matchesSearch && matchesTags && matchesRating;
     });
+
+    // Then sort the filtered results
+    return this.sortRits(filteredRits, options);
+  }
+
+  private static sortRits(rits: Rit[], options: RitSortAndFilterOptions): Rit[] {
+
+    rits.sort((a, b) => {
+      let comparison = 0;
+
+      switch (options.sortOptionOperator) {
+        case SortOptionOperator.DateCreated: {
+          // Sort by creation date
+          const dateA = new Date(a.createdAt || 0);
+          const dateB = new Date(b.createdAt || 0);
+          comparison = dateA.getTime() - dateB.getTime();
+          break;
+        }
+
+        case SortOptionOperator.LastUpdated: {
+          // Use calculateLastInteractionAt for last update date
+          const lastInteractionA = this.calculateLastInteractionAt(a).getTime();
+          const lastInteractionB = this.calculateLastInteractionAt(b).getTime();
+          comparison = lastInteractionA - lastInteractionB;
+          break;
+        }
+
+        case SortOptionOperator.Rating: {
+          // Sort by rating
+          const ratingA = this.getLatestRatingValue(a);
+          const ratingB = this.getLatestRatingValue(b);
+          comparison = ratingA - ratingB;
+          break;
+        }
+
+        case SortOptionOperator.Name: {
+          // Sort by name
+          const nameA = a.name?.toLowerCase() || '';
+          const nameB = b.name?.toLowerCase() || '';
+          comparison = nameA.localeCompare(nameB);
+          break;
+        }
+
+        default: {
+          // Default to creation date if an unsupported sort option is provided
+          const defaultDateA = new Date(a.createdAt || 0);
+          const defaultDateB = new Date(b.createdAt || 0);
+          comparison = defaultDateA.getTime() - defaultDateB.getTime();
+          break;
+        }
+      }
+
+      // Apply sort direction
+      if (options.sortDirection === SortDirection.Descending) {
+        comparison = -comparison; // Invert the comparison for descending order
+      }
+
+      return comparison;
+    });
+
+    return rits;
   }
 
   private static getLatestRatingValue(rit: Rit): number {
@@ -77,6 +139,16 @@ export class RitFilterService {
     }, rit.ratings[0]);
 
     return latestRating.value ?? 0;
+  }
+
+  public static calculateLastInteractionAt(rit: Rit): Date {
+    const latestRatingDate = rit.ratings?.reduce((latest, rating) => {
+      const ratingDate = new Date(rating.createdAt ?? 0);
+      return ratingDate > latest ? ratingDate : latest;
+    }, new Date(0)) ?? new Date(0);
+
+    const lastModified = new Date(rit.updatedAt ?? 0);
+    return latestRatingDate > lastModified ? latestRatingDate : lastModified;
   }
 
   public static getFilterOptionsFromUrl(params: any): RitSortAndFilterOptions {

@@ -14,26 +14,30 @@
   </ion-button>
   <ion-popover trigger="click-trigger" triggerAction="click">
     <ng-template>
-      <ion-list lines="full">
-        <ion-item (click)="setSortOptionOperator(SortOptionOperator.DateCreated)"
-          (keydown.enter)="setSortOptionOperator(SortOptionOperator.DateCreated)">
-          <ion-label>Date Created</ion-label>
-          <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.DateCreated"
-            [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
-        </ion-item>
-        <ion-item (click)="setSortOptionOperator(SortOptionOperator.LastUpdated)"
-          (keydown.enter)="setSortOptionOperator(SortOptionOperator.LastUpdated)">
-          <ion-label>Last Updated</ion-label>
-          <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.LastUpdated"
-            [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
-        </ion-item>
-        <ion-item (click)="setSortOptionOperator(SortOptionOperator.Rating)"
-          (keydown.enter)="setSortOptionOperator(SortOptionOperator.Rating)">
-          <ion-label>Rating</ion-label>
-          <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.Rating"
-            [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
-        </ion-item>
-      </ion-list>
+      <ion-item (click)="setSortOptionOperator(SortOptionOperator.DateCreated)"
+        (keydown.enter)="setSortOptionOperator(SortOptionOperator.DateCreated)">
+        <ion-label>Date Created</ion-label>
+        <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.DateCreated"
+          [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+      </ion-item>
+      <ion-item (click)="setSortOptionOperator(SortOptionOperator.LastUpdated)"
+        (keydown.enter)="setSortOptionOperator(SortOptionOperator.LastUpdated)">
+        <ion-label>Last Updated</ion-label>
+        <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.LastUpdated"
+          [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+      </ion-item>
+      <ion-item (click)="setSortOptionOperator(SortOptionOperator.Rating)"
+        (keydown.enter)="setSortOptionOperator(SortOptionOperator.Rating)">
+        <ion-label>Rating</ion-label>
+        <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.Rating"
+          [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+      </ion-item>
+      <ion-item (click)="setSortOptionOperator(SortOptionOperator.Name)"
+        (keydown.enter)="setSortOptionOperator(SortOptionOperator.Name)">
+        <ion-label>Name</ion-label>
+        <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.Name"
+          [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+      </ion-item>
     </ng-template>
   </ion-popover>
 </div>

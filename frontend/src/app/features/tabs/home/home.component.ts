@@ -10,6 +10,7 @@ import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.comp
 import { Router } from '@angular/router';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
 import { TagListItemComponent } from "../../tag/tag-list-item/tag-list-item.component";
+import { RitFilterService } from '../../../shared/services/rit-filter.service';
 
 @Component({
   selector: 'app-home',
@@ -92,23 +93,13 @@ export class HomeComponent implements ViewWillEnter {
 
   private handleLoadRitsSuccess(data: Rit[]) {
     this.rits = [...data];
-    // sotr by lastInteractionAt descending
+    // sort by lastInteractionAt descending
     this.rits.sort((a, b) => {
-      const dateA = this.calculateLastInteractionAt(a);
-      const dateB = this.calculateLastInteractionAt(b);
+      const dateA = RitFilterService.calculateLastInteractionAt(a);
+      const dateB = RitFilterService.calculateLastInteractionAt(b);
       return dateB.getTime() - dateA.getTime();
     });
     this.tags = this.topTags();
-  }
-
-  private calculateLastInteractionAt(rit: Rit): Date {
-    const latestRatingDate = rit.ratings?.reduce((latest, rating) => {
-      const ratingDate = new Date(rating.createdAt ?? 0);
-      return ratingDate > latest ? ratingDate : latest;
-    }, new Date(0)) ?? new Date(0);
-    
-    const lastModified = new Date(rit.updatedAt ?? 0);
-    return latestRatingDate > lastModified ? latestRatingDate : lastModified;
   }
 
   private handleLoadRitsError(err: any) {

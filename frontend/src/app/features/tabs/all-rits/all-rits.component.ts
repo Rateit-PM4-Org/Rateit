@@ -193,6 +193,6 @@ export class AllRitsComponent implements ViewWillEnter {
       this.sortAndFilterOptions.sortDirection = SortDirection.Descending;
       this.sortAndFilterOptions.sortOptionOperator = newOption;
     }
-    // this.updateSort();
+    this.updateFilters();
   }
 }
