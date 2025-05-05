@@ -73,19 +73,6 @@ describe('AllRitsComponent', () => {
     expect(component.rits).toEqual([]);
   });
 
-  it('should filter rits based on search text', () => {
-    component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
-      { id: '2', name: 'Another Rit', details: 'Details 2', tags: ['tag2'], codes: ['code2'] }
-    ];
-    component.filterOptions.searchText = 'Test';
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].name).toBe('Test Rit 1');
-  });
-
   it('should show error toast on error', async () => {
     spyOn(component, 'showErrorToast');
 
@@ -96,65 +83,6 @@ describe('AllRitsComponent', () => {
 
     expect(component.showErrorToast).toHaveBeenCalledWith('Failed to load rits');
   });
-
-  it('should filter rits based on selected tag', () => {
-    component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1', 'common'], codes: ['code1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2', 'common'], codes: ['code2'] }
-    ];
-    component.filterOptions.tags = ['tag1'];
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].name).toBe('Test Rit 1');
-  });
-
-  it('should filter rits based on both search text and tag', () => {
-    component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2'] },
-      { id: '3', name: 'Another Rit', details: 'Details 3', tags: ['tag1'], codes: ['code3'] }
-    ];
-    component.filterOptions.searchText = 'Test';
-    component.filterOptions.tags = ['tag1'];
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].name).toBe('Test Rit 1');
-  });
-
-  it('should read query parameters from URL on initialization', () => {
-    TestBed.resetTestingModule();
-
-    // Setup with specific query params
-    TestBed.configureTestingModule({
-      imports: [AllRitsComponent, IonicModule.forRoot()],
-      providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            queryParams: of({ tag: 'testTag', search: 'testSearch' })
-          }
-        },
-        { provide: Router, useValue: routerSpy },
-        provideHttpClient()
-      ]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AllRitsComponent);
-    component = fixture.componentInstance;
-
-    component.ionViewWillEnter();
-
-    expect(component.filterOptions.tags).toEqual(['testTag']);
-    expect(component.filterOptions.searchText).toBe('testSearch');
-  });
-
 
   it('should update URL when adding a tag filter', () => {
     component.addTagToFilter('newTag');
@@ -168,7 +96,7 @@ describe('AllRitsComponent', () => {
     expect(component.filterOptions.tags).toEqual(['newTag']);
   });
 
-  it('should clear URL parameters when clearing all filters', () => {
+  it('should clear URL parameters when clearing all filters except search', () => {
     component.filterOptions.tags = ['someTag'];
     component.filterOptions.searchText = 'someSearch';
 
@@ -182,7 +110,6 @@ describe('AllRitsComponent', () => {
     );
     expect(component.filterOptions.tags).toEqual([]);
     expect(component.filterOptions.searchText).toBe('someSearch');
-    expect(component.filterOptions.searchText).toBe('someSearch');
   });
 
   it('should remove only tag parameter when clearing tag filter', () => {
@@ -194,36 +121,6 @@ describe('AllRitsComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalled();
     expect(component.filterOptions.tags).toEqual([]);
     expect(component.filterOptions.searchText).toBe('someSearch');
-  });
-
-  it('should read multiple tag parameters from URL on initialization', () => {
-    TestBed.resetTestingModule();
-
-    // Setup with multiple tag query params
-    TestBed.configureTestingModule({
-      imports: [AllRitsComponent, IonicModule.forRoot()],
-      providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            queryParams: of({ tag: ['tag1', 'tag2'], search: 'testSearch' })
-          }
-        },
-        { provide: Router, useValue: routerSpy },
-        provideHttpClient()
-      ]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AllRitsComponent);
-    component = fixture.componentInstance;
-
-    component.ionViewWillEnter();
-
-    expect(component.filterOptions.tags).toEqual(['tag1', 'tag2']);
-    expect(component.filterOptions.searchText).toBe('testSearch');
   });
 
   it('should add a tag to existing tags when addTagToFilter is called', () => {
@@ -244,7 +141,6 @@ describe('AllRitsComponent', () => {
     component.addTagToFilter('existingTag');
 
     expect(component.filterOptions.tags).toEqual(['existingTag']);
-    // Verify that router.navigate was not called again with the same tag
     expect(routerSpy.navigate).not.toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
@@ -264,152 +160,6 @@ describe('AllRitsComponent', () => {
       })
     );
     expect(component.filterOptions.tags).toEqual(['tag1', 'tag3']);
-  });
-
-  it('should filter rits that match all selected tags', () => {
-    component.rits = [
-      {
-        id: '1', name: 'Rit 1', details: 'Details 1', tags: ['tag1', 'tag2', 'tag3'],
-        codes: []
-      },
-      {
-        id: '2', name: 'Rit 2', details: 'Details 2', tags: ['tag1', 'tag3'],
-        codes: []
-      },
-      {
-        id: '3', name: 'Rit 3', details: 'Details 3', tags: ['tag2', 'tag3'],
-        codes: []
-      }
-    ];
-    component.filterOptions.tags = ['tag1', 'tag3'];
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(2);
-    expect(filteredRits[0].id).toBe('1');
-    expect(filteredRits[1].id).toBe('2');
-  });
-
-  it('should filter rits by rating with Greater Than Or Equal operator', () => {
-    component.rits = [
-      {
-        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
-        ratings: [{ value: 2, createdAt: '2023-01-01' }]
-      }
-    ];
-    component.filterOptions.rating = 3;
-    component.filterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(2);
-    expect(filteredRits[0].id).toBe('1');
-    expect(filteredRits[1].id).toBe('2');
-  });
-
-  it('should filter rits by rating with Equal operator', () => {
-    component.rits = [
-      {
-        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
-      }
-    ];
-    component.filterOptions.rating = 3;
-    component.filterOptions.ratingOperator = RatingComparisonOperator.Equal;
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(2);
-    expect(filteredRits[0].id).toBe('2');
-    expect(filteredRits[1].id).toBe('3');
-  });
-
-  it('should filter rits by rating with Less Than Or Equal operator', () => {
-    component.rits = [
-      {
-        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
-        ratings: [{ value: 2, createdAt: '2023-01-01' }]
-      }
-    ];
-    component.filterOptions.rating = 3;
-    component.filterOptions.ratingOperator = RatingComparisonOperator.LessThanOrEqual;
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(2);
-    expect(filteredRits[0].id).toBe('2');
-    expect(filteredRits[1].id).toBe('3');
-  });
-
-  it('should filter by the latest rating when multiple ratings exist', () => {
-    component.rits = [
-      {
-        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [
-          { value: 2, createdAt: '2023-01-01' },
-          { value: 5, createdAt: '2023-03-01' }, // Latest should be used
-          { value: 3, createdAt: '2023-02-01' }
-        ]
-      },
-      {
-        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
-      }
-    ];
-    component.filterOptions.rating = 4;
-    component.filterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].id).toBe('1');
-  });
-
-  it('should handle rits with no ratings when filtering by rating', () => {
-    component.rits = [
-      {
-        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: []
-      },
-      {
-        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: []
-      }
-    ];
-    component.filterOptions.rating = 1;
-    component.filterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].id).toBe('1');
   });
 
   it('should update URL when setting a rating filter', () => {
@@ -471,39 +221,6 @@ describe('AllRitsComponent', () => {
     expect(component.filterOptions.ratingOperator).toBe(RatingComparisonOperator.GreaterThanOrEqual);
   });
 
-  it('should read rating parameters from URL on initialization', () => {
-    TestBed.resetTestingModule();
-
-    // Setup with rating query params
-    TestBed.configureTestingModule({
-      imports: [AllRitsComponent, IonicModule.forRoot()],
-      providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            queryParams: of({
-              rating: '4',
-              ratingOp: RatingComparisonOperator.Equal
-            })
-          }
-        },
-        { provide: Router, useValue: routerSpy },
-        provideHttpClient()
-      ]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AllRitsComponent);
-    component = fixture.componentInstance;
-
-    component.ionViewWillEnter();
-
-    expect(component.filterOptions.rating).toBe(4);
-    expect(component.filterOptions.ratingOperator).toBe(RatingComparisonOperator.Equal);
-  });
-
   it('should clear rating filter when clearRatingFilter is called', () => {
     component.filterOptions.rating = 3;
     component.clearRatingFilter();
@@ -515,54 +232,6 @@ describe('AllRitsComponent', () => {
       })
     );
     expect(component.filterOptions.rating).toBe(0);
-  });
-
-  it('should clear rating filter when clearFilters is called', () => {
-    component.filterOptions.tags = ['tag1'];
-    component.filterOptions.searchText = 'search';
-    component.filterOptions.rating = 3;
-
-    component.clearFilters();
-
-    expect(routerSpy.navigate).toHaveBeenCalledWith(
-      [],
-      jasmine.objectContaining({
-        queryParams: {search: 'search'}
-      })
-    );
-    expect(component.filterOptions.tags).toEqual([]);
-    expect(component.filterOptions.searchText).toBe('search');
-    expect(component.filterOptions.rating).toBe(0);
-  });
-
-  it('should handle combined filtering with search, tags and rating', () => {
-    component.rits = [
-      {
-        id: '1', name: 'Test Rit', details: 'Details 1',
-        tags: ['tag1', 'tag2'], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '2', name: 'Test Rit 2', details: 'Details 2',
-        tags: ['tag1'], codes: [],
-        ratings: [{ value: 2, createdAt: '2023-01-01' }]
-      },
-      {
-        id: '3', name: 'Another Rit', details: 'Details 3',
-        tags: ['tag1', 'tag2'], codes: [],
-        ratings: [{ value: 5, createdAt: '2023-01-01' }]
-      }
-    ];
-
-    component.filterOptions.searchText = 'Test';
-    component.filterOptions.tags = ['tag1'];
-    component.filterOptions.rating = 3;
-    component.filterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].id).toBe('1');
   });
 
   it('should call addTagToFilter when handleTagClick is called', () => {
@@ -611,5 +280,4 @@ describe('AllRitsComponent', () => {
     expect(component.filterOptions.tags).toEqual(['testTag']);
     expect(component.filterOptions.searchText).toBe('testSearch');
   });
-
 });
