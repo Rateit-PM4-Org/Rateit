@@ -18,6 +18,7 @@ import {ToastController} from '@ionic/angular/standalone';
 
 export class RitListItemComponent {
   @Input() rit!: Rit;
+  @Input() onTagClick?: (tagName: string, event: Event) => void;
 
   protected latestRatingValue: number = 0;
 
@@ -63,9 +64,13 @@ export class RitListItemComponent {
   }
 
   navigateToTag(tagName: string, event: Event): void {
-    this.router.navigate(['/tabs/rits'], {
-      queryParams: { tag: tagName }
-    });
+    if (this.onTagClick) {
+      this.onTagClick(tagName, event);
+    } else {
+      this.router.navigate(['/tabs/rits'], {
+        queryParams: { tag: tagName }
+      });
+    }
     event.stopPropagation();
   }
 

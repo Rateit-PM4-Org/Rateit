@@ -3,28 +3,108 @@
     <ion-title>Rits</ion-title>
   </ion-toolbar>
 </ion-header>
-<div class="ion-padding" scroll-y="false">
-  <div>
-    <ion-searchbar [(ngModel)]="searchText" (ionChange)="onSearchChange($event)" placeholder="Search..." class="searchbar"></ion-searchbar>
 
-    <div class="tags-input-container">
-      <ion-label>Tag:</ion-label>
-      <div class="tags-container">
-        <ion-chip color="primary" (click)="clearTagFilter()" (keypress)="clearTagFilter()">
-          <ion-icon name="pricetag-outline"></ion-icon>
-          <ion-label>{{ selectedTag || 'All' }}</ion-label>
-          <ion-icon *ngIf="selectedTag" name="close"></ion-icon>
-        </ion-chip>
+
+<div class="ion-padding-horizontal" scroll-y="false" slot="content">
+  <ion-searchbar [(ngModel)]="filterOptions.searchText" (ionChange)="onSearchChange($event)" placeholder="Search..."
+    class="searchbar">
+  </ion-searchbar>
+</div>
+
+<ion-accordion-group>
+  <ion-accordion value="first">
+    <ion-item slot="header" color="light">
+      <ion-label>Filter</ion-label>
+      <!-- Reset Filter Button -->
+      <ion-button *ngIf="hasFilter()" (click)="clearFilters($event)" (keydown.enter)="clearFilters($event)" size="small"
+        class="ion-padding-end">
+        <ion-icon name="close" class="ion-margin-end"></ion-icon>
+        <ion-label>Reset All</ion-label>
+      </ion-button>
+    </ion-item>
+
+    <div class="ion-padding-horizontal" scroll-y="false" slot="content">
+      <div>
+
+        <!-- Tags filter section -->
+        <div class="tags-input-container">
+          <ion-label class="ion-margin-end">Tags:</ion-label>
+          <div class="tags-container">
+            <ng-container *ngIf="filterOptions.tags.length === 0">
+              <ion-chip color="primary">
+                <ion-icon name="pricetag-outline"></ion-icon>
+                <ion-label>All</ion-label>
+              </ion-chip>
+            </ng-container>
+            <ion-chip color="primary" *ngFor="let tag of filterOptions.tags" (click)="removeTagFromFilter(tag)"
+              (keypress)="removeTagFromFilter(tag)">
+              <ion-icon name="pricetag-outline"></ion-icon>
+              <ion-label>{{ tag }}</ion-label>
+              <ion-icon name="close"></ion-icon>
+            </ion-chip>
+            <ion-chip *ngIf="filterOptions.tags.length > 1" color="medium" (click)="clearTagFilter()"
+              (keypress)="clearTagFilter()">
+              <ion-label>Clear</ion-label>
+              <ion-icon name="close"></ion-icon>
+            </ion-chip>
+          </div>
+        </div>
+
+        <!-- Rating filter section -->
+        <div class="rating-filter-container">
+          <div class="rating-filter-header">
+            <ion-label class="ion-margin-end">Rating:</ion-label>
+
+            <!-- Tri-state toggle for comparison operator -->
+            <div class="comparison-toggle">
+              <ion-button class="toggle-button"
+                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.GreaterThanOrEqual"
+                (click)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)"
+                (keydown.enter)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)" fill="clear"
+                size="small">
+                &ge;
+              </ion-button>
+              <ion-button class="toggle-button"
+                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.Equal"
+                (click)="setRatingOperator(RatingComparisonOperator.Equal)"
+                (keydown.enter)="setRatingOperator(RatingComparisonOperator.Equal)" fill="clear" size="small">
+                =
+              </ion-button>
+              <ion-button class="toggle-button"
+                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.LessThanOrEqual"
+                (click)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)"
+                (keydown.enter)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)" fill="clear" size="small">
+                &le;
+              </ion-button>
+            </div>
+
+            <div class="stars-container">
+              <ion-row>
+                <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]">
+                  <ion-icon class="rating-star" [class.filled]="star <= filterOptions.rating"
+                    [name]="star <= filterOptions.rating ? 'star' : 'star-outline'" (keydown.enter)="setRatingFilter(star)"
+                    (click)="setRatingFilter(star)">
+                  </ion-icon>
+                </ion-col>
+              </ion-row>
+            </div>
+
+          </div>
+        </div>
+
+
+
       </div>
     </div>
-  </div>
-</div>
-<ion-content class="ion-padding-horizontal" scroll-y="true">
+  </ion-accordion>
+</ion-accordion-group>
+
+<ion-content class="ion-padding-horizontal ion-padding-top" scroll-y="true">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit">
+    <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit" [onTagClick]="handleTagClick">
     </app-rit-list-item>
   </ion-list>
 </ion-content>

@@ -8,6 +8,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { Rit } from '../../../model/rit';
 import { of, throwError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RatingComparisonOperator } from '../../../shared/services/rit-filter.service';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -72,19 +73,6 @@ describe('AllRitsComponent', () => {
     expect(component.rits).toEqual([]);
   });
 
-  it('should filter rits based on search text', () => {
-    component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
-      { id: '2', name: 'Another Rit', details: 'Details 2', tags: ['tag2'], codes: ['code2'] }
-    ];
-    component.searchText = 'Test';
-
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].name).toBe('Test Rit 1');
-  });
-
   it('should show error toast on error', async () => {
     spyOn(component, 'showErrorToast');
 
@@ -96,32 +84,171 @@ describe('AllRitsComponent', () => {
     expect(component.showErrorToast).toHaveBeenCalledWith('Failed to load rits');
   });
 
-  it('should filter rits based on selected tag', () => {
-    component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1', 'common'], codes: ['code1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2', 'common'], codes: ['code2'] }
-    ];
-    component.selectedTag = 'tag1';
+  it('should update URL when adding a tag filter', () => {
+    component.addTagToFilter('newTag');
 
-    const filteredRits = component.filteredRits();
-
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].name).toBe('Test Rit 1');
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({ tag: ['newTag'] })
+      })
+    );
+    expect(component.filterOptions.tags).toEqual(['newTag']);
   });
 
-  it('should filter rits based on both search text and tag', () => {
-    component.rits = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2'] },
-      { id: '3', name: 'Another Rit', details: 'Details 3', tags: ['tag1'], codes: ['code3'] }
-    ];
-    component.searchText = 'Test';
-    component.selectedTag = 'tag1';
+  it('should clear URL parameters when clearing all filters except search', () => {
+    component.filterOptions.tags = ['someTag'];
+    component.filterOptions.searchText = 'someSearch';
 
-    const filteredRits = component.filteredRits();
+    component.clearFilters();
 
-    expect(filteredRits.length).toBe(1);
-    expect(filteredRits[0].name).toBe('Test Rit 1');
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {search: 'someSearch'}
+      })
+    );
+    expect(component.filterOptions.tags).toEqual([]);
+    expect(component.filterOptions.searchText).toBe('someSearch');
+  });
+
+  it('should remove only tag parameter when clearing tag filter', () => {
+    component.filterOptions.tags = ['someTag'];
+    component.filterOptions.searchText = 'someSearch';
+
+    component.clearTagFilter();
+
+    expect(routerSpy.navigate).toHaveBeenCalled();
+    expect(component.filterOptions.tags).toEqual([]);
+    expect(component.filterOptions.searchText).toBe('someSearch');
+  });
+
+  it('should add a tag to existing tags when addTagToFilter is called', () => {
+    component.filterOptions.tags = ['existingTag'];
+    component.addTagToFilter('newTag');
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({ tag: ['existingTag', 'newTag'] })
+      })
+    );
+    expect(component.filterOptions.tags).toEqual(['existingTag', 'newTag']);
+  });
+
+  it('should not add duplicate tags when addTagToFilter is called with existing tag', () => {
+    component.filterOptions.tags = ['existingTag'];
+    component.addTagToFilter('existingTag');
+
+    expect(component.filterOptions.tags).toEqual(['existingTag']);
+    expect(routerSpy.navigate).not.toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({ tag: ['existingTag', 'existingTag'] })
+      })
+    );
+  });
+
+  it('should remove a specific tag when removeTagFromFilter is called', () => {
+    component.filterOptions.tags = ['tag1', 'tag2', 'tag3'];
+    component.removeTagFromFilter('tag2');
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({ tag: ['tag1', 'tag3'] })
+      })
+    );
+    expect(component.filterOptions.tags).toEqual(['tag1', 'tag3']);
+  });
+
+  it('should update URL when setting a rating filter', () => {
+    component.setRatingFilter(4);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({
+          rating: 4,
+          ratingOp: RatingComparisonOperator.GreaterThanOrEqual
+        })
+      })
+    );
+    expect(component.filterOptions.rating).toBe(4);
+  });
+
+  it('should toggle off rating filter when clicking the same value', () => {
+    component.filterOptions.rating = 3;
+    component.setRatingFilter(3);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+    expect(component.filterOptions.rating).toBe(0);
+  });
+
+  it('should update URL when changing rating operator', () => {
+    component.filterOptions.rating = 3;
+    component.setRatingOperator(RatingComparisonOperator.Equal);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({
+          rating: 3,
+          ratingOp: component.filterOptions.ratingOperator
+        })
+      })
+    );
+    expect(component.filterOptions.ratingOperator).toBe(RatingComparisonOperator.Equal);
+  });
+
+  it('should reset rating filter when changing to the same operator', () => {
+    component.filterOptions.rating = 3;
+    component.filterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
+    component.setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+    expect(component.filterOptions.rating).toBe(0);
+    expect(component.filterOptions.ratingOperator).toBe(RatingComparisonOperator.GreaterThanOrEqual);
+  });
+
+  it('should clear rating filter when clearRatingFilter is called', () => {
+    component.filterOptions.rating = 3;
+    component.clearRatingFilter();
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+    expect(component.filterOptions.rating).toBe(0);
+  });
+
+  it('should call addTagToFilter when handleTagClick is called', () => {
+    spyOn(component, 'addTagToFilter');
+    const event = new Event('click');
+
+    component.handleTagClick('testTag', event);
+
+    expect(component.addTagToFilter).toHaveBeenCalledWith('testTag');
+  });
+
+  it('should prevent event propagation when handleTagClick is called', () => {
+    const event = jasmine.createSpyObj('Event', ['stopPropagation']);
+
+    component.handleTagClick('testTag', event as unknown as Event);
+
+    expect(event.stopPropagation).toHaveBeenCalled();
   });
 
   it('should read query parameters from URL on initialization', () => {
@@ -150,46 +277,7 @@ describe('AllRitsComponent', () => {
 
     component.ionViewWillEnter();
 
-    expect(component.selectedTag).toBe('testTag');
-    expect(component.searchText).toBe('testSearch');
-  });
-
-  it('should update URL when setting a tag filter', () => {
-    component.setTagFilter('newTag');
-
-    expect(routerSpy.navigate).toHaveBeenCalledWith(
-      [],
-      jasmine.objectContaining({
-        queryParams: jasmine.objectContaining({ tag: 'newTag' })
-      })
-    );
-    expect(component.selectedTag).toBe('newTag');
-  });
-
-  it('should clear URL parameters when clearing all filters', () => {
-    component.selectedTag = 'someTag';
-    component.searchText = 'someSearch';
-
-    component.clearFilters();
-
-    expect(routerSpy.navigate).toHaveBeenCalledWith(
-      [],
-      jasmine.objectContaining({
-        queryParams: {}
-      })
-    );
-    expect(component.selectedTag).toBe('');
-    expect(component.searchText).toBe('');
-  });
-
-  it('should remove only tag parameter when clearing tag filter', () => {
-    component.selectedTag = 'someTag';
-    component.searchText = 'someSearch';
-
-    component.clearTagFilter();
-
-    expect(routerSpy.navigate).toHaveBeenCalled();
-    expect(component.selectedTag).toBe('');
-    expect(component.searchText).toBe('someSearch');
+    expect(component.filterOptions.tags).toEqual(['testTag']);
+    expect(component.filterOptions.searchText).toBe('testSearch');
   });
 });
