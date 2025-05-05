@@ -80,7 +80,7 @@ export class ScannerComponent implements OnDestroy, AfterViewInit {
     Quagga.onDetected(this.onDetected.bind(this));
   }
 
-  private onDetected(data: any): void {
+  onDetected(data: any): void {
     const code = data?.codeResult?.code;
     if (!code) return;
 
