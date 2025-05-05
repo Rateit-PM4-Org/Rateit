@@ -3,10 +3,10 @@
     margin: 4px;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
-    color: var( --custom-color-accent); // Default gray for unselected stars
+    color: var( --custom-color-accent);
   
     &.filled {
-      color: var( --custom-color-accent); // Yellow for selected stars
+      color: var( --custom-color-accent);
     }
   
     &:hover {

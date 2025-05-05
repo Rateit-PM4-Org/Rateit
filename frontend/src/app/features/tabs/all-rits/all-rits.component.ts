@@ -9,6 +9,7 @@ import { RitService } from '../../../shared/services/rit.service';
 import { Subscription } from 'rxjs';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RatingComparisonOperator, RitFilterOptions, RitFilterService } from '../../../shared/services/rit-filter.service';
 
 @Component({
   selector: 'app-all-rits',
@@ -24,11 +25,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 
 export class AllRitsComponent implements ViewWillEnter {
-  searchText = '';
-  selectedTag: string = '';
+
+  filterOptions: RitFilterOptions = RitFilterService.getDefaultFilterOptions();
+
   rits: Rit[] = [];
   ritSubscription: Subscription | null = null;
   ritsErrorSubscription: Subscription | null = null;
+  RatingComparisonOperator = RatingComparisonOperator;
 
   constructor(
     private readonly ritService: RitService,
@@ -40,8 +43,7 @@ export class AllRitsComponent implements ViewWillEnter {
   ionViewWillEnter(): void {
     // Get query parameters from URL
     this.route.queryParams.subscribe(params => {
-      this.searchText = params['search'] ?? '';
-      this.selectedTag = params['tag'] ?? '';
+      this.filterOptions = RitFilterService.getFilterOptionsFromUrl(params);
     });
 
     this.ritSubscription = this.ritService.getRits().subscribe({
@@ -66,15 +68,7 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   filteredRits(): Rit[] {
-    return this.rits.filter(rit => {
-      const matchesSearch = !this.searchText ||
-        rit.name?.toLowerCase().includes(this.searchText.toLowerCase());
-
-      const matchesTag = !this.selectedTag ||
-        (rit.tags?.some(tag => tag.toLowerCase() === this.selectedTag.toLowerCase()));
-
-      return matchesSearch && matchesTag;
-    });
+    return RitFilterService.filterRits(this.rits, this.filterOptions);
   }
 
   private handleSuccess(data: Rit[]) {
@@ -121,43 +115,73 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   onSearchChange(event: any): void {
-    this.searchText = event.target.value;
+    this.filterOptions.searchText = event.target.value;
     this.updateFilters();
   }
 
   updateFilters(): void {
-    const queryParams: any = {};
-
-    if (this.searchText) {
-      queryParams.search = this.searchText;
-    }
-
-    if (this.selectedTag) {
-      queryParams.tag = this.selectedTag;
-    }
-
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: queryParams,
+      queryParams: RitFilterService.buildQueryParams(this.filterOptions)
     });
   }
 
-  setTagFilter(tag: string): void {
-    this.selectedTag = tag;
+  addTagToFilter(tag: string): void {
+    if (!this.filterOptions.tags.includes(tag)) {
+      this.filterOptions.tags.push(tag);
+      this.updateFilters();
+    }
+  }
+
+  removeTagFromFilter(tag: string): void {
+    this.filterOptions.tags = this.filterOptions.tags.filter(t => t !== tag);
     this.updateFilters();
-  }
-
-  clearFilters(): void {
-    this.searchText = '';
-    this.selectedTag = '';
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {}
-    });
   }
 
   clearTagFilter(): void {
-    this.selectedTag = '';
+    this.filterOptions.tags = [];
     this.updateFilters();
+  }
+
+  clearFilters(event?: Event): void {
+    this.filterOptions.tags = [];
+    this.filterOptions.rating = 0;
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: RitFilterService.buildQueryParams(this.filterOptions),
+    });
+    event?.stopPropagation();
+  }
+
+  setRatingFilter(value: number): void {
+    // Toggle off if the same value is clicked
+    this.filterOptions.rating = this.filterOptions.rating === value ? 0 : value;
+    this.updateFilters();
+  }
+
+  setRatingOperator(operator: RatingComparisonOperator): void {
+    if (this.filterOptions.ratingOperator === operator) { // reset to default if the same operator is clicked
+      this.filterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
+      this.filterOptions.rating = 0;
+    } else {
+      this.filterOptions.ratingOperator = operator;
+    }
+    this.updateFilters();
+  }
+
+  clearRatingFilter(): void {
+    this.filterOptions.rating = 0;
+    this.updateFilters();
+  }
+
+  handleTagClick = (tagName: string, event: Event): void => {
+    this.addTagToFilter(tagName);
+    event.stopPropagation();
+  }
+
+  hasFilter(): boolean {
+    return this.filterOptions.tags.length > 0 ||
+      this.filterOptions.rating > 0;
   }
 }
