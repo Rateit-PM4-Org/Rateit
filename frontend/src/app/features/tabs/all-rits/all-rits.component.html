@@ -6,7 +6,7 @@
 
 
 <div class="ion-padding-horizontal" scroll-y="false" slot="content">
-  <ion-searchbar [(ngModel)]="searchText" (ionChange)="onSearchChange($event)" placeholder="Search..."
+  <ion-searchbar [(ngModel)]="filterOptions.searchText" (ionChange)="onSearchChange($event)" placeholder="Search..."
     class="searchbar">
   </ion-searchbar>
 </div>
@@ -30,19 +30,19 @@
         <div class="tags-input-container">
           <ion-label>Tags:</ion-label>
           <div class="tags-container">
-            <ng-container *ngIf="selectedTags.length === 0">
+            <ng-container *ngIf="filterOptions.tags.length === 0">
               <ion-chip color="primary">
                 <ion-icon name="pricetag-outline"></ion-icon>
                 <ion-label>All</ion-label>
               </ion-chip>
             </ng-container>
-            <ion-chip color="primary" *ngFor="let tag of selectedTags" (click)="removeTagFromFilter(tag)"
+            <ion-chip color="primary" *ngFor="let tag of filterOptions.tags" (click)="removeTagFromFilter(tag)"
               (keypress)="removeTagFromFilter(tag)">
               <ion-icon name="pricetag-outline"></ion-icon>
               <ion-label>{{ tag }}</ion-label>
               <ion-icon name="close"></ion-icon>
             </ion-chip>
-            <ion-chip *ngIf="selectedTags.length > 1" color="medium" (click)="clearTagFilter()"
+            <ion-chip *ngIf="filterOptions.tags.length > 1" color="medium" (click)="clearTagFilter()"
               (keypress)="clearTagFilter()">
               <ion-label>Clear</ion-label>
               <ion-icon name="close"></ion-icon>
@@ -58,20 +58,20 @@
             <!-- Tri-state toggle for comparison operator -->
             <div class="comparison-toggle">
               <ion-button class="toggle-button"
-                [class.active]="ratingComparisonOperator === RatingComparisonOperator.GreaterThanOrEqual"
+                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.GreaterThanOrEqual"
                 (click)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)"
                 (keydown.enter)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)" fill="clear"
                 size="small">
                 &ge;
               </ion-button>
               <ion-button class="toggle-button"
-                [class.active]="ratingComparisonOperator === RatingComparisonOperator.Equal"
+                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.Equal"
                 (click)="setRatingOperator(RatingComparisonOperator.Equal)"
                 (keydown.enter)="setRatingOperator(RatingComparisonOperator.Equal)" fill="clear" size="small">
                 =
               </ion-button>
               <ion-button class="toggle-button"
-                [class.active]="ratingComparisonOperator === RatingComparisonOperator.LessThanOrEqual"
+                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.LessThanOrEqual"
                 (click)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)"
                 (keydown.enter)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)" fill="clear" size="small">
                 &le;
@@ -81,8 +81,8 @@
             <div class="stars-container">
               <ion-row>
                 <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]">
-                  <ion-icon class="rating-star" [class.filled]="star <= ratingFilter"
-                    [name]="star <= ratingFilter ? 'star' : 'star-outline'" (keydown.enter)="setRatingFilter(star)"
+                  <ion-icon class="rating-star" [class.filled]="star <= filterOptions.rating"
+                    [name]="star <= filterOptions.rating ? 'star' : 'star-outline'" (keydown.enter)="setRatingFilter(star)"
                     (click)="setRatingFilter(star)">
                   </ion-icon>
                 </ion-col>
