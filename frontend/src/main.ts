@@ -6,6 +6,9 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { addIcons } from 'ionicons';
 import {
   addOutline,
+  arrowDown,
+  arrowUp,
+  chevronExpand,
   chevronForward,
   close,
   createOutline,
@@ -50,5 +53,8 @@ addIcons({
   logInOutline,
   chevronForward,
   createOutline,
-  trashOutline
+  trashOutline,
+  chevronExpand,
+  arrowUp,
+  arrowDown,
 });

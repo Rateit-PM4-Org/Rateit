@@ -93,12 +93,12 @@ describe('AllRitsComponent', () => {
         queryParams: jasmine.objectContaining({ tag: ['newTag'] })
       })
     );
-    expect(component.filterOptions.tags).toEqual(['newTag']);
+    expect(component.sortAndFilterOptions.tags).toEqual(['newTag']);
   });
 
   it('should clear URL parameters when clearing all filters except search', () => {
-    component.filterOptions.tags = ['someTag'];
-    component.filterOptions.searchText = 'someSearch';
+    component.sortAndFilterOptions.tags = ['someTag'];
+    component.sortAndFilterOptions.searchText = 'someSearch';
 
     component.clearFilters();
 
@@ -108,23 +108,23 @@ describe('AllRitsComponent', () => {
         queryParams: {search: 'someSearch'}
       })
     );
-    expect(component.filterOptions.tags).toEqual([]);
-    expect(component.filterOptions.searchText).toBe('someSearch');
+    expect(component.sortAndFilterOptions.tags).toEqual([]);
+    expect(component.sortAndFilterOptions.searchText).toBe('someSearch');
   });
 
   it('should remove only tag parameter when clearing tag filter', () => {
-    component.filterOptions.tags = ['someTag'];
-    component.filterOptions.searchText = 'someSearch';
+    component.sortAndFilterOptions.tags = ['someTag'];
+    component.sortAndFilterOptions.searchText = 'someSearch';
 
     component.clearTagFilter();
 
     expect(routerSpy.navigate).toHaveBeenCalled();
-    expect(component.filterOptions.tags).toEqual([]);
-    expect(component.filterOptions.searchText).toBe('someSearch');
+    expect(component.sortAndFilterOptions.tags).toEqual([]);
+    expect(component.sortAndFilterOptions.searchText).toBe('someSearch');
   });
 
   it('should add a tag to existing tags when addTagToFilter is called', () => {
-    component.filterOptions.tags = ['existingTag'];
+    component.sortAndFilterOptions.tags = ['existingTag'];
     component.addTagToFilter('newTag');
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(
@@ -133,14 +133,14 @@ describe('AllRitsComponent', () => {
         queryParams: jasmine.objectContaining({ tag: ['existingTag', 'newTag'] })
       })
     );
-    expect(component.filterOptions.tags).toEqual(['existingTag', 'newTag']);
+    expect(component.sortAndFilterOptions.tags).toEqual(['existingTag', 'newTag']);
   });
 
   it('should not add duplicate tags when addTagToFilter is called with existing tag', () => {
-    component.filterOptions.tags = ['existingTag'];
+    component.sortAndFilterOptions.tags = ['existingTag'];
     component.addTagToFilter('existingTag');
 
-    expect(component.filterOptions.tags).toEqual(['existingTag']);
+    expect(component.sortAndFilterOptions.tags).toEqual(['existingTag']);
     expect(routerSpy.navigate).not.toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
@@ -150,7 +150,7 @@ describe('AllRitsComponent', () => {
   });
 
   it('should remove a specific tag when removeTagFromFilter is called', () => {
-    component.filterOptions.tags = ['tag1', 'tag2', 'tag3'];
+    component.sortAndFilterOptions.tags = ['tag1', 'tag2', 'tag3'];
     component.removeTagFromFilter('tag2');
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(
@@ -159,7 +159,7 @@ describe('AllRitsComponent', () => {
         queryParams: jasmine.objectContaining({ tag: ['tag1', 'tag3'] })
       })
     );
-    expect(component.filterOptions.tags).toEqual(['tag1', 'tag3']);
+    expect(component.sortAndFilterOptions.tags).toEqual(['tag1', 'tag3']);
   });
 
   it('should update URL when setting a rating filter', () => {
@@ -174,11 +174,11 @@ describe('AllRitsComponent', () => {
         })
       })
     );
-    expect(component.filterOptions.rating).toBe(4);
+    expect(component.sortAndFilterOptions.rating).toBe(4);
   });
 
   it('should toggle off rating filter when clicking the same value', () => {
-    component.filterOptions.rating = 3;
+    component.sortAndFilterOptions.rating = 3;
     component.setRatingFilter(3);
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(
@@ -187,11 +187,11 @@ describe('AllRitsComponent', () => {
         queryParams: {}
       })
     );
-    expect(component.filterOptions.rating).toBe(0);
+    expect(component.sortAndFilterOptions.rating).toBe(0);
   });
 
   it('should update URL when changing rating operator', () => {
-    component.filterOptions.rating = 3;
+    component.sortAndFilterOptions.rating = 3;
     component.setRatingOperator(RatingComparisonOperator.Equal);
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(
@@ -199,16 +199,16 @@ describe('AllRitsComponent', () => {
       jasmine.objectContaining({
         queryParams: jasmine.objectContaining({
           rating: 3,
-          ratingOp: component.filterOptions.ratingOperator
+          ratingOp: component.sortAndFilterOptions.ratingOperator
         })
       })
     );
-    expect(component.filterOptions.ratingOperator).toBe(RatingComparisonOperator.Equal);
+    expect(component.sortAndFilterOptions.ratingOperator).toBe(RatingComparisonOperator.Equal);
   });
 
   it('should reset rating filter when changing to the same operator', () => {
-    component.filterOptions.rating = 3;
-    component.filterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
+    component.sortAndFilterOptions.rating = 3;
+    component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
     component.setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual);
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(
@@ -217,12 +217,12 @@ describe('AllRitsComponent', () => {
         queryParams: {}
       })
     );
-    expect(component.filterOptions.rating).toBe(0);
-    expect(component.filterOptions.ratingOperator).toBe(RatingComparisonOperator.GreaterThanOrEqual);
+    expect(component.sortAndFilterOptions.rating).toBe(0);
+    expect(component.sortAndFilterOptions.ratingOperator).toBe(RatingComparisonOperator.GreaterThanOrEqual);
   });
 
   it('should clear rating filter when clearRatingFilter is called', () => {
-    component.filterOptions.rating = 3;
+    component.sortAndFilterOptions.rating = 3;
     component.clearRatingFilter();
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(
@@ -231,7 +231,7 @@ describe('AllRitsComponent', () => {
         queryParams: {}
       })
     );
-    expect(component.filterOptions.rating).toBe(0);
+    expect(component.sortAndFilterOptions.rating).toBe(0);
   });
 
   it('should call addTagToFilter when handleTagClick is called', () => {
@@ -277,7 +277,9 @@ describe('AllRitsComponent', () => {
 
     component.ionViewWillEnter();
 
-    expect(component.filterOptions.tags).toEqual(['testTag']);
-    expect(component.filterOptions.searchText).toBe('testSearch');
+    expect(component.sortAndFilterOptions.tags).toEqual(['testTag']);
+    expect(component.sortAndFilterOptions.searchText).toBe('testSearch');
   });
+
+  // TODO: Add tests for sorting logic
 });

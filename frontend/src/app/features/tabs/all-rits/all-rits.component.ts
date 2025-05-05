@@ -9,7 +9,7 @@ import { RitService } from '../../../shared/services/rit.service';
 import { Subscription } from 'rxjs';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RatingComparisonOperator, RitFilterOptions, RitFilterService } from '../../../shared/services/rit-filter.service';
+import { RatingComparisonOperator, RitSortAndFilterOptions, RitFilterService, SortDirection, SortOptionOperator } from '../../../shared/services/rit-filter.service';
 
 @Component({
   selector: 'app-all-rits',
@@ -26,12 +26,13 @@ import { RatingComparisonOperator, RitFilterOptions, RitFilterService } from '..
 
 export class AllRitsComponent implements ViewWillEnter {
 
-  filterOptions: RitFilterOptions = RitFilterService.getDefaultFilterOptions();
+  sortAndFilterOptions: RitSortAndFilterOptions = RitFilterService.getDefaultSortAndFilterOptions();
 
   rits: Rit[] = [];
   ritSubscription: Subscription | null = null;
   ritsErrorSubscription: Subscription | null = null;
   RatingComparisonOperator = RatingComparisonOperator;
+  SortOptionOperator = SortOptionOperator;
 
   constructor(
     private readonly ritService: RitService,
@@ -43,7 +44,7 @@ export class AllRitsComponent implements ViewWillEnter {
   ionViewWillEnter(): void {
     // Get query parameters from URL
     this.route.queryParams.subscribe(params => {
-      this.filterOptions = RitFilterService.getFilterOptionsFromUrl(params);
+      this.sortAndFilterOptions = RitFilterService.getFilterOptionsFromUrl(params);
     });
 
     this.ritSubscription = this.ritService.getRits().subscribe({
@@ -68,7 +69,7 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   filteredRits(): Rit[] {
-    return RitFilterService.filterRits(this.rits, this.filterOptions);
+    return RitFilterService.filterRits(this.rits, this.sortAndFilterOptions);
   }
 
   private handleSuccess(data: Rit[]) {
@@ -115,63 +116,63 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   onSearchChange(event: any): void {
-    this.filterOptions.searchText = event.target.value;
+    this.sortAndFilterOptions.searchText = event.target.value;
     this.updateFilters();
   }
 
   updateFilters(): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: RitFilterService.buildQueryParams(this.filterOptions)
+      queryParams: RitFilterService.buildQueryParams(this.sortAndFilterOptions)
     });
   }
 
   addTagToFilter(tag: string): void {
-    if (!this.filterOptions.tags.includes(tag)) {
-      this.filterOptions.tags.push(tag);
+    if (!this.sortAndFilterOptions.tags.includes(tag)) {
+      this.sortAndFilterOptions.tags.push(tag);
       this.updateFilters();
     }
   }
 
   removeTagFromFilter(tag: string): void {
-    this.filterOptions.tags = this.filterOptions.tags.filter(t => t !== tag);
+    this.sortAndFilterOptions.tags = this.sortAndFilterOptions.tags.filter(t => t !== tag);
     this.updateFilters();
   }
 
   clearTagFilter(): void {
-    this.filterOptions.tags = [];
+    this.sortAndFilterOptions.tags = [];
     this.updateFilters();
   }
 
   clearFilters(event?: Event): void {
-    this.filterOptions.tags = [];
-    this.filterOptions.rating = 0;
+    this.sortAndFilterOptions.tags = [];
+    this.sortAndFilterOptions.rating = 0;
 
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: RitFilterService.buildQueryParams(this.filterOptions),
+      queryParams: RitFilterService.buildQueryParams(this.sortAndFilterOptions),
     });
     event?.stopPropagation();
   }
 
   setRatingFilter(value: number): void {
     // Toggle off if the same value is clicked
-    this.filterOptions.rating = this.filterOptions.rating === value ? 0 : value;
+    this.sortAndFilterOptions.rating = this.sortAndFilterOptions.rating === value ? 0 : value;
     this.updateFilters();
   }
 
   setRatingOperator(operator: RatingComparisonOperator): void {
-    if (this.filterOptions.ratingOperator === operator) { // reset to default if the same operator is clicked
-      this.filterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-      this.filterOptions.rating = 0;
+    if (this.sortAndFilterOptions.ratingOperator === operator) { // reset to default if the same operator is clicked
+      this.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
+      this.sortAndFilterOptions.rating = 0;
     } else {
-      this.filterOptions.ratingOperator = operator;
+      this.sortAndFilterOptions.ratingOperator = operator;
     }
     this.updateFilters();
   }
 
   clearRatingFilter(): void {
-    this.filterOptions.rating = 0;
+    this.sortAndFilterOptions.rating = 0;
     this.updateFilters();
   }
 
@@ -181,7 +182,17 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   hasFilter(): boolean {
-    return this.filterOptions.tags.length > 0 ||
-      this.filterOptions.rating > 0;
+    return this.sortAndFilterOptions.tags.length > 0 ||
+      this.sortAndFilterOptions.rating > 0;
+  }
+
+  setSortOptionOperator(newOption: SortOptionOperator): void {
+    if (this.sortAndFilterOptions.sortOptionOperator === newOption) {
+      this.sortAndFilterOptions.sortDirection = this.sortAndFilterOptions.sortDirection === SortDirection.Descending ? SortDirection.Ascending : SortDirection.Descending;
+    } else {
+      this.sortAndFilterOptions.sortDirection = SortDirection.Descending;
+      this.sortAndFilterOptions.sortOptionOperator = newOption;
+    }
+    // this.updateSort();
   }
 }

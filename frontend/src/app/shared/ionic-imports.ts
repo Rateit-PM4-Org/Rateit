@@ -26,6 +26,7 @@ import {
   IonModal,
   IonNav,
   IonNote,
+  IonPopover,
   IonRefresher,
   IonRefresherContent,
   IonRippleEffect,
@@ -99,5 +100,6 @@ export const IonicStandaloneStandardImports = [
   IonItemOption,
   IonSelectOption,
   IonAccordion,
-  IonAccordionGroup
+  IonAccordionGroup,
+  IonPopover
 ];

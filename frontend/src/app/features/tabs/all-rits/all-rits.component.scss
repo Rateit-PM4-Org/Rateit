@@ -11,8 +11,9 @@
   align-items: center;
 }
 
-.searchbar{
-  padding: 0;
+.searchbar-container {
+  display: flex;
+  align-items: center;
 }
 
 .rating-filter-container {

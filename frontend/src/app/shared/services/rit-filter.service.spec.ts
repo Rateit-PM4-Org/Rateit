@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RatingComparisonOperator, RitFilterOptions, RitFilterService } from './rit-filter.service';
+import { RatingComparisonOperator, RitSortAndFilterOptions, RitFilterService, SortOptionOperator, SortDirection } from './rit-filter.service';
 import { Rit } from '../../model/rit';
 
 describe('RitFilterService', () => {
@@ -21,11 +21,13 @@ describe('RitFilterService', () => {
       { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
       { id: '2', name: 'Another Rit', details: 'Details 2', tags: ['tag2'], codes: ['code2'] }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: 'Test',
       tags: [],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -39,11 +41,13 @@ describe('RitFilterService', () => {
       { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1', 'common'], codes: ['code1'] },
       { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2', 'common'], codes: ['code2'] }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: ['tag1'],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -58,11 +62,13 @@ describe('RitFilterService', () => {
       { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2'] },
       { id: '3', name: 'Another Rit', details: 'Details 3', tags: ['tag1'], codes: ['code3'] }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: 'Test',
       tags: ['tag1'],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -86,11 +92,13 @@ describe('RitFilterService', () => {
         codes: []
       }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: ['tag1', 'tag3'],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -115,11 +123,13 @@ describe('RitFilterService', () => {
         ratings: [{ value: 2, createdAt: '2023-01-01' }]
       }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
       rating: 3,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -144,11 +154,13 @@ describe('RitFilterService', () => {
         ratings: [{ value: 3, createdAt: '2023-01-01' }]
       }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
       rating: 3,
-      ratingOperator: RatingComparisonOperator.Equal
+      ratingOperator: RatingComparisonOperator.Equal,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -173,11 +185,13 @@ describe('RitFilterService', () => {
         ratings: [{ value: 2, createdAt: '2023-01-01' }]
       }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
       rating: 3,
-      ratingOperator: RatingComparisonOperator.LessThanOrEqual
+      ratingOperator: RatingComparisonOperator.LessThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -202,11 +216,13 @@ describe('RitFilterService', () => {
         ratings: [{ value: 3, createdAt: '2023-01-01' }]
       }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
       rating: 4,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -229,11 +245,13 @@ describe('RitFilterService', () => {
         id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: []
       }
     ];
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
       rating: 1,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -261,11 +279,13 @@ describe('RitFilterService', () => {
       }
     ];
 
-    const options: RitFilterOptions = {
+    const options: RitSortAndFilterOptions = {
       searchText: 'Test',
       tags: ['tag1'],
       rating: 3,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const filteredRits = RitFilterService.filterRits(rits, options);
@@ -282,7 +302,9 @@ describe('getFilterOptionsFromUrl', () => {
       searchText: '',
       tags: [],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending
     });
   });
 
@@ -339,14 +361,16 @@ describe('getFilterOptionsFromUrl', () => {
       searchText: 'test query',
       tags: ['tag1', 'tag2'],
       rating: 5,
-      ratingOperator: RatingComparisonOperator.LessThanOrEqual
+      ratingOperator: RatingComparisonOperator.LessThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending
     });
   });
 });
 
 describe('buildQueryParams', () => {
   it('should build empty query params object when no filters are set', () => {
-    const options = RitFilterService.getDefaultFilterOptions();
+    const options = RitFilterService.getDefaultSortAndFilterOptions();
     const params = RitFilterService.buildQueryParams(options);
 
     expect(params).toEqual({});
@@ -357,7 +381,9 @@ describe('buildQueryParams', () => {
       searchText: 'test query',
       tags: [],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const params = RitFilterService.buildQueryParams(options);
@@ -370,7 +396,9 @@ describe('buildQueryParams', () => {
       searchText: '',
       tags: ['tag1', 'tag2'],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const params = RitFilterService.buildQueryParams(options);
@@ -383,7 +411,9 @@ describe('buildQueryParams', () => {
       searchText: '',
       tags: [],
       rating: 4,
-      ratingOperator: RatingComparisonOperator.Equal
+      ratingOperator: RatingComparisonOperator.Equal,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const params = RitFilterService.buildQueryParams(options);
@@ -399,7 +429,9 @@ describe('buildQueryParams', () => {
       searchText: 'test query',
       tags: ['tag1', 'tag2'],
       rating: 5,
-      ratingOperator: RatingComparisonOperator.LessThanOrEqual
+      ratingOperator: RatingComparisonOperator.LessThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
 
     const params = RitFilterService.buildQueryParams(options);
@@ -415,13 +447,17 @@ describe('buildQueryParams', () => {
 
 describe('getDefaultFilterOptions', () => {
   it('should return the default filter options', () => {
-    const options = RitFilterService.getDefaultFilterOptions();
+    const options = RitFilterService.getDefaultSortAndFilterOptions();
 
     expect(options).toEqual({
       searchText: '',
       tags: [],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     });
   });
+
+  // TODO: Add tests for sonting options
 });

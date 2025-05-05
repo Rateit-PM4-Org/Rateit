@@ -4,12 +4,40 @@
   </ion-toolbar>
 </ion-header>
 
-
-<div class="ion-padding-horizontal" scroll-y="false" slot="content">
-  <ion-searchbar [(ngModel)]="filterOptions.searchText" (ionChange)="onSearchChange($event)" placeholder="Search..."
-    class="searchbar">
+<div class="ion-padding-horizontal searchbar-container">
+  <ion-searchbar [(ngModel)]="sortAndFilterOptions.searchText" (ionChange)="onSearchChange($event)"
+    placeholder="Search..." class="ion-no-padding ion-padding-end">
   </ion-searchbar>
+
+  <ion-button id="click-trigger" fill="clear" class="ion-no-padding">
+    <ion-icon name="chevron-expand"></ion-icon>
+  </ion-button>
+  <ion-popover trigger="click-trigger" triggerAction="click">
+    <ng-template>
+      <ion-list lines="full">
+        <ion-item (click)="setSortOptionOperator(SortOptionOperator.DateCreated)"
+          (keydown.enter)="setSortOptionOperator(SortOptionOperator.DateCreated)">
+          <ion-label>Date Created</ion-label>
+          <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.DateCreated"
+            [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+        </ion-item>
+        <ion-item (click)="setSortOptionOperator(SortOptionOperator.LastUpdated)"
+          (keydown.enter)="setSortOptionOperator(SortOptionOperator.LastUpdated)">
+          <ion-label>Last Updated</ion-label>
+          <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.LastUpdated"
+            [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+        </ion-item>
+        <ion-item (click)="setSortOptionOperator(SortOptionOperator.Rating)"
+          (keydown.enter)="setSortOptionOperator(SortOptionOperator.Rating)">
+          <ion-label>Rating</ion-label>
+          <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.Rating"
+            [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </ion-popover>
 </div>
+
 
 <ion-accordion-group>
   <ion-accordion value="first">
@@ -30,19 +58,19 @@
         <div class="tags-input-container">
           <ion-label>Tags:</ion-label>
           <div class="tags-container">
-            <ng-container *ngIf="filterOptions.tags.length === 0">
+            <ng-container *ngIf="sortAndFilterOptions.tags.length === 0">
               <ion-chip color="primary">
                 <ion-icon name="pricetag-outline"></ion-icon>
                 <ion-label>All</ion-label>
               </ion-chip>
             </ng-container>
-            <ion-chip color="primary" *ngFor="let tag of filterOptions.tags" (click)="removeTagFromFilter(tag)"
+            <ion-chip color="primary" *ngFor="let tag of sortAndFilterOptions.tags" (click)="removeTagFromFilter(tag)"
               (keypress)="removeTagFromFilter(tag)">
               <ion-icon name="pricetag-outline"></ion-icon>
               <ion-label>{{ tag }}</ion-label>
               <ion-icon name="close"></ion-icon>
             </ion-chip>
-            <ion-chip *ngIf="filterOptions.tags.length > 1" color="medium" (click)="clearTagFilter()"
+            <ion-chip *ngIf="sortAndFilterOptions.tags.length > 1" color="medium" (click)="clearTagFilter()"
               (keypress)="clearTagFilter()">
               <ion-label>Clear</ion-label>
               <ion-icon name="close"></ion-icon>
@@ -58,20 +86,20 @@
             <!-- Tri-state toggle for comparison operator -->
             <div class="comparison-toggle">
               <ion-button class="toggle-button"
-                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.GreaterThanOrEqual"
+                [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.GreaterThanOrEqual"
                 (click)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)"
                 (keydown.enter)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)" fill="clear"
                 size="small">
                 &ge;
               </ion-button>
               <ion-button class="toggle-button"
-                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.Equal"
+                [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.Equal"
                 (click)="setRatingOperator(RatingComparisonOperator.Equal)"
                 (keydown.enter)="setRatingOperator(RatingComparisonOperator.Equal)" fill="clear" size="small">
                 =
               </ion-button>
               <ion-button class="toggle-button"
-                [class.active]="filterOptions.ratingOperator === RatingComparisonOperator.LessThanOrEqual"
+                [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.LessThanOrEqual"
                 (click)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)"
                 (keydown.enter)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)" fill="clear" size="small">
                 &le;
@@ -81,9 +109,9 @@
             <div class="stars-container">
               <ion-row>
                 <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]">
-                  <ion-icon class="rating-star" [class.filled]="star <= filterOptions.rating"
-                    [name]="star <= filterOptions.rating ? 'star' : 'star-outline'" (keydown.enter)="setRatingFilter(star)"
-                    (click)="setRatingFilter(star)">
+                  <ion-icon class="rating-star" [class.filled]="star <= sortAndFilterOptions.rating"
+                    [name]="star <= sortAndFilterOptions.rating ? 'star' : 'star-outline'"
+                    (keydown.enter)="setRatingFilter(star)" (click)="setRatingFilter(star)">
                   </ion-icon>
                 </ion-col>
               </ion-row>
@@ -91,9 +119,6 @@
 
           </div>
         </div>
-
-
-
       </div>
     </div>
   </ion-accordion>

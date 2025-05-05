@@ -7,11 +7,24 @@ export enum RatingComparisonOperator {
   Equal = 'eq'
 }
 
-export interface RitFilterOptions {
+export enum SortOptionOperator {
+  DateCreated = 'dateCreated',
+  LastUpdated = 'lastUpdated',
+  Rating = 'rating'
+}
+
+export enum SortDirection {
+  Ascending = 'asc',
+  Descending = 'desc'
+}
+
+export interface RitSortAndFilterOptions {
   searchText: string;
   tags: string[];
   rating: number;
   ratingOperator: RatingComparisonOperator;
+  sortOptionOperator: SortOptionOperator;
+  sortDirection: SortDirection;
 }
 
 @Injectable({
@@ -22,7 +35,7 @@ export class RitFilterService {
   constructor() { }
 
 
-  public static filterRits(rits: Rit[], options: RitFilterOptions): Rit[] {
+  public static filterRits(rits: Rit[], options: RitSortAndFilterOptions): Rit[] {
     return rits.filter(rit => {
       const matchesSearch = !options.searchText ||
         rit.name?.toLowerCase().includes(options.searchText.toLowerCase());
@@ -66,8 +79,8 @@ export class RitFilterService {
     return latestRating.value ?? 0;
   }
 
-  public static getFilterOptionsFromUrl(params: any): RitFilterOptions {
-    const options = this.getDefaultFilterOptions();
+  public static getFilterOptionsFromUrl(params: any): RitSortAndFilterOptions {
+    const options = this.getDefaultSortAndFilterOptions();
     if (!params) {
       return options;
     }
@@ -90,34 +103,53 @@ export class RitFilterService {
       options.ratingOperator = params['ratingOp'] as RatingComparisonOperator;
     }
 
+    if (params['sort']) {
+      options.sortOptionOperator = params['sort'] as SortOptionOperator;
+    }
+
+    if (params['sortDir']) {
+      options.sortDirection = params['sortDir'] as SortDirection;
+    }
+
     return options;
   }
 
-  public static buildQueryParams(options: RitFilterOptions): any {
+  public static buildQueryParams(options: RitSortAndFilterOptions): any {
     const queryParams: any = {};
+    const defaultOptions = this.getDefaultSortAndFilterOptions();
 
-    if (options.searchText) {
+    if (options.searchText && options.searchText !== defaultOptions.searchText) {
       queryParams.search = options.searchText;
     }
 
-    if (options.tags?.length) {
+    if (options.tags && options.tags.length > 0 && options.tags.every((element, index) => element !== defaultOptions.tags[index])) {
       queryParams.tag = options.tags;
     }
 
-    if (options.rating && options.rating > 0) {
+    if (options.rating && options.rating > defaultOptions.rating) {
       queryParams.rating = options.rating;
       queryParams.ratingOp = options.ratingOperator;
+    }
+
+    if (options.sortOptionOperator && options.sortOptionOperator !== defaultOptions.sortOptionOperator) {
+      queryParams.sort = options.sortOptionOperator;
+    }
+
+    if (options.sortDirection && options.sortDirection !== defaultOptions.sortDirection) {
+      queryParams.sortDir = options.sortDirection;
     }
 
     return queryParams;
   }
 
-  public static getDefaultFilterOptions(): RitFilterOptions {
+  public static getDefaultSortAndFilterOptions(): RitSortAndFilterOptions {
     return {
       searchText: '',
       tags: [],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
   }
 }
