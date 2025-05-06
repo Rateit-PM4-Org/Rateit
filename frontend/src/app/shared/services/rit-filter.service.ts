@@ -7,11 +7,25 @@ export enum RatingComparisonOperator {
   Equal = 'eq'
 }
 
-export interface RitFilterOptions {
+export enum SortOptionOperator {
+  DateCreated = 'dateCreated',
+  LastUpdated = 'lastUpdated',
+  Rating = 'rating',
+  Name = 'name'
+}
+
+export enum SortDirection {
+  Ascending = 'asc',
+  Descending = 'desc'
+}
+
+export interface RitSortAndFilterOptions {
   searchText: string;
   tags: string[];
   rating: number;
   ratingOperator: RatingComparisonOperator;
+  sortOptionOperator: SortOptionOperator;
+  sortDirection: SortDirection;
 }
 
 @Injectable({
@@ -21,9 +35,9 @@ export class RitFilterService {
 
   constructor() { }
 
-
-  public static filterRits(rits: Rit[], options: RitFilterOptions): Rit[] {
-    return rits.filter(rit => {
+  public static filterRits(rits: Rit[], options: RitSortAndFilterOptions): Rit[] {
+    // Filter the rits first
+    const filteredRits = rits.filter(rit => {
       const matchesSearch = !options.searchText ||
         rit.name?.toLowerCase().includes(options.searchText.toLowerCase());
 
@@ -52,6 +66,67 @@ export class RitFilterService {
 
       return matchesSearch && matchesTags && matchesRating;
     });
+
+    // Then sort the filtered results
+    return this.sortRits(filteredRits, options);
+  }
+
+  private static sortRits(rits: Rit[], options: RitSortAndFilterOptions): Rit[] {
+
+    rits.sort((a, b) => {
+      let comparison = 0;
+
+      switch (options.sortOptionOperator) {
+        case SortOptionOperator.DateCreated: {
+          // Sort by creation date
+          const dateA = new Date(a.createdAt || 0);
+          const dateB = new Date(b.createdAt || 0);
+          comparison = dateA.getTime() - dateB.getTime();
+          break;
+        }
+
+        case SortOptionOperator.LastUpdated: {
+          // Use calculateLastInteractionAt for last update date
+          const lastInteractionA = this.calculateLastInteractionAt(a).getTime();
+          const lastInteractionB = this.calculateLastInteractionAt(b).getTime();
+          comparison = lastInteractionA - lastInteractionB;
+          break;
+        }
+
+        case SortOptionOperator.Rating: {
+          // Sort by rating
+          const ratingA = this.getLatestRatingValue(a);
+          const ratingB = this.getLatestRatingValue(b);
+          comparison = ratingA - ratingB;
+          break;
+        }
+
+        case SortOptionOperator.Name: {
+          // Sort by name
+          const nameA = a.name?.toLowerCase() || '';
+          const nameB = b.name?.toLowerCase() || '';
+          comparison = nameA.localeCompare(nameB);
+          break;
+        }
+
+        default: {
+          // Default to creation date if an unsupported sort option is provided
+          const defaultDateA = new Date(a.createdAt || 0);
+          const defaultDateB = new Date(b.createdAt || 0);
+          comparison = defaultDateA.getTime() - defaultDateB.getTime();
+          break;
+        }
+      }
+
+      // Apply sort direction
+      if (options.sortDirection === SortDirection.Descending) {
+        comparison = -comparison; // Invert the comparison for descending order
+      }
+
+      return comparison;
+    });
+
+    return rits;
   }
 
   private static getLatestRatingValue(rit: Rit): number {
@@ -66,8 +141,18 @@ export class RitFilterService {
     return latestRating.value ?? 0;
   }
 
-  public static getFilterOptionsFromUrl(params: any): RitFilterOptions {
-    const options = this.getDefaultFilterOptions();
+  public static calculateLastInteractionAt(rit: Rit): Date {
+    const latestRatingDate = rit.ratings?.reduce((latest, rating) => {
+      const ratingDate = new Date(rating.createdAt ?? 0);
+      return ratingDate > latest ? ratingDate : latest;
+    }, new Date(0)) ?? new Date(0);
+
+    const lastModified = new Date(rit.updatedAt ?? 0);
+    return latestRatingDate > lastModified ? latestRatingDate : lastModified;
+  }
+
+  public static getFilterOptionsFromUrl(params: any): RitSortAndFilterOptions {
+    const options = this.getDefaultSortAndFilterOptions();
     if (!params) {
       return options;
     }
@@ -90,34 +175,53 @@ export class RitFilterService {
       options.ratingOperator = params['ratingOp'] as RatingComparisonOperator;
     }
 
+    if (params['sort']) {
+      options.sortOptionOperator = params['sort'] as SortOptionOperator;
+    }
+
+    if (params['sortDir']) {
+      options.sortDirection = params['sortDir'] as SortDirection;
+    }
+
     return options;
   }
 
-  public static buildQueryParams(options: RitFilterOptions): any {
+  public static buildQueryParams(options: RitSortAndFilterOptions): any {
     const queryParams: any = {};
+    const defaultOptions = this.getDefaultSortAndFilterOptions();
 
-    if (options.searchText) {
+    if (options.searchText && options.searchText !== defaultOptions.searchText) {
       queryParams.search = options.searchText;
     }
 
-    if (options.tags?.length) {
+    if (options.tags && options.tags.length > 0 && options.tags.every((element, index) => element !== defaultOptions.tags[index])) {
       queryParams.tag = options.tags;
     }
 
-    if (options.rating && options.rating > 0) {
+    if (options.rating && options.rating > defaultOptions.rating) {
       queryParams.rating = options.rating;
       queryParams.ratingOp = options.ratingOperator;
+    }
+
+    if (options.sortOptionOperator && options.sortOptionOperator !== defaultOptions.sortOptionOperator) {
+      queryParams.sort = options.sortOptionOperator;
+    }
+
+    if (options.sortDirection && options.sortDirection !== defaultOptions.sortDirection) {
+      queryParams.sortDir = options.sortDirection;
     }
 
     return queryParams;
   }
 
-  public static getDefaultFilterOptions(): RitFilterOptions {
+  public static getDefaultSortAndFilterOptions(): RitSortAndFilterOptions {
     return {
       searchText: '',
       tags: [],
       rating: 0,
-      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
     };
   }
 }
