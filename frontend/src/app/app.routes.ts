@@ -85,6 +85,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'scanner',
+        loadComponent: () =>
+          import('./features/tabs/scannertest/scannertest.component').then(
+            (m) => m.ScannertestComponent
+          )
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',

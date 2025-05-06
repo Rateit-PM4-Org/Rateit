@@ -29,6 +29,7 @@
     "@ionic/pwa-elements": "^3.3.0",
     "ionicons": "^7.4.0",
     "karma-sonarqube-reporter": "^1.4.0",
+    "quagga": "^0.12.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
