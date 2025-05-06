@@ -1,0 +1,9 @@
+div {
+    max-width: 640px;
+    &::ng-deep video {
+        width: 100%;
+    }
+     ::ng-deep canvas {
+        display: none;
+    }
+}
