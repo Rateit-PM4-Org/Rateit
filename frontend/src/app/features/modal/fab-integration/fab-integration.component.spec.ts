@@ -16,9 +16,11 @@ describe('FabIntegrationComponent', () => {
   let ritServiceSpy: jasmine.SpyObj<RitService>;
 
   beforeEach(waitForAsync(() => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits', 'getRitsErrorStream']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits', 'getRitsErrorStream', 'getAllTags']);
     ritServiceSpy.getRits.and.returnValue(of([]));
     ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
+    ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
+    
     TestBed.configureTestingModule({
       imports: [FabIntegrationComponent],
       providers: [

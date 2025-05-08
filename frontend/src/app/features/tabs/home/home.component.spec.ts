@@ -22,9 +22,10 @@ describe('HomeComponent', () => {
   let actionSheetControllerSpy: jasmine.SpyObj<ActionSheetController>;
 
   beforeEach(async () => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits', 'getRitsErrorStream']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits', 'getRitsErrorStream', 'getAllTags']);
     ritServiceSpy.getRits.and.returnValue(of([]));
     ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
+    ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
     const toastSpy = jasmine.createSpyObj('ToastController', ['create']);
     const actionSheetSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
 
