@@ -31,17 +31,9 @@
       </ion-text>
     </ion-card-content>
 
-    <ion-card-content class="tags-container">
-      <ion-chip [disabled]="mode === 'view'" color="primary" *ngFor="let tag of tags; let i = index"
-        (click)="removeTag(i)" (keydown.enter)="removeTag(i)" [attr.data-testid]="'tag-chip-' + i">
-        <ion-icon name="pricetag-outline"></ion-icon>
-        <ion-label>{{ tag }}</ion-label>
-        <ion-icon name="close"></ion-icon>
-      </ion-chip>
-
-      <ion-input *ngIf="mode !== 'view'" #tagInput class="tag-input" data-testid="new-tag-input" [value]="newTag"
-        (ionInput)="setNewTag($event)" placeholder="Enter Tag" (keyup.enter)="addTag(tagInput, 'enter')"
-        (ionBlur)="addTag(tagInput, 'blur')"></ion-input>
+    <ion-card-content class="tags-container" testId="tags-container">
+      <app-tag-selector [selectedTags]="tags" [disabled]="mode === 'view'" (tagsChange)="onTagsChange($event)">
+      </app-tag-selector>
     </ion-card-content>
     <ion-card-content *ngIf="tagsErrorMessage" class="tags-error-container">
       <ion-text color="danger">
