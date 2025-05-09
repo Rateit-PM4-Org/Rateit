@@ -168,4 +168,8 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
     });
     event.stopPropagation();
   }
+
+  goToLogin() {
+    this.router.navigate(['/tabs/login']);
+  }
 }
