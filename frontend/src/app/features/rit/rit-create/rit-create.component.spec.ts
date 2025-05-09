@@ -13,10 +13,11 @@ describe('RitCreateComponent', () => {
   let component: RitCreateComponent;
   let fixture: ComponentFixture<RitCreateComponent>;
   let modalCtrlSpy = jasmine.createSpyObj('ModalController', ['create']);
-  let ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'updateRit', 'triggerRitsReload']);
+  let ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'updateRit', 'triggerRitsReload', 'getAllTags']);
   ritServiceSpy.createRit.and.returnValue(of({}));
   ritServiceSpy.updateRit.and.returnValue(of({}));
   ritServiceSpy.triggerRitsReload.and.returnValue(of({}));
+  ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
   let activatedRouteSpy = { snapshot: { paramMap: { get: () => null } } };
   let toastControllerSpy = jasmine.createSpyObj('ToastController', ['create']);
 
@@ -42,22 +43,26 @@ describe('RitCreateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all tag chips', () => {
-    component.tags = ['red', 'blue', 'green'];
-    fixture.detectChanges();
+  // it('should display all tag chips', () => {
+  //   component.tags = ['red', 'blue', 'green'];
+  //   fixture.detectChanges();
 
-    component.tags.forEach((tag, i) => {
-      const chip = fixture.debugElement.query(By.css(`[data-testid="tag-chip-${i}"]`));
-      expect(chip.nativeElement.textContent).toContain(tag);
-    });
-  });
+  //   component.tags.forEach((tag, i) => {
+  //     const chip = fixture.debugElement.query(By.css(`[data-testid="tag-chip-${i}"]`));
+  //     expect(chip.nativeElement.textContent).toContain(tag);
+  //   });
+  // });
 
   it('should show the new tag input value', () => {
-    component.newTag = 'hafermilch';
+    component.tags = ['hafermilch'];
     fixture.detectChanges();
 
-    const newTagInput = fixture.debugElement.query(By.css('[data-testid="new-tag-input"]'));
-    expect(newTagInput.attributes['ng-reflect-value']).toContain('hafermilch');
+    const tagSelector = fixture.debugElement.query(By.css('app-tag-selector'));
+    expect(tagSelector).toBeTruthy();
+    
+    const tagsContainer = fixture.debugElement.query(By.css('[testId="tags-container"]'));
+    expect(tagsContainer).toBeTruthy();
+    expect(tagsContainer.nativeElement.textContent).toContain('hafermilch');
   });
 
   it('should set ritName', () => {
@@ -73,52 +78,14 @@ describe('RitCreateComponent', () => {
   });
 
   it('should set new tag', () => {
-    const event = { target: { value: 'TestTag' } };
-    component.setNewTag(event);
-    expect(component.newTag).toBe('TestTag');
+    component.onTagsChange(['TestTag']);
+    expect(component.tags).toEqual(['TestTag']);
   });
 
-  it('should add new tag with fake input element', () => {
-    component.newTag = 'NewTag';
-
-    const fakeInput = {
-      setFocus: jasmine.createSpy('setFocus')
-    } as any;
-
-    component.addTag(fakeInput, 'blur');
-
-    expect(component.tags.includes('NewTag')).toBeTrue();
-  });
-
-
-  it('should not add empty tag', () => {
-    component.newTag = '   ';
-
-    const fakeInput = {
-      setFocus: jasmine.createSpy('setFocus')
-    } as any;
-
-    component.addTag(fakeInput, 'blur');
-    expect(component.tags.includes('')).toBeFalse();
-  });
-
-  it('should not add existing tag', () => {
-    component.tags = ['existingTag'];
-    component.newTag = 'existingTag';
-
-    const fakeInput = {
-      setFocus: jasmine.createSpy('setFocus')
-    } as any;
-
-    component.addTag(fakeInput, 'blur');
-    expect(component.tags.includes('')).toBeFalse();
-  });
-
-  it('should remove tag', () => {
+  it('should clear tags', () => {
     component.tags = ['Tag1', 'Tag2', 'Tag3'];
-    const initialLength = component.tags.length;
-    component.removeTag(0);
-    expect(component.tags.length).toBe(initialLength - 1);
+    component.onTagsChange([]);
+    expect(component.tags.length).toBe(0);
   });
 
   it('should call createRit and show success toast on success', async () => {

@@ -1,0 +1,25 @@
+<div>
+  <div>
+    <ion-chip color="primary" *ngFor="let tag of selectedTags;" (click)="removeTag(tag)"
+      (keydown.enter)="removeTag(tag)">
+      <ion-icon name="pricetag-outline"></ion-icon>
+      <ion-label>{{ tag }}</ion-label>
+      <ion-icon name="close" *ngIf="!disabled"></ion-icon>
+    </ion-chip>
+  </div>
+
+  <ion-input #tagInput data-testid="new-tag-input" [(ngModel)]="newTag" placeholder="Search or add new tag"
+    (ionChange)="addNewTag(tagInput, 'enter')" (ionInput)="filterTags()">
+  </ion-input>
+
+  <div *ngIf="!disabled">
+    <div>
+      <ion-chip *ngFor="let tag of filteredTags | slice:0:10" outline color="medium" (click)="selectTag(tag)"
+        (keydown.enter)="selectTag(tag)">
+        <ion-icon name="pricetag-outline"></ion-icon>
+        <ion-label>{{ tag }}</ion-label>
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-chip>
+    </div>
+  </div>
+</div>

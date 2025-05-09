@@ -21,10 +21,11 @@ describe('AllRitsComponent', () => {
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(waitForAsync(() => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRits', 'getRitsErrorStream']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRits', 'getRitsErrorStream', 'getAllTags']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     ritServiceSpy.getRits.and.returnValue(of([]));
     ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
+    ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
 
     TestBed.configureTestingModule({
       imports: [AllRitsComponent, IonicModule.forRoot()],

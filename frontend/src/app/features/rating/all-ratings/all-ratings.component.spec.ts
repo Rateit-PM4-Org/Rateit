@@ -20,8 +20,9 @@ describe('AllRatingsComponent', () => {
   let ritServiceSpy: jasmine.SpyObj<RitService>;
 
   beforeEach(waitForAsync(() => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRitById', 'getRitsErrorStream']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRitById', 'getRitsErrorStream', 'getAllTags']);
     ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
+    ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
 
 
     TestBed.configureTestingModule({

@@ -6,13 +6,14 @@ import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
 import { ModalContent } from '../../modal/modal-view/modal-view.component';
+import { TagSelectorComponent } from '../../tag/tag-selector/tag-selector.component';
 
 @Component({
   selector: 'app-rit-create',
   templateUrl: './rit-create.component.html',
   styleUrls: ['./rit-create.component.scss'],
   standalone: true,
-  imports: [IonBackButton, CommonModule, ...IonicStandaloneStandardImports],
+  imports: [IonBackButton, CommonModule, TagSelectorComponent, ...IonicStandaloneStandardImports],
 })
 export class RitCreateComponent implements ViewWillEnter, ModalContent {
 
@@ -34,8 +35,6 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
   ritNameErrorMessage?: string
   details?: string
   detailsErrorMessage?: string
-
-  newTag?: string
 
   ionViewWillEnter(): void {
     this.ritId = this.route.snapshot.paramMap.get('ritId') ?? undefined;
@@ -166,26 +165,8 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     this.details = event.target.value
   }
 
-  setNewTag(event: any) {
-    let input = event.target.value
-    if (input) {
-      this.newTag = input
-    }
-  }
-
-  addTag(inputEl: IonInput, action: string) {
-    const tag = this.newTag?.trim();
-    if (tag && !this.tags.includes(tag)) {
-      this.tags.push(tag)
-      if (action === 'enter') {
-        setTimeout(() => inputEl.setFocus(), 100)
-      }
-    }
-    this.newTag = ''
-  }
-
-  removeTag(index: number) {
-    this.tags.splice(index, 1)
+  onTagsChange(newTags: string[]) {
+    this.tags = newTags;
   }
 
   validateFields() {
