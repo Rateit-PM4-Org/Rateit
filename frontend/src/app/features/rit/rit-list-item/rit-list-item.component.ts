@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { Rating } from '../../../model/rating';
 import {RitService} from '../../../shared/services/rit.service';
@@ -16,12 +16,13 @@ import {ToastController} from '@ionic/angular/standalone';
   imports: [CommonModule, ...IonicStandaloneStandardImports],
 })
 
-export class RitListItemComponent {
+export class RitListItemComponent implements OnInit {
   @Input() rit!: Rit;
   @Input() onTagClick?: (tagName: string, event: Event) => void;
 
   protected latestRatingValue: number = 0;
 
+  maxTags: number = 2;
 
   constructor(private readonly router: Router,
               private readonly navCtrl: NavController,

@@ -4,14 +4,20 @@
       <ion-label (click)="navigateToRit()" (keydown.enter)="navigateToRit()" class="content">
         <h2 class="title">{{ rit.name }}</h2>
         <div class="tags-container">
-          <ion-chip color="primary" *ngFor="let tag of rit.tags; let i = index"
-                    (click)="navigateToTag(tag, $event)"
-                    (keydown.enter)="navigateToTag(tag, $event)"
-                    class="tag-chip">
-            <ion-icon name="pricetag-outline"></ion-icon>
-            <ion-label>{{ tag }}</ion-label>
-          </ion-chip>
+          <div class="tags-content">
+            <ion-chip color="primary" *ngFor="let tag of rit.tags.slice(0, maxTags)"
+                      (click)="navigateToTag(tag, $event)"
+                      (keydown.enter)="navigateToTag(tag, $event)"
+                      class="tag-chip">
+              <ion-icon name="pricetag-outline"></ion-icon>
+              <ion-label>{{ tag }}</ion-label>
+            </ion-chip>
+          </div>
+          <div *ngIf="rit.tags.length > maxTags" class="tags-ellipsis">
+            <ion-label>...</ion-label>
+          </div>
         </div>
+
       </ion-label>
       <ion-button size="default" class="ratingButton"
                   (keydown.enter)="navigateToRatings()"
