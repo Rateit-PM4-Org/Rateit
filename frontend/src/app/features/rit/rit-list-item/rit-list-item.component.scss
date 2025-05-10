@@ -51,8 +51,38 @@
 
 .tags-container {
   display: flex;
+  max-height: 100px;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.tags-content {
+  display: flex;
+  overflow: hidden;
+  max-width: calc(100% - 40px);
+}
+
+.tag-chip {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 8px;
+}
+
+.tag-chip ion-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag-chip ion-icon {
+  flex-shrink: 0;
+}
+
+.tags-ellipsis {
+  padding-left: 8px;
 }
 
 ion-chip:first-child{
