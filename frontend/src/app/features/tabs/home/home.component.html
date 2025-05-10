@@ -4,6 +4,15 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-content class="ion-padding" scroll-y="false" *ngIf="!(isLoggedIn$ | async)">
+  <div class="welcome-container">
+    <img src="/icons/AppIcon.png" alt="App Logo" class="welcome-logo"/>
+    <h1>Welcome to Rateit!</h1>
+    <p>Discover honest ratings. Keep track of your experiences in a simple and authentic way.</p>
+    <ion-button type="submit" (click)="goToLogin()" (keydown.enter)="goToLogin()">Get Started</ion-button>
+  </div>
+</ion-content>
+
 <div *ngIf="isLoggedIn$ | async" class="ion-padding" scroll-y="false">
   <ion-label>Your top Tags</ion-label>
 </div>
@@ -22,7 +31,8 @@
 <div *ngIf="isLoggedIn$ | async" class="ion-padding" scroll-y="false">
   <div class="rits-header-row">
     <ion-label>Your latest Rits</ion-label>
-    <ion-button size="small" (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button" data-testid="show-all-rits">
+    <ion-button size="small" (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button"
+                data-testid="show-all-rits">
       Show all
       <ion-icon slot="end" name="chevron-forward"></ion-icon>
     </ion-button>
