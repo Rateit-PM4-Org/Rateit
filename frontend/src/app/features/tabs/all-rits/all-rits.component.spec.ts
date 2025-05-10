@@ -375,4 +375,67 @@ describe('AllRitsComponent', () => {
     expect(RitFilterService.filterRits).toHaveBeenCalledWith(mockRits, component.sortAndFilterOptions);
     expect(result).toEqual([mockRits[1]]);
   });
+
+  it('should toggle to NoRating operator when toggleNoRatingFilter is called', () => {
+    component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
+    component.sortAndFilterOptions.rating = 3;
+    
+    component.toggleNoRatingFilter();
+    
+    expect(component.sortAndFilterOptions.ratingOperator).toBe(RatingComparisonOperator.NoRating);
+    expect(component.sortAndFilterOptions.rating).toBe(0);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: jasmine.objectContaining({
+          ratingOp: RatingComparisonOperator.NoRating
+        })
+      })
+    );
+  });
+
+  it('should toggle back to default operator when toggleNoRatingFilter is called again', () => {
+    // Initially set to NoRating operator
+    component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.NoRating;
+    
+    component.toggleNoRatingFilter();
+    
+    expect(component.sortAndFilterOptions.ratingOperator).toBe(RatingComparisonOperator.GreaterThanOrEqual);
+    expect(component.sortAndFilterOptions.rating).toBe(0);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+  });
+
+  it('should consider NoRating as a filter in hasFilter method', () => {
+    // No filters set
+    component.sortAndFilterOptions.tags = [];
+    component.sortAndFilterOptions.rating = 0;
+    component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
+    
+    expect(component.hasFilter()).toBe(false);
+    
+    // Set NoRating filter
+    component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.NoRating;
+    
+    expect(component.hasFilter()).toBe(true);
+  });
+
+  it('should reset NoRating filter when clearFilters is called', () => {
+    // Set NoRating filter
+    component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.NoRating;
+    
+    component.clearFilters();
+    
+    expect(component.sortAndFilterOptions.ratingOperator).toBe(RatingComparisonOperator.GreaterThanOrEqual);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({
+        queryParams: {}
+      })
+    );
+  });
 });

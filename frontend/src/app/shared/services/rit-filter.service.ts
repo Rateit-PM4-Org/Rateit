@@ -4,7 +4,8 @@ import { Rit } from '../../model/rit';
 export enum RatingComparisonOperator {
   GreaterThanOrEqual = 'gte',
   LessThanOrEqual = 'lte',
-  Equal = 'eq'
+  Equal = 'eq',
+  NoRating = 'noTag'
 }
 
 export enum SortOptionOperator {
@@ -48,7 +49,11 @@ export class RitFilterService {
 
       // Rating filter logic
       let matchesRating = true;
-      if (options.rating && options.rating > 0) {
+
+      if (options.ratingOperator === RatingComparisonOperator.NoRating) {
+        const latestRatingValue = this.getLatestRatingValue(rit);
+        matchesRating = latestRatingValue === 0;
+      } else if (options.rating && options.rating > 0) {
         const latestRatingValue = this.getLatestRatingValue(rit);
 
         switch (options.ratingOperator) {
@@ -198,8 +203,10 @@ export class RitFilterService {
       queryParams.tag = options.tags;
     }
 
-    if (options.rating && options.rating > defaultOptions.rating) {
-      queryParams.rating = options.rating;
+    if (options.rating && options.rating > defaultOptions.rating || options.ratingOperator === RatingComparisonOperator.NoRating) {
+      if (options.ratingOperator !== RatingComparisonOperator.NoRating) {
+        queryParams.rating = options.rating;
+      }
       queryParams.ratingOp = options.ratingOperator;
     }
 
