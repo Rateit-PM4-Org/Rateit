@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { TagSelectorComponent } from './tag-selector.component';
 import { RitService } from '../../../shared/services/rit.service';
 import { of } from 'rxjs';
@@ -9,6 +10,7 @@ describe('TagSelectorComponent', () => {
   let component: TagSelectorComponent;
   let fixture: ComponentFixture<TagSelectorComponent>;
   let mockRitService: jasmine.SpyObj<RitService>;
+  let mockRouter: jasmine.SpyObj<Router>;
   let mockTags: string[];
 
   beforeEach(waitForAsync(() => {
@@ -17,6 +19,8 @@ describe('TagSelectorComponent', () => {
     mockRitService = jasmine.createSpyObj('RitService', ['getAllTags']);
     mockRitService.getAllTags.and.returnValue(of(mockTags));
 
+    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+
     TestBed.configureTestingModule({
       imports: [
         TagSelectorComponent,
@@ -24,13 +28,13 @@ describe('TagSelectorComponent', () => {
         IonicModule
       ],
       providers: [
-        { provide: RitService, useValue: mockRitService }
+        { provide: RitService, useValue: mockRitService },
+        { provide: Router, useValue: mockRouter }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TagSelectorComponent);
     component = fixture.componentInstance;
-    mockRitService = TestBed.inject(RitService) as jasmine.SpyObj<RitService>;
     fixture.detectChanges();
   }));
 
@@ -151,4 +155,29 @@ describe('TagSelectorComponent', () => {
 
     expect(component.filterTags).toHaveBeenCalled();
   });
+
+  it('should not navigate to the tag route when not disabled', () => {
+    const tagName = 'Tag1';
+    const event = new Event('click');
+    spyOn(event, 'stopPropagation');
+
+    component.disabled = false;
+    component.navigateToTag(tagName, event);
+
+    expect(mockRouter.navigate).not.toHaveBeenCalledWith(['/tabs/rits'], { queryParams: { tag: tagName } });
+    expect(event.stopPropagation).toHaveBeenCalled();
+  });
+
+  it('should navigate when disabled is true', () => {
+    const tagName = 'Tag1';
+    const event = new Event('click');
+    spyOn(event, 'stopPropagation');
+
+    component.disabled = true;
+    component.navigateToTag(tagName, event);
+
+    expect(mockRouter.navigate).toHaveBeenCalled();
+    expect(event.stopPropagation).toHaveBeenCalled();
+  });
+
 });
