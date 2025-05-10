@@ -1,9 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { IonInput } from '@ionic/angular/standalone';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { RitService } from '../../../shared/services/rit.service';
+import {CommonModule} from '@angular/common';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {IonInput} from '@ionic/angular/standalone';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {RitService} from '../../../shared/services/rit.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-tag-selector',
@@ -22,7 +23,7 @@ export class TagSelectorComponent implements OnChanges {
   newTag: string = '';
   availableTags: string[] = [];
 
-  constructor(private readonly ritService: RitService) {
+  constructor(private readonly ritService: RitService, private router: Router) {
     // Get tags from rit service
     this.ritService.getAllTags().subscribe(tags => {
       this.availableTags = tags;
@@ -58,6 +59,15 @@ export class TagSelectorComponent implements OnChanges {
     this.newTag = '';
 
     setTimeout(() => this.tagInput.setFocus(), 100);
+  }
+
+  navigateToTag(tagName: string, event: Event): void {
+    if (this.disabled) {
+      this.router.navigate(['/tabs/rits'], {
+        queryParams: {tag: tagName}
+      });
+    }
+    event.stopPropagation();
   }
 
   addNewTag(inputEl: IonInput, action: string) {
