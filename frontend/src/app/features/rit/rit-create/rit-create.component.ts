@@ -48,7 +48,6 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
         this.details = rit.details ?? '';
         this.tags = [...(rit.tags ?? [])];
         this.codes = [...(rit.codes ?? [])];
-        console.log(this.codes);
       });
     }
   }
@@ -179,7 +178,6 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     const uniqueCodes = new Set(this.codes);
     newCodes.forEach(code => uniqueCodes.add(code));
     this.codes = Array.from(uniqueCodes);
-    console.log(this.codes);
   }
 
   onTagsChange(newTags: string[]) {
