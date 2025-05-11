@@ -25,6 +25,8 @@ export class ScannerComponent {
 
   stop(): void {
     Quagga.stop();
+    this.scannedCodes.clear();
+    this.recentCodes = [];
   }
 
   private initQuagga(): void {
