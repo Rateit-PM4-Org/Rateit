@@ -29,6 +29,18 @@ export class ModalViewComponent implements OnInit {
     })
   }
 
+  ngAfterViewInit() {
+    if(this.content.registerModal) {
+      this.content.registerModal(this.modal);
+    }
+    this.modal.ionModalWillPresent.subscribe(() => {
+      this.content.onPresent?.();
+    });
+    this.modal.ionModalWillDismiss.subscribe(() => {
+      this.content.onDismiss?.();
+    });
+  }
+
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -98,5 +110,8 @@ export class ModalViewComponent implements OnInit {
 
 export interface ModalContent {
   submit: () => Promise<boolean>,
+  onPresent?: () => void,
+  onDismiss?: () => void,
+  registerModal?: (modal: IonModal) => void,
   isDisabled: EventEmitter<boolean>,
 }

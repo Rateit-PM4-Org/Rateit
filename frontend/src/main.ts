@@ -19,7 +19,8 @@ import {
   pricetagOutline,
   star,
   starOutline,
-  trashOutline
+  trashOutline,
+  qrCodeOutline
 } from 'ionicons/icons';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
@@ -57,4 +58,5 @@ addIcons({
   chevronExpand,
   arrowUp,
   arrowDown,
+  qrCodeOutline
 });
