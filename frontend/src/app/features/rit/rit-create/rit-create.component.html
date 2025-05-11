@@ -57,14 +57,14 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="codes.length > 0">
+  <ion-card *ngIf="codes.length > 0 || mode === 'edit'">
     <ion-card-header>
       <ion-card-title>Barcodes</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <ion-textarea [readonly]="mode === 'view'" [disabled]="mode === 'view'" [value]="codes"
-                    [autoGrow]="true">
+                    placeholder="No barcodes linked to this Rit..." [autoGrow]="true">
       </ion-textarea>
       <ion-text color="danger" *ngIf="codesErrorMessage">
         <p>{{codesErrorMessage}}</p>
@@ -72,11 +72,11 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="mode === 'view'">
-    <ion-fab-button class="edit-button" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button *ngIf="mode === 'view'" class="edit-button" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
       <ion-icon name="create-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button class="edit-button" (click)="openScanner()" (keydown.enter)="openScanner()">
+    <ion-fab-button *ngIf="mode === 'edit'" class="edit-button" (click)="openScanner()" (keydown.enter)="openScanner()">
       <ion-icon name="qr-code-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
