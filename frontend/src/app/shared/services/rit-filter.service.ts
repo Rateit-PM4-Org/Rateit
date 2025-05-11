@@ -24,6 +24,7 @@ export interface RitSortAndFilterOptions {
   searchText: string;
   tags: string[];
   rating: number;
+  barcode: string;
   ratingOperator: RatingComparisonOperator;
   sortOptionOperator: SortOptionOperator;
   sortDirection: SortDirection;
@@ -47,6 +48,9 @@ export class RitFilterService {
           rit.tags?.some(ritTag => ritTag.toLowerCase() === tag.toLowerCase())
         );
 
+      const matchesBarcode = !options.barcode ||
+        rit.codes?.includes(options.barcode);
+
       // Rating filter logic
       let matchesRating = true;
 
@@ -69,7 +73,7 @@ export class RitFilterService {
         }
       }
 
-      return matchesSearch && matchesTags && matchesRating;
+      return matchesSearch && matchesTags && matchesRating && matchesBarcode;
     });
 
     // Then sort the filtered results
@@ -188,6 +192,10 @@ export class RitFilterService {
       options.sortDirection = params['sortDir'] as SortDirection;
     }
 
+    if (params['barcode']) {
+      options.barcode = params['barcode'];
+    }
+
     return options;
   }
 
@@ -226,6 +234,7 @@ export class RitFilterService {
       searchText: '',
       tags: [],
       rating: 0,
+      barcode: '',
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
       sortDirection: SortDirection.Descending,

@@ -8,7 +8,7 @@
           </ion-button>
         </ion-buttons>
         <ion-title>{{title}}</ion-title>
-        <ion-buttons slot="end">
+        <ion-buttons *ngIf="confirmable" slot="end">
           <ion-button [disabled]="isDisabled" (click)="confirm()" (keydown.enter)="confirm()" [strong]="true">
             Confirm
           </ion-button>

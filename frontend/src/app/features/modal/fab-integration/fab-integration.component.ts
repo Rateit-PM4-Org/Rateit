@@ -7,12 +7,13 @@ import { Rit } from '../../../model/rit';
 import { Observable } from 'rxjs';
 import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
 import { RateComponent } from '../../rit/rate/rate.component';
+import { ScannerSearchModalComponent } from '../../scanner-search-modal/scanner-search-modal.component';
 
 @Component({
   selector: 'app-fab-integration',
   templateUrl: './fab-integration.component.html',
   styleUrls: ['./fab-integration.component.scss'],
-  imports: [CommonModule, ...IonicStandaloneStandardImports, FabComponent, ModalViewComponent, RitCreateComponent, RateComponent],
+  imports: [CommonModule, ...IonicStandaloneStandardImports, FabComponent, ModalViewComponent, RitCreateComponent, RateComponent, ScannerSearchModalComponent],
   standalone: true,
 })
 export class FabIntegrationComponent implements OnInit {
@@ -22,6 +23,7 @@ export class FabIntegrationComponent implements OnInit {
   @ViewChild(FabComponent) fabComponent!: FabComponent;
   @ViewChild("ritCreateModal") ritCreateModalComponent!: ModalViewComponent;
   @ViewChild("rateModal") ratingCreateModalComponent!: ModalViewComponent;
+  @ViewChild("ritSearchModal") ritSearchModal!: ModalViewComponent;
 
   buttons: FabButton[] = [];
 
@@ -45,6 +47,10 @@ export class FabIntegrationComponent implements OnInit {
         {
           icon: 'add-outline',
           action: () => this.ritCreateModalComponent.modal.present(),
+        },
+        {
+          icon: 'qr-code-outline',
+          action: () => this.ritSearchModal.modal.present(),
         },
       ];
     } else {

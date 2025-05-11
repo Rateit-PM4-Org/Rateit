@@ -184,8 +184,7 @@ export class AllRitsComponent implements ViewWillEnter {
 
   hasFilter(): boolean {
     return this.sortAndFilterOptions.tags.length > 0 ||
-      this.sortAndFilterOptions.rating > 0 ||
-      this.sortAndFilterOptions.ratingOperator === RatingComparisonOperator.NoRating;
+      this.sortAndFilterOptions.rating > 0 || this.sortAndFilterOptions.barcode.length > 0 || this.sortAndFilterOptions.ratingOperator === RatingComparisonOperator.NoRating;
   }
 
   setSortOptionOperator(newOption: SortOptionOperator): void {
