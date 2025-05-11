@@ -1,14 +1,18 @@
-.tags-container {
+.tags-container, .barcode-container{
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   cursor: pointer;
 }
 
-.tags-input-container {
+.tags-input-container, .barcode-input-container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.barcode-input-container {
+  height: 40px;
 }
 
 .searchbar-container {

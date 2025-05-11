@@ -10,7 +10,7 @@ import {CommonModule} from '@angular/common';
   standalone: true,
   imports: [CommonModule],
 })
-export class ScannerComponent implements OnDestroy, AfterViewInit {
+export class ScannerComponent {
   @ViewChild('videoElement', { static: false }) videoElement!: ElementRef<HTMLDivElement>;
   @Input() MAX_HISTORY = 10;
   @Input() CONFIRM_THRESHOLD = 7;
@@ -19,11 +19,11 @@ export class ScannerComponent implements OnDestroy, AfterViewInit {
   scannedCodes = new Set<string>();
   recentCodes: string[] = [];
 
-  ngAfterViewInit(): void {
+  start(): void {
     this.initQuagga();
   }
 
-  ngOnDestroy(): void {
+  stop(): void {
     Quagga.stop();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { ScannerComponent } from '../../scanner/scanner.component';
 import { ToastController } from '@ionic/angular';
@@ -11,13 +11,20 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [...IonicStandaloneStandardImports, ScannerComponent, CommonModule],
 })
-export class ScannertestComponent  implements OnInit {
+export class ScannertestComponent{
 
+  @ViewChild(ScannerComponent) scannerComponent!: ScannerComponent;
   protected scannedCodes: Array<string> = new Array<string>();
 
   constructor(private toastController: ToastController) { }
 
-  ngOnInit() {}
+  ionViewDidEnter() {
+    this.scannerComponent.start();
+  }
+
+  ionViewWillLeave() {
+    this.scannerComponent.stop();
+  }
 
   async onScanned(scannedCodes: Set<string>) {
     const message = Array.from(scannedCodes).join(', ');
