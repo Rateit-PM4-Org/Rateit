@@ -24,6 +24,7 @@ describe('RitFilterService', () => {
     const options: RitSortAndFilterOptions = {
       searchText: 'Test',
       tags: [],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -45,6 +46,7 @@ describe('RitFilterService', () => {
       searchText: '',
       tags: ['tag1'],
       rating: 0,
+      barcode: '',
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
       sortDirection: SortDirection.Descending,
@@ -65,6 +67,7 @@ describe('RitFilterService', () => {
     const options: RitSortAndFilterOptions = {
       searchText: 'Test',
       tags: ['tag1'],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -95,6 +98,7 @@ describe('RitFilterService', () => {
     const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: ['tag1', 'tag3'],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -125,6 +129,7 @@ describe('RitFilterService', () => {
     ];
     const options: RitSortAndFilterOptions = {
       searchText: '',
+      barcode: '',
       tags: [],
       rating: 3,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
@@ -156,6 +161,7 @@ describe('RitFilterService', () => {
     ];
     const options: RitSortAndFilterOptions = {
       searchText: '',
+      barcode: '',
       tags: [],
       rating: 3,
       ratingOperator: RatingComparisonOperator.Equal,
@@ -187,6 +193,7 @@ describe('RitFilterService', () => {
     ];
     const options: RitSortAndFilterOptions = {
       searchText: '',
+      barcode: '',
       tags: [],
       rating: 3,
       ratingOperator: RatingComparisonOperator.LessThanOrEqual,
@@ -219,6 +226,7 @@ describe('RitFilterService', () => {
     const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 4,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -248,6 +256,7 @@ describe('RitFilterService', () => {
     const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 1,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -282,6 +291,7 @@ describe('RitFilterService', () => {
     const options: RitSortAndFilterOptions = {
       searchText: 'Test',
       tags: ['tag1'],
+      barcode: '',
       rating: 3,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -301,6 +311,7 @@ describe('getFilterOptionsFromUrl', () => {
     expect(options).toEqual({
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -360,6 +371,7 @@ describe('getFilterOptionsFromUrl', () => {
     expect(options).toEqual({
       searchText: 'test query',
       tags: ['tag1', 'tag2'],
+      barcode: '',
       rating: 5,
       ratingOperator: RatingComparisonOperator.LessThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -381,6 +393,7 @@ describe('buildQueryParams', () => {
       searchText: 'test query',
       tags: [],
       rating: 0,
+      barcode: '',
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
       sortDirection: SortDirection.Descending,
@@ -395,6 +408,7 @@ describe('buildQueryParams', () => {
     const options = {
       searchText: '',
       tags: ['tag1', 'tag2'],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -410,6 +424,7 @@ describe('buildQueryParams', () => {
     const options = {
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 4,
       ratingOperator: RatingComparisonOperator.Equal,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -429,6 +444,7 @@ describe('buildQueryParams', () => {
       searchText: 'test query',
       tags: ['tag1', 'tag2'],
       rating: 5,
+      barcode: '',
       ratingOperator: RatingComparisonOperator.LessThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
       sortDirection: SortDirection.Descending,
@@ -452,6 +468,7 @@ describe('getDefaultFilterOptions', () => {
     expect(options).toEqual({
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -492,6 +509,7 @@ describe('RitFilterService - Sorting Tests', () => {
     const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -537,6 +555,7 @@ describe('RitFilterService - Sorting Tests', () => {
     const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
@@ -582,6 +601,7 @@ describe('RitFilterService - Sorting Tests', () => {
     const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.LastUpdated,
@@ -628,6 +648,7 @@ describe('RitFilterService - Sorting Tests', () => {
       searchText: '',
       tags: [],
       rating: 0,
+      barcode: '',
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.LastUpdated,
       sortDirection: SortDirection.Ascending,
@@ -672,6 +693,7 @@ describe('RitFilterService - Sorting Tests', () => {
     const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.Rating,
@@ -717,6 +739,7 @@ describe('RitFilterService - Sorting Tests', () => {
     const options: RitSortAndFilterOptions = {
       searchText: '',
       tags: [],
+      barcode: '',
       rating: 0,
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.Rating,
@@ -765,6 +788,7 @@ describe('RitFilterService - Sorting Tests', () => {
       searchText: '',
       tags: [],
       rating: 0,
+      barcode: '',
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.Rating,
       sortDirection: SortDirection.Descending,
@@ -813,6 +837,7 @@ describe('RitFilterService - Sorting Tests', () => {
       searchText: 'Test',
       tags: [],
       rating: 0,
+      barcode: '',
       ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,
       sortDirection: SortDirection.Ascending,
