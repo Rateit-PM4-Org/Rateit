@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { RatingComparisonOperator, RitSortAndFilterOptions, RitFilterService, SortOptionOperator, SortDirection } from './rit-filter.service';
 import { Rit } from '../../model/rit';
+import { barcode } from 'ionicons/icons';
 
 describe('RitFilterService', () => {
   let service: RitFilterService;
@@ -303,6 +304,63 @@ describe('RitFilterService', () => {
     expect(filteredRits.length).toBe(1);
     expect(filteredRits[0].id).toBe('1');
   });
+
+  it('should handle barcode filtering', () => {
+    const rits: Rit[] = [
+      {
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: ['123'],
+        ratings: []
+      },
+      {
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: ['456'],
+        ratings: []
+      },
+      {
+        id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: ['789'],
+        ratings: []
+      }
+    ];
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      barcode: '123',
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
+    };
+
+    const filteredRits = RitFilterService.filterRits(rits, options);
+
+    expect(filteredRits.length).toBe(1);
+    expect(filteredRits[0].id).toBe('1');
+  });
+
+  it('should handle empty barcode fields', () => {
+    const rits: Rit[] = [
+      {
+        id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
+        ratings: []
+      },
+      {
+        id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
+        ratings: []
+      }
+    ];
+    const options: RitSortAndFilterOptions = {
+      searchText: '',
+      tags: [],
+      barcode: '123',
+      rating: 0,
+      ratingOperator: RatingComparisonOperator.GreaterThanOrEqual,
+      sortOptionOperator: SortOptionOperator.DateCreated,
+      sortDirection: SortDirection.Descending,
+    };
+
+    const filteredRits = RitFilterService.filterRits(rits, options);
+
+    expect(filteredRits.length).toBe(0);
+  });
 });
 
 describe('getFilterOptionsFromUrl', () => {
@@ -362,6 +420,7 @@ describe('getFilterOptionsFromUrl', () => {
     const params = {
       search: 'test query',
       tag: ['tag1', 'tag2'],
+      barcode: '123',
       rating: '5',
       ratingOp: RatingComparisonOperator.LessThanOrEqual
     };
@@ -371,7 +430,7 @@ describe('getFilterOptionsFromUrl', () => {
     expect(options).toEqual({
       searchText: 'test query',
       tags: ['tag1', 'tag2'],
-      barcode: '',
+      barcode: '123',
       rating: 5,
       ratingOperator: RatingComparisonOperator.LessThanOrEqual,
       sortOptionOperator: SortOptionOperator.DateCreated,

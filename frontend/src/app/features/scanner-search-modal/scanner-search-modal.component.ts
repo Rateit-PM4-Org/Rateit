@@ -13,11 +13,11 @@ import { IonModal } from '@ionic/angular/standalone';
   imports: [ScannerComponent, ...IonicStandaloneStandardImports],
 })
 export class ScannerSearchModalComponent  implements ModalContent {
-  private modal!: IonModal;
+  modal!: IonModal;
   @ViewChild(ScannerComponent) scannerComponent!: ScannerComponent;
   @Output() isDisabled = new EventEmitter<boolean>();
 
-  constructor(private router: Router) { 
+  constructor(private readonly router: Router) { 
     this.isDisabled = new EventEmitter<boolean>();
     this.submit = async () => {
       return true;
