@@ -304,7 +304,97 @@ describe('RitFilterService', () => {
     expect(filteredRits.length).toBe(1);
     expect(filteredRits[0].id).toBe('1');
   });
+  const mockRits: Rit[] = [
+    {
+      id: '1',
+      name: 'Rit with rating',
+      details: 'Details 1',
+      tags: ['tag1', 'tag2'],
+      codes: ['code1'],
+      ratings: [{ id: 'r1', value: 4, createdAt: new Date().toISOString() }]
+    },
+    {
+      id: '2',
+      name: 'Rit with no rating',
+      details: 'Details 2',
+      tags: ['tag2', 'tag3'],
+      codes: ['code2'],
+      ratings: []
+    },
+    {
+      id: '3',
+      name: 'Another rit with rating',
+      details: 'Details 3',
+      tags: ['tag1', 'tag3'],
+      codes: ['code3'],
+      ratings: [{ id: 'r2', value: 2, createdAt: new Date().toISOString() }]
+    },
+    {
+      id: '4',
+      name: 'Another rit without rating',
+      details: 'Details 4',
+      tags: ['tag4'],
+      codes: ['code4'],
+      ratings: []
+    }
+  ];
 
+  it('should filter rits with NoRating operator to only include rits without ratings', () => {
+    const options = RitFilterService.getDefaultSortAndFilterOptions();
+    options.ratingOperator = RatingComparisonOperator.NoRating;
+
+    const filteredRits = RitFilterService.filterRits(mockRits, options);
+
+    expect(filteredRits.length).toBe(2);
+    expect(filteredRits[0].id).toBe('2');
+    expect(filteredRits[1].id).toBe('4');
+    expect(filteredRits.every(rit => !rit.ratings || rit.ratings.length === 0)).toBe(true);
+  });
+
+  it('should respect other filter criteria when using NoRating operator', () => {
+    const options = RitFilterService.getDefaultSortAndFilterOptions();
+    options.ratingOperator = RatingComparisonOperator.NoRating;
+    options.tags = ['tag3']; // Only include rits with 'tag3'
+    
+    const filteredRits = RitFilterService.filterRits(mockRits, options);
+    
+    expect(filteredRits.length).toBe(1);
+    expect(filteredRits[0].id).toBe('2');
+    expect(filteredRits[0].tags).toContain('tag3');
+    expect(filteredRits[0].ratings?.length).toBe(0);
+  });
+
+  it('should correctly switch between NoRating and regular rating operators', () => {
+    // First with NoRating
+    let options = RitFilterService.getDefaultSortAndFilterOptions();
+    options.ratingOperator = RatingComparisonOperator.NoRating;
+    
+    let filteredRits = RitFilterService.filterRits(mockRits, options);
+    expect(filteredRits.length).toBe(2);
+    expect(filteredRits.every(rit => !rit.ratings || rit.ratings.length === 0)).toBe(true);
+    
+    // Now with GreaterThanOrEqual and a rating value
+    options.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
+    options.rating = 3;
+    
+    filteredRits = RitFilterService.filterRits(mockRits, options);
+    expect(filteredRits.length).toBe(1);
+    expect(filteredRits[0].id).toBe('1');
+    expect(filteredRits[0].ratings?.[0].value).toBe(4);
+  });
+
+  it('should sort NoRating filtered results according to sort options', () => {
+    const options = RitFilterService.getDefaultSortAndFilterOptions();
+    options.ratingOperator = RatingComparisonOperator.NoRating;
+    options.sortOptionOperator = SortOptionOperator.Name;
+    options.sortDirection = SortDirection.Ascending;
+    
+    const filteredRits = RitFilterService.filterRits(mockRits, options);
+    
+    expect(filteredRits.length).toBe(2);
+    expect(filteredRits[0].id).toBe('4'); // "Another rit without rating" comes first alphabetically
+    expect(filteredRits[1].id).toBe('2'); // "Rit with no rating" comes second
+  });
   it('should handle barcode filtering', () => {
     const rits: Rit[] = [
       {

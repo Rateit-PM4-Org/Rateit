@@ -147,6 +147,7 @@ export class AllRitsComponent implements ViewWillEnter {
   clearFilters(event?: Event): void {
     this.sortAndFilterOptions.tags = [];
     this.sortAndFilterOptions.rating = 0;
+    this.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -183,7 +184,7 @@ export class AllRitsComponent implements ViewWillEnter {
 
   hasFilter(): boolean {
     return this.sortAndFilterOptions.tags.length > 0 ||
-      this.sortAndFilterOptions.rating > 0 || this.sortAndFilterOptions.barcode.length > 0;
+      this.sortAndFilterOptions.rating > 0 || this.sortAndFilterOptions.barcode.length > 0 || this.sortAndFilterOptions.ratingOperator === RatingComparisonOperator.NoRating;
   }
 
   setSortOptionOperator(newOption: SortOptionOperator): void {
@@ -193,6 +194,16 @@ export class AllRitsComponent implements ViewWillEnter {
       this.sortAndFilterOptions.sortDirection = SortDirection.Descending;
       this.sortAndFilterOptions.sortOptionOperator = newOption;
     }
+    this.updateFilters();
+  }
+
+  toggleNoRatingFilter() {
+    if (this.sortAndFilterOptions.ratingOperator === RatingComparisonOperator.NoRating) {
+      this.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
+    } else {
+      this.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.NoRating;
+    }
+    this.sortAndFilterOptions.rating = 0;
     this.updateFilters();
   }
 }
