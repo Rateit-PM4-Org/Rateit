@@ -57,7 +57,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="codes.length > 0 || mode === 'edit'">
+  <ion-card *ngIf="codes.length > 0 || mode !== 'view'">
     <ion-card-header>
       <ion-card-title>Barcodes</ion-card-title>
     </ion-card-header>
@@ -71,7 +71,7 @@
           </ion-chip>
           <ion-text *ngIf="codes.length == 0">No Barcodes present</ion-text>
       </div>
-      <ion-button class="ion-margin-top" *ngIf="mode === 'edit'" (click)="openScanner()" (keydown.enter)="openScanner()">
+      <ion-button class="ion-margin-top" *ngIf="mode !== 'view'" (click)="openScanner()" (keydown.enter)="openScanner()">
         <ion-icon name="qr-code-outline"></ion-icon>
         Scan Barcode
       </ion-button>
