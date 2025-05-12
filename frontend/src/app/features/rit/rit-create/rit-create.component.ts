@@ -162,7 +162,7 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     this.ritUpdateModal.modal.present();
     const {data} = await this.ritUpdateModal.modal.onDidDismiss();
     this.addCodes(data.scannedCodes);
-    this.updateRit();
+    //this.updateRit();
   }
 
   setRitName(event: any) {
