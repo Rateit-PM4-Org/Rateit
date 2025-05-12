@@ -1,12 +1,9 @@
-import { CommonModule } from '@angular/common';
-import {Component, Input, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
-import { Rating } from '../../../model/rating';
-import {RitService} from '../../../shared/services/rit.service';
-import { Rit } from '../../../model/rit';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { NavController } from '@ionic/angular';
-import {ToastController} from '@ionic/angular/standalone';
+import {CommonModule} from '@angular/common';
+import {Component, Input} from '@angular/core';
+import {Router} from '@angular/router';
+import {Rit} from '../../../model/rit';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {Rating} from '../../../model/rating';
 
 @Component({
   selector: 'app-rit-list-item',
@@ -16,19 +13,12 @@ import {ToastController} from '@ionic/angular/standalone';
   imports: [CommonModule, ...IonicStandaloneStandardImports],
 })
 
-export class RitListItemComponent implements OnInit {
+export class RitListItemComponent {
   @Input() rit!: Rit;
-  @Input() onTagClick?: (tagName: string, event: Event) => void;
 
   protected latestRatingValue: number = 0;
 
-  maxTags: number = 2;
-
-  constructor(private readonly router: Router,
-              private readonly navCtrl: NavController,
-              private readonly ritService: RitService,
-              private readonly toastController: ToastController,
-              ) {
+  constructor(private readonly router: Router) {
   }
 
   ngOnInit() {
@@ -46,74 +36,12 @@ export class RitListItemComponent implements OnInit {
     return latestRating.value ?? 0;
   }
 
-  private isInHomeTab(): boolean {
-    return this.router.url.includes('/tabs/home');
-  }
-
   navigateToRatings(): void {
-    const path = this.isInHomeTab()
-      ? `/tabs/home/rits/ratings/${this.rit.id}`
-      : `/tabs/rits/ratings/${this.rit.id}`;
-    this.navCtrl.navigateForward(path);
+    this.router.navigate(['/rits/ratings', this.rit.id]);
   }
 
   navigateToRit(): void {
-    const path = this.isInHomeTab()
-      ? `/tabs/home/rits/view/${this.rit.id}`
-      : `/tabs/rits/view/${this.rit.id}`;
-    this.navCtrl.navigateForward(path);
-  }
-
-  navigateToTag(tagName: string, event: Event): void {
-    if (this.onTagClick) {
-      this.onTagClick(tagName, event);
-    } else {
-      this.router.navigate(['/tabs/rits'], {
-        queryParams: { tag: tagName }
-      });
-    }
-    event.stopPropagation();
-  }
-
-  private handleError(err: any) {
-    const baseError = err.error?.error ?? 'Unknown error';
-    this.showErrorToast(baseError);
-  }
-
-  async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 2000,
-      position: 'top',
-      color: 'danger',
-    });
-
-    await toast.present();
-  }
-
-
-  async showSuccessToast(message: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 2000,
-      position: 'top',
-      color: 'success',
-    });
-
-    await toast.present();
-  }
-
-  deleteRit(ritId: string | undefined): void {
-    this.ritService.deleteRit(ritId).subscribe({
-      next: () => {
-        this.showSuccessToast('Rit deleted successfully!');
-        this.ritService.triggerRitsReload().subscribe(() => {});
-      },
-      error: (err: any) => {
-        this.handleError(err);
-        this.ritService.triggerRitsReload().subscribe(() => {});
-      }
-    });
+    this.router.navigate(['/rits/view', this.rit.id]);
   }
 
 }

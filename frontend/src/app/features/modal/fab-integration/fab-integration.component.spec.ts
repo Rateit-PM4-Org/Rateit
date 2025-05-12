@@ -16,11 +16,9 @@ describe('FabIntegrationComponent', () => {
   let ritServiceSpy: jasmine.SpyObj<RitService>;
 
   beforeEach(waitForAsync(() => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits', 'getRitsErrorStream', 'getAllTags']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits', 'getRitsErrorStream']);
     ritServiceSpy.getRits.and.returnValue(of([]));
     ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
-    ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
-    
     TestBed.configureTestingModule({
       imports: [FabIntegrationComponent],
       providers: [
@@ -39,14 +37,14 @@ describe('FabIntegrationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not add rating Button if currentRit is null', () => {
-    component.currentRit = null;
+  it('should add rating Button if currentRit is not null', () => {
+    component.currentRit = { id: '1', name: 'Test Rit' } as any;
     component.updateButtons();
     expect(component.buttons.length).toBe(2);
-  });
-
-  it('should add rating Button if currentRit is not null', () => {
-    component.currentRit = {id: '1', name: 'Test Rit', details: 'Some details', tags: ['tag1', 'tag2'], codes: ['code1', 'code2']};
+  }
+  );
+  it('should not add rating Button if currentRit is null', () => {
+    component.currentRit = null;
     component.updateButtons();
     expect(component.buttons.length).toBe(1);
   });

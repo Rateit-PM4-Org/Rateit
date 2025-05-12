@@ -6,10 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
 import { Rit } from '../../../model/rit';
 import { RitService } from '../../../shared/services/rit.service';
+
 import { Subscription } from 'rxjs';
 import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RatingComparisonOperator, RitSortAndFilterOptions, RitFilterService, SortDirection, SortOptionOperator } from '../../../shared/services/rit-filter.service';
 
 @Component({
   selector: 'app-all-rits',
@@ -25,28 +24,18 @@ import { RatingComparisonOperator, RitSortAndFilterOptions, RitFilterService, So
 })
 
 export class AllRitsComponent implements ViewWillEnter {
-
-  sortAndFilterOptions: RitSortAndFilterOptions = RitFilterService.getDefaultSortAndFilterOptions();
-
+  searchText = '';
+  selectedTag: string = '';
   rits: Rit[] = [];
   ritSubscription: Subscription | null = null;
   ritsErrorSubscription: Subscription | null = null;
-  RatingComparisonOperator = RatingComparisonOperator;
-  SortOptionOperator = SortOptionOperator;
 
   constructor(
     private readonly ritService: RitService,
-    private readonly toastController: ToastController,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly toastController: ToastController
   ) { }
 
   ionViewWillEnter(): void {
-    // Get query parameters from URL
-    this.route.queryParams.subscribe(params => {
-      this.sortAndFilterOptions = RitFilterService.getFilterOptionsFromUrl(params);
-    });
-
     this.ritSubscription = this.ritService.getRits().subscribe({
       next: (data) => {
         this.handleSuccess(data);
@@ -69,10 +58,15 @@ export class AllRitsComponent implements ViewWillEnter {
   }
 
   filteredRits(): Rit[] {
-    return RitFilterService.filterRits(this.rits, this.sortAndFilterOptions);
+    return this.rits.filter(rit =>
+      rit.name?.toLowerCase().includes(this.searchText.toLowerCase())
+    );
   }
 
   private handleSuccess(data: Rit[]) {
+    if (data.length === 0) {
+      return;
+    }
     this.rits = [...data];
   }
 
@@ -115,95 +109,4 @@ export class AllRitsComponent implements ViewWillEnter {
     });
   }
 
-  onSearchChange(event: any): void {
-    this.sortAndFilterOptions.searchText = event.target.value;
-    this.updateFilters();
-  }
-
-  updateFilters(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: RitFilterService.buildQueryParams(this.sortAndFilterOptions)
-    });
-  }
-
-  addTagToFilter(tag: string): void {
-    if (!this.sortAndFilterOptions.tags.includes(tag)) {
-      this.sortAndFilterOptions.tags.push(tag);
-      this.updateFilters();
-    }
-  }
-
-  removeTagFromFilter(tag: string): void {
-    this.sortAndFilterOptions.tags = this.sortAndFilterOptions.tags.filter(t => t !== tag);
-    this.updateFilters();
-  }
-
-  clearTagFilter(): void {
-    this.sortAndFilterOptions.tags = [];
-    this.updateFilters();
-  }
-
-  clearFilters(event?: Event): void {
-    this.sortAndFilterOptions.tags = [];
-    this.sortAndFilterOptions.rating = 0;
-    this.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: RitFilterService.buildQueryParams(this.sortAndFilterOptions),
-    });
-    event?.stopPropagation();
-  }
-
-  setRatingFilter(value: number): void {
-    // Toggle off if the same value is clicked
-    this.sortAndFilterOptions.rating = this.sortAndFilterOptions.rating === value ? 0 : value;
-    this.updateFilters();
-  }
-
-  setRatingOperator(operator: RatingComparisonOperator): void {
-    if (this.sortAndFilterOptions.ratingOperator === operator) { // reset to default if the same operator is clicked
-      this.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-      this.sortAndFilterOptions.rating = 0;
-    } else {
-      this.sortAndFilterOptions.ratingOperator = operator;
-    }
-    this.updateFilters();
-  }
-
-  clearRatingFilter(): void {
-    this.sortAndFilterOptions.rating = 0;
-    this.updateFilters();
-  }
-
-  handleTagClick = (tagName: string, event: Event): void => {
-    this.addTagToFilter(tagName);
-    event.stopPropagation();
-  }
-
-  hasFilter(): boolean {
-    return this.sortAndFilterOptions.tags.length > 0 ||
-      this.sortAndFilterOptions.rating > 0 || this.sortAndFilterOptions.barcode.length > 0 || this.sortAndFilterOptions.ratingOperator === RatingComparisonOperator.NoRating;
-  }
-
-  setSortOptionOperator(newOption: SortOptionOperator): void {
-    if (this.sortAndFilterOptions.sortOptionOperator === newOption) {
-      this.sortAndFilterOptions.sortDirection = this.sortAndFilterOptions.sortDirection === SortDirection.Descending ? SortDirection.Ascending : SortDirection.Descending;
-    } else {
-      this.sortAndFilterOptions.sortDirection = SortDirection.Descending;
-      this.sortAndFilterOptions.sortOptionOperator = newOption;
-    }
-    this.updateFilters();
-  }
-
-  toggleNoRatingFilter() {
-    if (this.sortAndFilterOptions.ratingOperator === RatingComparisonOperator.NoRating) {
-      this.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-    } else {
-      this.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.NoRating;
-    }
-    this.sortAndFilterOptions.rating = 0;
-    this.updateFilters();
-  }
 }

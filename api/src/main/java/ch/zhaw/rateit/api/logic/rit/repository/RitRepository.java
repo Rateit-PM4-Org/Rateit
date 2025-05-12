@@ -14,5 +14,5 @@ import java.util.List;
 public interface RitRepository extends MongoRepository<Rit, String> {
     Rit getRitById(String id);
 
-    List<Rit> findAllByOwnerOrderByUpdatedAtDesc(User owner);
+    List<Rit> findAllByOwner(User owner);
 }

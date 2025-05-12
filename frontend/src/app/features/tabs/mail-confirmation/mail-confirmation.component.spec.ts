@@ -1,12 +1,14 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
+import { MailConfirmationComponent } from './mail-confirmation.component';
+import { CommonModule } from '@angular/common';
+import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
-import { ApiService } from '../../../shared/services/api.service';
 import { provideMockApiService } from '../../../shared/test-util/test-util';
-import { MailConfirmationComponent } from './mail-confirmation.component';
+import { ApiService } from '../../../shared/services/api.service';
+import { Observable, of, throwError } from 'rxjs';
 
 describe('MailConfirmationComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -37,7 +39,7 @@ describe('MailConfirmationComponent', () => {
     apiServiceSpy.get.and.returnValue(of({}));
     const fixture = TestBed.createComponent(MailConfirmationComponent);
     fixture.detectChanges();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/login'], { queryParams: { emailConfirmed: true } });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { emailConfirmed: true } });
   });
 
   it('should not redirect to /login on ngOnInit if api-call failed', () => {
@@ -48,6 +50,6 @@ describe('MailConfirmationComponent', () => {
     apiServiceSpy.get.and.returnValue(throwError(() => new Error('Error')));
     const fixture = TestBed.createComponent(MailConfirmationComponent);
     fixture.detectChanges();
-    expect(routerSpy.navigate).not.toHaveBeenCalledWith(['/tabs/login'], { queryParams: { emailConfirmed: true } });
+    expect(routerSpy.navigate).not.toHaveBeenCalledWith(['/login'], { queryParams: { emailConfirmed: true } });
   });
 });

@@ -3,7 +3,7 @@ version: '3.1'
 name: rateit-dev
 services:
   mongo:
-    image: mongo:8.0.9
+    image: mongo:8.0.6
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -24,7 +24,7 @@ services:
 
 # Kann ausgeführt werden, um Dumps aus dem dumps-Ordner in die MongoDB zu importieren
   mongo-import-dump:
-    image: mongo:8.0.9
+    image: mongo:8.0.6
     restart: "no"
     volumes:
       - ./dumps:/dumps

@@ -71,23 +71,5 @@ export class RitService {
       })
     );
   }
-
-  deleteRating(ratingId: string | undefined): Observable<any> {
-    return this.apiService.delete('/rit/deleteRating/' + ratingId);
-  }
-
-  deleteRit(ritId: string | undefined): Observable<any> {
-    return this.apiService.delete('/rit/deleteRit/' + ritId);
-  }
-
-  getAllTags(): Observable<string[]> {
-    return this.getRits().pipe(
-      map(rits => {
-        const allTags = rits
-          .filter(rit => rit.tags && rit.tags.length > 0)
-          .flatMap(rit => rit.tags);
-        return [...new Set(allTags)];
-      })
-    );
-  }
+  
 }

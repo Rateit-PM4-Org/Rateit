@@ -42,7 +42,7 @@ export class ProfileComponent {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/tabs/home']);
+    this.router.navigate(['/home']);
   }
 
 }

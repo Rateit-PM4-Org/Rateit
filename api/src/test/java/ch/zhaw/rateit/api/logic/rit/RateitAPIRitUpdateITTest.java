@@ -48,8 +48,9 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
     private ObjectMapper objectMapper;
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
-    private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
+    private final Rit testRit = new Rit("TestRit", "Details", null, testUser);
     private Rit inputTestRit = new Rit();
+    private final List<String> tags = List.of("tag1", "tag2");
 
     @BeforeEach
     void setup() {
@@ -63,21 +64,19 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
     private static Stream<Arguments> provideValidRitUpdateParams() {
         return Stream.of(
-                Arguments.of("TestRit-Updated", "Details", List.of("tag1", "tag2"), List.of()), // name updated
-                Arguments.of("TestRit", "Details-Updated", List.of("tag1"), List.of()), // details updated
-                Arguments.of("TestRit", null, List.of("tag1"), List.of()), // details updated
-                Arguments.of("TestRit-Updated", null, List.of("tag1"), List.of()), // details and name updated
-                Arguments.of("TestRit-Updated", null, List.of("tag1", "tag2, tag3"), List.of()), // all updated
-                Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of()), // none updated
-                Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of("code1")), // single code set
-                Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of("code1", "code2")) // multiple codes set
+                Arguments.of("TestRit-Updated", "Details", List.of("tag1", "tag2")), // name updated
+                Arguments.of("TestRit", "Details-Updated", List.of("tag1")), // details updated
+                Arguments.of("TestRit", null, List.of("tag1")), // details updated
+                Arguments.of("TestRit-Updated", null, List.of("tag1")), // details and name updated
+                Arguments.of("TestRit-Updated", null, List.of("tag1", "tag2, tag3")), // all updated
+                Arguments.of("TestRit", "Details", List.of("tag1", "tag2")) // none updated
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideValidRitUpdateParams")
-    void updateRit_positive_returnsStatusOk(String name, String details, List<String> tags, List<String> codes) throws Exception {
-        String input = objectMapper.writeValueAsString(new RitUpdateRequest(name, details, tags, codes));
+    void updateRit_positive_returnsStatusOk(String name, String details, List<String> tags) throws Exception {
+        String input = objectMapper.writeValueAsString(new RitUpdateRequest(name, details, tags));
 
         var resultActions = mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON)
                 .with(user(testUser)));
@@ -99,18 +98,18 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
     private static Stream<Arguments> provideInvalidRitUpdateParams() {
         return Stream.of(
-                Arguments.of("", "Details", List.of(), List.of()), // name blank
-                Arguments.of("   ", "Details", List.of(), List.of()), // name blank with spaces
-                Arguments.of(null, "Details", List.of(), List.of()), // name null
-                Arguments.of("TestRit", "Details", null, List.of()), // tags null
-                Arguments.of("TestRit", "Details", List.of(), null) // codes null
+                Arguments.of("", "Details", List.of()), // name blank
+                Arguments.of("   ", "Details", List.of()), // name blank with spaces
+                Arguments.of(null, "Details", List.of()), // name null
+                Arguments.of("TestRit", "Details", null) // tags null
+
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidRitUpdateParams")
-    void updateRit_negative_returnsBadRequest(String name, String details, List<String> tags, List<String> codes) throws Exception {
-        String input = objectMapper.writeValueAsString(new RitUpdateRequest(name, details, tags, codes));
+    void updateRit_negative_returnsBadRequest(String name, String details, List<String> tags) throws Exception {
+        String input = objectMapper.writeValueAsString(new RitUpdateRequest(name, details, tags));
 
         mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
@@ -119,7 +118,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void updateRit_negative_unauthorized_returnsForbidden() throws Exception {
-        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
+        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of()));
 
         mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -127,7 +126,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void updateRit_negative_RitNotPresent() throws Exception {
-        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
+        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of()));
 
         mockMvc.perform(put("/rit/update/123").content(input).contentType(MediaType.APPLICATION_JSON).with(user(testUser)))
                 .andExpect(status().isNotFound());
@@ -141,7 +140,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
         testRit.setOwner(otherOwner);
         Rit rit = ritRepository.save(testRit);
 
-        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
+        String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of()));
 
         mockMvc.perform(put("/rit/update/" + rit.getId()).content(input).contentType(MediaType.APPLICATION_JSON).with(user(testUser)))
                 .andExpect(status().isForbidden());

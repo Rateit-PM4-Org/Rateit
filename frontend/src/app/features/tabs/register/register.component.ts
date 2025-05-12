@@ -42,8 +42,8 @@ export class RegisterComponent {
         this.registrationSuccess = true;
       },
       error: err => {
-        this.showErrorToast(err.error?.error ?? 'Registration Error');
-        this.registrationErrorFields = err.error?.fields ?? {};
+        this.showErrorToast(err.error?.error || 'Registration Error');
+        this.registrationErrorFields = err.error?.fields || {};
         this.form.get("password")?.setValue('');
         this.form.get("password")?.markAsPristine();
         console.error('Registration Error:', err);

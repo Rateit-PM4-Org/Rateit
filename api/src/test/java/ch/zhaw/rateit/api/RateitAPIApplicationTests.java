@@ -7,7 +7,6 @@ class RateitAPIApplicationTests extends AbstractBaseIntegrationTest {
 
 	@Test
 	void contextLoads() {
-		// empty on purpose => we only check that the context loads correctly without any modifications
 	}
 
 }

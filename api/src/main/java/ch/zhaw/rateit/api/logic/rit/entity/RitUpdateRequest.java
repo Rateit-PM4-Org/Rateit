@@ -15,7 +15,6 @@ import java.util.List;
 public record RitUpdateRequest(
         @NotBlank String name,
         String details,
-        @NotNull List<String> tags,
-        @NotNull List<String> codes
+        @NotNull List<String> tags
 ) {
 }

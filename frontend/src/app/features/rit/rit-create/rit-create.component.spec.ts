@@ -13,11 +13,10 @@ describe('RitCreateComponent', () => {
   let component: RitCreateComponent;
   let fixture: ComponentFixture<RitCreateComponent>;
   let modalCtrlSpy = jasmine.createSpyObj('ModalController', ['create']);
-  let ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'updateRit', 'triggerRitsReload', 'getAllTags']);
+  let ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'updateRit', 'triggerRitsReload']);
   ritServiceSpy.createRit.and.returnValue(of({}));
   ritServiceSpy.updateRit.and.returnValue(of({}));
   ritServiceSpy.triggerRitsReload.and.returnValue(of({}));
-  ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
   let activatedRouteSpy = { snapshot: { paramMap: { get: () => null } } };
   let toastControllerSpy = jasmine.createSpyObj('ToastController', ['create']);
 
@@ -43,26 +42,22 @@ describe('RitCreateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should display all tag chips', () => {
-  //   component.tags = ['red', 'blue', 'green'];
-  //   fixture.detectChanges();
-
-  //   component.tags.forEach((tag, i) => {
-  //     const chip = fixture.debugElement.query(By.css(`[data-testid="tag-chip-${i}"]`));
-  //     expect(chip.nativeElement.textContent).toContain(tag);
-  //   });
-  // });
-
-  it('should show the new tag input value', () => {
-    component.tags = ['hafermilch'];
+  it('should display all tag chips', () => {
+    component.tags = ['red', 'blue', 'green'];
     fixture.detectChanges();
 
-    const tagSelector = fixture.debugElement.query(By.css('app-tag-selector'));
-    expect(tagSelector).toBeTruthy();
+    component.tags.forEach((tag, i) => {
+      const chip = fixture.debugElement.query(By.css(`[data-testid="tag-chip-${i}"]`));
+      expect(chip.nativeElement.textContent).toContain(tag);
+    });
+  });
 
-    const tagsContainer = fixture.debugElement.query(By.css('[testId="tags-container"]'));
-    expect(tagsContainer).toBeTruthy();
-    expect(tagsContainer.nativeElement.textContent).toContain('hafermilch');
+  it('should show the new tag input value', () => {
+    component.newTag = 'hafermilch';
+    fixture.detectChanges();
+
+    const newTagInput = fixture.debugElement.query(By.css('[data-testid="new-tag-input"]'));
+    expect(newTagInput.attributes['ng-reflect-value']).toContain('hafermilch');
   });
 
   it('should set ritName', () => {
@@ -78,14 +73,52 @@ describe('RitCreateComponent', () => {
   });
 
   it('should set new tag', () => {
-    component.onTagsChange(['TestTag']);
-    expect(component.tags).toEqual(['TestTag']);
+    const event = { target: { value: 'TestTag' } };
+    component.setNewTag(event);
+    expect(component.newTag).toBe('TestTag');
   });
 
-  it('should clear tags', () => {
+  it('should add new tag with fake input element', () => {
+    component.newTag = 'NewTag';
+
+    const fakeInput = {
+      setFocus: jasmine.createSpy('setFocus')
+    } as any;
+
+    component.addTag(fakeInput, 'blur');
+
+    expect(component.tags.includes('NewTag')).toBeTrue();
+  });
+
+
+  it('should not add empty tag', () => {
+    component.newTag = '   ';
+
+    const fakeInput = {
+      setFocus: jasmine.createSpy('setFocus')
+    } as any;
+
+    component.addTag(fakeInput, 'blur');
+    expect(component.tags.includes('')).toBeFalse();
+  });
+
+  it('should not add existing tag', () => {
+    component.tags = ['existingTag'];
+    component.newTag = 'existingTag';
+
+    const fakeInput = {
+      setFocus: jasmine.createSpy('setFocus')
+    } as any;
+
+    component.addTag(fakeInput, 'blur');
+    expect(component.tags.includes('')).toBeFalse();
+  });
+
+  it('should remove tag', () => {
     component.tags = ['Tag1', 'Tag2', 'Tag3'];
-    component.onTagsChange([]);
-    expect(component.tags.length).toBe(0);
+    const initialLength = component.tags.length;
+    component.removeTag(0);
+    expect(component.tags.length).toBe(initialLength - 1);
   });
 
   it('should call createRit and show success toast on success', async () => {
@@ -95,7 +128,6 @@ describe('RitCreateComponent', () => {
     component.ritName = 'Test Rit';
     component.details = 'Details';
     component.tags = ['tag1'];
-    component.codes = ['code1'];
 
     ritServiceSpy.createRit.and.returnValue(of({}));
 
@@ -116,13 +148,11 @@ describe('RitCreateComponent', () => {
     component.ritName = 'Test Rit';
     component.details = 'Details';
     component.tags = ['tag1'];
-    component.codes = ['code1'];
 
     ritServiceSpy.updateRit.and.returnValue(of({
       name: 'Test Rit',
       details: 'Details',
-      tags: ['tag1'],
-      codes: ['code1']
+      tags: ['tag1']
     }));
 
     component.updateRit();
@@ -141,7 +171,6 @@ describe('RitCreateComponent', () => {
     component.ritName = 'Test Rit';
     component.details = 'Details';
     component.tags = ['tag1'];
-    component.codes = ['code1'];
 
     const mockErrorResponse = {
       error: {
@@ -165,7 +194,6 @@ describe('RitCreateComponent', () => {
     component.ritName = '';
     component.details = 'Details';
     component.tags = ['tag1'];
-    component.codes = ['code1'];
 
     const mockValidationError = {
       error: {
@@ -173,8 +201,7 @@ describe('RitCreateComponent', () => {
         fields: {
           name: ['must not be empty'],
           details: ['too short'],
-          tags: ['invalid tag'],
-          codes: ['invalid code']
+          tags: ['invalid tag']
         }
       }
     };
@@ -188,7 +215,6 @@ describe('RitCreateComponent', () => {
     expect(component.ritNameErrorMessage).toEqual('must not be empty');
     expect(component.detailsErrorMessage).toEqual('too short');
     expect(component.tagsErrorMessage).toEqual('invalid tag');
-    expect(component.codesErrorMessage).toEqual('invalid code');
   });
 
   it('should load rit data in ionViewWillEnter if ritId is present', () => {
@@ -196,53 +222,22 @@ describe('RitCreateComponent', () => {
       id: 'test-id',
       name: 'Loaded Rit',
       details: 'Some loaded details',
-      tags: ['tag1', 'tag2'],
-      codes: ['code1']
+      tags: ['tag1', 'tag2']
     };
-
+  
     const route = TestBed.inject(ActivatedRoute);
     spyOn(route.snapshot.paramMap, 'get').and.returnValue('test-id');
-
+  
     ritServiceSpy.getRit = jasmine.createSpy().and.returnValue(of(mockRit));
-
+  
     component.ionViewWillEnter();
-
+  
     expect(component.ritId).toBe('test-id');
     expect(component.mode).toBe('view');
     expect(ritServiceSpy.getRit).toHaveBeenCalledWith('test-id');
     expect(component.ritName).toBe(mockRit.name);
     expect(component.details).toBe(mockRit.details);
     expect(component.tags).toEqual(mockRit.tags);
-    expect(component.codes).toEqual(mockRit.codes);
-  });
-  it('should add scanned code to Rit', () => {
-    component.codes = ['code1'];
-    component.addCodes(['code2', 'code3']);
-    expect(component.codes).toEqual(['code1', 'code2', 'code3']);
-  });
-  it('scanned code should not be duplicated', () => {
-    component.codes = ['code1', 'code2'];
-    component.addCodes(['code2', 'code3']);
-    expect(component.codes).toEqual(['code1', 'code2', 'code3']);
-  });
-
-  it('scanned code should be removed', () => {
-    component.codes = ['code1', 'code2'];
-    component.removeCode('code1');
-    expect(component.codes).toEqual(['code2']);
-  });
-
-  it('should get scanned codes from the scanner', async () => {
-    const modalSpy = jasmine.createSpyObj('IonModal', ['present', 'onDidDismiss']);
-    modalSpy.present.and.returnValue(Promise.resolve());
-    modalSpy.onDidDismiss.and.returnValue(Promise.resolve({ data: {scannedCodes: ['code1'] }}));
-    const modalViewComponentSpy = {modal: modalSpy};
-
-    // @ts-ignore
-    component.ritUpdateModal = modalViewComponentSpy;
-
-    await component.openScanner();
-    expect(component.codes).toEqual(['code1']);
   });
 
 });

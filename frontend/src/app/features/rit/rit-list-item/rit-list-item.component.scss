@@ -20,11 +20,6 @@
   min-width: 70px;
 }
 
-.ratingButton ion-icon.centered {
-  margin: 0 auto;
-  display: block;
-}
-
 .content {
   display: flex;
   flex-direction: column;
@@ -40,7 +35,6 @@
   margin: 0;
 }
 .list-item-card {
-  cursor: pointer;
   display: flex;
   width: 100%;
   border-radius: 20px;
@@ -51,55 +45,10 @@
 
 .tags-container {
   display: flex;
-  max-height: 100px;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.tags-content {
-  display: flex;
-  overflow: hidden;
-  max-width: calc(100% - 40px);
-}
-
-.tag-chip {
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding-right: 8px;
-}
-
-.tag-chip ion-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.tag-chip ion-icon {
-  flex-shrink: 0;
-}
-
-.tags-ellipsis {
-  padding-left: 8px;
-}
-
 ion-chip:first-child{
   margin-left: 0;
-}
-
-
-ion-item{
-  --inner-padding-end: 0px;
-  border-radius: 20px;
-}
-
-ion-item-option{
-  border-radius: 20px;
-  padding: 15px;
-}
-
-ion-item-options {
-  border: 0;
 }

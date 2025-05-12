@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   ionViewWillEnter() {
     this.route.snapshot.queryParams['emailConfirmed'] && this.showSuccessToast('Email confirmed successfully!');
-    this.router.navigate(['/tabs/login'], { queryParams: { emailConfirmed: null } });
+    this.router.navigate(['/login'], { queryParams: { emailConfirmed: null } });
     this.reset();
   }
 
@@ -42,21 +42,21 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.form.value.email, this.form.value.password).subscribe({
       next: response => {
         this.form.reset();
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] ?? '/';
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.router.navigateByUrl(returnUrl);
       },
       error: err => {
-        this.showErrorToast(err.error?.error ?? 'Login Error');
+        this.showErrorToast(err.error?.error || 'Login Error');
         this.form.get("password")?.setValue('');
         this.form.get("password")?.markAsPristine();
-        this.loginErrorFields = err.error?.fields ?? {};
+        this.loginErrorFields = err.error?.fields || {};
         console.error('Login Error:', err);
       }
     })
   }
 
   register() {
-    this.router.navigate(['/tabs/register']);
+    this.router.navigate(['/register']);
   }
 
   async showSuccessToast(message: string) {

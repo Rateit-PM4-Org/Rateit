@@ -18,8 +18,6 @@ on:
     outputs:
       imageDigest:
         value: ${{ jobs.build-and-push-image.outputs.imageDigest }}     
-      image:
-        value: ${{ inputs.imageName }}:${{ inputs.imageTag }}  
   workflow_dispatch:
     inputs:
       imageName:

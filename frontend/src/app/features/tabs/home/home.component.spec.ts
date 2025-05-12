@@ -8,7 +8,6 @@ import { RitService } from '../../../shared/services/rit.service';
 import { UserService } from '../../../shared/services/user.service';
 import { HomeComponent } from './home.component';
 import { ActivatedRoute } from '@angular/router';
-import { Rit } from '../../../model/rit';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -22,10 +21,9 @@ describe('HomeComponent', () => {
   let actionSheetControllerSpy: jasmine.SpyObj<ActionSheetController>;
 
   beforeEach(async () => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits', 'getRitsErrorStream', 'getAllTags']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['createRit', 'getRits', 'getRitsErrorStream']);
     ritServiceSpy.getRits.and.returnValue(of([]));
     ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
-    ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
     const toastSpy = jasmine.createSpyObj('ToastController', ['create']);
     const actionSheetSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
 
@@ -92,28 +90,27 @@ describe('HomeComponent', () => {
       name: `rit-${i}`,
       details: '',
       tags: [],
-      updatedAt: new Date(now + i * 1000).toISOString()
+      lastInteractionAt: now + i * 1000
     })) as any[];
 
-    component['handleLoadRitsSuccess'](ritsMock);
+    component['rits'] = ritsMock;
     component.numberOfLatestRitsToShow = 10;
 
     const latest = component.latestRits();
 
     expect(latest.length).toBe(10);
-    //  0,  1,  2,  3,  4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-    // 14, 13, 12, 11, 10, 9, 8, 7, 6, 5,  4,  3,  2,  1,  0
-    expect(latest[0].name).toBe('rit-14');
-    expect(latest[3].name).toBe('rit-11');
-    expect(latest[9].name).toBe('rit-5');
+    expect(latest[0].name).toBe('rit-0');
+    expect(latest[9].name).toBe('rit-9');
   });
 
   it('should return 10 latest rits when more than 10 are available', () => {
+    const now = new Date();
     const rits = Array.from({ length: 20 }, (_, i) => ({
       id: i.toString(),
       name: `Rit ${i}`,
       details: `Details ${i}`,
       tags: [],
+      lastInteractionAt: new Date(now.getTime() - i * 1000).toISOString(),
     }));
 
     ritServiceSpy.getRits = jasmine.createSpy().and.returnValue(of(rits));
@@ -210,72 +207,4 @@ describe('HomeComponent', () => {
     );
   }));
 
-  it('should return top tags sorted by latest interaction and rit count', () => {
-    const ritsMock = [
-      { tags: ['tag1', 'tag2'], updatedAt: '2023-01-02T12:00:00Z' },
-      { tags: ['tag1'], updatedAt: '2023-01-01T12:00:00Z' },
-      { tags: ['tag2'], updatedAt: '2023-01-03T12:00:00Z' }
-    ] as Rit[];
-
-    component['rits'] = ritsMock;
-
-    const topTags = component.topTags();
-
-    expect(topTags).toEqual([
-      { name: 'tag2', ritCount: 2 },
-      { name: 'tag1', ritCount: 2 }
-    ]);
-  });
-
-  it('should return an empty array when there are no rits for topTags()', () => {
-    component['rits'] = [];
-    const topTags = component.topTags();
-    expect(topTags).toEqual([]);
-  });
-
-  it('should render top tags in ion-grid', () => {
-    const ritsMock = [
-      { tags: ['tag1', 'tag2'], updatedAt: '2023-01-02T12:00:00Z' },
-      { tags: ['tag1'], updatedAt: '2023-01-01T12:00:00Z' },
-      { tags: ['tag2'], updatedAt: '2023-01-03T12:00:00Z' }
-    ] as Rit[];
-
-    ritServiceSpy.getRits.and.returnValue(of(ritsMock));
-
-    component.ionViewWillEnter();
-    fixture.detectChanges();
-
-    const gridItems = fixture.nativeElement.querySelectorAll('[data-testid="tag-item"]');
-
-    expect(gridItems).toBeTruthy();
-    expect(gridItems.length).toBe(2);
-  });
-
-  it('should call topTags() when ionViewWillEnter is called', () => {
-    spyOn(component, 'topTags');
-    component.ionViewWillEnter();
-    fixture.detectChanges();
-    expect(component.topTags).toHaveBeenCalled();
-  });
-
-  it('should not render ion-grid when there are no top tags', () => {
-    fixture.detectChanges();
-
-    const grid = fixture.nativeElement.querySelector('ion-grid');
-    expect(grid).toBeFalsy();
-  });
-
-  it('should sort rits by lastInteractionAt descending on handleLoadRitsSuccess', () => {
-    const ritsMock = [
-      { updatedAt: '2023-01-01T00:00:00Z', ratings: [{ createdAt: '2023-01-03T00:00:00Z' }] },
-      { updatedAt: '2023-01-02T00:00:00Z', ratings: [] },
-      { updatedAt: '2023-01-04T00:00:00Z', ratings: [{ createdAt: '2023-01-01T00:00:00Z' }] },
-    ] as Rit[];
-
-    component['handleLoadRitsSuccess'](ritsMock);
-
-    expect(component.rits[0].updatedAt).toBe('2023-01-04T00:00:00Z');
-    expect(component.rits[1].updatedAt).toBe('2023-01-01T00:00:00Z');
-    expect(component.rits[2].updatedAt).toBe('2023-01-02T00:00:00Z');
-  });
 });

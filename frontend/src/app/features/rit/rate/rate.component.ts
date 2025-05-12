@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ToastController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { star, starOutline } from 'ionicons/icons';
-import { Observable } from 'rxjs';
-import { Rating } from '../../../model/rating';
-import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
+import { Observable } from 'rxjs';
+import { Rit } from '../../../model/rit';
+import { Rating } from '../../../model/rating';
 import { RitService } from '../../../shared/services/rit.service';
 import { ModalContent } from '../../modal/modal-view/modal-view.component';
+import { ToastController } from '@ionic/angular/standalone';
 
 addIcons({ star, 'star-outline': starOutline });
 
@@ -19,11 +19,11 @@ addIcons({ star, 'star-outline': starOutline });
   imports: [CommonModule, ...IonicStandaloneStandardImports],
   standalone: true,
 })
-export class RateComponent implements ModalContent {
-  @Input() rit!: Observable<Rit | null> | null;
+export class RateComponent implements ModalContent{
+  @Input() rit!: Observable<Rit|null> | null;
   @Output() isDisabled = new EventEmitter<boolean>();
   private ritSubscription: any;
-  protected currentRit: Rit | null = null;
+  protected currentRit: Rit|null = null;
 
   constructor(private readonly ritService: RitService, private readonly toastController: ToastController) { }
 
@@ -91,10 +91,10 @@ export class RateComponent implements ModalContent {
     await toast.present();
   }
 
-
+  
   private buildRequest(): Rating {
     return {
-      rit: { id: this.currentRit?.id },
+      rit: {id: this.currentRit?.id},
       value: this.rating,
       positiveComment: this.positiveComment,
       negativeComment: this.negativeComment,

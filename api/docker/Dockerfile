@@ -1,15 +1,17 @@
-FROM gradle:8.14.0-jdk-alpine AS build
+FROM gradle:8.13.0-jdk-alpine AS build
 
-COPY --chown=root:root --chmod=744 api/settings.gradle /app/settings.gradle
-COPY --chown=root:root --chmod=744 api/build.gradle /app/build.gradle
-COPY --chown=root:root --chmod=744 api/src /app/src
-COPY --chown=root:root --chmod=744 .git/ /.git/
+COPY --chown=gradle:gradle --chmod=755 settings.gradle /app/settings.gradle
+COPY --chown=gradle:gradle --chmod=755 build.gradle /app/build.gradle
+COPY --chown=gradle:gradle --chmod=755 src /app/src
 WORKDIR /app
 
 RUN gradle bootJar --no-daemon
 
-FROM eclipse-temurin:21-jre-alpine AS run
+FROM eclipse-temurin:21 AS run
+RUN addgroup nonroot && useradd -g nonroot nonroot
 COPY --from=build /app/build/libs/*.jar /app/app.jar
 EXPOSE 8080
+
+USER nonroot
 
 CMD ["java", "-jar", "/app/app.jar"]

@@ -38,7 +38,7 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
 
-    private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
+    private final Rit testRit = new Rit("TestRit", "Details", null, testUser);
 
     @BeforeEach
     void setup() {
@@ -64,7 +64,6 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
         assertEquals(inputRit.getName(), rit.getName(), "Rit name must be equal");
         assertEquals(inputRit.getDetails(), rit.getDetails(), "Rit details must be equal");
         assertEquals(inputRit.getTags(), rit.getTags(), "Rit tags must be equal");
-        assertEquals(inputRit.getCodes(), rit.getCodes(), "Rit codes must be equal");
         assertEquals(inputRit.isPublished(), rit.isPublished(), "Rit isPublished must be equal");
         assertEquals(inputRit.getOwner().getId(), rit.getOwner().getId(), "Rit owner must be equal");
 

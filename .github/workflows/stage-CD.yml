@@ -22,7 +22,7 @@ jobs:
       imageName: rateit-api
       imageTag: stage
       dockerFilePath: api/docker/Dockerfile
-      buildPath: .
+      buildPath: api    
   build-and-push-image-frontend:
         name: Build and Push Docker Image Frontend
         uses: ./.github/workflows/module-docker-image-build-push.yml
@@ -35,7 +35,7 @@ jobs:
           imageName: rateit-frontend
           imageTag: stage
           dockerFilePath: frontend/Dockerfile
-          buildPath: .
+          buildPath: frontend
   update-frontend-deployment-image:
         needs:  [build-and-push-image-frontend, build-and-push-image-api]
         name: Update Deployment Image Tag

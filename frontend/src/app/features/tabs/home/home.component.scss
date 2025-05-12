@@ -4,28 +4,3 @@
   align-items: center;
 }
 
-.welcome-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  text-align: center;
-}
-
-.welcome-logo {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 20px;
-  border-radius: 20px;
-}
-
-.welcome-container h1 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.welcome-container p {
-  margin-bottom: 20px;
-  color: var(--ion-color-medium);
-}
