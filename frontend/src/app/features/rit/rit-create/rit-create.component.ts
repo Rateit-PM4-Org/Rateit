@@ -1,19 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonBackButton, IonInput, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
 import { Rit } from '../../../model/rit';
 import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
 import { RitService } from '../../../shared/services/rit.service';
-import { ModalContent } from '../../modal/modal-view/modal-view.component';
+import {ModalContent, ModalViewComponent} from '../../modal/modal-view/modal-view.component';
 import { TagSelectorComponent } from '../../tag/tag-selector/tag-selector.component';
+import {ScannerUpdateModalComponent} from '../../scanner-update-modal/scanner-update-modal.component';
 
 @Component({
   selector: 'app-rit-create',
   templateUrl: './rit-create.component.html',
   styleUrls: ['./rit-create.component.scss'],
   standalone: true,
-  imports: [IonBackButton, CommonModule, TagSelectorComponent, ...IonicStandaloneStandardImports],
+  imports: [IonBackButton, CommonModule, TagSelectorComponent, ...IonicStandaloneStandardImports, ModalViewComponent, ScannerUpdateModalComponent],
 })
 export class RitCreateComponent implements ViewWillEnter, ModalContent {
 
@@ -26,6 +27,7 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
   mode?: 'create' | 'edit' | 'view' = 'create';
   @Input() ritId: string | undefined;
   @Output() isDisabled = new EventEmitter<boolean>();
+  @ViewChild("ritUpdateModal") ritUpdateModal!: ModalViewComponent;
 
   tags: string[] = []
   tagsErrorMessage?: string
@@ -156,6 +158,12 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
   }
 
+  async openScanner(){
+    this.ritUpdateModal.modal.present();
+    const {data} = await this.ritUpdateModal.modal.onDidDismiss();
+    this.addCodes(data.scannedCodes);
+  }
+
   setRitName(event: any) {
     this.ritName = event.target.value
     this.validateFields()
@@ -163,6 +171,16 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
 
   setDetails(event: any) {
     this.details = event.target.value
+  }
+
+  addCodes(newCodes: string[]) {
+    const uniqueCodes = new Set(this.codes);
+    newCodes.forEach(code => uniqueCodes.add(code));
+    this.codes = Array.from(uniqueCodes);
+  }
+
+  removeCode(code: string) {
+    this.codes = this.codes.filter(c => c !== code);
   }
 
   onTagsChange(newTags: string[]) {

@@ -59,7 +59,7 @@ describe('RitCreateComponent', () => {
 
     const tagSelector = fixture.debugElement.query(By.css('app-tag-selector'));
     expect(tagSelector).toBeTruthy();
-    
+
     const tagsContainer = fixture.debugElement.query(By.css('[testId="tags-container"]'));
     expect(tagsContainer).toBeTruthy();
     expect(tagsContainer.nativeElement.textContent).toContain('hafermilch');
@@ -214,6 +214,35 @@ describe('RitCreateComponent', () => {
     expect(component.details).toBe(mockRit.details);
     expect(component.tags).toEqual(mockRit.tags);
     expect(component.codes).toEqual(mockRit.codes);
+  });
+  it('should add scanned code to Rit', () => {
+    component.codes = ['code1'];
+    component.addCodes(['code2', 'code3']);
+    expect(component.codes).toEqual(['code1', 'code2', 'code3']);
+  });
+  it('scanned code should not be duplicated', () => {
+    component.codes = ['code1', 'code2'];
+    component.addCodes(['code2', 'code3']);
+    expect(component.codes).toEqual(['code1', 'code2', 'code3']);
+  });
+
+  it('scanned code should be removed', () => {
+    component.codes = ['code1', 'code2'];
+    component.removeCode('code1');
+    expect(component.codes).toEqual(['code2']);
+  });
+
+  it('should get scanned codes from the scanner', async () => {
+    const modalSpy = jasmine.createSpyObj('IonModal', ['present', 'onDidDismiss']);
+    modalSpy.present.and.returnValue(Promise.resolve());
+    modalSpy.onDidDismiss.and.returnValue(Promise.resolve({ data: {scannedCodes: ['code1'] }}));
+    const modalViewComponentSpy = {modal: modalSpy};
+
+    // @ts-ignore
+    component.ritUpdateModal = modalViewComponentSpy;
+
+    await component.openScanner();
+    expect(component.codes).toEqual(['code1']);
   });
 
 });
