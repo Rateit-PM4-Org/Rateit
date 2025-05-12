@@ -71,6 +71,10 @@
           </ion-chip>
           <ion-text *ngIf="codes.length == 0">No Barcodes present</ion-text>
       </div>
+      <ion-button class="ion-margin-top" *ngIf="mode === 'edit'" (click)="openScanner()" (keydown.enter)="openScanner()">
+        <ion-icon name="qr-code-outline"></ion-icon>
+        Scan Barcode
+      </ion-button>
       <ion-text color="danger" *ngIf="codesErrorMessage">
         <p>{{codesErrorMessage}}</p>
       </ion-text>
@@ -80,9 +84,6 @@
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button *ngIf="mode === 'view'" class="edit-button" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
       <ion-icon name="create-outline"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-button *ngIf="mode === 'edit'" class="edit-button" (click)="openScanner()" (keydown.enter)="openScanner()">
-      <ion-icon name="qr-code-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
