@@ -30,6 +30,7 @@ public class Rit {
     private String details;
     private boolean published;
     private List<String> tags;
+    private List<String> codes;
 
     @CreatedDate
     private Instant createdAt;
@@ -40,9 +41,10 @@ public class Rit {
     public Rit() {
     }
 
-    public Rit(String name, String details, List<String> tags, User owner) {
+    public Rit(String name, String details, List<String> tags, List<String> codes, User owner) {
         this.name = name;
         this.details = details;
+        this.codes = codes;
         this.tags = tags;
         this.published = false;
         this.owner = owner;
@@ -76,6 +78,10 @@ public class Rit {
         this.details = details;
     }
 
+    public List<String> getCodes() {return codes;}
+
+    public void setCodes(List<String> codes) {this.codes = codes;}
+
     public boolean isPublished() {
         return published;
     }
@@ -98,10 +104,6 @@ public class Rit {
 
     public void setId(String s) {
         this.id = s;
-    }
-
-    public Instant getLastInteractionAt() {
-        return updatedAt; // For now, return the same value as updatedAt
     }
 
     public Set<Rating> getRatings() {
