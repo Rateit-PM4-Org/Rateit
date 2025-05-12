@@ -180,6 +180,10 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     this.codes = Array.from(uniqueCodes);
   }
 
+  removeCode(code: string) {
+    this.codes = this.codes.filter(c => c !== code);
+  }
+
   onTagsChange(newTags: string[]) {
     this.tags = newTags;
   }

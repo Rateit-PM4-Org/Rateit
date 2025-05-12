@@ -63,9 +63,14 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-textarea [readonly]="mode === 'view'" [disabled]="mode === 'view'" [value]="codes"
-                    placeholder="No barcodes linked to this Rit..." [autoGrow]="true">
-      </ion-textarea>
+      <div>
+          <ion-chip color="primary" *ngFor="let code of codes;">
+            <ion-label>{{ code }}</ion-label>
+            <ion-icon name="close" *ngIf="mode === 'edit'" (click)="removeCode(code)"
+              (keydown.enter)="removeCode(code)"></ion-icon>
+          </ion-chip>
+          <ion-text *ngIf="codes.length == 0">No Barcodes present</ion-text>
+      </div>
       <ion-text color="danger" *ngIf="codesErrorMessage">
         <p>{{codesErrorMessage}}</p>
       </ion-text>
@@ -82,4 +87,5 @@
   </ion-fab>
 
 </ion-content>
-<app-modal-view [title]="'Update Rit'" [content]="ritUpdate" [confirmable]="false" #ritUpdateModal><app-scanner-update-modal #ritUpdate></app-scanner-update-modal></app-modal-view>
+<app-modal-view [title]="'Update Rit'" [content]="ritUpdate" [confirmable]="false"
+  #ritUpdateModal><app-scanner-update-modal #ritUpdate></app-scanner-update-modal></app-modal-view>
