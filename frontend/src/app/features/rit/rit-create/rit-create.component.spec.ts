@@ -226,4 +226,23 @@ describe('RitCreateComponent', () => {
     expect(component.codes).toEqual(['code1', 'code2', 'code3']);
   });
 
+  it('scanned code should be removed', () => {
+    component.codes = ['code1', 'code2'];
+    component.removeCode('code1');
+    expect(component.codes).toEqual(['code2']);
+  });
+
+  it('should get scanned codes from the scanner', async () => {
+    const modalSpy = jasmine.createSpyObj('IonModal', ['present', 'onDidDismiss']);
+    modalSpy.present.and.returnValue(Promise.resolve());
+    modalSpy.onDidDismiss.and.returnValue(Promise.resolve({ data: {scannedCodes: ['code1'] }}));
+    const modalViewComponentSpy = {modal: modalSpy};
+
+    // @ts-ignore
+    component.ritUpdateModal = modalViewComponentSpy;
+
+    await component.openScanner();
+    expect(component.codes).toEqual(['code1']);
+  });
+
 });
