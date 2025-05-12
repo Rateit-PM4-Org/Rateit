@@ -20,8 +20,9 @@ describe('AllRatingsComponent', () => {
   let ritServiceSpy: jasmine.SpyObj<RitService>;
 
   beforeEach(waitForAsync(() => {
-    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRitById', 'getRitsErrorStream']);
+    ritServiceSpy = jasmine.createSpyObj('RitService', ['getRitById', 'getRitsErrorStream', 'getAllTags']);
     ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
+    ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
 
 
     TestBed.configureTestingModule({
@@ -60,6 +61,7 @@ describe('AllRatingsComponent', () => {
       name: 'Test Rit',
       details: 'Details',
       tags: ['tag1'],
+      codes: ['code1'],
       ratings: mockRatings
     };
 
@@ -89,4 +91,21 @@ describe('AllRatingsComponent', () => {
 
     expect(component.showErrorToast).toHaveBeenCalledWith('Failed to load ratings');
   });
+
+  it('should delete a rating successfully', () => {
+    const ratingId = '1';
+
+    ritServiceSpy.deleteRating = jasmine.createSpy().and.returnValue(of({}));
+    ritServiceSpy.triggerRitsReload = jasmine.createSpy().and.returnValue(of({}));
+    spyOn(component, 'loadRatings');
+    spyOn(component, 'showSuccessToast');
+
+    component.deleteRating(ratingId);
+
+    expect(ritServiceSpy.deleteRating).toHaveBeenCalledWith(ratingId);
+    expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
+    expect(component.loadRatings).toHaveBeenCalledWith('1');
+    expect(component.showSuccessToast).toHaveBeenCalledWith('Rating deleted successfully!');
+  });
+
 });

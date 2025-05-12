@@ -21,13 +21,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -51,7 +49,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
 
-    private final Rit testRit = new Rit("TestRit", "Details", null, testUser);
+    private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
 
     @BeforeEach
     void setup() {
@@ -143,7 +141,7 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
     }
     @Test
     void createRit_negative_RitNotPresent() throws Exception {
-        Rit rit = new Rit("TestRit", "Details", null, testUser);
+        Rit rit = new Rit("TestRit", "Details", null, null, testUser);
         rit.setId("non-existing-id");
         String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
 
@@ -175,4 +173,50 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         assertNotNull(ritResponse.getRatings(), "Rit must have ratings");
         assertFalse(ritResponse.getRatings().isEmpty());
     }
+    @Test
+    void deleteRating_positive() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        Rating rating = ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+        mockMvc.perform(delete("/rit/deleteRating/" + rating.getId()).with(user(testUser)))
+                .andExpect(status().is2xxSuccessful());
+
+        assertFalse(ratingRepository.existsById(rating.getId()), "Rating must be deleted");
+    }
+
+    @Test
+    void deleteRating_negative() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        Rating rating = ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+
+        mockMvc.perform(delete("/rit/deleteRating/" + "non-existing-id").with(user(testUser)))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(delete("/rit/deleteRating/" + rating.getId()).with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
+                .andExpect(status().isForbidden());
+    }
+    @Test
+    void deleteRit_positive() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+        mockMvc.perform(delete("/rit/deleteRit/" + rit.getId()).with(user(testUser)))
+                .andExpect(status().is2xxSuccessful());
+
+        assertFalse(ritRepository.existsById(rit.getId()), "Rit must be deleted");
+        assertFalse(ratingRepository.existsById(rit.getId()), "All ratings must be deleted");
+    }
+    @Test
+    void deleteRit_negative() throws Exception {
+        Rit rit = ritRepository.save(testRit);
+        ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
+
+        mockMvc.perform(delete("/rit/deleteRit/" + "non-existing-id").with(user(testUser)))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(delete("/rit/deleteRit/" + rit.getId()).with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
+                .andExpect(status().isForbidden());
+    }
+
 }

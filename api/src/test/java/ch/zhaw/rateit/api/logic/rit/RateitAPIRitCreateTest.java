@@ -33,6 +33,7 @@ class RateitAPIRitCreateTest {
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
     private final List<String> tags = List.of("tag1", "tag2");
+    private final List<String> codes = List.of("code1", "code2", "code3");
 
     @BeforeEach
     void setUp() {
@@ -44,10 +45,11 @@ class RateitAPIRitCreateTest {
         RitCreateRequest request = new RitCreateRequest(
                 "Test Rit",
                 "Details",
-                tags
+                tags,
+                codes
         );
 
-        Rit dummyRit = new Rit("Test Rit", "Details", List.of("tag1", "tag2"), testUser);
+        Rit dummyRit = new Rit("Test Rit", "Details", List.of("tag1", "tag2"), codes, testUser);
         when(ritRepository.getRitById(any())).thenReturn(dummyRit);
 
         Rit result = ritService.create(testUser, request);
@@ -56,6 +58,7 @@ class RateitAPIRitCreateTest {
         assertEquals(request.name(), result.getName());
         assertEquals(request.details(), result.getDetails());
         assertEquals(request.tags(), result.getTags());
+        assertEquals(request.codes(), result.getCodes());
         assertFalse(result.isPublished());
         assertEquals(testUser.getId(), result.getOwner().getId());
         verify(ritRepository).save(any());

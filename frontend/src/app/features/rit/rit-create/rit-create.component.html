@@ -1,7 +1,7 @@
 <ion-header *ngIf="mode !== 'create'">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/rits"></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Rit</ion-title>
 
@@ -31,17 +31,9 @@
       </ion-text>
     </ion-card-content>
 
-    <ion-card-content class="tags-container">
-      <ion-chip [disabled]="mode === 'view'" color="primary" *ngFor="let tag of tags; let i = index"
-        (click)="removeTag(i)" (keydown.enter)="removeTag(i)" [attr.data-testid]="'tag-chip-' + i">
-        <ion-icon name="pricetag-outline"></ion-icon>
-        <ion-label>{{ tag }}</ion-label>
-        <ion-icon name="close"></ion-icon>
-      </ion-chip>
-
-      <ion-input *ngIf="mode !== 'view'" #tagInput class="tag-input" data-testid="new-tag-input" [value]="newTag"
-        (ionInput)="setNewTag($event)" placeholder="Enter Tag" (keyup.enter)="addTag(tagInput, 'enter')"
-        (ionBlur)="addTag(tagInput, 'blur')"></ion-input>
+    <ion-card-content class="tags-container" testId="tags-container">
+      <app-tag-selector [selectedTags]="tags" [disabled]="mode === 'view'" (tagsChange)="onTagsChange($event)">
+      </app-tag-selector>
     </ion-card-content>
     <ion-card-content *ngIf="tagsErrorMessage" class="tags-error-container">
       <ion-text color="danger">
@@ -65,10 +57,36 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="mode === 'view'">
-    <ion-fab-button class="edit-button" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
+  <ion-card *ngIf="codes.length > 0 || mode === 'edit'">
+    <ion-card-header>
+      <ion-card-title>Barcodes</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div>
+          <ion-chip color="primary" *ngFor="let code of codes;">
+            <ion-label>{{ code }}</ion-label>
+            <ion-icon name="close" *ngIf="mode === 'edit'" (click)="removeCode(code)"
+              (keydown.enter)="removeCode(code)"></ion-icon>
+          </ion-chip>
+          <ion-text *ngIf="codes.length == 0">No Barcodes present</ion-text>
+      </div>
+      <ion-button class="ion-margin-top" *ngIf="mode === 'edit'" (click)="openScanner()" (keydown.enter)="openScanner()">
+        <ion-icon name="qr-code-outline"></ion-icon>
+        Scan Barcode
+      </ion-button>
+      <ion-text color="danger" *ngIf="codesErrorMessage">
+        <p>{{codesErrorMessage}}</p>
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button *ngIf="mode === 'view'" class="edit-button" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
       <ion-icon name="create-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
 </ion-content>
+<app-modal-view [title]="'Update Rit'" [content]="ritUpdate" [confirmable]="false"
+  #ritUpdateModal><app-scanner-update-modal #ritUpdate></app-scanner-update-modal></app-modal-view>

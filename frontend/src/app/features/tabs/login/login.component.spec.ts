@@ -75,7 +75,7 @@ describe('LoginComponent', () => {
 
   it('should navigate to register page when register is called', () => {
     component.register();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/register']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/register']);
   });
 
   it('should set errorMessage and clear password on login error', () => {

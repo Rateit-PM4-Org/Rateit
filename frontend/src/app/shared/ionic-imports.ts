@@ -1,4 +1,6 @@
 import {
+  IonAccordion,
+  IonAccordionGroup,
   IonBadge,
   IonButton,
   IonButtons,
@@ -18,12 +20,13 @@ import {
   IonIcon,
   IonImg,
   IonInput,
-  IonItem,
+  IonItem, IonItemOption, IonItemOptions, IonItemSliding,
   IonLabel,
   IonList,
   IonModal,
   IonNav,
   IonNote,
+  IonPopover,
   IonRefresher,
   IonRefresherContent,
   IonRippleEffect,
@@ -33,6 +36,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonSegmentContent,
+  IonSelectOption,
   IonSpinner,
   IonTabBar,
   IonTabButton,
@@ -90,6 +94,12 @@ export const IonicStandaloneStandardImports = [
   IonNote,
   IonSearchbar,
   IonRefresher,
-  IonRefresherContent
-
+  IonRefresherContent,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+  IonSelectOption,
+  IonAccordion,
+  IonAccordionGroup,
+  IonPopover
 ];

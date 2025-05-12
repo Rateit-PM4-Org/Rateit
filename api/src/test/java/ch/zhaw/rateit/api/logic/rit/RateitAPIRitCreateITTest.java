@@ -49,6 +49,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
     private final List<String> tags = List.of("tag1", "tag2");
+    private final List<String> codes = List.of("code1", "code2", "code3");
 
     @BeforeEach
     void setup() {
@@ -61,16 +62,18 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     private static Stream<Arguments> provideValidRitCreateParams() {
         return Stream.of(
-                Arguments.of("TestRit", "Details", List.of()),
-                Arguments.of("TestRit", "Details", List.of("tag1")),
-                Arguments.of("TestRit", null, List.of("tag1", "tag2"))
+                Arguments.of("TestRit", "Details", List.of(), List.of()),
+                Arguments.of("TestRit", "Details", List.of("tag1"), List.of()),
+                Arguments.of("TestRit", null, List.of("tag1", "tag2"), List.of()),
+                Arguments.of("TestRit", null, List.of(), List.of("code1")),
+                Arguments.of("TestRit", null, List.of(), List.of("code1", "code2"))
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideValidRitCreateParams")
-    void createRit_positive_returnsStatusOk(String name, String details, List<String> tags) throws Exception {
-        String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags));
+    void createRit_positive_returnsStatusOk(String name, String details, List<String> tags, List<String> codes) throws Exception {
+        String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags, codes));
 
         var resultActions = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
                 .with(user(testUser)));
@@ -91,18 +94,18 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     private static Stream<Arguments> provideInvalidRitCreateParams() {
         return Stream.of(
-                Arguments.of("", "Details", List.of()), // name blank
-                Arguments.of("   ", "Details", List.of()), // name blank with spaces
-                Arguments.of(null, "Details", List.of()), // name null
-                Arguments.of("TestRit", "Details", null) // tags null
-
+                Arguments.of("", "Details", List.of(), List.of()), // name blank
+                Arguments.of("   ", "Details", List.of(), List.of()), // name blank with spaces
+                Arguments.of(null, "Details", List.of(), List.of()), // name null
+                Arguments.of("TestRit", "Details", null, List.of()), // tags null
+                Arguments.of("TestRit", "Details", List.of(), null) // codes null
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideInvalidRitCreateParams")
-    void createRit_negative_returnsBadRequest(String name, String details, List<String> tags) throws Exception {
-        String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags));
+    void createRit_negative_returnsBadRequest(String name, String details, List<String> tags, List<String> codes) throws Exception {
+        String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags, codes));
 
         mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
@@ -111,7 +114,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void createRit_negative_unauthorized_returnsForbidden() throws Exception {
-        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", List.of()));
+        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", List.of(), codes));
 
         mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -119,7 +122,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void createRit_positive_setsTimestamps() throws Exception {
-        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", tags));
+        String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", tags, codes));
 
         String response = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))

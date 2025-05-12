@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Scanner Test</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <app-scanner (scannedCodeEmitter)="onScanned($event)"></app-scanner>
+  <div class="ion-padding-top">Scanned Codes:</div>
+  <ion-list class="ion-no-padding" lines="none">
+    <ion-item *ngFor="let scannedCode of scannedCodes" class="ion-no-padding">
+      <ion-label>{{ scannedCode }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

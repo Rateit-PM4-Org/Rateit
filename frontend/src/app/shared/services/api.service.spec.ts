@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { ApiService } from './api.service';
-import { AuthService } from './auth.service';
-import { environment } from '../../../environments/environment';
-import { provideHttpClient } from '@angular/common/http';
-import { first } from 'rxjs';
-import { provideMockAuthService } from '../test-util/test-util';
+import {TestBed} from '@angular/core/testing';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {ApiService} from './api.service';
+import {AuthService} from './auth.service';
+import {environment} from '../../../environments/environment';
+import {provideHttpClient} from '@angular/common/http';
+import {first} from 'rxjs';
+import {provideMockAuthService} from '../test-util/test-util';
 
 describe('ApiService', () => {
   let service: ApiService;
@@ -34,7 +34,7 @@ describe('ApiService', () => {
   });
 
   it('should perform a GET request with the correct headers', () => {
-    const mockResponse = { data: 'test' };
+    const mockResponse = {data: 'test'};
 
     service.get('/test').pipe(first()).subscribe(response => {
       expect(response).toEqual(mockResponse);
@@ -47,8 +47,8 @@ describe('ApiService', () => {
   });
 
   it('should perform a POST request with the correct headers and body', () => {
-    const mockBody = { key: 'value' };
-    const mockResponse = { success: true };
+    const mockBody = {key: 'value'};
+    const mockResponse = {success: true};
 
     service.post('/test', mockBody).pipe(first()).subscribe(response => {
       expect(response).toEqual(mockResponse);
@@ -62,8 +62,8 @@ describe('ApiService', () => {
   });
 
   it('should perform a PUT request with the correct headers and body', () => {
-    const mockBody = { key: 'value' };
-    const mockResponse = { success: true };
+    const mockBody = {key: 'value'};
+    const mockResponse = {success: true};
 
     service.put('/test/12', mockBody).pipe(first()).subscribe(response => {
       expect(response).toEqual(mockResponse);
@@ -85,12 +85,12 @@ describe('ApiService', () => {
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/test`);
-    req.flush({}, { status: 403, statusText: 'Forbidden' });
+    req.flush({}, {status: 403, statusText: 'Forbidden'});
   });
 
   it('should call AuthService.logout on 403 error for POST request', () => {
     const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    const mockBody = { key: 'value' };
+    const mockBody = {key: 'value'};
 
     service.post('/test', mockBody).pipe(first()).subscribe({
       error: () => {
@@ -99,6 +99,19 @@ describe('ApiService', () => {
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/test`);
-    req.flush({}, { status: 403, statusText: 'Forbidden' });
+    req.flush({}, {status: 403, statusText: 'Forbidden'});
+  });
+
+  it('should perform a DELETE request with the correct headers', () => {
+    const mockResponse = {success: true};
+
+    service.delete('/test/123').pipe(first()).subscribe(response => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/test/123`);
+    expect(req.request.method).toBe('DELETE');
+    expect(req.request.headers.get('Authorization')).toBe('Bearer token');
+    req.flush(mockResponse);
   });
 });

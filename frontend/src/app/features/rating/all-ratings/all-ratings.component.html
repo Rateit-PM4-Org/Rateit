@@ -6,14 +6,26 @@
     <ion-title>Ratings</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding-horizontal ion-padding-top" scroll-y="true">
-  <ion-text *ngIf="ratings.length==0">
-    No ratings present for this Rit.
-  </ion-text>
+<ion-content scroll-y="true" class="ion-padding">
   <ion-list>
-    <app-rating-list-item *ngFor="let rating of ratings" [rating]="rating">
-    </app-rating-list-item>
+    <ion-text *ngIf="ratings.length === 0">
+      No ratings present for this Rit.
+    </ion-text>
+
+    <ion-item-sliding class="rating-item ion-margin-bottom" *ngFor="let rating of ratings">
+      <ion-item lines="none" class="ion-no-padding rating-container">
+        <div class="full-width-wrapper" >
+          <app-rating-list-item [rating]="rating"></app-rating-list-item>
+        </div>
+      </ion-item>
+
+      <ion-item-options side="end" class="ion-padding-start ">
+        <ion-item-option color="danger delete-button" (click)="deleteRating(rating.id)" (keydown.enter)="deleteRating(rating.id)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 </ion-content>
 
-<app-fab-integration [rit]="rit"></app-fab-integration>
+<app-fab-integration [rit]="rit$"></app-fab-integration>

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { AuthService } from './auth.service';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {catchError, Observable} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -46,9 +46,20 @@ export class ApiService {
     );
   }
 
+  delete(path: string): Observable<any> {
+    return this.http.delete<any>(this.baseEndpoint + path, this.addTokenHeader()).pipe(
+      catchError(error => {
+        if (error.status === 403) {
+          this.authService.logout();
+        }
+        throw error;
+      })
+    );
+  }
+
   addTokenHeader() {
     if (this.authService.getToken() != null) {
-      return { headers: { Authorization: `Bearer ${this.authService.getToken()}` } };
+      return {headers: {Authorization: `Bearer ${this.authService.getToken()}`}};
     }
     return {};
   }
