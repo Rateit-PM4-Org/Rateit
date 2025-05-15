@@ -1,11 +1,13 @@
-.tags-container, .barcode-container{
+.tags-container,
+.barcode-container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   cursor: pointer;
 }
 
-.tags-input-container, .barcode-input-container {
+.tags-input-container,
+.barcode-input-container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -84,11 +86,6 @@
       font-size: 24px;
       cursor: pointer;
       transition: transform 0.2s ease-in-out;
-      color: var(--custom-color-accent);
-
-      &.filled {
-        color: var(--custom-color-accent);
-      }
 
       &:hover {
         transform: scale(1.2);
