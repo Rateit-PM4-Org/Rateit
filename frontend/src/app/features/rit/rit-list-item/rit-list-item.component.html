@@ -18,7 +18,7 @@
 
       </ion-label>
       <ion-button size="default" (keydown.enter)="navigateToRatings()"
-        [color]="latestRatingValue > 3 ? 'success' : (latestRatingValue < 3 ? 'danger' : 'warning')"
+        [color]="latestRatingValue <= 0 ? 'medium' : (latestRatingValue > 3 ? 'success' : (latestRatingValue < 3 ? 'danger' : 'warning'))"
         (click)="navigateToRatings()" class="ratingButton">
         <ng-container *ngIf="latestRatingValue > 0">
           {{ latestRatingValue }}
