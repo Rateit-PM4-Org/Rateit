@@ -1,16 +1,16 @@
-import { CommonModule } from '@angular/common';
-import { Component, } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Component,} from '@angular/core';
 import {ToastController, ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
-import { Observable, Subscription } from 'rxjs';
-import { Rit } from '../../../model/rit';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { RitService } from '../../../shared/services/rit.service';
-import { UserService } from '../../../shared/services/user.service';
-import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
-import { Router } from '@angular/router';
-import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
-import { TagListItemComponent } from "../../tag/tag-list-item/tag-list-item.component";
-import { RitFilterService } from '../../../shared/services/rit-filter.service';
+import {Observable, Subscription} from 'rxjs';
+import {Rit} from '../../../model/rit';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {RitService} from '../../../shared/services/rit.service';
+import {AuthState, UserService} from '../../../shared/services/user.service';
+import {RitListItemComponent} from '../../rit/rit-list-item/rit-list-item.component';
+import {Router} from '@angular/router';
+import {FabIntegrationComponent} from '../../modal/fab-integration/fab-integration.component';
+import {TagListItemComponent} from "../../tag/tag-list-item/tag-list-item.component";
+import {RitFilterService} from '../../../shared/services/rit-filter.service';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +32,9 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
   tags: any[] = [];
   numberOfLatestRitsToShow: number = 10;
   numberOfTopTagsToShow: number = 4;
-  isLoggedIn$!: Observable<boolean>;
+  authState$!: Observable<AuthState>;
+
+  loading: boolean = true;
 
   ritSubscription: Subscription | null = null;
   ritsErrorSubscription: Subscription | null = null;
@@ -46,25 +48,33 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
   }
 
   ionViewWillEnter() {
-    this.isLoggedIn$ = this.userService.isLoggedIn();
+    this.loading = true;
+
+    this.authState$ = this.userService.getAuthState();
     this.presentingElement = document.querySelector('ion-page');
 
-    this.isLoggedIn$.pipe().subscribe((isLoggedIn) => {
-      if (isLoggedIn) {
-        this.ritSubscription = this.ritService.getRits().subscribe({
-          next: (data) => {
-            this.handleLoadRitsSuccess(data);
-          },
-          error: (err) => {
-            this.handleLoadRitsError(err);
-          }
-        });
+    this.authState$.subscribe((authState: AuthState) => {
+      switch (authState) {
+        case AuthState.LOADING:
+          this.loading = true;
+          break;
 
-        this.ritsErrorSubscription = this.ritService.getRitsErrorStream().subscribe({
-          next: (err) => {
-            this.handleLoadRitsError(err);
-          }
-        });
+        case AuthState.AUTHENTICATED:
+          this.ritSubscription = this.ritService.getRits().subscribe({
+            next: (data) => this.handleLoadRitsSuccess(data),
+            error: (err) => this.handleLoadRitsError(err)
+          });
+
+          this.ritsErrorSubscription = this.ritService.getRitsErrorStream().subscribe({
+            next: (err) => this.handleLoadRitsError(err)
+          });
+          break;
+
+        case AuthState.NOT_AUTHENTICATED:
+          this.loading = false;
+          this.rits = [];
+          this.tags = [];
+          break;
       }
     });
   }
@@ -106,11 +116,13 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
       return dateB.getTime() - dateA.getTime();
     });
     this.tags = this.topTags();
+    this.loading = false;
   }
 
   private handleLoadRitsError(err: any) {
     const baseError = err.error?.error ?? 'Unknown error';
     this.showErrorToast(baseError);
+    this.loading = false;
   }
 
   latestRits(): Rit[] {
@@ -172,4 +184,6 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
   goToLogin() {
     this.router.navigate(['/tabs/login']);
   }
+
+  protected readonly AuthState = AuthState;
 }
