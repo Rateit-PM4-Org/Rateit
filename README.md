@@ -21,13 +21,12 @@ Rateit is a web application—no installation is required. You can access it dir
 ## Usage
 
 1. Open [Rateit](https://rateit.pm4.init-lab.ch) in your browser
-2. Create your first rating
-3. Organize your rated items into categories
-4. Explore analytics on your preferences
+2. Create your first Rits and rate them
+3. Organize your Rits with Tags
 
 ## Developer infrastructure setup
 
-Developers can follow the guide in the [Wiki](https://github.com/Rateit-PM4-Org/Rateit/wiki/Infrastruktur#lokale-entwicklungsumgebung-aufbauen) to set up the local development environment.
+Developers can follow the guide in the [Wiki](https://github.com/Rateit-PM4-Org/Rateit/wiki/Software-Guidebook#lokale-entwicklungsumgebung-aufbauen) to set up the local development environment.
 
 ## Contributing
 
