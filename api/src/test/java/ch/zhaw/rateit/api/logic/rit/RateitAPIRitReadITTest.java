@@ -51,7 +51,7 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
     void readRit_positive_returnsStatusOk() throws Exception {
         Rit inputRit = ritRepository.save(testRit);
 
-        var resultActions = mockMvc.perform(get("/rit/read/" + inputRit.getId()).with(user(testUser)));
+        var resultActions = mockMvc.perform(get("/api/rits/" + inputRit.getId()).with(user(testUser)));
         String result = resultActions
                 .andReturn()
                 .getResponse()
@@ -72,14 +72,14 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void readRit_negative_RitNotPresent() throws Exception {
-        mockMvc.perform(get("/rit/read/123").with(user(testUser)))
+        mockMvc.perform(get("/api/rits/123").with(user(testUser)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void readRit_negative_unauthorized_returnsForbidden() throws Exception {
         var rit = ritRepository.save(testRit);
-        mockMvc.perform(get("/rit/read/" + rit.getId()))
+        mockMvc.perform(get("/api/rits/" + rit.getId()))
                 .andExpect(status().isForbidden());
     }
 
@@ -91,7 +91,7 @@ class RateitAPIRitReadITTest extends AbstractBaseIntegrationTest {
         testRit.setOwner(otherOwner);
         Rit rit = ritRepository.save(testRit);
 
-        mockMvc.perform(get("/rit/read/" + rit.getId()).with(user(testUser)))
+        mockMvc.perform(get("/api/rits/" + rit.getId()).with(user(testUser)))
                 .andExpect(status().isForbidden());
     }
 }

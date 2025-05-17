@@ -30,7 +30,7 @@ public class WebsecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/user/login", "/user/register", "/user/mail-confirmation", "/error", "/actuator/health/**", "/actuator/info").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/api/users/login", "/api/users/register", "/api/users/mail-confirmation", "/error", "/actuator/health/**", "/actuator/info").permitAll().anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)

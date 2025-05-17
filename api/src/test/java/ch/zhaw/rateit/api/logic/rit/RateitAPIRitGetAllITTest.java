@@ -62,7 +62,7 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void getAllRits_authenticated_returnsOnlyOwnRits() throws Exception {
-        String response = mockMvc.perform(get("/rit/rits")
+        String response = mockMvc.perform(get("/api/rits")
                         .with(user(testUser))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -79,7 +79,7 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
 
     @Test
     void getAllRits_unauthenticated_returnsForbidden() throws Exception {
-        mockMvc.perform(get("/rit/rits").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/rits").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
@@ -89,7 +89,7 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
         newUser.setEmailVerified(true);
         userRepository.save(newUser);
 
-        String response = mockMvc.perform(get("/rit/rits")
+        String response = mockMvc.perform(get("/api/rits")
                         .with(user(newUser))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

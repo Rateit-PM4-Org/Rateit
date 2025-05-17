@@ -33,7 +33,7 @@ public class UserVerificationService {
         user.setEmailVerificationToken(UUID.randomUUID().toString());
 
         String verificationUrl = String.format(
-                "%s/user/mail-confirmation?token=%s",
+                "%s/api/users/mail-confirmation?token=%s",
                 frontendUrl,
                 user.getEmailVerificationToken()
         );

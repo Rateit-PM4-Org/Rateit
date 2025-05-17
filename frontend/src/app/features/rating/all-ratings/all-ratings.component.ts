@@ -97,7 +97,7 @@ export class AllRatingsComponent implements ViewWillEnter, ViewWillLeave {
   }
 
   deleteRating(ratingId: string | undefined) {
-    this.ritService.deleteRating(ratingId).subscribe({
+    this.ritService.deleteRating(this.activatedRoute.snapshot.params['ritId'], ratingId).subscribe({
       next: () => {
         this.showSuccessToast('Rating deleted successfully!');
         this.ritService.triggerRitsReload().subscribe({});
