@@ -64,14 +64,15 @@
 
     <ion-card-content>
       <div>
-          <ion-chip color="primary" *ngFor="let code of codes;">
-            <ion-label>{{ code }}</ion-label>
-            <ion-icon name="close" *ngIf="mode === 'edit'" (click)="removeCode(code)"
-              (keydown.enter)="removeCode(code)"></ion-icon>
-          </ion-chip>
-          <ion-text *ngIf="codes.length == 0">No Barcodes present</ion-text>
+        <ion-chip color="primary" *ngFor="let code of codes;">
+          <ion-label>{{ code }}</ion-label>
+          <ion-icon name="close" *ngIf="mode === 'edit'" (click)="removeCode(code)"
+            (keydown.enter)="removeCode(code)"></ion-icon>
+        </ion-chip>
+        <ion-text *ngIf="codes.length == 0">No Barcodes present</ion-text>
       </div>
-      <ion-button class="ion-margin-top" *ngIf="mode !== 'view'" (click)="openScanner()" (keydown.enter)="openScanner()">
+      <ion-button class="ion-margin-top" *ngIf="mode !== 'view'" (click)="openScanner()"
+        (keydown.enter)="openScanner()">
         <ion-icon name="qr-code-outline"></ion-icon>
         Scan Barcode
       </ion-button>
@@ -82,7 +83,7 @@
   </ion-card>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button *ngIf="mode === 'view'" class="edit-button" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
+    <ion-fab-button *ngIf="mode === 'view'" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
       <ion-icon name="create-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
