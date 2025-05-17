@@ -94,15 +94,18 @@ describe('AllRatingsComponent', () => {
 
   it('should delete a rating successfully', () => {
     const ratingId = '1';
+    const ritId = '1';
 
     ritServiceSpy.deleteRating = jasmine.createSpy().and.returnValue(of({}));
     ritServiceSpy.triggerRitsReload = jasmine.createSpy().and.returnValue(of({}));
     spyOn(component, 'loadRatings');
     spyOn(component, 'showSuccessToast');
 
+    component['activatedRoute'].snapshot.params = { ritId };
+
     component.deleteRating(ratingId);
 
-    expect(ritServiceSpy.deleteRating).toHaveBeenCalledWith(ratingId);
+    expect(ritServiceSpy.deleteRating).toHaveBeenCalledWith(ritId, ratingId);
     expect(ritServiceSpy.triggerRitsReload).toHaveBeenCalled();
     expect(component.loadRatings).toHaveBeenCalledWith('1');
     expect(component.showSuccessToast).toHaveBeenCalledWith('Rating deleted successfully!');

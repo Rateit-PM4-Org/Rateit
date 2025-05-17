@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable} from 'rxjs';
-import { environment } from '../../../environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, map, Observable} from 'rxjs';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly endpoint = environment.apiUrl + '/user';
+  private readonly endpoint = environment.apiUrl + '/api/users';
   private readonly token: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   constructor(private readonly http: HttpClient) {
@@ -19,14 +19,14 @@ export class AuthService {
   }
 
   private setToken(token: string | null): void {
-    
-    if(token != null){
+
+    if (token != null) {
       localStorage.setItem('token', token);
-    }else{
+    } else {
       localStorage.removeItem('token');
     }
     this.token.next(token);
-    
+
   }
 
   isAuthenticated(): boolean {
@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(this.endpoint + '/login', { email, password }).pipe(
+    return this.http.post<any>(this.endpoint + '/login', {email, password}).pipe(
       map(response => {
         this.setToken(response.token);
         return response;
@@ -49,5 +49,5 @@ export class AuthService {
   logout(): void {
     this.setToken(null);
   }
-  
+
 }

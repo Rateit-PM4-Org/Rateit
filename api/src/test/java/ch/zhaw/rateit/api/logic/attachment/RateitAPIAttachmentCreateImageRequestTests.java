@@ -42,7 +42,7 @@ class RateitAPIAttachmentCreateImageRequestTests extends AbstractBaseIntegration
         MockMultipartFile file = new MockMultipartFile("file", "test.png", "image/png", Base64.getDecoder().decode(imageBase64));
 
         // Perform the request and assert the response
-        String result = mockMvc.perform(multipart("/attachment/create-image").file(file).with(user("test")))
+        String result = mockMvc.perform(multipart("/api/attachments/images").file(file).with(user("test")))
                 .andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
 
         Attachment attachment = objectMapper.readValue(result, Attachment.class);
@@ -55,14 +55,14 @@ class RateitAPIAttachmentCreateImageRequestTests extends AbstractBaseIntegration
 
     @Test
     void testEndpointCreateImageRequestNegative_NoFile() throws Exception {
-        mockMvc.perform(multipart("/attachment/create-image").with(user("test"))).andExpect(status().isBadRequest());
+        mockMvc.perform(multipart("/api/attachments/images").with(user("test"))).andExpect(status().isBadRequest());
     }
 
     @Test
     void testEndpointCreateImageRequestNegative_InvalidFile() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Invalid content".getBytes());
 
-        mockMvc.perform(multipart("/attachment/create-image").file(file).with(user("test"))).andExpect(status().isBadRequest());
+        mockMvc.perform(multipart("/api/attachments/images").file(file).with(user("test"))).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -71,7 +71,7 @@ class RateitAPIAttachmentCreateImageRequestTests extends AbstractBaseIntegration
         byte[] largeImage = new byte[10 * 1024 * 1024]; // 10 MB
         MockMultipartFile file = new MockMultipartFile("file", "large.png", "image/png", largeImage);
 
-        mockMvc.perform(multipart("/attachment/create-image").file(file).with(user("test")))
+        mockMvc.perform(multipart("/api/attachments/images").file(file).with(user("test")))
                 .andExpect(status().isBadRequest());
     }
 
