@@ -8,7 +8,6 @@ import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
 import ch.zhaw.rateit.api.util.AbstractBaseIntegrationTest;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @Import(WebsecurityConfig.class)
-public class RateitAPIRitDeleteITTest extends AbstractBaseIntegrationTest {
+class RateitAPIRitDeleteITTest extends AbstractBaseIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

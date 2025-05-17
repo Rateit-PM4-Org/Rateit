@@ -61,7 +61,7 @@ public class RitController {
     }
 
     @DeleteMapping("/{id}/ratings/{ratingId}")
-    public void deleteRating(@AuthenticationPrincipal User user, @PathVariable String ratingId) {
+    public void deleteRating(@AuthenticationPrincipal User user, @PathVariable String id,  @PathVariable String ratingId) {
         ritService.deleteRating(user, ratingId);
     }
 
