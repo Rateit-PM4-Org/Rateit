@@ -313,7 +313,7 @@ describe('RitService', () => {
 
     service.deleteRating(ritId, ratingId).pipe(first()).subscribe(response => {
       expect(response).toEqual(mockResponse);
-      expect(apiServiceSpy.delete).toHaveBeenCalledWith('/api/rits/' + ritId + '/rating' + ratingId);
+      expect(apiServiceSpy.delete).toHaveBeenCalledWith('/api/rits/' + ritId + '/ratings/' + ratingId);
       expect(apiServiceSpy.delete).toHaveBeenCalledTimes(1);
       done();
     });
