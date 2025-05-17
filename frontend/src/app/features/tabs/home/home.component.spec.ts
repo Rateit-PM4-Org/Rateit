@@ -5,13 +5,14 @@ import { IonicModule } from '@ionic/angular';
 import { ActionSheetController, ToastController } from '@ionic/angular/standalone';
 import { of, throwError } from 'rxjs';
 import { RitService } from '../../../shared/services/rit.service';
-import { UserService } from '../../../shared/services/user.service';
+import {AuthState, UserService} from '../../../shared/services/user.service';
 import { HomeComponent } from './home.component';
 import { ActivatedRoute } from '@angular/router';
 import { Rit } from '../../../model/rit';
 
 const userServiceMock = {
-  isLoggedIn: () => of(true)
+  isLoggedIn: () => of(true),
+  getAuthState: () => of('AUTHENTICATED')
 };
 
 describe('HomeComponent', () => {

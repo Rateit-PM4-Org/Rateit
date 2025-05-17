@@ -75,7 +75,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     void createRit_positive_returnsStatusOk(String name, String details, List<String> tags, List<String> codes) throws Exception {
         String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags, codes));
 
-        var resultActions = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
+        var resultActions = mockMvc.perform(post("/api/rits").content(input).contentType(MediaType.APPLICATION_JSON)
                 .with(user(testUser)));
         String result = resultActions
                 .andReturn()
@@ -107,7 +107,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     void createRit_negative_returnsBadRequest(String name, String details, List<String> tags, List<String> codes) throws Exception {
         String input = objectMapper.writeValueAsString(new RitCreateRequest(name, details, tags, codes));
 
-        mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/api/rits").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().isBadRequest());
     }
@@ -116,7 +116,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     void createRit_negative_unauthorized_returnsForbidden() throws Exception {
         String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", List.of(), codes));
 
-        mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/rits").content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
@@ -124,7 +124,7 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     void createRit_positive_setsTimestamps() throws Exception {
         String input = objectMapper.writeValueAsString(new RitCreateRequest("test", "details", tags, codes));
 
-        String response = mockMvc.perform(post("/rit/create").content(input).contentType(MediaType.APPLICATION_JSON)
+        String response = mockMvc.perform(post("/api/rits").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
 
@@ -136,5 +136,6 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
         assertNotNull(rit.getUpdatedAt(), "updatedAt must be set");
         assertEquals(rit.getCreatedAt(), rit.getUpdatedAt(), "createdAt and updatedAt must be equal after creation");
     }
+
 
 }

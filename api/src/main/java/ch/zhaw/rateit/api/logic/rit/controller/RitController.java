@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 /**
  * Controller to handle interactions with rits.
  *
  * @author Micha Mettler
  */
 @RestController
-@RequestMapping("/rit")
+@RequestMapping("/api/rits")
 @Validated
 public class RitController {
 
@@ -31,42 +30,39 @@ public class RitController {
         this.ritService = ritService;
     }
 
-    @PostMapping(path = "/create")
-    public Rit create(@AuthenticationPrincipal User user, @RequestBody @Validated RitCreateRequest request) {
+    @PostMapping
+    public Rit createRit(@AuthenticationPrincipal User user, @RequestBody @Validated RitCreateRequest request) {
         return ritService.create(user, request);
     }
 
-    @GetMapping(path = "/read/{id}")
-    public Rit read(@AuthenticationPrincipal User user, @PathVariable String id) {
+    @GetMapping("/{id}")
+    public Rit getRit(@AuthenticationPrincipal User user, @PathVariable String id) {
         return ritService.getRitById(user, id);
     }
 
-    @PutMapping(path = "/update/{id}")
-    public Rit update(
-            @AuthenticationPrincipal User user,
-            @PathVariable String id,
-            @RequestBody @Validated RitCreateRequest request) {
+    @GetMapping
+    public List<Rit> getAllRits(@AuthenticationPrincipal User user) {
+        return ritService.getAll(user);
+    }
+
+    @PutMapping("/{id}")
+    public Rit updateRit(@AuthenticationPrincipal User user, @PathVariable String id, @RequestBody @Validated RitCreateRequest request) {
         return ritService.update(user, id, request);
     }
 
-    @GetMapping(path = "/rits")
-    public List<Rit> rits(@AuthenticationPrincipal User user) {
-        return ritService.getAll(user);
-    }
-  
-    @PostMapping(path = "/rate")
-    public Rating rate(@AuthenticationPrincipal User user, @RequestBody @Validated RatingCreateRequest request) {
-        return ritService.rate(user, request);
-    }
-
-    @DeleteMapping(path = "/deleteRating/{id}")
-    public void deleteRating(@AuthenticationPrincipal User user, @PathVariable String id) {
-        ritService.deleteRating(user, id);
-    }
-
-    @DeleteMapping(path = "/deleteRit/{id}")
+    @DeleteMapping("/{id}")
     public void deleteRit(@AuthenticationPrincipal User user, @PathVariable String id) {
         ritService.deleteRit(user, id);
+    }
+
+    @PostMapping("/{id}/ratings")
+    public Rating createRating(@AuthenticationPrincipal User user, @PathVariable String id, @RequestBody @Validated RatingCreateRequest request) {
+        return ritService.rate(user, id, request);
+    }
+
+    @DeleteMapping("/{id}/ratings/{ratingId}")
+    public void deleteRating(@AuthenticationPrincipal User user, @PathVariable String id,  @PathVariable String ratingId) {
+        ritService.deleteRating(user, ratingId);
     }
 
 }

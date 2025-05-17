@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, Subject, tap } from 'rxjs';
-import { Rit } from '../../model/rit';
-import { ApiService } from './api.service';
-import { AuthService } from './auth.service';
-import { Rating } from '../../model/rating';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, map, Observable, Subject, tap} from 'rxjs';
+import {Rit} from '../../model/rit';
+import {ApiService} from './api.service';
+import {AuthService} from './auth.service';
+import {Rating} from '../../model/rating';
 
 @Injectable({
   providedIn: 'root'
@@ -24,15 +24,7 @@ export class RitService {
   }
 
   createRit(rit: Rit): Observable<any> {
-    return this.apiService.post('/rit/create', rit);
-  }
-
-  updateRit(rit: Rit, ritId: string): Observable<Rit> {
-    return this.apiService.put('/rit/update/' + ritId, rit);
-  }
-
-  createRating(rating: Rating): Observable<any> {
-    return this.apiService.post('/rit/rate', rating);
+    return this.apiService.post('/api/rits', rit);
   }
 
   getRits(): Observable<Rit[]> {
@@ -40,14 +32,30 @@ export class RitService {
   }
 
   getRit(ritId: string): Observable<Rit> {
-    return this.apiService.get('/rit/read/' + ritId);
+    return this.apiService.get('/api/rits/' + ritId);
   }
 
-  getRitById(id: string): Observable<Rit|null> {
+  getRitById(id: string): Observable<Rit | null> {
     return this.getRits().pipe(
       map(rits => rits.find(rit => rit.id === id)),
       map(rit => rit ?? null)
     );
+  }
+
+  updateRit(rit: Rit, ritId: string): Observable<Rit> {
+    return this.apiService.put('/api/rits/' + ritId, rit);
+  }
+
+  deleteRit(ritId: string | undefined): Observable<any> {
+    return this.apiService.delete('/api/rits/' + ritId);
+  }
+
+  createRating(ritId: string | undefined, rating: Rating): Observable<any> {
+    return this.apiService.post('/api/rits/' + ritId + "/ratings", rating);
+  }
+
+  deleteRating(ritId: string | undefined, ratingId: string | undefined): Observable<any> {
+    return this.apiService.delete('/api/rits/' + ritId + '/ratings/' + ratingId);
   }
 
   getRitsErrorStream(): Observable<any> {
@@ -55,7 +63,7 @@ export class RitService {
   }
 
   triggerRitsReload(): Observable<Rit[]> {
-    return this.apiService.get('/rit/rits').pipe(
+    return this.apiService.get('/api/rits').pipe(
       tap({
         next: (data) => {
           this.rits.next(data);
@@ -70,14 +78,6 @@ export class RitService {
         }
       })
     );
-  }
-
-  deleteRating(ratingId: string | undefined): Observable<any> {
-    return this.apiService.delete('/rit/deleteRating/' + ratingId);
-  }
-
-  deleteRit(ritId: string | undefined): Observable<any> {
-    return this.apiService.delete('/rit/deleteRit/' + ritId);
   }
 
   getAllTags(): Observable<string[]> {

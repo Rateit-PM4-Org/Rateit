@@ -8,11 +8,3 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
-
-:root {
-
-  /* Custom colors */
-  --custom-color-accent: #F43A4B;
-  --custom-color-accent-darker: #973139;
-
-}

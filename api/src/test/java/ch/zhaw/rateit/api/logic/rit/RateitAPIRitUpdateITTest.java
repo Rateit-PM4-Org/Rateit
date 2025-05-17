@@ -79,7 +79,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
     void updateRit_positive_returnsStatusOk(String name, String details, List<String> tags, List<String> codes) throws Exception {
         String input = objectMapper.writeValueAsString(new RitUpdateRequest(name, details, tags, codes));
 
-        var resultActions = mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON)
+        var resultActions = mockMvc.perform(put("/api/rits/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON)
                 .with(user(testUser)));
         String result = resultActions
                 .andReturn()
@@ -112,7 +112,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
     void updateRit_negative_returnsBadRequest(String name, String details, List<String> tags, List<String> codes) throws Exception {
         String input = objectMapper.writeValueAsString(new RitUpdateRequest(name, details, tags, codes));
 
-        mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put("/api/rits/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().isBadRequest());
     }
@@ -121,7 +121,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
     void updateRit_negative_unauthorized_returnsForbidden() throws Exception {
         String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
 
-        mockMvc.perform(put("/rit/update/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/api/rits/" + inputTestRit.getId()).content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
@@ -129,7 +129,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
     void updateRit_negative_RitNotPresent() throws Exception {
         String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
 
-        mockMvc.perform(put("/rit/update/123").content(input).contentType(MediaType.APPLICATION_JSON).with(user(testUser)))
+        mockMvc.perform(put("/api/rits/123").content(input).contentType(MediaType.APPLICATION_JSON).with(user(testUser)))
                 .andExpect(status().isNotFound());
     }
 
@@ -143,7 +143,7 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
         String input = objectMapper.writeValueAsString(new RitUpdateRequest("test", "details", List.of(), List.of("code1")));
 
-        mockMvc.perform(put("/rit/update/" + rit.getId()).content(input).contentType(MediaType.APPLICATION_JSON).with(user(testUser)))
+        mockMvc.perform(put("/api/rits/" + rit.getId()).content(input).contentType(MediaType.APPLICATION_JSON).with(user(testUser)))
                 .andExpect(status().isForbidden());
     }
 }

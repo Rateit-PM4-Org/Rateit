@@ -53,7 +53,7 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
         UserLoginRequest userLoginRequest = new UserLoginRequest("test@test.ch", "test");
         String requestBody = objectMapper.writeValueAsString(userLoginRequest);
 
-        String result = mockMvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
+        String result = mockMvc.perform(post("/api/users/login").contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
 
         TokenResponse tokenResponse = objectMapper.readValue(result, TokenResponse.class);
         assertNotNull(tokenResponse);
@@ -65,7 +65,7 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
         UserLoginRequest userLoginRequest = new UserLoginRequest("test@test.ch", "wrongPW");
         String requestBody = objectMapper.writeValueAsString(userLoginRequest);
 
-        mockMvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(requestBody))
+        mockMvc.perform(post("/api/users/login").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 
@@ -83,7 +83,7 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
         UserLoginRequest userLoginRequest = new UserLoginRequest(email, password);
         String requestBody = objectMapper.writeValueAsString(userLoginRequest);
 
-        mockMvc.perform(post("/user/login")
+        mockMvc.perform(post("/api/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isBadRequest());
@@ -91,7 +91,7 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
 
     @Test
     void endpointMePositive() throws Exception {
-        String result = mockMvc.perform(get("/user/me").contentType(MediaType.APPLICATION_JSON).with(user(testUser))).andReturn().getResponse().getContentAsString();
+        String result = mockMvc.perform(get("/api/users/me").contentType(MediaType.APPLICATION_JSON).with(user(testUser))).andReturn().getResponse().getContentAsString();
 
         User userResponse = objectMapper.readValue(result, User.class);
         assertNotNull(userResponse);
@@ -101,7 +101,7 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
 
     @Test
     void endpointMeNegative() throws Exception {
-        mockMvc.perform(get("/user/me").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isForbidden());
+        mockMvc.perform(get("/api/users/me").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isForbidden());
     }
 
 }

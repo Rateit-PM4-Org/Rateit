@@ -32,8 +32,9 @@ public class UserVerificationService {
         user.setEmailVerified(false);
         user.setEmailVerificationToken(UUID.randomUUID().toString());
 
+        // TODO Pfad parametrisieren mit Property
         String verificationUrl = String.format(
-                "%s/user/mail-confirmation?token=%s",
+                "%s/tabs/user/mail-confirmation?token=%s",
                 frontendUrl,
                 user.getEmailVerificationToken()
         );

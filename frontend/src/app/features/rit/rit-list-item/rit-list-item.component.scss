@@ -1,11 +1,4 @@
 .ratingButton {
-  --background: var(--custom-color-accent);
-  --background-hover: var(--custom-color-accent-darker);
-  --background-activated: var(--custom-color-accent-darker);
-  --background-focused: var(--custom-color-accent-darker);
-
-  --color: var(--ion-text-color);
-
   --border-radius: 10px;
 
   --padding-top: 5px;
@@ -18,6 +11,11 @@
   justify-content: center;
   max-width: 70px;
   min-width: 70px;
+
+  /* This ensures the text stays the specified color regardless of the button color */
+  &::part(native) {
+    color: var(--ion-background-color) !important;
+  }
 }
 
 .ratingButton ion-icon.centered {
@@ -85,17 +83,16 @@
   padding-left: 8px;
 }
 
-ion-chip:first-child{
+ion-chip:first-child {
   margin-left: 0;
 }
 
-
-ion-item{
+ion-item {
   --inner-padding-end: 0px;
   border-radius: 20px;
 }
 
-ion-item-option{
+ion-item-option {
   border-radius: 20px;
   padding: 15px;
 }

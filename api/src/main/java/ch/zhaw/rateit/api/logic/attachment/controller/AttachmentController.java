@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Achille Hünenberger
  */
 @RestController
-@RequestMapping("/attachment")
+@RequestMapping("/api/attachments")
 @Validated
 public class AttachmentController {
 
@@ -30,7 +30,7 @@ public class AttachmentController {
         this.attachmentService = attachmentService;
     }
 
-    @PostMapping(path = "/create-image", consumes = "multipart/form-data")
+    @PostMapping(path = "/images", consumes = "multipart/form-data")
     public Attachment createImage(@AuthenticationPrincipal User user, @ModelAttribute @Validated AttachmentCreateRequest attachmentCreateRequest) {
         return attachmentService.createImageAttachement(user, attachmentCreateRequest);
     }

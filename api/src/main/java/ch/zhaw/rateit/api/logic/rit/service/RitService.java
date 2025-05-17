@@ -45,45 +45,6 @@ public class RitService {
         return ritRepository.getRitById(rit.getId());
     }
 
-    public Rating rate(User owner, RatingCreateRequest request) {
-        Rit rit = findRitById(request.rit().getId());
-
-        if (!canUserViewRit(owner, rit)) {
-            throw new AccessDeniedException("You don't have access to this rit");
-        }
-
-        Rating rating = new Rating(
-                request.value(),
-                request.positiveComment(),
-                request.negativeComment(),
-                rit,
-                owner
-        );
-
-        return ratingRepository.save(rating);
-    }
-
-    public void deleteRating(User owner, String id) {
-        Rating rating = findRatingById(id);
-
-        if (!rating.getOwner().getId().equals(owner.getId())) {
-            throw new AccessDeniedException("You don't have access to this rating");
-        }
-
-        ratingRepository.delete(rating);
-    }
-
-    public void deleteRit(User owner, String id) {
-        Rit rit = findRitById(id);
-
-        if (!canUserUpdateRit(owner, rit)) {
-            throw new AccessDeniedException("You don't have access to this rit");
-        }
-
-        ratingRepository.deleteAllByRit(rit);
-        ritRepository.delete(rit);
-    }
-
     public List<Rit> getAll(User owner) {
         return ritRepository.findAllByOwnerOrderByUpdatedAtDesc(owner);
     }
@@ -110,6 +71,45 @@ public class RitService {
         rit.setTags(request.tags());
         rit.setCodes(request.codes());
         return ritRepository.save(rit);
+    }
+
+    public void deleteRit(User owner, String id) {
+        Rit rit = findRitById(id);
+
+        if (!canUserUpdateRit(owner, rit)) {
+            throw new AccessDeniedException("You don't have access to this rit");
+        }
+
+        ratingRepository.deleteAllByRit(rit);
+        ritRepository.delete(rit);
+    }
+
+    public Rating rate(User owner, String id, RatingCreateRequest request) {
+        Rit rit = findRitById(id);
+
+        if (!canUserViewRit(owner, rit)) {
+            throw new AccessDeniedException("You don't have access to this rit");
+        }
+
+        Rating rating = new Rating(
+                request.value(),
+                request.positiveComment(),
+                request.negativeComment(),
+                rit,
+                owner
+        );
+
+        return ratingRepository.save(rating);
+    }
+
+    public void deleteRating(User owner, String id) {
+        Rating rating = findRatingById(id);
+
+        if (!rating.getOwner().getId().equals(owner.getId())) {
+            throw new AccessDeniedException("You don't have access to this rating");
+        }
+
+        ratingRepository.delete(rating);
     }
 
     private Rit findRitById(String id) {

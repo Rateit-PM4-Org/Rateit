@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @Import(WebsecurityConfig.class)
-class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
+class RateitAPIRatingITTest extends AbstractBaseIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -70,11 +70,11 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
     @ParameterizedTest
     @MethodSource("provideValidRatingParams")
-    void createRit_positive_returnsStatusOk(int value, String positive, String negative) throws Exception {
-        var rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, value, positive, negative));
+    void createRating_positive_returnsStatusOk(int value, String positive, String negative) throws Exception {
+        ritRepository.save(testRit);
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest( value, positive, negative));
 
-        var resultActions = mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
+        var resultActions = mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON)
                 .with(user(testUser)));
         String result = resultActions
                 .andReturn()
@@ -102,30 +102,30 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
 
     @ParameterizedTest
     @MethodSource("provideInvalidRatingParams")
-    void createRit_negative_returnsBadRequest(int value, String positive, String negative) throws Exception {
-        var rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, value, positive, negative));
+    void createRating_negative_returnsBadRequest(int value, String positive, String negative) throws Exception {
+        ritRepository.save(testRit);
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest( value, positive, negative));
 
-        mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().isBadRequest());
     }
 
 
     @Test
-    void createRit_negative_unauthorized_returnsForbidden() throws Exception {
-        var rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
+    void createRating_negative_unauthorized_returnsForbidden() throws Exception {
+        ritRepository.save(testRit);
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest( 4, "test", "test"));
 
-        mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    void createRit_positive_setsTimestamps() throws Exception {
-        var rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
-        String response = mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
+    void createRating_positive_setsTimestamps() throws Exception {
+        ritRepository.save(testRit);
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(4, "test", "test"));
+        String response = mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().is2xxSuccessful()).andReturn().getResponse().getContentAsString();
 
@@ -139,28 +139,26 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         assertEquals(rating.getCreatedAt(), rating.getUpdatedAt(), "createdAt and updatedAt must be equal after creation");
 
     }
+
     @Test
-    void createRit_negative_RitNotPresent() throws Exception {
+    void createRating_negative_RitNotPresent() throws Exception {
         Rit rit = new Rit("TestRit", "Details", null, null, testUser);
         rit.setId("non-existing-id");
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(4, "test", "test"));
 
-        mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
                 .andExpect(status().isNotFound());
-
     }
-    @Test
-    void createRit_negative_RitNotCorrectOwner() throws Exception {
-        Rit rit = ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest(rit, 4, "test", "test"));
 
-        mockMvc.perform(post("/rit/rate").content(input).contentType(MediaType.APPLICATION_JSON)
+    @Test
+    void createRating_negative_RitNotCorrectOwner() throws Exception {
+        ritRepository.save(testRit);
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(4, "test", "test"));
+
+        mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
                 .andExpect(status().isForbidden());
-
-
-
     }
 
     @Test
@@ -168,17 +166,18 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         Rit rit = ritRepository.save(testRit);
         ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
 
-        String result = mockMvc.perform(get("/rit/read/" + testRit.getId()).with(user(testUser))).andReturn().getResponse().getContentAsString();
+        String result = mockMvc.perform(get("/api/rits/" + testRit.getId()).with(user(testUser))).andReturn().getResponse().getContentAsString();
         Rit ritResponse = objectMapper.readValue(result, Rit.class);
         assertNotNull(ritResponse.getRatings(), "Rit must have ratings");
         assertFalse(ritResponse.getRatings().isEmpty());
     }
+
     @Test
     void deleteRating_positive() throws Exception {
         Rit rit = ritRepository.save(testRit);
         Rating rating = ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
 
-        mockMvc.perform(delete("/rit/deleteRating/" + rating.getId()).with(user(testUser)))
+        mockMvc.perform(delete("/api/rits/" + rating.getId() + "/ratings/" + rating.getId()).with(user(testUser)))
                 .andExpect(status().is2xxSuccessful());
 
         assertFalse(ratingRepository.existsById(rating.getId()), "Rating must be deleted");
@@ -189,33 +188,10 @@ class RateitAPIRitRateITTest extends AbstractBaseIntegrationTest {
         Rit rit = ritRepository.save(testRit);
         Rating rating = ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
 
-
-        mockMvc.perform(delete("/rit/deleteRating/" + "non-existing-id").with(user(testUser)))
+        mockMvc.perform(delete("/api/rits/" + testRit.getId() + "/ratings/nonexist").with(user(testUser)))
                 .andExpect(status().isNotFound());
 
-        mockMvc.perform(delete("/rit/deleteRating/" + rating.getId()).with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
-                .andExpect(status().isForbidden());
-    }
-    @Test
-    void deleteRit_positive() throws Exception {
-        Rit rit = ritRepository.save(testRit);
-        ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
-
-        mockMvc.perform(delete("/rit/deleteRit/" + rit.getId()).with(user(testUser)))
-                .andExpect(status().is2xxSuccessful());
-
-        assertFalse(ritRepository.existsById(rit.getId()), "Rit must be deleted");
-        assertFalse(ratingRepository.existsById(rit.getId()), "All ratings must be deleted");
-    }
-    @Test
-    void deleteRit_negative() throws Exception {
-        Rit rit = ritRepository.save(testRit);
-        ratingRepository.save(new Rating(4, "test", "test", rit, testUser));
-
-        mockMvc.perform(delete("/rit/deleteRit/" + "non-existing-id").with(user(testUser)))
-                .andExpect(status().isNotFound());
-
-        mockMvc.perform(delete("/rit/deleteRit/" + rit.getId()).with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
+        mockMvc.perform(delete("/api/rits/" + testRit.getId() + "/ratings/" + rating.getId()).with(user(new User("fakeuser", "fakeuser", "fakepassword"))))
                 .andExpect(status().isForbidden());
     }
 

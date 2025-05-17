@@ -126,7 +126,8 @@
 
               <div class="stars-container">
                 <ion-row>
-                  <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]">
+                  <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]"
+                    [class]="sortAndFilterOptions.rating > 3 ? 'star-green' : (sortAndFilterOptions.rating < 3 ? 'star-red' : 'star-orange')">
                     <ion-icon class="rating-star" [class.filled]="star <= sortAndFilterOptions.rating"
                       [name]="star <= sortAndFilterOptions.rating ? 'star' : 'star-outline'"
                       (keydown.enter)="setRatingFilter(star)" (click)="setRatingFilter(star)">
@@ -136,13 +137,13 @@
               </div>
             </div>
           </div>
-        <!-- Barcode filter section -->
-        <div class="barcode-input-container">
-          <ion-label class="ion-margin-end">Barcode:</ion-label>
-          <div class="barcode-container">
-            {{ sortAndFilterOptions.barcode }}
+          <!-- Barcode filter section -->
+          <div class="barcode-input-container">
+            <ion-label class="ion-margin-end">Barcode:</ion-label>
+            <div class="barcode-container">
+              {{ sortAndFilterOptions.barcode }}
+            </div>
           </div>
-        </div>
 
         </div>
       </div>

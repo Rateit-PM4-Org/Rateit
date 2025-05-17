@@ -56,7 +56,7 @@ export class RateComponent implements ModalContent {
 
   submit(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.ritService.createRating(this.buildRequest()).subscribe({
+      this.ritService.createRating(this.currentRit?.id, this.buildRequest()).subscribe({
         next: (rit) => {
           this.handleSuccess(rit, 'Rating created successfully!');
           resolve(true);
@@ -94,7 +94,6 @@ export class RateComponent implements ModalContent {
 
   private buildRequest(): Rating {
     return {
-      rit: { id: this.currentRit?.id },
       value: this.rating,
       positiveComment: this.positiveComment,
       negativeComment: this.negativeComment,

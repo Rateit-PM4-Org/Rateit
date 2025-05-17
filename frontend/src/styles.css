@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+.star-green {
+  color: var(--ion-color-success);
+}
+
+.star-orange {
+  color: var(--ion-color-warning);
+}
+
+.star-red {
+  color: var(--ion-color-danger);
+}

@@ -6,7 +6,8 @@
     <ion-card-content>
       <ion-grid>
         <ion-row>
-          <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]; let i = index">
+          <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]; let i = index"
+            [class]="rating > 3 ? 'star-green' : (rating < 3 ? 'star-red' : 'star-orange')">
             <ion-icon class="rating-star" [class.filled]="i < rating" [name]="i < rating ? 'star' : 'star-outline'"
               (keydown.enter)="setRating(i + 1)" (click)="setRating(i + 1)">
             </ion-icon>
