@@ -49,7 +49,7 @@ class RateitAPIUserVerificationTest extends AbstractBaseIntegrationTest {
 
         userRepository.save(testUser);
 
-        mockMvc.perform(get("/user/mail-confirmation").param("token", "testToken").param("email", testUser.getEmail())).andExpect(
+        mockMvc.perform(get("/api/users/mail-confirmation").param("token", "testToken").param("email", testUser.getEmail())).andExpect(
                 status().is2xxSuccessful());
 
         User user = userRepository.findByEmail(testUser.getEmail()).get();
@@ -72,7 +72,7 @@ class RateitAPIUserVerificationTest extends AbstractBaseIntegrationTest {
 
         userRepository.save(testUser);
 
-        mockMvc.perform(get("/user/mail-confirmation").param("token", token)).andExpect(
+        mockMvc.perform(get("/api/users/mail-confirmation").param("token", token)).andExpect(
                 status().isBadRequest());
     }
 }

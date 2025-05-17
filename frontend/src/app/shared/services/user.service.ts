@@ -44,7 +44,7 @@ export class UserService {
   private reloadProfile(): void {
     this.authState.next(AuthState.LOADING);
 
-    this.apiService.get('/user/me').subscribe({
+    this.apiService.get('/api/users/me').subscribe({
       next: (profile) => {
         this.profile.next(profile);
         this.authState.next(AuthState.AUTHENTICATED);
@@ -57,10 +57,10 @@ export class UserService {
   }
 
   register(email: string, displayName: string, password: string): Observable<any> {
-    return this.apiService.post('/user/register', { email, displayName, password });
+    return this.apiService.post('/api/users/register', { email, displayName, password });
   }
 
   confirmEmail(email: string, token: string): Observable<any> {
-    return this.apiService.get('/user/mail-confirmation?email=' + email + '&token=' + token);
+    return this.apiService.get('/api/users/mail-confirmation?email=' + email + '&token=' + token);
   }
 }

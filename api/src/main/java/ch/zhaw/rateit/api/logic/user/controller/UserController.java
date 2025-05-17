@@ -22,7 +22,7 @@ import java.util.Map;
  * @author Nicolas Zillig
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserRegistrationService userRegistrationService;
