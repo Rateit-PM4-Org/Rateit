@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../shared/services/user.service';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../../../shared/services/user.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-mail-confirmation',
@@ -8,9 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./mail-confirmation.component.scss'],
   standalone: true,
 })
-export class MailConfirmationComponent  implements OnInit {
+export class MailConfirmationComponent implements OnInit {
 
-  constructor(private readonly userService: UserService, private readonly router: Router) { }
+  constructor(private readonly userService: UserService, private readonly router: Router) {
+  }
 
   ngOnInit() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -21,7 +22,7 @@ export class MailConfirmationComponent  implements OnInit {
       {
         next: (response) => {
           console.log('Email confirmed successfully:', response);
-          this.router.navigate(['/tabs/login'], { queryParams: { emailConfirmed: true } });
+          this.router.navigate(['/tabs/login'], {queryParams: {emailConfirmed: true}});
         },
         error: (error) => {
           console.error('Error confirming email:', error.error);

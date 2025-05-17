@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, Input, Output, EventEmitter} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import Quagga from 'quagga';
 import {CommonModule} from '@angular/common';
 
@@ -11,7 +11,7 @@ import {CommonModule} from '@angular/common';
   imports: [CommonModule],
 })
 export class ScannerComponent {
-  @ViewChild('videoElement', { static: false }) videoElement!: ElementRef<HTMLDivElement>;
+  @ViewChild('videoElement', {static: false}) videoElement!: ElementRef<HTMLDivElement>;
   @Input() MAX_HISTORY = 10;
   @Input() CONFIRM_THRESHOLD = 7;
   @Output() scannedCodeEmitter = new EventEmitter();
@@ -37,8 +37,8 @@ export class ScannerComponent {
         target: this.videoElement.nativeElement,
         constraints: {
           facingMode: 'environment',
-          width: { ideal: 640 },
-          height: { ideal: 480 }
+          width: {ideal: 640},
+          height: {ideal: 480}
         }
       },
       locator: {

@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { UserService } from '../../../shared/services/user.service';
-import { AuthService } from '../../../shared/services/auth.service';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {UserService} from '../../../shared/services/user.service';
+import {AuthService} from '../../../shared/services/auth.service';
+import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-profile',
@@ -15,13 +16,13 @@ import { Subscription } from 'rxjs';
     CommonModule, ...IonicStandaloneStandardImports
   ],
 })
-export class ProfileComponent {
-  private profileSubscription: Subscription|null = null;
+export class ProfileComponent implements ViewWillEnter, ViewWillLeave {
+  private profileSubscription: Subscription | null = null;
   profile: any;
 
   constructor(
-    private readonly userService: UserService, 
-    private readonly authService: AuthService, 
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
     private readonly router: Router) {
   }
 
@@ -35,7 +36,7 @@ export class ProfileComponent {
       }
     })
   }
-  
+
   ionViewWillLeave() {
     this.profileSubscription?.unsubscribe();
   }

@@ -26,7 +26,7 @@ export class ScannerUpdateModalComponent implements ModalContent {
 
   async onScanned(scannedCodes: Set<string>) {
     console.log('Scanned codes:', scannedCodes);
-    this.modal.dismiss({ scannedCodes: Array.from(scannedCodes) });
+    this.modal.dismiss({scannedCodes: Array.from(scannedCodes)});
   }
 
   registerModal(modal: IonModal) {
@@ -41,7 +41,7 @@ export class ScannerUpdateModalComponent implements ModalContent {
     this.scannerComponent.stop();
   }
 
-  submit(){
+  submit() {
     return new Promise<boolean>((resolve) => {
       resolve(true);
     });

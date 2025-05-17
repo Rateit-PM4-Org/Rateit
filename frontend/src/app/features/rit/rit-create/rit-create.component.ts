@@ -1,12 +1,12 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IonBackButton, IonInput, ToastController, ViewWillEnter } from '@ionic/angular/standalone';
-import { Rit } from '../../../model/rit';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { RitService } from '../../../shared/services/rit.service';
+import {ActivatedRoute} from '@angular/router';
+import {IonBackButton, ToastController, ViewWillEnter} from '@ionic/angular/standalone';
+import {Rit} from '../../../model/rit';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {RitService} from '../../../shared/services/rit.service';
 import {ModalContent, ModalViewComponent} from '../../modal/modal-view/modal-view.component';
-import { TagSelectorComponent } from '../../tag/tag-selector/tag-selector.component';
+import {TagSelectorComponent} from '../../tag/tag-selector/tag-selector.component';
 import {ScannerUpdateModalComponent} from '../../scanner-update-modal/scanner-update-modal.component';
 
 @Component({
@@ -22,7 +22,8 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     private readonly ritService: RitService,
     private readonly route: ActivatedRoute,
     private readonly toastController: ToastController,
-  ) { }
+  ) {
+  }
 
   mode?: 'create' | 'edit' | 'view' = 'create';
   @Input() ritId: string | undefined;
@@ -158,7 +159,7 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
   }
 
-  async openScanner(){
+  async openScanner() {
     this.ritUpdateModal.modal.present();
     const {data} = await this.ritUpdateModal.modal.onDidDismiss();
     this.addCodes(data.scannedCodes);

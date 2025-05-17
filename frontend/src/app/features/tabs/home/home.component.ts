@@ -5,7 +5,7 @@ import {Observable, Subscription} from 'rxjs';
 import {Rit} from '../../../model/rit';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {RitService} from '../../../shared/services/rit.service';
-import {AuthState, UserService} from '../../../shared/services/user.service';
+import {AuthState,UserService} from '../../../shared/services/user.service';
 import {RitListItemComponent} from '../../rit/rit-list-item/rit-list-item.component';
 import {Router} from '@angular/router';
 import {FabIntegrationComponent} from '../../modal/fab-integration/fab-integration.component';

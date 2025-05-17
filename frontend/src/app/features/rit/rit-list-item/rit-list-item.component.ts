@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {Component, Input, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
-import { Rating } from '../../../model/rating';
+import {Router} from '@angular/router';
+import {Rating} from '../../../model/rating';
 import {RitService} from '../../../shared/services/rit.service';
-import { Rit } from '../../../model/rit';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { NavController } from '@ionic/angular';
+import {Rit} from '../../../model/rit';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {NavController} from '@ionic/angular';
 import {ToastController} from '@ionic/angular/standalone';
 
 @Component({
@@ -28,7 +28,7 @@ export class RitListItemComponent implements OnInit {
               private readonly navCtrl: NavController,
               private readonly ritService: RitService,
               private readonly toastController: ToastController,
-              ) {
+  ) {
   }
 
   ngOnInit() {
@@ -69,7 +69,7 @@ export class RitListItemComponent implements OnInit {
       this.onTagClick(tagName, event);
     } else {
       this.router.navigate(['/tabs/rits'], {
-        queryParams: { tag: tagName }
+        queryParams: {tag: tagName}
       });
     }
     event.stopPropagation();
@@ -107,11 +107,13 @@ export class RitListItemComponent implements OnInit {
     this.ritService.deleteRit(ritId).subscribe({
       next: () => {
         this.showSuccessToast('Rit deleted successfully!');
-        this.ritService.triggerRitsReload().subscribe(() => {});
+        this.ritService.triggerRitsReload().subscribe(() => {
+        });
       },
       error: (err: any) => {
         this.handleError(err);
-        this.ritService.triggerRitsReload().subscribe(() => {});
+        this.ritService.triggerRitsReload().subscribe(() => {
+        });
       }
     });
   }

@@ -1,15 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ToastController, ViewWillEnter } from '@ionic/angular/standalone';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { FormsModule } from '@angular/forms';
-import { RitListItemComponent } from '../../rit/rit-list-item/rit-list-item.component';
-import { Rit } from '../../../model/rit';
-import { RitService } from '../../../shared/services/rit.service';
-import { Subscription } from 'rxjs';
-import { FabIntegrationComponent } from '../../modal/fab-integration/fab-integration.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RatingComparisonOperator, RitSortAndFilterOptions, RitFilterService, SortDirection, SortOptionOperator } from '../../../shared/services/rit-filter.service';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
+import {ToastController, ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {FormsModule} from '@angular/forms';
+import {RitListItemComponent} from '../../rit/rit-list-item/rit-list-item.component';
+import {Rit} from '../../../model/rit';
+import {RitService} from '../../../shared/services/rit.service';
+import {Subscription} from 'rxjs';
+import {FabIntegrationComponent} from '../../modal/fab-integration/fab-integration.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  RatingComparisonOperator,
+  RitFilterService,
+  RitSortAndFilterOptions,
+  SortDirection,
+  SortOptionOperator
+} from '../../../shared/services/rit-filter.service';
 
 @Component({
   selector: 'app-all-rits',
@@ -24,7 +30,7 @@ import { RatingComparisonOperator, RitSortAndFilterOptions, RitFilterService, So
   ],
 })
 
-export class AllRitsComponent implements ViewWillEnter {
+export class AllRitsComponent implements ViewWillEnter, ViewWillLeave {
 
   sortAndFilterOptions: RitSortAndFilterOptions = RitFilterService.getDefaultSortAndFilterOptions();
 
@@ -39,7 +45,8 @@ export class AllRitsComponent implements ViewWillEnter {
     private readonly toastController: ToastController,
     private readonly route: ActivatedRoute,
     private readonly router: Router
-  ) { }
+  ) {
+  }
 
   ionViewWillEnter(): void {
     // Get query parameters from URL

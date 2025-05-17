@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { AuthService } from '../../../shared/services/auth.service';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {NavController} from '@ionic/angular';
+import {Subscription} from 'rxjs';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {AuthService} from '../../../shared/services/auth.service';
+import {ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-tab-menu',
@@ -15,7 +16,7 @@ import { AuthService } from '../../../shared/services/auth.service';
     CommonModule, ...IonicStandaloneStandardImports
   ]
 })
-export class TabMenuComponent {
+export class TabMenuComponent implements ViewWillEnter, ViewWillLeave {
   private authSubscription: Subscription | null = null;
   isAuthenticated: boolean = false;
 
@@ -23,7 +24,8 @@ export class TabMenuComponent {
     private readonly authService: AuthService,
     private readonly router: Router,
     private readonly navCtrl: NavController
-  ) { }
+  ) {
+  }
 
   ionViewWillEnter() {
     this.authSubscription = this.authService.getAuthenticationStatusObservable().subscribe({
@@ -40,7 +42,7 @@ export class TabMenuComponent {
   navigateToTab(tab: string) {
     const currentUrl = this.router.url;
     const tabRootPath = `/tabs/${tab}`;
-    
+
     if (currentUrl !== tabRootPath) {
       this.navCtrl.navigateRoot(tabRootPath);
     }

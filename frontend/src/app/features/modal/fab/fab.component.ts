@@ -1,8 +1,8 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { UserService } from '../../../shared/services/user.service';
-import { Observable } from 'rxjs';
+import {CommonModule} from '@angular/common';
+import {Component, Input, OnInit} from '@angular/core';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {UserService} from '../../../shared/services/user.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-fab',

@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { AuthService } from '../../../shared/services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {AuthService} from '../../../shared/services/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ToastController} from '@ionic/angular';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ViewWillEnter} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
     CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports
   ],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, ViewWillEnter {
   form: FormGroup = new FormGroup({
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
@@ -23,13 +24,15 @@ export class LoginComponent implements OnInit {
 
   loginErrorFields: { [key: string]: string[] } = {};
 
-  constructor(private readonly authService: AuthService, private readonly router: Router, private readonly route: ActivatedRoute, private readonly toastController:ToastController) { }
+  constructor(private readonly authService: AuthService, private readonly router: Router, private readonly route: ActivatedRoute, private readonly toastController: ToastController) {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   ionViewWillEnter() {
     this.route.snapshot.queryParams['emailConfirmed'] && this.showSuccessToast('Email confirmed successfully!');
-    this.router.navigate(['/tabs/login'], { queryParams: { emailConfirmed: null } });
+    this.router.navigate(['/tabs/login'], {queryParams: {emailConfirmed: null}});
     this.reset();
   }
 
