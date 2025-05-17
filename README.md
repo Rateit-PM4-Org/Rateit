@@ -26,7 +26,7 @@ Rateit is a web application—no installation is required. You can access it dir
 
 ## Developer infrastructure setup
 
-Developers can follow the guide in the [Wiki](https://github.com/Rateit-PM4-Org/Rateit/wiki/Software-Guidebook#lokale-entwicklungsumgebung-aufbauen) to set up the local development environment.
+Developers can follow the guide in the [Wiki](https://github.com/Rateit-PM4-Org/Rateit/wiki/Software-Guidebook#101-lokales-deployment) to set up the local development environment.
 
 ## Contributing
 
