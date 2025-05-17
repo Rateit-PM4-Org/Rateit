@@ -1,18 +1,18 @@
-import { Rating } from "./rating";
+import {Rating} from "./rating";
 
 export type Rit = {
-    id?: string;
-    name?: string;
-    details?: string;
-    tags: string[];
-    codes: string[];
-    ratings?: Rating[];
-    owner?: {
-      id: string;
-      email: string;
-      displayName: string;
-    };
-    published?: boolean;
-    createdAt?: string;
-    updatedAt?: string;
+  id?: string;
+  name?: string;
+  details?: string;
+  tags: string[];
+  codes: string[];
+  ratings?: Rating[];
+  owner?: {
+    id: string;
+    email: string;
+    displayName: string;
   };
+  published?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+};

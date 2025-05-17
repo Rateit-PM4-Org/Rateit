@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component} from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { Router } from '@angular/router';
-import { UserService } from '../../../shared/services/user.service';
-import { ToastController } from '@ionic/angular';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {Router} from '@angular/router';
+import {UserService} from '../../../shared/services/user.service';
+import {ToastController} from '@ionic/angular';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ViewWillEnter} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-register',
@@ -12,10 +13,10 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
   styleUrls: ['./register.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,ReactiveFormsModule, ...IonicStandaloneStandardImports
+    CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports
   ],
 })
-export class RegisterComponent {
+export class RegisterComponent implements ViewWillEnter {
   form: FormGroup = new FormGroup({
     email: new FormControl('', Validators.required),
     displayName: new FormControl('', Validators.required),
@@ -24,7 +25,8 @@ export class RegisterComponent {
   protected registrationErrorFields: { [key: string]: string[] } = {};
   protected registrationSuccess: boolean = false;
 
-  constructor(private readonly router: Router, private readonly userService: UserService, private readonly toastController: ToastController) { }
+  constructor(private readonly router: Router, private readonly userService: UserService, private readonly toastController: ToastController) {
+  }
 
   ionViewWillEnter() {
     this.reset();

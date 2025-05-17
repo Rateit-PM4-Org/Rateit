@@ -1,16 +1,16 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ToastController } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { star, starOutline } from 'ionicons/icons';
-import { Observable } from 'rxjs';
-import { Rating } from '../../../model/rating';
-import { Rit } from '../../../model/rit';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { RitService } from '../../../shared/services/rit.service';
-import { ModalContent } from '../../modal/modal-view/modal-view.component';
+import {CommonModule} from '@angular/common';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {ToastController} from '@ionic/angular/standalone';
+import {addIcons} from 'ionicons';
+import {star, starOutline} from 'ionicons/icons';
+import {Observable} from 'rxjs';
+import {Rating} from '../../../model/rating';
+import {Rit} from '../../../model/rit';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {RitService} from '../../../shared/services/rit.service';
+import {ModalContent} from '../../modal/modal-view/modal-view.component';
 
-addIcons({ star, 'star-outline': starOutline });
+addIcons({star, 'star-outline': starOutline});
 
 @Component({
   selector: 'app-rate',
@@ -19,19 +19,21 @@ addIcons({ star, 'star-outline': starOutline });
   imports: [CommonModule, ...IonicStandaloneStandardImports],
   standalone: true,
 })
-export class RateComponent implements ModalContent {
+export class RateComponent implements ModalContent, OnInit, OnDestroy {
   @Input() rit!: Observable<Rit | null> | null;
   @Output() isDisabled = new EventEmitter<boolean>();
   private ritSubscription: any;
   protected currentRit: Rit | null = null;
 
-  constructor(private readonly ritService: RitService, private readonly toastController: ToastController) { }
+  constructor(private readonly ritService: RitService, private readonly toastController: ToastController) {
+  }
 
   ngOnInit() {
     this.ritSubscription = this.rit?.subscribe((data) => {
       this.currentRit = data;
     })
   }
+
   ngOnDestroy() {
     if (this.ritSubscription) {
       this.ritSubscription.unsubscribe();
@@ -50,6 +52,7 @@ export class RateComponent implements ModalContent {
   setPositiveComment(e: any) {
     this.positiveComment = e.target.value;
   }
+
   setNegativeComment(e: any) {
     this.negativeComment = e.target.value;
   }
