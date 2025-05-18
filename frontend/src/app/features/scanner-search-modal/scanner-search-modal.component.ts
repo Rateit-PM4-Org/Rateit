@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { ModalContent } from '../modal/modal-view/modal-view.component';
 import { ScannerComponent } from '../scanner/scanner.component';
 import { IonicStandaloneStandardImports } from '../../shared/ionic-imports';
@@ -45,9 +45,7 @@ export class ScannerSearchModalComponent  implements ModalContent {
   }
 
   submit(){
-    return new Promise<boolean>((resolve) => {
-      resolve(true);
-    });
+    return Promise.resolve(true);
   }
 
 
