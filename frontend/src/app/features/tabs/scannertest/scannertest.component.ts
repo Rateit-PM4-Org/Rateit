@@ -17,7 +17,7 @@ export class ScannertestComponent implements ViewDidEnter, ViewWillLeave {
   @ViewChild(ScannerComponent) scannerComponent!: ScannerComponent;
   protected scannedCodes: Array<string> = new Array<string>();
 
-  constructor(private toastController: ToastController) {
+  constructor(private readonly toastController: ToastController) {
   }
 
   ionViewDidEnter() {

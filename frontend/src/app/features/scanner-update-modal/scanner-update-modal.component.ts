@@ -42,9 +42,7 @@ export class ScannerUpdateModalComponent implements ModalContent {
   }
 
   submit() {
-    return new Promise<boolean>((resolve) => {
-      resolve(true);
-    });
+    return Promise.resolve(true);
   }
 
 }
