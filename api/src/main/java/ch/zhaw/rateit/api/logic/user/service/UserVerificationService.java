@@ -23,6 +23,9 @@ public class UserVerificationService {
     @Value("${user.registration.email.body}")
     private String emailBody;
 
+    @Value("${user.registration.email.link}")
+    private String emailLink;
+
     public UserVerificationService(UserRepository userRepository, MailService mailService) {
         this.userRepository = userRepository;
         this.mailService = mailService;
@@ -33,7 +36,7 @@ public class UserVerificationService {
         user.setEmailVerificationToken(UUID.randomUUID().toString());
 
         String verificationUrl = String.format(
-                "%s/user/mail-confirmation?token=%s",
+                emailLink,
                 frontendUrl,
                 user.getEmailVerificationToken()
         );

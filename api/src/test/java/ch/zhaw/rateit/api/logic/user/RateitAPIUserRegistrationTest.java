@@ -53,7 +53,7 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(email, displayName, cleanPassword);
         String requestBody = objectMapper.writeValueAsString(userRegistrationRequest);
 
-        String result = mockMvc.perform(post("/user/register")
+        String result = mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andReturn()
@@ -77,7 +77,7 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         User user = new User("test1@example.com", "TestUser1", "mostSecurePassword1!");
         userRepository.save(user);
 
-        String result = mockMvc.perform(post("/user/register")
+        String result = mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andReturn()
@@ -101,7 +101,7 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         User user = new User("test1@example.com", "TestUser1", "mostSecurePassword1!");
         userRepository.save(user);
 
-        mockMvc.perform(post("/user/register")
+        mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody));
 
@@ -118,7 +118,7 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         User user = new User(email, "TestUser1", "mostSecurePassword1!");
         userRepository.save(user);
 
-        Exception resolvedException = mockMvc.perform(post("/user/register")
+        Exception resolvedException = mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andReturn().getResolvedException();
@@ -148,7 +148,7 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(email, displayName, cleanPassword);
         String requestBody = objectMapper.writeValueAsString(userRegistrationRequest);
 
-        mockMvc.perform(post("/user/register")
+        mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isBadRequest());

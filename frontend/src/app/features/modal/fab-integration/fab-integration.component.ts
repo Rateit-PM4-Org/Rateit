@@ -1,22 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { FabButton, FabComponent } from '../fab/fab.component';
-import { ModalViewComponent } from '../modal-view/modal-view.component';
-import { Rit } from '../../../model/rit';
-import { Observable } from 'rxjs';
-import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
-import { RateComponent } from '../../rit/rate/rate.component';
-import { ScannerSearchModalComponent } from '../../scanner-search-modal/scanner-search-modal.component';
+import {CommonModule} from '@angular/common';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FabButton, FabComponent} from '../fab/fab.component';
+import {ModalViewComponent} from '../modal-view/modal-view.component';
+import {Rit} from '../../../model/rit';
+import {Observable} from 'rxjs';
+import {RitCreateComponent} from '../../rit/rit-create/rit-create.component';
+import {RateComponent} from '../../rit/rate/rate.component';
+import {ScannerSearchModalComponent} from '../../scanner-search-modal/scanner-search-modal.component';
 
 @Component({
   selector: 'app-fab-integration',
   templateUrl: './fab-integration.component.html',
   styleUrls: ['./fab-integration.component.scss'],
-  imports: [CommonModule, ...IonicStandaloneStandardImports, FabComponent, ModalViewComponent, RitCreateComponent, RateComponent, ScannerSearchModalComponent],
+  imports: [CommonModule, FabComponent, ModalViewComponent, RitCreateComponent, RateComponent, ScannerSearchModalComponent],
   standalone: true,
 })
-export class FabIntegrationComponent implements OnInit {
+export class FabIntegrationComponent implements OnInit, OnDestroy {
   @Input() rit!: Observable<Rit | null> | null;
   private ritSubscription: any;
   currentRit: Rit | null = null;

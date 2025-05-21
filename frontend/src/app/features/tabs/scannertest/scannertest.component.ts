@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonicStandaloneStandardImports } from '../../../shared/ionic-imports';
-import { ScannerComponent } from '../../scanner/scanner.component';
-import { ToastController } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
+import {Component, ViewChild} from '@angular/core';
+import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
+import {ScannerComponent} from '../../scanner/scanner.component';
+import {ToastController, ViewDidEnter} from '@ionic/angular';
+import {CommonModule} from '@angular/common';
+import {ViewWillLeave} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-scannertest',
@@ -11,12 +12,13 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [...IonicStandaloneStandardImports, ScannerComponent, CommonModule],
 })
-export class ScannertestComponent{
+export class ScannertestComponent implements ViewDidEnter, ViewWillLeave {
 
   @ViewChild(ScannerComponent) scannerComponent!: ScannerComponent;
   protected scannedCodes: Array<string> = new Array<string>();
 
-  constructor(private toastController: ToastController) { }
+  constructor(private readonly toastController: ToastController) {
+  }
 
   ionViewDidEnter() {
     this.scannerComponent.start();

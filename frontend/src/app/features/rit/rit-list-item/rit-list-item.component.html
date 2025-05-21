@@ -6,9 +6,7 @@
         <div class="tags-container">
           <div class="tags-content">
             <ion-chip color="primary" *ngFor="let tag of rit.tags.slice(0, maxTags)"
-                      (click)="navigateToTag(tag, $event)"
-                      (keydown.enter)="navigateToTag(tag, $event)"
-                      class="tag-chip">
+              (click)="navigateToTag(tag, $event)" (keydown.enter)="navigateToTag(tag, $event)" class="tag-chip">
               <ion-icon name="pricetag-outline"></ion-icon>
               <ion-label>{{ tag }}</ion-label>
             </ion-chip>
@@ -19,9 +17,9 @@
         </div>
 
       </ion-label>
-      <ion-button size="default" class="ratingButton"
-                  (keydown.enter)="navigateToRatings()"
-                  (click)="navigateToRatings()">
+      <ion-button size="default" (keydown.enter)="navigateToRatings()"
+        [color]="latestRatingValue <= 0 ? 'medium' : (latestRatingValue > 3 ? 'success' : (latestRatingValue < 3 ? 'danger' : 'warning'))"
+        (click)="navigateToRatings()" class="ratingButton">
         <ng-container *ngIf="latestRatingValue > 0">
           {{ latestRatingValue }}
         </ng-container>
@@ -31,9 +29,7 @@
   </ion-item>
 
   <ion-item-options side="end" class="ion-padding-start">
-    <ion-item-option color="danger"
-                     (click)="deleteRit(rit.id)"
-                     (keydown.enter)="deleteRit(rit.id)">
+    <ion-item-option color="danger" (click)="deleteRit(rit.id)" (keydown.enter)="deleteRit(rit.id)">
       <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
     </ion-item-option>
   </ion-item-options>

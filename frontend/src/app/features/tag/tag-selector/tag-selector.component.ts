@@ -23,7 +23,7 @@ export class TagSelectorComponent implements OnChanges {
   newTag: string = '';
   availableTags: string[] = [];
 
-  constructor(private readonly ritService: RitService, private router: Router) {
+  constructor(private readonly ritService: RitService, private readonly router: Router) {
     // Get tags from rit service
     this.ritService.getAllTags().subscribe(tags => {
       this.availableTags = tags;
