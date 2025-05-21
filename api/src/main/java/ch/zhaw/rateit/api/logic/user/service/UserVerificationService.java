@@ -23,6 +23,9 @@ public class UserVerificationService {
     @Value("${user.registration.email.body}")
     private String emailBody;
 
+    @Value("${user.registration.email.link}")
+    private String emailLink;
+
     public UserVerificationService(UserRepository userRepository, MailService mailService) {
         this.userRepository = userRepository;
         this.mailService = mailService;
@@ -32,9 +35,8 @@ public class UserVerificationService {
         user.setEmailVerified(false);
         user.setEmailVerificationToken(UUID.randomUUID().toString());
 
-        // TODO Pfad parametrisieren mit Property
         String verificationUrl = String.format(
-                "%s/tabs/user/mail-confirmation?token=%s",
+                emailLink,
                 frontendUrl,
                 user.getEmailVerificationToken()
         );
