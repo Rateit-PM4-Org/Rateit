@@ -48,7 +48,7 @@ public class JwtService {
 
     /**
      * Extracts a specific claim from a JWT token using the given claims resolver function.
-     * This method allows for custom extraction logic based on the provided claims resolver.
+     * This method allows for custom extraction logic based on the provided claims' resolver.
      *
      * @param token          the JWT token from which claims are to be extracted
      * @param claimsResolver a function defining the logic to extract a specific claim from the JWT's claims
