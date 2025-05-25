@@ -22,9 +22,9 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(RateLimitInterceptor.class);
 
-    private final RateLimitService rateLimitService;
+    private RateLimitService rateLimitService;
 
-    private final RateLimitProperties rateLimitProperties;
+    private RateLimitProperties rateLimitProperties;
 
     public RateLimitInterceptor(RateLimitService rateLimitService, RateLimitProperties rateLimitProperties) {
         this.rateLimitService = rateLimitService;
