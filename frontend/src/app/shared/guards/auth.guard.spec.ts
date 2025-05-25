@@ -8,9 +8,7 @@ import {provideMockAuthService} from '../test-util/test-util';
 
 describe('AuthGuard', () => {
   let authGuard: AuthGuard;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
   let routerSpy: jasmine.SpyObj<Router>;
-
 
   beforeEach(() => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);

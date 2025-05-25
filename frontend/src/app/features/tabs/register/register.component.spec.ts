@@ -54,25 +54,6 @@ describe('RegisterComponent', () => {
     expect(component['registrationSuccess']).toBe(true);
   });
 
-  /*it('should set errorMessage and clear password on registration error', () => {
-    const mockError = {
-      error: {
-        message: 'Registration failed.'
-      }
-    };
-    component['email'] = 'notAnEmail';
-    component['displayName'] = 'John Doe';
-    component['password'] = 'badPassword';
-
-    userServiceSpy.register.and.returnValue(throwError(() => mockError));
-
-    component.register();
-
-    expect(component['registrationErrorMessage']).toBe('Registration Error');
-    expect(component['registrationErrorFields']).toEqual({});
-    expect(component['password']).toBe('');
-  });*/
-
   it('should set registrationSuccess on registration error', () => {
     const mockError = {
       error: {

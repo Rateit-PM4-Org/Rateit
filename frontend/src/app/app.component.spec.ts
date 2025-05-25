@@ -9,7 +9,7 @@ describe('AppComponent (Standalone)', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent], // direkt importieren, da standalone
+      imports: [AppComponent],
       providers: [
         {
           provide: ActivatedRoute,

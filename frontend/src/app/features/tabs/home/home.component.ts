@@ -144,7 +144,7 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
       });
     });
 
-    // Convert the tag map to an array and sort by latest interaction, then by rit count
+    // Convert the tag map to an array and sort by the latest interaction, then by rit count
     const sortedTags = Object.entries(tagMap)
       .map(([name, {ritCount, latestInteraction}]) => ({name, ritCount, latestInteraction}))
       .sort((a, b) => {

@@ -21,7 +21,6 @@ describe('RitCreateComponent', () => {
   let activatedRouteSpy = {snapshot: {paramMap: {get: () => null}}};
   let toastControllerSpy = jasmine.createSpyObj('ToastController', ['create']);
 
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RitCreateComponent, IonicModule.forRoot(), FormsModule],
@@ -42,16 +41,6 @@ describe('RitCreateComponent', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
-
-  // it('should display all tag chips', () => {
-  //   component.tags = ['red', 'blue', 'green'];
-  //   fixture.detectChanges();
-
-  //   component.tags.forEach((tag, i) => {
-  //     const chip = fixture.debugElement.query(By.css(`[data-testid="tag-chip-${i}"]`));
-  //     expect(chip.nativeElement.textContent).toContain(tag);
-  //   });
-  // });
 
   it('should show the new tag input value', () => {
     component.tags = ['hafermilch'];
