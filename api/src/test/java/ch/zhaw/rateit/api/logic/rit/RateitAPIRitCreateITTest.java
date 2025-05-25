@@ -1,7 +1,6 @@
 package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
-import ch.zhaw.rateit.api.logic.attachment.repository.AttachmentRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
@@ -42,9 +41,6 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private AttachmentRepository attachmentRepository;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
@@ -55,7 +51,6 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     void setup() {
         userRepository.deleteAll();
         ritRepository.deleteAll();
-        attachmentRepository.deleteAll();
         testUser.setEmailVerified(true);
         userRepository.save(testUser);
     }
