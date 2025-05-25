@@ -1,8 +1,9 @@
 package ch.zhaw.rateit.api.config.ratelimit;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import io.github.bucket4j.*;
-
+import io.github.bucket4j.BandwidthBuilder;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.ConsumptionProbe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,6 +14,7 @@ import java.time.Duration;
 /**
  * Service for rate limiting.
  *
+ * @author Achille Hünenberger
  */
 @Service
 @ConditionalOnProperty(value = "rate.limiting.enabled", havingValue = "true")
@@ -34,9 +36,10 @@ public class RateLimitService {
      * If the bucket is full, the request is denied.
      * If the bucket is not full, the request is allowed and the remaining tokens are returned.
      *
-     * @param ip IP address of the request
-     * @param path Request path
-     * @return
+     * @param ip   the IP address of the client attempting to consume a request
+     * @param path the request path associated with the rate limit rule
+     * @return a {@code ConsumptionProbe} object containing information about the consumption result,
+     * remaining tokens, and wait time for the next token refill
      */
     public ConsumptionProbe tryConsume(String ip, String path) {
 
@@ -54,9 +57,9 @@ public class RateLimitService {
      * Resolves the bucket for the given IP and path.
      * If the bucket does not exist, a new bucket is created.
      *
-     * @param ip
-     * @param rateLimit
-     * @return
+     * @param ip        the IP address for which the rate-limiting bucket is to be resolved
+     * @param rateLimit the rate limit configuration containing the path, limit, and duration
+     * @return the resolved or newly created {@code Bucket} associated with the given IP and rate limit
      */
     private Bucket resolveBucket(String ip, RateLimitProperties.RateLimit rateLimit) {
         return ipCache.get(ip + ":" + rateLimit.getPath(), k -> createNewBucket(rateLimit));
@@ -65,8 +68,8 @@ public class RateLimitService {
     /**
      * Creates a new bucket for the given rate limit.
      *
-     * @param rateLimit
-     * @return
+     * @param rateLimit the configuration containing the limit and duration for the bucket
+     * @return a new instance of {@code Bucket} configured with the specified rate limit
      */
     private Bucket createNewBucket(RateLimitProperties.RateLimit rateLimit) {
         return Bucket.builder()
