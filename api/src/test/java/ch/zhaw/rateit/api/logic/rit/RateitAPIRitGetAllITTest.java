@@ -29,16 +29,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(WebsecurityConfig.class)
 class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
 
-    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$hashed");
-    private final User otherUser = new User("other@test.ch", "OtherUser", "$2a$12$hashed");
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private RitRepository ritRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
+
+    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$hashed");
+
+    private final User otherUser = new User("other@test.ch", "OtherUser", "$2a$12$hashed");
 
     @BeforeEach
     void setup() throws InterruptedException {

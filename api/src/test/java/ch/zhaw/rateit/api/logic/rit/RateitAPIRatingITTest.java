@@ -32,18 +32,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(WebsecurityConfig.class)
 class RateitAPIRatingITTest extends AbstractBaseIntegrationTest {
 
-    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
-    private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private RatingRepository ratingRepository;
+
     @Autowired
     private RitRepository ritRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
+
+    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
+
+    private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
 
     private static Stream<Arguments> provideValidRatingParams() {
         return Stream.of(

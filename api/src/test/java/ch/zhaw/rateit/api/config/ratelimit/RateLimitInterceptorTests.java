@@ -20,7 +20,6 @@ class RateLimitInterceptorTests {
 
     private RateLimitInterceptor rateLimitInterceptor;
 
-
     private RateLimitProperties rateLimitProperties;
 
     @Mock

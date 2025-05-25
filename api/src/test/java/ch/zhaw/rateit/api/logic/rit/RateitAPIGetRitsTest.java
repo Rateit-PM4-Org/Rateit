@@ -23,12 +23,15 @@ import static org.mockito.Mockito.when;
 @Import(WebsecurityConfig.class)
 class RateitAPIGetRitsTest extends AbstractBaseIntegrationTest {
 
-    private final User testUser = new User("test@test.ch", "TestUser", "someHashedPassword");
     @Mock
     private RitRepository ritRepository;
+
     @Mock
     private RatingRepository ratingRepository;
+
     private RitService ritService;
+
+    private final User testUser = new User("test@test.ch", "TestUser", "someHashedPassword");
 
     @BeforeEach
     void setUp() {

@@ -31,17 +31,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(WebsecurityConfig.class)
 class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
 
-    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
-    private final List<String> tags = List.of("tag1", "tag2");
-    private final List<String> codes = List.of("code1", "code2", "code3");
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private RitRepository ritRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
+
+    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
+
+    private final List<String> tags = List.of("tag1", "tag2");
+
+    private final List<String> codes = List.of("code1", "code2", "code3");
 
     private static Stream<Arguments> provideValidRitCreateParams() {
         return Stream.of(
