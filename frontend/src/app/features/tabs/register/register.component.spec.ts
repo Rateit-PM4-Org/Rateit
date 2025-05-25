@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RegisterComponent } from './register.component';
-import { provideHttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { UserService } from '../../../shared/services/user.service';
-import { of, throwError } from 'rxjs';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {RegisterComponent} from './register.component';
+import {provideHttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {UserService} from '../../../shared/services/user.service';
+import {of, throwError} from 'rxjs';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -19,8 +19,8 @@ describe('RegisterComponent', () => {
       imports: [RegisterComponent],
       providers: [
         provideHttpClient(),
-        { provide: UserService, useValue: userServiceSpy },
-        { provide: Router, useValue: routerSpy },
+        {provide: UserService, useValue: userServiceSpy},
+        {provide: Router, useValue: routerSpy},
       ]
     }).compileComponents();
 

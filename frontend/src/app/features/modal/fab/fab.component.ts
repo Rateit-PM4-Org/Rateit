@@ -15,7 +15,8 @@ export class FabComponent implements OnInit {
   @Input() buttons: FabButton[] = [];
   isLoggedIn$!: Observable<boolean>;
 
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {
+  }
 
   ngOnInit() {
     this.isLoggedIn$ = this.userService.isLoggedIn();

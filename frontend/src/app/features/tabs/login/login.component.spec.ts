@@ -1,12 +1,11 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { LoginComponent } from './login.component';
-import { provideHttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../shared/services/auth.service';
-import { throwError } from 'rxjs';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideMockAuthService } from '../../../shared/test-util/test-util';
-import { ModalController } from '@ionic/angular';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {LoginComponent} from './login.component';
+import {provideHttpClient} from '@angular/common/http';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService} from '../../../shared/services/auth.service';
+import {throwError} from 'rxjs';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
+import {provideMockAuthService} from '../../../shared/test-util/test-util';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -32,7 +31,7 @@ describe('LoginComponent', () => {
             }
           }
         },
-        { provide: Router, useValue: routerSpy },]
+        {provide: Router, useValue: routerSpy},]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
@@ -97,5 +96,5 @@ describe('LoginComponent', () => {
     expect(component.form.get('password')?.value).toBe('');
     expect(component.loginErrorFields).toEqual({});
   });
-  
+
 });

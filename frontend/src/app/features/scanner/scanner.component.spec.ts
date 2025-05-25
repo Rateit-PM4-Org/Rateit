@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { ScannerComponent } from './scanner.component';
+import {ScannerComponent} from './scanner.component';
 
 describe('ScannertestComponent', () => {
   let component: ScannerComponent;
@@ -30,7 +30,7 @@ describe('ScannertestComponent', () => {
 
     for (let i = 0; i < component.CONFIRM_THRESHOLD; i++) {
       component.onDetected({
-        codeResult: { code: testCode }
+        codeResult: {code: testCode}
       });
     }
 
@@ -48,7 +48,7 @@ describe('ScannertestComponent', () => {
 
     for (let i = 0; i < component.CONFIRM_THRESHOLD; i++) {
       component.onDetected({
-        codeResult: { code: testCode }
+        codeResult: {code: testCode}
       });
     }
 
@@ -68,12 +68,12 @@ describe('ScannertestComponent', () => {
 
     for (let i = 0; i < component.CONFIRM_THRESHOLD; i++) {
       component.onDetected({
-        codeResult: { code: testCode }
+        codeResult: {code: testCode}
       });
     }
     for (let i = 0; i < component.CONFIRM_THRESHOLD; i++) {
       component.onDetected({
-        codeResult: { code: testCode2 }
+        codeResult: {code: testCode2}
       });
     }
 
@@ -93,14 +93,14 @@ describe('ScannertestComponent', () => {
       emittedSet = result;
     });
 
-    for (let i = 0; i < component.CONFIRM_THRESHOLD-1; i++) {
+    for (let i = 0; i < component.CONFIRM_THRESHOLD - 1; i++) {
       component.onDetected({
-        codeResult: { code: testCode }
+        codeResult: {code: testCode}
       });
     }
-    for (let i = 0; i < component.CONFIRM_THRESHOLD-1; i++) {
+    for (let i = 0; i < component.CONFIRM_THRESHOLD - 1; i++) {
       component.onDetected({
-        codeResult: { code: testCode2 }
+        codeResult: {code: testCode2}
       });
     }
 
@@ -117,9 +117,9 @@ describe('ScannertestComponent', () => {
       emittedSet = result;
     });
 
-    for (let i = 0; i < component.CONFIRM_THRESHOLD*2; i++) {
+    for (let i = 0; i < component.CONFIRM_THRESHOLD * 2; i++) {
       component.onDetected({
-        codeResult: { code: testCode }
+        codeResult: {code: testCode}
       });
     }
 

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import {Injectable} from '@angular/core';
+import {ApiService} from './api.service';
+import {BehaviorSubject, map, Observable} from 'rxjs';
+import {AuthService} from './auth.service';
 
 export enum AuthState {
   LOADING = 'LOADING',
@@ -41,6 +41,14 @@ export class UserService {
     );
   }
 
+  register(email: string, displayName: string, password: string): Observable<any> {
+    return this.apiService.post('/api/users/register', {email, displayName, password});
+  }
+
+  confirmEmail(email: string, token: string): Observable<any> {
+    return this.apiService.get('/api/users/mail-confirmation?email=' + email + '&token=' + token);
+  }
+
   private reloadProfile(): void {
     this.authState.next(AuthState.LOADING);
 
@@ -54,13 +62,5 @@ export class UserService {
         this.authState.next(AuthState.NOT_AUTHENTICATED);
       }
     });
-  }
-
-  register(email: string, displayName: string, password: string): Observable<any> {
-    return this.apiService.post('/api/users/register', { email, displayName, password });
-  }
-
-  confirmEmail(email: string, token: string): Observable<any> {
-    return this.apiService.get('/api/users/mail-confirmation?email=' + email + '&token=' + token);
   }
 }

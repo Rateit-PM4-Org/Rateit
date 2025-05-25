@@ -5,7 +5,7 @@ import {Observable, Subscription} from 'rxjs';
 import {Rit} from '../../../model/rit';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {RitService} from '../../../shared/services/rit.service';
-import {AuthState,UserService} from '../../../shared/services/user.service';
+import {AuthState, UserService} from '../../../shared/services/user.service';
 import {RitListItemComponent} from '../../rit/rit-list-item/rit-list-item.component';
 import {Router} from '@angular/router';
 import {FabIntegrationComponent} from '../../modal/fab-integration/fab-integration.component';
@@ -38,6 +38,7 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
 
   ritSubscription: Subscription | null = null;
   ritsErrorSubscription: Subscription | null = null;
+  protected readonly AuthState = AuthState;
 
   constructor(
     private readonly ritService: RitService,
@@ -106,25 +107,6 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
     await toast.present();
   }
 
-
-  private handleLoadRitsSuccess(data: Rit[]) {
-    this.rits = [...data];
-    // sort by lastInteractionAt descending
-    this.rits.sort((a, b) => {
-      const dateA = RitFilterService.calculateLastInteractionAt(a);
-      const dateB = RitFilterService.calculateLastInteractionAt(b);
-      return dateB.getTime() - dateA.getTime();
-    });
-    this.tags = this.topTags();
-    this.loading = false;
-  }
-
-  private handleLoadRitsError(err: any) {
-    const baseError = err.error?.error ?? 'Unknown error';
-    this.showErrorToast(baseError);
-    this.loading = false;
-  }
-
   latestRits(): Rit[] {
     return this.rits.slice(0, this.numberOfLatestRitsToShow);
   }
@@ -185,5 +167,21 @@ export class HomeComponent implements ViewWillEnter, ViewWillLeave {
     this.router.navigate(['/tabs/login']);
   }
 
-  protected readonly AuthState = AuthState;
+  private handleLoadRitsSuccess(data: Rit[]) {
+    this.rits = [...data];
+    // sort by lastInteractionAt descending
+    this.rits.sort((a, b) => {
+      const dateA = RitFilterService.calculateLastInteractionAt(a);
+      const dateB = RitFilterService.calculateLastInteractionAt(b);
+      return dateB.getTime() - dateA.getTime();
+    });
+    this.tags = this.topTags();
+    this.loading = false;
+  }
+
+  private handleLoadRitsError(err: any) {
+    const baseError = err.error?.error ?? 'Unknown error';
+    this.showErrorToast(baseError);
+    this.loading = false;
+  }
 }

@@ -8,12 +8,12 @@
   <ion-spinner name="crescent"></ion-spinner>
 </div>
 
-<ion-content class="ion-padding" scroll-y="false" *ngIf="(authState$ | async) === AuthState.NOT_AUTHENTICATED">
+<ion-content *ngIf="(authState$ | async) === AuthState.NOT_AUTHENTICATED" class="ion-padding" scroll-y="false">
   <div class="welcome-container">
-    <img src="/icons/AppIcon.png" alt="App Logo" class="welcome-logo"/>
+    <img alt="App Logo" class="welcome-logo" src="/icons/AppIcon.png"/>
     <h1>Welcome to Rateit!</h1>
     <p>Discover honest ratings. Keep track of your experiences in a simple and authentic way.</p>
-    <ion-button type="submit" (click)="goToLogin()" (keydown.enter)="goToLogin()">Get Started</ion-button>
+    <ion-button (click)="goToLogin()" (keydown.enter)="goToLogin()" type="submit">Get Started</ion-button>
   </div>
 </ion-content>
 
@@ -25,7 +25,7 @@
   <div class="ion-padding-horizontal" scroll-y="false">
     <ion-grid>
       <ion-row>
-        <ion-col size="6" *ngFor="let tag of tags; let i = index" data-testid="tag-item">
+        <ion-col *ngFor="let tag of tags; let i = index" data-testid="tag-item" size="6">
           <app-tag-list-item [tag]="tag"></app-tag-list-item>
         </ion-col>
       </ion-row>
@@ -35,20 +35,20 @@
   <div class="ion-padding" scroll-y="false">
     <div class="rits-header-row">
       <ion-label>Your latest Rits</ion-label>
-      <ion-button size="small" (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button"
-                  data-testid="show-all-rits">
+      <ion-button (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button" data-testid="show-all-rits"
+                  size="small">
         Show all
-        <ion-icon slot="end" name="chevron-forward"></ion-icon>
+        <ion-icon name="chevron-forward" slot="end"></ion-icon>
       </ion-button>
     </div>
   </div>
 
   <ion-content class="ion-padding-horizontal" scroll-y="true">
-    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher (ionRefresh)="handleRefresh($event)" slot="fixed">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-list>
-      <app-rit-list-item *ngFor="let rit of latestRits()" [rit]="rit" [onTagClick]="handleTagNavigation">
+      <app-rit-list-item *ngFor="let rit of latestRits()" [onTagClick]="handleTagNavigation" [rit]="rit">
       </app-rit-list-item>
     </ion-list>
   </ion-content>

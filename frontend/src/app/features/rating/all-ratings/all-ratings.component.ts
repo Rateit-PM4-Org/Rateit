@@ -56,24 +56,6 @@ export class AllRatingsComponent implements ViewWillEnter, ViewWillLeave {
     });
   }
 
-  private handleSuccess(data: Rating[]) {
-    this.ratings = [...data];
-    // sort by updatedAt descending
-    if (this.ratings.length > 0) {
-      this.ratings.sort((a, b) => {
-        const dateA = new Date(a.updatedAt ?? 0);
-        const dateB = new Date(b.updatedAt ?? 0);
-        return dateB.getTime() - dateA.getTime();
-      });
-    }
-  }
-
-  private handleError(err: any) {
-    this.ratings = [];
-    const baseError = err.error?.error ?? 'Unknown error';
-    this.showErrorToast(baseError);
-  }
-
   async showErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -107,5 +89,23 @@ export class AllRatingsComponent implements ViewWillEnter, ViewWillLeave {
         this.handleError(err);
       }
     });
+  }
+
+  private handleSuccess(data: Rating[]) {
+    this.ratings = [...data];
+    // sort by updatedAt descending
+    if (this.ratings.length > 0) {
+      this.ratings.sort((a, b) => {
+        const dateA = new Date(a.updatedAt ?? 0);
+        const dateB = new Date(b.updatedAt ?? 0);
+        return dateB.getTime() - dateA.getTime();
+      });
+    }
+  }
+
+  private handleError(err: any) {
+    this.ratings = [];
+    const baseError = err.error?.error ?? 'Unknown error';
+    this.showErrorToast(baseError);
   }
 }

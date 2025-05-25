@@ -29,6 +29,24 @@ export class ScannerComponent {
     this.recentCodes = [];
   }
 
+  onDetected(data: any): void {
+    const code = data?.codeResult?.code;
+    if (!code) return;
+
+    this.recentCodes.push(code);
+    if (this.recentCodes.length > this.MAX_HISTORY) {
+      this.recentCodes.shift();
+    }
+
+    const occurrences = this.recentCodes.filter(c => c === code).length;
+
+    if (occurrences >= this.CONFIRM_THRESHOLD && !this.scannedCodes.has(code)) {
+      this.scannedCodes.add(code);
+      this.recentCodes = [];
+      this.scannedCodeEmitter.emit(this.scannedCodes);
+    }
+  }
+
   private initQuagga(): void {
     Quagga.init({
       inputStream: {
@@ -80,23 +98,5 @@ export class ScannerComponent {
     });
 
     Quagga.onDetected(this.onDetected.bind(this));
-  }
-
-  onDetected(data: any): void {
-    const code = data?.codeResult?.code;
-    if (!code) return;
-
-    this.recentCodes.push(code);
-    if (this.recentCodes.length > this.MAX_HISTORY) {
-      this.recentCodes.shift();
-    }
-
-    const occurrences = this.recentCodes.filter(c => c === code).length;
-
-    if (occurrences >= this.CONFIRM_THRESHOLD && !this.scannedCodes.has(code)) {
-      this.scannedCodes.add(code);
-      this.recentCodes = [];
-      this.scannedCodeEmitter.emit(this.scannedCodes);
-    }
   }
 }

@@ -1,13 +1,13 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
-import { ModalController, ToastController } from '@ionic/angular/standalone';
-import { of } from 'rxjs/internal/observable/of';
-import { throwError } from 'rxjs/internal/observable/throwError';
-import { RitService } from '../../../shared/services/rit.service';
-import { RitCreateComponent } from './rit-create.component';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {FormsModule} from '@angular/forms';
+import {By} from '@angular/platform-browser';
+import {ActivatedRoute} from '@angular/router';
+import {IonicModule} from '@ionic/angular';
+import {ModalController, ToastController} from '@ionic/angular/standalone';
+import {of} from 'rxjs/internal/observable/of';
+import {throwError} from 'rxjs/internal/observable/throwError';
+import {RitService} from '../../../shared/services/rit.service';
+import {RitCreateComponent} from './rit-create.component';
 
 describe('RitCreateComponent', () => {
   let component: RitCreateComponent;
@@ -18,7 +18,7 @@ describe('RitCreateComponent', () => {
   ritServiceSpy.updateRit.and.returnValue(of({}));
   ritServiceSpy.triggerRitsReload.and.returnValue(of({}));
   ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
-  let activatedRouteSpy = { snapshot: { paramMap: { get: () => null } } };
+  let activatedRouteSpy = {snapshot: {paramMap: {get: () => null}}};
   let toastControllerSpy = jasmine.createSpyObj('ToastController', ['create']);
 
 
@@ -26,10 +26,10 @@ describe('RitCreateComponent', () => {
     await TestBed.configureTestingModule({
       imports: [RitCreateComponent, IonicModule.forRoot(), FormsModule],
       providers: [
-        { provide: ModalController, useValue: modalCtrlSpy },
-        { provide: RitService, useValue: ritServiceSpy },
-        { provide: ActivatedRoute, useValue: activatedRouteSpy },
-        { provide: ToastController, useValue: toastControllerSpy }
+        {provide: ModalController, useValue: modalCtrlSpy},
+        {provide: RitService, useValue: ritServiceSpy},
+        {provide: ActivatedRoute, useValue: activatedRouteSpy},
+        {provide: ToastController, useValue: toastControllerSpy}
 
       ]
     }).compileComponents();
@@ -66,13 +66,13 @@ describe('RitCreateComponent', () => {
   });
 
   it('should set ritName', () => {
-    const event = { target: { value: 'My Rit' } };
+    const event = {target: {value: 'My Rit'}};
     component.setRitName(event);
     expect(component.ritName).toBe('My Rit');
   });
 
   it('should set details', () => {
-    const event = { target: { value: 'Details here' } };
+    const event = {target: {value: 'Details here'}};
     component.setDetails(event);
     expect(component.details).toBe('Details here');
   });
@@ -89,7 +89,7 @@ describe('RitCreateComponent', () => {
   });
 
   it('should call createRit and show success toast on success', async () => {
-    const toast = { present: jasmine.createSpy() };
+    const toast = {present: jasmine.createSpy()};
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
 
     component.ritName = 'Test Rit';
@@ -103,13 +103,13 @@ describe('RitCreateComponent', () => {
 
     expect(success).toBeTrue();
     expect(ritServiceSpy.createRit).toHaveBeenCalled();
-    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Rit created successfully!' }));
-    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'success' }));
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({message: 'Rit created successfully!'}));
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({color: 'success'}));
     expect(toast.present).toHaveBeenCalled();
   });
 
   it('should call updateRit and show success toast on success', fakeAsync(() => {
-    const toast = { present: jasmine.createSpy().and.returnValue(Promise.resolve()) };
+    const toast = {present: jasmine.createSpy().and.returnValue(Promise.resolve())};
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
 
     component.ritId = '123';
@@ -129,13 +129,13 @@ describe('RitCreateComponent', () => {
     tick();
 
     expect(ritServiceSpy.updateRit).toHaveBeenCalled();
-    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Rit updated successfully!' }));
-    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ color: 'success' }));
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({message: 'Rit updated successfully!'}));
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({color: 'success'}));
     expect(toast.present).toHaveBeenCalled();
   }));
 
   it('should call createRit and show error toast on unknown error', async () => {
-    const toast = { present: jasmine.createSpy() };
+    const toast = {present: jasmine.createSpy()};
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
 
     component.ritName = 'Test Rit';
@@ -154,12 +154,15 @@ describe('RitCreateComponent', () => {
     const success = await component.createRit();
 
     expect(success).toBeFalse();
-    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({ message: 'Unknown error', color: 'danger' }));
+    expect(toastControllerSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({
+      message: 'Unknown error',
+      color: 'danger'
+    }));
     expect(toast.present).toHaveBeenCalled();
   });
 
   it('should call createRit and not show error toast on field validation errors', async () => {
-    const toast = { present: jasmine.createSpy() };
+    const toast = {present: jasmine.createSpy()};
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
 
     component.ritName = '';
@@ -235,7 +238,7 @@ describe('RitCreateComponent', () => {
   it('should get scanned codes from the scanner', async () => {
     const modalSpy = jasmine.createSpyObj('IonModal', ['present', 'onDidDismiss']);
     modalSpy.present.and.returnValue(Promise.resolve());
-    modalSpy.onDidDismiss.and.returnValue(Promise.resolve({ data: {scannedCodes: ['code1'] }}));
+    modalSpy.onDidDismiss.and.returnValue(Promise.resolve({data: {scannedCodes: ['code1']}}));
     const modalViewComponentSpy = {modal: modalSpy};
 
     // @ts-ignore

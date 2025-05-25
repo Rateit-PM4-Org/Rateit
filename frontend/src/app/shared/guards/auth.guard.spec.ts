@@ -1,17 +1,16 @@
-import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthGuard } from './auth.guard';
-import { AuthService } from '../services/auth.service';
-import { of } from 'rxjs';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideMockAuthService } from '../test-util/test-util';
+import {TestBed} from '@angular/core/testing';
+import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
+import {AuthGuard} from './auth.guard';
+import {AuthService} from '../services/auth.service';
+import {provideHttpClient} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
+import {provideMockAuthService} from '../test-util/test-util';
 
 describe('AuthGuard', () => {
   let authGuard: AuthGuard;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let routerSpy: jasmine.SpyObj<Router>;
-  
+
 
   beforeEach(() => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -22,7 +21,7 @@ describe('AuthGuard', () => {
         provideHttpClientTesting(),
         AuthGuard,
         provideMockAuthService(false),
-        { provide: Router, useValue: routerSpy }
+        {provide: Router, useValue: routerSpy}
       ]
     });
 
@@ -41,7 +40,7 @@ describe('AuthGuard', () => {
 
   it('should deny activation and redirect to login if user is not authenticated', () => {
     expect(authGuard.canActivate(new ActivatedRouteSnapshot(), <RouterStateSnapshot>{url: 'testUrl'})).toBeFalse();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/login'], Object({ queryParams: Object({ returnUrl: "testUrl" }) }));
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/login'], Object({queryParams: Object({returnUrl: "testUrl"})}));
   });
 });
 

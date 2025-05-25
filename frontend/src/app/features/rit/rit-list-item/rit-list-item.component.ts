@@ -19,10 +19,8 @@ import {ToastController} from '@ionic/angular/standalone';
 export class RitListItemComponent implements OnInit {
   @Input() rit!: Rit;
   @Input() onTagClick?: (tagName: string, event: Event) => void;
-
-  protected latestRatingValue: number = 0;
-
   maxTags: number = 2;
+  protected latestRatingValue: number = 0;
 
   constructor(private readonly router: Router,
               private readonly navCtrl: NavController,
@@ -44,10 +42,6 @@ export class RitListItemComponent implements OnInit {
     }, ratings[0]);
 
     return latestRating.value ?? 0;
-  }
-
-  private isInHomeTab(): boolean {
-    return this.router.url.includes('/tabs/home');
   }
 
   navigateToRatings(): void {
@@ -75,11 +69,6 @@ export class RitListItemComponent implements OnInit {
     event.stopPropagation();
   }
 
-  private handleError(err: any) {
-    const baseError = err.error?.error ?? 'Unknown error';
-    this.showErrorToast(baseError);
-  }
-
   async showErrorToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -90,7 +79,6 @@ export class RitListItemComponent implements OnInit {
 
     await toast.present();
   }
-
 
   async showSuccessToast(message: string) {
     const toast = await this.toastController.create({
@@ -116,6 +104,15 @@ export class RitListItemComponent implements OnInit {
         });
       }
     });
+  }
+
+  private isInHomeTab(): boolean {
+    return this.router.url.includes('/tabs/home');
+  }
+
+  private handleError(err: any) {
+    const baseError = err.error?.error ?? 'Unknown error';
+    this.showErrorToast(baseError);
   }
 
 }

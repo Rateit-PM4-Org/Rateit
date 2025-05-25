@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { ModalContent } from '../modal/modal-view/modal-view.component';
-import { ScannerComponent } from '../scanner/scanner.component';
-import { IonicStandaloneStandardImports } from '../../shared/ionic-imports';
-import { Router } from '@angular/router';
-import { IonModal } from '@ionic/angular/standalone';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {ModalContent} from '../modal/modal-view/modal-view.component';
+import {ScannerComponent} from '../scanner/scanner.component';
+import {IonicStandaloneStandardImports} from '../../shared/ionic-imports';
+import {Router} from '@angular/router';
+import {IonModal} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-scanner-search-modal',
@@ -12,12 +12,12 @@ import { IonModal } from '@ionic/angular/standalone';
   standalone: true,
   imports: [ScannerComponent, ...IonicStandaloneStandardImports],
 })
-export class ScannerSearchModalComponent  implements ModalContent {
+export class ScannerSearchModalComponent implements ModalContent {
   modal!: IonModal;
   @ViewChild(ScannerComponent) scannerComponent!: ScannerComponent;
   @Output() isDisabled = new EventEmitter<boolean>();
 
-  constructor(private readonly router: Router) { 
+  constructor(private readonly router: Router) {
     this.isDisabled = new EventEmitter<boolean>();
     this.submit = async () => {
       return true;
@@ -27,7 +27,7 @@ export class ScannerSearchModalComponent  implements ModalContent {
   async onScanned(scannedCodes: Set<string>) {
     console.log('Scanned codes:', scannedCodes);
     this.router.navigate(['/tabs/rits'], {
-        queryParams: { barcode: Array.from(scannedCodes)[0]}
+      queryParams: {barcode: Array.from(scannedCodes)[0]}
     });
     this.modal.dismiss();
   }
@@ -44,7 +44,7 @@ export class ScannerSearchModalComponent  implements ModalContent {
     this.scannerComponent.stop();
   }
 
-  submit(){
+  submit() {
     return Promise.resolve(true);
   }
 

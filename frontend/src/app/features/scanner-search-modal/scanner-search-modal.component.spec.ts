@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { ScannerSearchModalComponent } from './scanner-search-modal.component';
-import { Router } from '@angular/router';
-import { IonModal } from '@ionic/angular/standalone';
+import {ScannerSearchModalComponent} from './scanner-search-modal.component';
+import {Router} from '@angular/router';
+import {IonModal} from '@ionic/angular/standalone';
 
 describe('ScannerSearchModalComponent', () => {
   let component: ScannerSearchModalComponent;
   let fixture: ComponentFixture<ScannerSearchModalComponent>;
-  let routerSpy: jasmine.SpyObj<Router> =  jasmine.createSpyObj('Router', ['navigate']);
+  let routerSpy: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigate']);
   let modalSpy: jasmine.SpyObj<IonModal> = jasmine.createSpyObj('IonModal', ['dismiss']);
 
   beforeEach(waitForAsync(() => {
@@ -51,7 +51,7 @@ describe('ScannerSearchModalComponent', () => {
     component.registerModal(modalSpy);
     component.onScanned(scannedCodes);
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tabs/rits'], {
-      queryParams: { barcode: Array.from(scannedCodes)[0] }
+      queryParams: {barcode: Array.from(scannedCodes)[0]}
     });
     expect(modalSpy.dismiss).toHaveBeenCalled();
   });

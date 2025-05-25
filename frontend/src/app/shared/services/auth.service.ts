@@ -18,17 +18,6 @@ export class AuthService {
     return this.token.getValue();
   }
 
-  private setToken(token: string | null): void {
-
-    if (token != null) {
-      localStorage.setItem('token', token);
-    } else {
-      localStorage.removeItem('token');
-    }
-    this.token.next(token);
-
-  }
-
   isAuthenticated(): boolean {
     return !!this.token.getValue();
   }
@@ -48,6 +37,17 @@ export class AuthService {
 
   logout(): void {
     this.setToken(null);
+  }
+
+  private setToken(token: string | null): void {
+
+    if (token != null) {
+      localStorage.setItem('token', token);
+    } else {
+      localStorage.removeItem('token');
+    }
+    this.token.next(token);
+
   }
 
 }

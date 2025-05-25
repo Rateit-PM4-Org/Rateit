@@ -1,14 +1,14 @@
-import { provideHttpClient } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { IonicModule } from '@ionic/angular';
-import { ActionSheetController, ToastController } from '@ionic/angular/standalone';
-import { of, throwError } from 'rxjs';
-import { RitService } from '../../../shared/services/rit.service';
-import {AuthState, UserService} from '../../../shared/services/user.service';
-import { HomeComponent } from './home.component';
-import { ActivatedRoute } from '@angular/router';
-import { Rit } from '../../../model/rit';
+import {provideHttpClient} from '@angular/common/http';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {IonicModule} from '@ionic/angular';
+import {ActionSheetController, ToastController} from '@ionic/angular/standalone';
+import {of, throwError} from 'rxjs';
+import {RitService} from '../../../shared/services/rit.service';
+import {UserService} from '../../../shared/services/user.service';
+import {HomeComponent} from './home.component';
+import {ActivatedRoute} from '@angular/router';
+import {Rit} from '../../../model/rit';
 
 const userServiceMock = {
   isLoggedIn: () => of(true),
@@ -37,11 +37,11 @@ describe('HomeComponent', () => {
         NoopAnimationsModule
       ],
       providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
-        { provide: ToastController, useValue: toastSpy },
-        { provide: ActionSheetController, useValue: actionSheetSpy },
-        { provide: ActivatedRoute, useValue: { params: of({}) } },
+        {provide: UserService, useValue: userServiceMock},
+        {provide: RitService, useValue: ritServiceSpy},
+        {provide: ToastController, useValue: toastSpy},
+        {provide: ActionSheetController, useValue: actionSheetSpy},
+        {provide: ActivatedRoute, useValue: {params: of({})}},
         provideHttpClient()
       ]
     }).compileComponents();
@@ -89,7 +89,7 @@ describe('HomeComponent', () => {
 
   it('should return the latest 10 rits sorted by lastInteractionAt descending', () => {
     const now = new Date().getTime();
-    const ritsMock = Array.from({ length: 15 }, (_, i) => ({
+    const ritsMock = Array.from({length: 15}, (_, i) => ({
       name: `rit-${i}`,
       details: '',
       tags: [],
@@ -110,7 +110,7 @@ describe('HomeComponent', () => {
   });
 
   it('should return 10 latest rits when more than 10 are available', () => {
-    const rits = Array.from({ length: 20 }, (_, i) => ({
+    const rits = Array.from({length: 20}, (_, i) => ({
       id: i.toString(),
       name: `Rit ${i}`,
       details: `Details ${i}`,
@@ -126,7 +126,7 @@ describe('HomeComponent', () => {
   it('should show error toast on error', async () => {
     spyOn(component, 'showErrorToast');
 
-    const mockError = { error: { error: 'Failed to load rits' } };
+    const mockError = {error: {error: 'Failed to load rits'}};
     ritServiceSpy.getRits = jasmine.createSpy().and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
@@ -161,7 +161,7 @@ describe('HomeComponent', () => {
     };
 
     // Mock the toast
-    const toast = { present: jasmine.createSpy('present') };
+    const toast = {present: jasmine.createSpy('present')};
     toastControllerSpy.create.and.returnValue(Promise.resolve(toast as any));
 
     // Setup ritService to return success
@@ -213,9 +213,9 @@ describe('HomeComponent', () => {
 
   it('should return top tags sorted by latest interaction and rit count', () => {
     const ritsMock = [
-      { tags: ['tag1', 'tag2'], updatedAt: '2023-01-02T12:00:00Z' },
-      { tags: ['tag1'], updatedAt: '2023-01-01T12:00:00Z' },
-      { tags: ['tag2'], updatedAt: '2023-01-03T12:00:00Z' }
+      {tags: ['tag1', 'tag2'], updatedAt: '2023-01-02T12:00:00Z'},
+      {tags: ['tag1'], updatedAt: '2023-01-01T12:00:00Z'},
+      {tags: ['tag2'], updatedAt: '2023-01-03T12:00:00Z'}
     ] as Rit[];
 
     component['rits'] = ritsMock;
@@ -223,8 +223,8 @@ describe('HomeComponent', () => {
     const topTags = component.topTags();
 
     expect(topTags).toEqual([
-      { name: 'tag2', ritCount: 2 },
-      { name: 'tag1', ritCount: 2 }
+      {name: 'tag2', ritCount: 2},
+      {name: 'tag1', ritCount: 2}
     ]);
   });
 
@@ -236,9 +236,9 @@ describe('HomeComponent', () => {
 
   it('should render top tags in ion-grid', () => {
     const ritsMock = [
-      { tags: ['tag1', 'tag2'], updatedAt: '2023-01-02T12:00:00Z' },
-      { tags: ['tag1'], updatedAt: '2023-01-01T12:00:00Z' },
-      { tags: ['tag2'], updatedAt: '2023-01-03T12:00:00Z' }
+      {tags: ['tag1', 'tag2'], updatedAt: '2023-01-02T12:00:00Z'},
+      {tags: ['tag1'], updatedAt: '2023-01-01T12:00:00Z'},
+      {tags: ['tag2'], updatedAt: '2023-01-03T12:00:00Z'}
     ] as Rit[];
 
     ritServiceSpy.getRits.and.returnValue(of(ritsMock));
@@ -268,9 +268,9 @@ describe('HomeComponent', () => {
 
   it('should sort rits by lastInteractionAt descending on handleLoadRitsSuccess', () => {
     const ritsMock = [
-      { updatedAt: '2023-01-01T00:00:00Z', ratings: [{ createdAt: '2023-01-03T00:00:00Z' }] },
-      { updatedAt: '2023-01-02T00:00:00Z', ratings: [] },
-      { updatedAt: '2023-01-04T00:00:00Z', ratings: [{ createdAt: '2023-01-01T00:00:00Z' }] },
+      {updatedAt: '2023-01-01T00:00:00Z', ratings: [{createdAt: '2023-01-03T00:00:00Z'}]},
+      {updatedAt: '2023-01-02T00:00:00Z', ratings: []},
+      {updatedAt: '2023-01-04T00:00:00Z', ratings: [{createdAt: '2023-01-01T00:00:00Z'}]},
     ] as Rit[];
 
     component['handleLoadRitsSuccess'](ritsMock);

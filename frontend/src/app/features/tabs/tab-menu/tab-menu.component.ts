@@ -17,8 +17,8 @@ import {ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
   ]
 })
 export class TabMenuComponent implements ViewWillEnter, ViewWillLeave {
-  private authSubscription: Subscription | null = null;
   isAuthenticated: boolean = false;
+  private authSubscription: Subscription | null = null;
 
   constructor(
     private readonly authService: AuthService,
