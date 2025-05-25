@@ -11,12 +11,12 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Dataclass for users in database.
+ * Dataclass for users in the MongoDB database.
  *
- * @author Nicolas Zillig
+ * @author Nicolas Zillig, Achille Hünenberger
  */
 @Document
-@JsonIgnoreProperties(value = { "target", "source" })
+@JsonIgnoreProperties(value = {"target", "source"})
 public class User implements UserDetails {
     @Id
     private String id;
@@ -82,7 +82,8 @@ public class User implements UserDetails {
     /**
      * Springboot Security Roles
      *
-     * @return
+     * @return a collection of GrantedAuthority objects associated with the user.
+     * In this implementation, an empty collection is returned, indicating no authorities are granted.
      */
     @Override
     @JsonIgnore
@@ -93,7 +94,7 @@ public class User implements UserDetails {
     /**
      * For Springboot-Security
      *
-     * @return
+     * @return the hashed password associated with this user.
      */
     @Override
     @JsonIgnore
@@ -104,7 +105,7 @@ public class User implements UserDetails {
     /**
      * For Springboot-Security
      *
-     * @return
+     * @return the email address of the user, which serves as the username.
      */
     @Override
     @JsonIgnore
