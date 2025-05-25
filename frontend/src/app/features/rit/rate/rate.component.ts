@@ -119,19 +119,9 @@ export class RateComponent implements ModalContent, OnInit, OnDestroy {
     const baseError = err.error?.error ?? 'Unknown error';
     const fields = err.error?.fields;
 
-    if (fields) {
-      this.setFieldErrorMessages(fields);
-    } else {
+    if (!fields) {
       this.showErrorToast(baseError);
     }
-  }
-
-  private setFieldErrorMessages(fields: any) {
-    // TODO: Handle field errors show in the UI
-  }
-
-  private formatFieldError(fieldError: string | string[]): string {
-    return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
   }
 
 
