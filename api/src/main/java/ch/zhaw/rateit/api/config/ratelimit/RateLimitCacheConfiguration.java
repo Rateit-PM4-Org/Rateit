@@ -38,6 +38,10 @@ public class RateLimitCacheConfiguration {
     @Value("${rate.limiting.cache.expire-after-write}")
     private long expireAfterWrite;
 
+    /**
+     * Logs the configuration details of the rate limit cache after the application
+     * initializes the corresponding properties.
+     */
     @PostConstruct
     public void init() {
         logger.info("Rate limit cache configuration: Maximum size: {} - Expire after write: {} minutes", maximumSize, expireAfterWrite);
