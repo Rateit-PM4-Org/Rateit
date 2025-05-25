@@ -6,10 +6,10 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-
-/* * Request object for rating a rit.
+/**
+ * Request object for rating a Rit.
  *
- * @param value The rating value (1-5).
+ * @param value           The rating value (1-5).
  * @param positiveComment Optional comment for positiveComment feedback.
  * @param negativeComment Optional comment for negativeComment feedback.
  * @author Michèle Berger

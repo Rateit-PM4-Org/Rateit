@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 /**
- * Repository for users.
+ * Repository for Rits.
  *
  * @author Micha Mettler
  */

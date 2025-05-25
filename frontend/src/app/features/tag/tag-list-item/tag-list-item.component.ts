@@ -10,13 +10,13 @@ import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
   imports: [CommonModule, ...IonicStandaloneStandardImports],
 })
 export class TagListItemComponent {
-  constructor(private readonly router: Router) {
-  }
-
   @Input() tag!: {
     name: string;
     ritCount: number;
   };
+
+  constructor(private readonly router: Router) {
+  }
 
   navigateToTag() {
     this.router.navigate(['/tabs/rits'], {

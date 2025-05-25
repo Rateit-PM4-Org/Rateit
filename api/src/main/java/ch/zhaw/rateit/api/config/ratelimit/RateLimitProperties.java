@@ -20,19 +20,20 @@ import java.util.regex.Pattern;
 @ConfigurationProperties(prefix = "rate.limiting")
 public class RateLimitProperties {
 
+    private static final Logger logger = LoggerFactory.getLogger(RateLimitProperties.class);
+
     /**
      * Whether rate limiting is enabled.
      */
     private boolean enabled;
+
     /**
      * List of rate limits.
      */
     private List<RateLimit> rateLimits;
 
-    private static final Logger logger = LoggerFactory.getLogger(RateLimitProperties.class);
-
     /**
-     * Logs the rate limiting configuration.
+     * Logs the rate-limiting configuration.
      */
     @PostConstruct
     public void init() {
@@ -56,6 +57,14 @@ public class RateLimitProperties {
         this.rateLimits = rateLimits;
     }
 
+    /**
+     * Retrieves the {@code RateLimit} configuration for the specified path.
+     * This method searches through the list of configured rate limits and returns
+     * the most specific match for the given path. If no match is found, it returns {@code null}.
+     *
+     * @param path the request path to find the rate limit configuration for
+     * @return the corresponding {@code RateLimit} object for the given path, or {@code null} if no match is found
+     */
     public RateLimit getRateLimit(String path) {
         return rateLimits.stream()
                 .filter(rateLimit -> Pattern.matches(rateLimit.getPath().replace("/**", "/.*"), path))

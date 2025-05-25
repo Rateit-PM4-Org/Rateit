@@ -31,6 +31,4 @@ class RateLimitIntegrationTests extends AbstractBaseIntegrationTest {
         mockMvc.perform(get("/").with(user("test")))
                 .andExpect(status().isTooManyRequests());
     }
-
-    // TODO add multiendpoint test
 }

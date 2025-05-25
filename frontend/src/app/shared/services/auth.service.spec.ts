@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { AuthService } from './auth.service';
-import { environment } from '../../../environments/environment';
-import { provideHttpClient } from '@angular/common/http';
-import { first } from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {AuthService} from './auth.service';
+import {environment} from '../../../environments/environment';
+import {provideHttpClient} from '@angular/common/http';
+import {first} from 'rxjs';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -29,8 +29,8 @@ describe('AuthService', () => {
   });
 
   it('should login and store the token', () => {
-    const mockResponse = { token: 'mock-token' };
-    const credentials = { email: 'test@example.com', password: 'password123' };
+    const mockResponse = {token: 'mock-token'};
+    const credentials = {email: 'test@example.com', password: 'password123'};
 
     service.login(credentials.email, credentials.password).pipe(first()).subscribe(response => {
       expect(response).toEqual(mockResponse);

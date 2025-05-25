@@ -18,18 +18,10 @@ import {ScannerUpdateModalComponent} from '../../scanner-update-modal/scanner-up
 })
 export class RitCreateComponent implements ViewWillEnter, ModalContent {
 
-  constructor(
-    private readonly ritService: RitService,
-    private readonly route: ActivatedRoute,
-    private readonly toastController: ToastController,
-  ) {
-  }
-
   mode?: 'create' | 'edit' | 'view' = 'create';
   @Input() ritId: string | undefined;
   @Output() isDisabled = new EventEmitter<boolean>();
   @ViewChild("ritUpdateModal") ritUpdateModal!: ModalViewComponent;
-
   tags: string[] = []
   tagsErrorMessage?: string
   codes: string[] = []
@@ -38,6 +30,13 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
   ritNameErrorMessage?: string
   details?: string
   detailsErrorMessage?: string
+
+  constructor(
+    private readonly ritService: RitService,
+    private readonly route: ActivatedRoute,
+    private readonly toastController: ToastController,
+  ) {
+  }
 
   ionViewWillEnter(): void {
     this.ritId = this.route.snapshot.paramMap.get('ritId') ?? undefined;
@@ -82,6 +81,61 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
         },
       });
     });
+  }
+
+  async showSuccessToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      color: 'success',
+    });
+
+    await toast.present();
+  }
+
+  async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 4000,
+      position: 'top',
+      color: 'danger',
+    });
+
+    await toast.present();
+  }
+
+  async openScanner() {
+    this.ritUpdateModal.modal.present();
+    const {data} = await this.ritUpdateModal.modal.onDidDismiss();
+    this.addCodes(data.scannedCodes);
+  }
+
+  setRitName(event: any) {
+    this.ritName = event.target.value
+    this.validateFields()
+  }
+
+  setDetails(event: any) {
+    this.details = event.target.value
+  }
+
+  addCodes(newCodes: string[]) {
+    const uniqueCodes = new Set(this.codes);
+    newCodes.forEach(code => uniqueCodes.add(code));
+    this.codes = Array.from(uniqueCodes);
+  }
+
+  removeCode(code: string) {
+    this.codes = this.codes.filter(c => c !== code);
+  }
+
+  onTagsChange(newTags: string[]) {
+    this.tags = newTags;
+  }
+
+  validateFields() {
+    this.isDisabled.emit(!this.ritName);
   }
 
   private buildRequest(): Rit {
@@ -133,63 +187,8 @@ export class RitCreateComponent implements ViewWillEnter, ModalContent {
     }
   }
 
-  async showSuccessToast(message: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 2000,
-      position: 'top',
-      color: 'success',
-    });
-
-    await toast.present();
-  }
-
-  async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 4000,
-      position: 'top',
-      color: 'danger',
-    });
-
-    await toast.present();
-  }
-
   private formatFieldError(fieldError: string | string[]): string {
     return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
-  }
-
-  async openScanner() {
-    this.ritUpdateModal.modal.present();
-    const {data} = await this.ritUpdateModal.modal.onDidDismiss();
-    this.addCodes(data.scannedCodes);
-  }
-
-  setRitName(event: any) {
-    this.ritName = event.target.value
-    this.validateFields()
-  }
-
-  setDetails(event: any) {
-    this.details = event.target.value
-  }
-
-  addCodes(newCodes: string[]) {
-    const uniqueCodes = new Set(this.codes);
-    newCodes.forEach(code => uniqueCodes.add(code));
-    this.codes = Array.from(uniqueCodes);
-  }
-
-  removeCode(code: string) {
-    this.codes = this.codes.filter(c => c !== code);
-  }
-
-  onTagsChange(newTags: string[]) {
-    this.tags = newTags;
-  }
-
-  validateFields() {
-    this.isDisabled.emit(!this.ritName);
   }
 
 }

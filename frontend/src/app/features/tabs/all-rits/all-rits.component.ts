@@ -79,15 +79,6 @@ export class AllRitsComponent implements ViewWillEnter, ViewWillLeave {
     return RitFilterService.filterRits(this.rits, this.sortAndFilterOptions);
   }
 
-  private handleSuccess(data: Rit[]) {
-    this.rits = [...data];
-  }
-
-  private handleError(err: any) {
-    const baseError = err.error?.error ?? 'Unknown error';
-    this.showErrorToast(baseError);
-  }
-
   async showSuccessToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -212,5 +203,14 @@ export class AllRitsComponent implements ViewWillEnter, ViewWillLeave {
     }
     this.sortAndFilterOptions.rating = 0;
     this.updateFilters();
+  }
+
+  private handleSuccess(data: Rit[]) {
+    this.rits = [...data];
+  }
+
+  private handleError(err: any) {
+    const baseError = err.error?.error ?? 'Unknown error';
+    this.showErrorToast(baseError);
   }
 }

@@ -12,10 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Bean-Configurations für Authentication/Authorization
+ *
+ * @author Achille Hünenberger
  */
 @Configuration
 public class AuthConfiguration {
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
     public AuthConfiguration(UserDetailsService userDetailsService) {
@@ -27,6 +29,13 @@ public class AuthConfiguration {
         return config.getAuthenticationManager();
     }
 
+    /**
+     * Configures and provides an {@link AuthenticationProvider} bean for managing authentication logic.
+     * This method uses a {@link DaoAuthenticationProvider}, setting a {@link UserDetailsService}
+     * to retrieve user details and a password encoder to handle password validation.
+     *
+     * @return an instance of {@link AuthenticationProvider} configured with a user details service and password encoder
+     */
     @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

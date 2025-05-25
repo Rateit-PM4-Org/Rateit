@@ -4,28 +4,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" *ngIf="!registrationSuccess" scroll-y="false">
-  <form [formGroup]="form" (ngSubmit)="register()">
-      <ion-input label="Email" type="email" formControlName="email"></ion-input>
+<ion-content *ngIf="!registrationSuccess" class="ion-padding" scroll-y="false">
+  <form (ngSubmit)="register()" [formGroup]="form">
+    <ion-input formControlName="email" label="Email" type="email"></ion-input>
 
-    <ion-text color="danger" *ngIf="registrationErrorFields['email']">
-      <p *ngFor="let message of registrationErrorFields['email']">{{message}}</p>
+    <ion-text *ngIf="registrationErrorFields['email']" color="danger">
+      <p *ngFor="let message of registrationErrorFields['email']">{{ message }}</p>
     </ion-text>
-      <ion-input label="Display-Name" type="text" formControlName="displayName"></ion-input>
+    <ion-input formControlName="displayName" label="Display-Name" type="text"></ion-input>
 
-    <ion-text color="danger" *ngIf="registrationErrorFields['displayName']">
-      <p *ngFor="let message of registrationErrorFields['displayName']">{{message}}</p>
+    <ion-text *ngIf="registrationErrorFields['displayName']" color="danger">
+      <p *ngFor="let message of registrationErrorFields['displayName']">{{ message }}</p>
     </ion-text>
-      <ion-input label="Password" type="password" formControlName="password"></ion-input>
+    <ion-input formControlName="password" label="Password" type="password"></ion-input>
 
-    <ion-text color="danger" *ngIf="registrationErrorFields['password']">
-      <p *ngFor="let message of registrationErrorFields['password']">{{message}}</p>
+    <ion-text *ngIf="registrationErrorFields['password']" color="danger">
+      <p *ngFor="let message of registrationErrorFields['password']">{{ message }}</p>
     </ion-text>
-    <ion-button type="submit" [disabled]="!form.valid">Submit</ion-button>
+    <ion-button [disabled]="!form.valid" type="submit">Submit</ion-button>
     <ion-ripple-effect></ion-ripple-effect>
   </form>
 </ion-content>
-<ion-content class="ion-padding" *ngIf="registrationSuccess" scroll-y="false">
+<ion-content *ngIf="registrationSuccess" class="ion-padding" scroll-y="false">
   <ion-text>
     <p>Registration successful.</p>
   </ion-text>

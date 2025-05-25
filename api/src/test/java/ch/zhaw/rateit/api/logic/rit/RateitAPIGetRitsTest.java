@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @AutoConfigureMockMvc
 @Import(WebsecurityConfig.class)
- class RateitAPIGetRitsTest extends AbstractBaseIntegrationTest {
+class RateitAPIGetRitsTest extends AbstractBaseIntegrationTest {
 
     @Mock
     private RitRepository ritRepository;

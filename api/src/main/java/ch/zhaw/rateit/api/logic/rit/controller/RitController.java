@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controller to handle interactions with rits.
+ * REST Controller for managing and interacting with Rits.
  *
  * @author Micha Mettler
  */
@@ -61,7 +61,7 @@ public class RitController {
     }
 
     @DeleteMapping("/{id}/ratings/{ratingId}")
-    public void deleteRating(@AuthenticationPrincipal User user, @PathVariable String id,  @PathVariable String ratingId) {
+    public void deleteRating(@AuthenticationPrincipal User user, @PathVariable String id, @PathVariable String ratingId) {
         ritService.deleteRating(user, ratingId);
     }
 

@@ -5,38 +5,38 @@
 </ion-header>
 
 <div class="ion-padding-horizontal searchbar-container">
-  <ion-searchbar [(ngModel)]="sortAndFilterOptions.searchText" (ionChange)="onSearchChange($event)"
-    placeholder="Search..." class="ion-no-padding ion-padding-end">
+  <ion-searchbar (ionChange)="onSearchChange($event)" [(ngModel)]="sortAndFilterOptions.searchText"
+                 class="ion-no-padding ion-padding-end" placeholder="Search...">
   </ion-searchbar>
 
-  <ion-button id="click-trigger" fill="clear" class="ion-no-padding">
+  <ion-button class="ion-no-padding" fill="clear" id="click-trigger">
     <ion-icon name="chevron-expand"></ion-icon>
   </ion-button>
   <ion-popover trigger="click-trigger" triggerAction="click">
     <ng-template>
       <ion-item (click)="setSortOptionOperator(SortOptionOperator.DateCreated)"
-        (keydown.enter)="setSortOptionOperator(SortOptionOperator.DateCreated)">
+                (keydown.enter)="setSortOptionOperator(SortOptionOperator.DateCreated)">
         <ion-label>Date Created</ion-label>
-        <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.DateCreated"
-          [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+        <ion-icon *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.DateCreated" [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"
+                  slot="end"></ion-icon>
       </ion-item>
       <ion-item (click)="setSortOptionOperator(SortOptionOperator.LastUpdated)"
-        (keydown.enter)="setSortOptionOperator(SortOptionOperator.LastUpdated)">
+                (keydown.enter)="setSortOptionOperator(SortOptionOperator.LastUpdated)">
         <ion-label>Last Updated</ion-label>
-        <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.LastUpdated"
-          [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+        <ion-icon *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.LastUpdated" [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"
+                  slot="end"></ion-icon>
       </ion-item>
       <ion-item (click)="setSortOptionOperator(SortOptionOperator.Rating)"
-        (keydown.enter)="setSortOptionOperator(SortOptionOperator.Rating)">
+                (keydown.enter)="setSortOptionOperator(SortOptionOperator.Rating)">
         <ion-label>Rating</ion-label>
-        <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.Rating"
-          [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+        <ion-icon *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.Rating" [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"
+                  slot="end"></ion-icon>
       </ion-item>
       <ion-item (click)="setSortOptionOperator(SortOptionOperator.Name)"
-        (keydown.enter)="setSortOptionOperator(SortOptionOperator.Name)">
+                (keydown.enter)="setSortOptionOperator(SortOptionOperator.Name)">
         <ion-label>Name</ion-label>
-        <ion-icon slot="end" *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.Name"
-          [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+        <ion-icon *ngIf="sortAndFilterOptions.sortOptionOperator === SortOptionOperator.Name" [name]="sortAndFilterOptions.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down'"
+                  slot="end"></ion-icon>
       </ion-item>
     </ng-template>
   </ion-popover>
@@ -45,12 +45,12 @@
 
 <ion-accordion-group>
   <ion-accordion value="first">
-    <ion-item slot="header" color="light">
+    <ion-item color="light" slot="header">
       <ion-label>Filters</ion-label>
       <!-- Reset Filter Button -->
-      <ion-button *ngIf="hasFilter()" (click)="clearFilters($event)" (keydown.enter)="clearFilters($event)" size="small"
-        class="ion-padding-end">
-        <ion-icon name="close" class="ion-margin-end"></ion-icon>
+      <ion-button (click)="clearFilters($event)" (keydown.enter)="clearFilters($event)" *ngIf="hasFilter()" class="ion-padding-end"
+                  size="small">
+        <ion-icon class="ion-margin-end" name="close"></ion-icon>
         <ion-label>Reset All</ion-label>
       </ion-button>
     </ion-item>
@@ -68,14 +68,14 @@
                 <ion-label>All</ion-label>
               </ion-chip>
             </ng-container>
-            <ion-chip color="primary" *ngFor="let tag of sortAndFilterOptions.tags" (click)="removeTagFromFilter(tag)"
-              (keypress)="removeTagFromFilter(tag)">
+            <ion-chip (click)="removeTagFromFilter(tag)" (keypress)="removeTagFromFilter(tag)" *ngFor="let tag of sortAndFilterOptions.tags"
+                      color="primary">
               <ion-icon name="pricetag-outline"></ion-icon>
               <ion-label>{{ tag }}</ion-label>
               <ion-icon name="close"></ion-icon>
             </ion-chip>
-            <ion-chip *ngIf="sortAndFilterOptions.tags.length > 1" color="medium" (click)="clearTagFilter()"
-              (keypress)="clearTagFilter()">
+            <ion-chip (click)="clearTagFilter()" (keypress)="clearTagFilter()" *ngIf="sortAndFilterOptions.tags.length > 1"
+                      color="medium">
               <ion-label>Clear</ion-label>
               <ion-icon name="close"></ion-icon>
             </ion-chip>
@@ -91,46 +91,49 @@
                 <ion-label>Rating:</ion-label>
               </div>
 
-              <ion-button class="toggle-button"
-                [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.NoRating"
-                (click)="toggleNoRatingFilter()" (keydown.enter)="toggleNoRatingFilter()" fill="clear" size="small">
+              <ion-button (click)="toggleNoRatingFilter()"
+                          (keydown.enter)="toggleNoRatingFilter()"
+                          [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.NoRating" class="toggle-button" fill="clear"
+                          size="small">
                 No Rating
               </ion-button>
             </div>
 
             <!-- Comparison and stars -->
-            <div class="bottom-row" *ngIf="sortAndFilterOptions.ratingOperator !== RatingComparisonOperator.NoRating">
+            <div *ngIf="sortAndFilterOptions.ratingOperator !== RatingComparisonOperator.NoRating" class="bottom-row">
               <!-- Tri-state toggle for comparison operator -->
               <div class="comparison-toggle">
-                <ion-button class="toggle-button"
-                  [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.GreaterThanOrEqual"
-                  (click)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)"
-                  (keydown.enter)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)" fill="clear"
-                  size="small">
+                <ion-button (click)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)"
+                            (keydown.enter)="setRatingOperator(RatingComparisonOperator.GreaterThanOrEqual)"
+                            [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.GreaterThanOrEqual"
+                            class="toggle-button"
+                            fill="clear"
+                            size="small">
                   &ge;
                 </ion-button>
-                <ion-button class="toggle-button"
-                  [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.Equal"
-                  (click)="setRatingOperator(RatingComparisonOperator.Equal)"
-                  (keydown.enter)="setRatingOperator(RatingComparisonOperator.Equal)" fill="clear" size="small">
+                <ion-button (click)="setRatingOperator(RatingComparisonOperator.Equal)"
+                            (keydown.enter)="setRatingOperator(RatingComparisonOperator.Equal)"
+                            [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.Equal"
+                            class="toggle-button" fill="clear"
+                            size="small">
                   =
                 </ion-button>
-                <ion-button class="toggle-button"
-                  [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.LessThanOrEqual"
-                  (click)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)"
-                  (keydown.enter)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)" fill="clear"
-                  size="small">
+                <ion-button (click)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)"
+                            (keydown.enter)="setRatingOperator(RatingComparisonOperator.LessThanOrEqual)"
+                            [class.active]="sortAndFilterOptions.ratingOperator === RatingComparisonOperator.LessThanOrEqual"
+                            class="toggle-button" fill="clear"
+                            size="small">
                   &le;
                 </ion-button>
               </div>
 
               <div class="stars-container">
                 <ion-row>
-                  <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]"
-                    [class]="sortAndFilterOptions.rating > 3 ? 'star-green' : (sortAndFilterOptions.rating < 3 ? 'star-red' : 'star-orange')">
-                    <ion-icon class="rating-star" [class.filled]="star <= sortAndFilterOptions.rating"
-                      [name]="star <= sortAndFilterOptions.rating ? 'star' : 'star-outline'"
-                      (keydown.enter)="setRatingFilter(star)" (click)="setRatingFilter(star)">
+                  <ion-col *ngFor="let star of [1,2,3,4,5]" [class]="sortAndFilterOptions.rating > 3 ? 'star-green' : (sortAndFilterOptions.rating < 3 ? 'star-red' : 'star-orange')"
+                           size="auto">
+                    <ion-icon (click)="setRatingFilter(star)" (keydown.enter)="setRatingFilter(star)"
+                              [class.filled]="star <= sortAndFilterOptions.rating"
+                              [name]="star <= sortAndFilterOptions.rating ? 'star' : 'star-outline'" class="rating-star">
                     </ion-icon>
                   </ion-col>
                 </ion-row>
@@ -152,11 +155,11 @@
 </ion-accordion-group>
 
 <ion-content class="ion-padding-horizontal ion-padding-top" scroll-y="true">
-  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+  <ion-refresher (ionRefresh)="handleRefresh($event)" slot="fixed">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <app-rit-list-item *ngFor="let rit of filteredRits()" [rit]="rit" [onTagClick]="handleTagClick">
+    <app-rit-list-item *ngFor="let rit of filteredRits()" [onTagClick]="handleTagClick" [rit]="rit">
     </app-rit-list-item>
   </ion-list>
 </ion-content>

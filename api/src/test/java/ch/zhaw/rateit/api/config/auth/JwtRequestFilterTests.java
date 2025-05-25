@@ -1,8 +1,5 @@
 package ch.zhaw.rateit.api.config.auth;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JwtRequestFilterTests {
@@ -43,7 +43,8 @@ class JwtRequestFilterTests {
 
     @Test
     void shouldAllowRequestWithoutAuthorizationHeaderAndNotSetAuthentication() throws IOException, ServletException {
-        jwtRequestFilter.doFilterInternal(request, response, (req, res) -> {});
+        jwtRequestFilter.doFilterInternal(request, response, (req, res) -> {
+        });
         assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
 
@@ -58,7 +59,8 @@ class JwtRequestFilterTests {
         when(userDetailsService.loadUserByUsername(userEmail)).thenReturn(userDetails);
         when(jwtService.isTokenValid(token, userDetails)).thenReturn(true);
 
-        jwtRequestFilter.doFilterInternal(request, response, (req, res) -> {});
+        jwtRequestFilter.doFilterInternal(request, response, (req, res) -> {
+        });
         assertNotNull(SecurityContextHolder.getContext().getAuthentication());
         assertEquals(userEmail, SecurityContextHolder.getContext().getAuthentication().getName());
         assertEquals(userDetails, SecurityContextHolder.getContext().getAuthentication().getPrincipal());

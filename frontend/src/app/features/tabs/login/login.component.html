@@ -5,16 +5,16 @@
 </ion-header>
 
 <ion-content class="ion-padding" scroll-y="false">
-  <form [formGroup]="form" (ngSubmit)="login()">
-      <ion-input label="Email" type="email" formControlName="email" ngModel></ion-input>
-      <ion-text color="danger" *ngIf="loginErrorFields['email']">
-        <p *ngFor="let message of loginErrorFields['email']">{{message}}</p>
-      </ion-text>
-      <ion-input label="Password" type="password" formControlName="password" ngModel></ion-input>
-      <ion-text color="danger" *ngIf="loginErrorFields['password']">
-        <p *ngFor="let message of loginErrorFields['password']">{{message}}</p>
-      </ion-text>
-    <ion-button type="submit" [disabled]="!form.valid">Submit</ion-button>
+  <form (ngSubmit)="login()" [formGroup]="form">
+    <ion-input formControlName="email" label="Email" ngModel type="email"></ion-input>
+    <ion-text *ngIf="loginErrorFields['email']" color="danger">
+      <p *ngFor="let message of loginErrorFields['email']">{{ message }}</p>
+    </ion-text>
+    <ion-input formControlName="password" label="Password" ngModel type="password"></ion-input>
+    <ion-text *ngIf="loginErrorFields['password']" color="danger">
+      <p *ngFor="let message of loginErrorFields['password']">{{ message }}</p>
+    </ion-text>
+    <ion-button [disabled]="!form.valid" type="submit">Submit</ion-button>
     <ion-button (click)="register()" (keydown.enter)="register()">Register</ion-button>
     <ion-ripple-effect></ion-ripple-effect>
 

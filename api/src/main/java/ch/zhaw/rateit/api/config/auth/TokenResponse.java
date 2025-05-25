@@ -5,5 +5,5 @@ package ch.zhaw.rateit.api.config.auth;
  *
  * @author Achille Hünenberger
  */
-public record TokenResponse (String token) {
+public record TokenResponse(String token) {
 }

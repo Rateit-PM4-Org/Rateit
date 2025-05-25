@@ -12,8 +12,7 @@ import java.time.Instant;
 
 /**
  * Dataclass for ratings in the MongoDB database.
- * Represents a rating of a rit, with optional positiveComment and negativeComment feedback.
- * Owned by a user and associated with a rit.
+ * Owned by a user and associated with a Rit.
  *
  * @author Michèle Berger
  */

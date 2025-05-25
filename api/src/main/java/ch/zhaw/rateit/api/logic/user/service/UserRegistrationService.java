@@ -24,6 +24,16 @@ public class UserRegistrationService {
         this.userVerificationService = userVerificationService;
     }
 
+    /**
+     * Registers a new user in the system. The method validates the uniqueness of the user's email,
+     * hashes the provided password, sends a verification email to the user, and saves the user
+     * in the repository.
+     *
+     * @param userRegistrationRequest the request object containing the email, display name, and password
+     *                                for the user to be registered.
+     * @return the newly registered User object with the hashed password and verification details.
+     * @throws ValidationExceptionWithField if the provided email already exists in the system.
+     */
     public User register(UserRegistrationRequest userRegistrationRequest) {
         checkEmailUnique(userRegistrationRequest.email());
 
@@ -33,8 +43,6 @@ public class UserRegistrationService {
 
         return newUser;
     }
-
-
 
     private void checkEmailUnique(String email) {
         userRepository.findByEmail(email).ifPresent(user -> {

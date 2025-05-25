@@ -1,27 +1,27 @@
 <div class="list-item-card">
   <div class="content">
-    <div class="header-row" [ngClass]="{ 'ion-margin-bottom': rating.positiveComment || rating.negativeComment }">
+    <div [ngClass]="{ 'ion-margin-bottom': rating.positiveComment || rating.negativeComment }" class="header-row">
       <ion-label>
         <h2 class="title">
           <ion-grid class="ion-no-padding">
             <ion-row>
-              <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]; let i = index;"
-                [class]="rating.value && rating.value > 3 ? 'star-green' : (rating.value && rating.value < 3 ? 'star-red' : 'star-orange')">
-                <ion-icon [name]="isBelowRating(i)? 'star' : 'star-outline'" />
+              <ion-col *ngFor="let star of [1,2,3,4,5]; let i = index;" [class]="rating.value && rating.value > 3 ? 'star-green' : (rating.value && rating.value < 3 ? 'star-red' : 'star-orange')"
+                       size="auto">
+                <ion-icon [name]="isBelowRating(i)? 'star' : 'star-outline'"/>
               </ion-col>
             </ion-row>
           </ion-grid>
         </h2>
       </ion-label>
-      <ion-text color="medium">{{formatRelativeTime(rating.updatedAt)}}</ion-text>
+      <ion-text color="medium">{{ formatRelativeTime(rating.updatedAt) }}</ion-text>
     </div>
-    <div class="rating-positive" [ngClass]="{ 'ion-margin-bottom': rating.positiveComment }">
+    <div [ngClass]="{ 'ion-margin-bottom': rating.positiveComment }" class="rating-positive">
       <ion-label *ngIf="rating.positiveComment"><b>Positive</b></ion-label>
-      <ion-text>{{rating.positiveComment}}</ion-text>
+      <ion-text>{{ rating.positiveComment }}</ion-text>
     </div>
     <div class="rating-negative">
       <ion-label *ngIf="rating.negativeComment"><b>Negative</b></ion-label>
-      <ion-text>{{rating.negativeComment}}</ion-text>
+      <ion-text>{{ rating.negativeComment }}</ion-text>
     </div>
   </div>
 </div>

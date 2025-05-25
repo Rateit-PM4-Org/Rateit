@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { TagSelectorComponent } from './tag-selector.component';
-import { RitService } from '../../../shared/services/rit.service';
-import { of } from 'rxjs';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {Router} from '@angular/router';
+import {TagSelectorComponent} from './tag-selector.component';
+import {RitService} from '../../../shared/services/rit.service';
+import {of} from 'rxjs';
+import {FormsModule} from '@angular/forms';
+import {IonicModule} from '@ionic/angular';
 
 describe('TagSelectorComponent', () => {
   let component: TagSelectorComponent;
@@ -28,8 +28,8 @@ describe('TagSelectorComponent', () => {
         IonicModule
       ],
       providers: [
-        { provide: RitService, useValue: mockRitService },
-        { provide: Router, useValue: mockRouter }
+        {provide: RitService, useValue: mockRitService},
+        {provide: Router, useValue: mockRouter}
       ]
     }).compileComponents();
 
@@ -81,7 +81,7 @@ describe('TagSelectorComponent', () => {
     spyOn(component.tagsChange, 'emit');
     component.newTag = 'newTag';
 
-    const inputEl = { value: '' } as any;
+    const inputEl = {value: ''} as any;
     component.addNewTag(inputEl, 'enter');
 
     expect(component.selectedTags).toContain('newTag');
@@ -93,7 +93,7 @@ describe('TagSelectorComponent', () => {
     spyOn(component.tagsChange, 'emit');
     component.newTag = '   ';
 
-    const inputEl = { value: '' } as any;
+    const inputEl = {value: ''} as any;
     component.addNewTag(inputEl, 'enter');
 
     expect(component.selectedTags.length).toBe(0);
@@ -105,7 +105,7 @@ describe('TagSelectorComponent', () => {
     spyOn(component.tagsChange, 'emit');
     component.newTag = 'Tag1';
 
-    const inputEl = { value: '' } as any;
+    const inputEl = {value: ''} as any;
     component.addNewTag(inputEl, 'enter');
 
     expect(component.selectedTags.length).toBe(1);
@@ -164,7 +164,7 @@ describe('TagSelectorComponent', () => {
     component.disabled = false;
     component.navigateToTag(tagName, event);
 
-    expect(mockRouter.navigate).not.toHaveBeenCalledWith(['/tabs/rits'], { queryParams: { tag: tagName } });
+    expect(mockRouter.navigate).not.toHaveBeenCalledWith(['/tabs/rits'], {queryParams: {tag: tagName}});
     expect(event.stopPropagation).toHaveBeenCalled();
   });
 

@@ -1,7 +1,10 @@
 package ch.zhaw.rateit.api.logic.rit.entity;
 
 import ch.zhaw.rateit.api.logic.user.entity.User;
-import org.springframework.data.annotation.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
@@ -10,7 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Dataclass for rits in the MongoDB database.
+ * Represents a Rit entity stored in the MongoDB database.
+ * Each Rit is linked to a User entity as its owner and a collection of Rating entities, which
+ * represent user evaluations for the Rit.
  *
  * @author Micha Mettler
  */
@@ -78,9 +83,13 @@ public class Rit {
         this.details = details;
     }
 
-    public List<String> getCodes() {return codes;}
+    public List<String> getCodes() {
+        return codes;
+    }
 
-    public void setCodes(List<String> codes) {this.codes = codes;}
+    public void setCodes(List<String> codes) {
+        this.codes = codes;
+    }
 
     public boolean isPublished() {
         return published;

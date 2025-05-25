@@ -6,22 +6,23 @@
     <ion-title>Ratings</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content scroll-y="true" class="ion-padding">
+<ion-content class="ion-padding" scroll-y="true">
   <ion-list>
     <ion-text *ngIf="ratings.length === 0">
       No ratings present for this Rit.
     </ion-text>
 
-    <ion-item-sliding class="rating-item ion-margin-bottom" *ngFor="let rating of ratings">
-      <ion-item lines="none" class="ion-no-padding rating-container">
-        <div class="full-width-wrapper" >
+    <ion-item-sliding *ngFor="let rating of ratings" class="rating-item ion-margin-bottom">
+      <ion-item class="ion-no-padding rating-container" lines="none">
+        <div class="full-width-wrapper">
           <app-rating-list-item [rating]="rating"></app-rating-list-item>
         </div>
       </ion-item>
 
-      <ion-item-options side="end" class="ion-padding-start ">
-        <ion-item-option color="danger delete-button" (click)="deleteRating(rating.id)" (keydown.enter)="deleteRating(rating.id)">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      <ion-item-options class="ion-padding-start " side="end">
+        <ion-item-option (click)="deleteRating(rating.id)" (keydown.enter)="deleteRating(rating.id)"
+                         color="danger delete-button">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>

@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { FabIntegrationComponent } from './fab-integration.component';
-import { provideHttpClient } from '@angular/common/http';
-import { UserService } from '../../../shared/services/user.service';
-import { of } from 'rxjs';
-import { RitService } from '../../../shared/services/rit.service';
-import { ActivatedRoute } from '@angular/router';
+import {FabIntegrationComponent} from './fab-integration.component';
+import {provideHttpClient} from '@angular/common/http';
+import {UserService} from '../../../shared/services/user.service';
+import {of} from 'rxjs';
+import {RitService} from '../../../shared/services/rit.service';
+import {ActivatedRoute} from '@angular/router';
+
 const userServiceMock = {
   isLoggedIn: () => of(true)
 };
@@ -20,13 +21,13 @@ describe('FabIntegrationComponent', () => {
     ritServiceSpy.getRits.and.returnValue(of([]));
     ritServiceSpy.getRitsErrorStream.and.returnValue(of({}));
     ritServiceSpy.getAllTags.and.returnValue(of(['tag1', 'tag2']));
-    
+
     TestBed.configureTestingModule({
       imports: [FabIntegrationComponent],
       providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
-        { provide: ActivatedRoute, useValue: { params: of({}) } },
+        {provide: UserService, useValue: userServiceMock},
+        {provide: RitService, useValue: ritServiceSpy},
+        {provide: ActivatedRoute, useValue: {params: of({})}},
         provideHttpClient(),
       ]
     }).compileComponents();
@@ -46,7 +47,13 @@ describe('FabIntegrationComponent', () => {
   });
 
   it('should add rating Button if currentRit is not null', () => {
-    component.currentRit = {id: '1', name: 'Test Rit', details: 'Some details', tags: ['tag1', 'tag2'], codes: ['code1', 'code2']};
+    component.currentRit = {
+      id: '1',
+      name: 'Test Rit',
+      details: 'Some details',
+      tags: ['tag1', 'tag2'],
+      codes: ['code1', 'code2']
+    };
     component.updateButtons();
     expect(component.buttons.length).toBe(1);
   });
