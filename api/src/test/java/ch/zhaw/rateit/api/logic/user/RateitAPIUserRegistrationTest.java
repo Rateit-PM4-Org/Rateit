@@ -1,14 +1,14 @@
 package ch.zhaw.rateit.api.logic.user;
 
+import ch.zhaw.rateit.api.config.WebsecurityConfig;
 import ch.zhaw.rateit.api.exceptions.types.ValidationExceptionWithField;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
-import ch.zhaw.rateit.api.config.WebsecurityConfig;
 import ch.zhaw.rateit.api.util.AbstractBaseIntegrationTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -41,10 +41,26 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
     @Autowired
     private PasswordEncoder passwordEncrypter;
 
+    static Stream<Arguments> provideInvalidRegisterRequests() {
+        return Stream.of(
+                Arguments.of("test", "display name", "goodPassword1!"), // Invalid email
+                Arguments.of("", "display name", "goodPassword1!"),      // Missing email
+                Arguments.of("test@test.ch", "", "goodPassword1!"), // Missing displayname
+                Arguments.of("test@test.ch", "display name", ""), // Missing password
+                Arguments.of("test@test.ch", "display name", "shortPW"),  // Password to short
+                Arguments.of("test@test.ch", "display name", "badPassword1"),  // Password missing special characters
+                Arguments.of("test@test.ch", "display name", "badPassword!"),  // Password missing number
+                Arguments.of("test@test.ch", "display name", "badpassword1!"),  // Password missing uppercase letter
+                Arguments.of("test@test.ch", "display name", "BADPASSWORD1!"),  // Password missing lowercase letter
+                Arguments.of("test@test.ch", "display name", "good Password1!")  // Space in password
+        );
+    }
+
     @BeforeEach
     void cleanDatabase() {
         userRepository.deleteAll();
     }
+
     @Test
     void endpointRegisterPositive() throws Exception {
         String email = "test@example.com";
@@ -102,8 +118,8 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
         userRepository.save(user);
 
         mockMvc.perform(post("/api/users/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
 
         User savedUser = userRepository.findByEmail(email2).get();
         assertTrue(passwordEncrypter.matches(cleanPassword, savedUser.getHashedPassword()));
@@ -125,21 +141,6 @@ class RateitAPIUserRegistrationTest extends AbstractBaseIntegrationTest {
 
         assertNotNull(resolvedException);
         assertInstanceOf(ValidationExceptionWithField.class, resolvedException);
-    }
-
-    static Stream<Arguments> provideInvalidRegisterRequests() {
-        return Stream.of(
-                Arguments.of("test", "display name", "goodPassword1!"), // Invalid email
-                Arguments.of("", "display name", "goodPassword1!"),      // Missing email
-                Arguments.of("test@test.ch", "", "goodPassword1!"), // Missing displayname
-                Arguments.of("test@test.ch", "display name", "") , // Missing password
-                Arguments.of("test@test.ch", "display name", "shortPW"),  // Password to short
-                Arguments.of("test@test.ch", "display name", "badPassword1"),  // Password missing special characters
-                Arguments.of("test@test.ch", "display name", "badPassword!"),  // Password missing number
-                Arguments.of("test@test.ch", "display name", "badpassword1!"),  // Password missing uppercase letter
-                Arguments.of("test@test.ch", "display name", "BADPASSWORD1!"),  // Password missing lowercase letter
-                Arguments.of("test@test.ch", "display name", "good Password1!")  // Space in password
-        );
     }
 
     @ParameterizedTest

@@ -20,10 +20,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -40,6 +41,14 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
     private ObjectMapper objectMapper;
 
     private User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq"); //pw: test
+
+    static Stream<Arguments> provideInvalidLoginRequests() {
+        return Stream.of(
+                Arguments.of("test", "wrongPW"), // Invalid email
+                Arguments.of("", "wrongPW"),      // Missing email
+                Arguments.of("test@test.ch", "")  // Missing password
+        );
+    }
 
     @BeforeEach
     void cleanDatabase() {
@@ -67,14 +76,6 @@ class RateitAPIUserLoginTest extends AbstractBaseIntegrationTest {
 
         mockMvc.perform(post("/api/users/login").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
-    }
-
-    static Stream<Arguments> provideInvalidLoginRequests() {
-        return Stream.of(
-                Arguments.of("test", "wrongPW"), // Invalid email
-                Arguments.of("", "wrongPW"),      // Missing email
-                Arguments.of("test@test.ch", "")  // Missing password
-        );
     }
 
     @ParameterizedTest

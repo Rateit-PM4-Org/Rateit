@@ -36,6 +36,11 @@ class RateitAPIUserVerificationTest extends AbstractBaseIntegrationTest {
 
     private User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq"); //pw: test
 
+    static Stream<Arguments> provideInvalidVerificationRequests() {
+        return Stream.of(
+                Arguments.of("")   // Empty Token
+        );
+    }
 
     @BeforeEach
     void cleanDatabase() {
@@ -56,12 +61,6 @@ class RateitAPIUserVerificationTest extends AbstractBaseIntegrationTest {
         assertTrue(user.isEmailVerified());
         assertTrue(user.isEnabled());
 
-    }
-
-    static Stream<Arguments> provideInvalidVerificationRequests() {
-        return Stream.of(
-                Arguments.of("")   // Empty Token
-        );
     }
 
     @ParameterizedTest

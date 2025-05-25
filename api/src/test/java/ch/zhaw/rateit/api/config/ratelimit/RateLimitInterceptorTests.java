@@ -13,7 +13,8 @@ import org.springframework.http.HttpStatus;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class RateLimitInterceptorTests {
 
@@ -66,7 +67,7 @@ class RateLimitInterceptorTests {
         when(request.getRequestURI()).thenReturn("/test");
         when(request.getHeader("X-FORWARDED-FOR")).thenReturn(null);
         when(request.getRemoteAddr()).thenReturn("127.0.0.1");
-        when(rateLimitService.tryConsume("127.0.0.1", "/test")).thenReturn(ConsumptionProbe.consumed(5, 2*1_000_000_000));
+        when(rateLimitService.tryConsume("127.0.0.1", "/test")).thenReturn(ConsumptionProbe.consumed(5, 2 * 1_000_000_000));
 
         boolean result = rateLimitInterceptor.preHandle(request, response, new Object());
         assertTrue(result);
@@ -79,7 +80,7 @@ class RateLimitInterceptorTests {
         when(request.getRequestURI()).thenReturn("/test");
         when(request.getHeader("X-FORWARDED-FOR")).thenReturn(null);
         when(request.getRemoteAddr()).thenReturn("127.0.0.1");
-        when(rateLimitService.tryConsume("127.0.0.1", "/test")).thenReturn(ConsumptionProbe.rejected(0, 5L *1_000_000_000, 0));
+        when(rateLimitService.tryConsume("127.0.0.1", "/test")).thenReturn(ConsumptionProbe.rejected(0, 5L * 1_000_000_000, 0));
 
         boolean result = rateLimitInterceptor.preHandle(request, response, new Object());
         assertFalse(result);

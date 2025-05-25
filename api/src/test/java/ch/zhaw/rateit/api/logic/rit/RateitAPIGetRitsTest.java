@@ -21,17 +21,14 @@ import static org.mockito.Mockito.when;
 
 @AutoConfigureMockMvc
 @Import(WebsecurityConfig.class)
- class RateitAPIGetRitsTest extends AbstractBaseIntegrationTest {
-
-    @Mock
-    private RitRepository ritRepository;
-
-    @Mock
-    private RatingRepository ratingRepository;
-
-    private RitService ritService;
+class RateitAPIGetRitsTest extends AbstractBaseIntegrationTest {
 
     private final User testUser = new User("test@test.ch", "TestUser", "someHashedPassword");
+    @Mock
+    private RitRepository ritRepository;
+    @Mock
+    private RatingRepository ratingRepository;
+    private RitService ritService;
 
     @BeforeEach
     void setUp() {

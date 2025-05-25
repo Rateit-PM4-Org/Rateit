@@ -31,30 +31,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(WebsecurityConfig.class)
 class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private RitRepository ritRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
     private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private RitRepository ritRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ObjectMapper objectMapper;
     private Rit inputTestRit = new Rit();
-
-    @BeforeEach
-    void setup() {
-        userRepository.deleteAll();
-        ritRepository.deleteAll();
-        testUser.setEmailVerified(true);
-        userRepository.save(testUser);
-        inputTestRit = ritRepository.save(testRit);
-    }
 
     private static Stream<Arguments> provideValidRitUpdateParams() {
         return Stream.of(
@@ -67,6 +54,25 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
                 Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of("code1")), // single code set
                 Arguments.of("TestRit", "Details", List.of("tag1", "tag2"), List.of("code1", "code2")) // multiple codes set
         );
+    }
+
+    private static Stream<Arguments> provideInvalidRitUpdateParams() {
+        return Stream.of(
+                Arguments.of("", "Details", List.of(), List.of()), // name blank
+                Arguments.of("   ", "Details", List.of(), List.of()), // name blank with spaces
+                Arguments.of(null, "Details", List.of(), List.of()), // name null
+                Arguments.of("TestRit", "Details", null, List.of()), // tags null
+                Arguments.of("TestRit", "Details", List.of(), null) // codes null
+        );
+    }
+
+    @BeforeEach
+    void setup() {
+        userRepository.deleteAll();
+        ritRepository.deleteAll();
+        testUser.setEmailVerified(true);
+        userRepository.save(testUser);
+        inputTestRit = ritRepository.save(testRit);
     }
 
     @ParameterizedTest
@@ -90,16 +96,6 @@ class RateitAPIRitUpdateITTest extends AbstractBaseIntegrationTest {
         assertEquals(tags, updatedRit.getTags(), "Rit tags must be equal to the input tags");
         assertFalse(updatedRit.isPublished(), "Rit must not be published");
         assertEquals(testUser.getId(), updatedRit.getOwner().getId(), "Rit owner must be equal to the input owner");
-    }
-
-    private static Stream<Arguments> provideInvalidRitUpdateParams() {
-        return Stream.of(
-                Arguments.of("", "Details", List.of(), List.of()), // name blank
-                Arguments.of("   ", "Details", List.of(), List.of()), // name blank with spaces
-                Arguments.of(null, "Details", List.of(), List.of()), // name null
-                Arguments.of("TestRit", "Details", null, List.of()), // tags null
-                Arguments.of("TestRit", "Details", List.of(), null) // codes null
-        );
     }
 
     @ParameterizedTest

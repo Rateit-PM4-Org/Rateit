@@ -19,7 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,20 +29,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(WebsecurityConfig.class)
 class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private RitRepository ritRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$hashed");
     private final User otherUser = new User("other@test.ch", "OtherUser", "$2a$12$hashed");
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private RitRepository ritRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setup() throws InterruptedException {
@@ -68,7 +65,8 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        List<Rit> rits = objectMapper.readValue(response, new TypeReference<>() {});
+        List<Rit> rits = objectMapper.readValue(response, new TypeReference<>() {
+        });
 
         assertEquals(2, rits.size(), "Only Rits owned by the testUser should be returned");
         assertTrue(rits.stream().allMatch(r -> r.getOwner().getId().equals(testUser.getId())));
@@ -95,7 +93,8 @@ class RateitAPIRitGetAllITTest extends AbstractBaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        List<Rit> rits = objectMapper.readValue(response, new TypeReference<>() {});
+        List<Rit> rits = objectMapper.readValue(response, new TypeReference<>() {
+        });
         assertTrue(rits.isEmpty(), "User without rits should receive an empty list");
     }
 }

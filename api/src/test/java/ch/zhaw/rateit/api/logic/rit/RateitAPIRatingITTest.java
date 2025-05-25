@@ -3,8 +3,8 @@ package ch.zhaw.rateit.api.logic.rit;
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
 import ch.zhaw.rateit.api.logic.rit.entity.Rating;
 import ch.zhaw.rateit.api.logic.rit.entity.RatingCreateRequest;
-import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.repository.UserRepository;
@@ -32,32 +32,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(WebsecurityConfig.class)
 class RateitAPIRatingITTest extends AbstractBaseIntegrationTest {
 
+    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
+    private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private RatingRepository ratingRepository;
-
     @Autowired
     private RitRepository ritRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private ObjectMapper objectMapper;
-
-    private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
-
-    private final Rit testRit = new Rit("TestRit", "Details", null, null, testUser);
-
-    @BeforeEach
-    void setup() {
-        userRepository.deleteAll();
-        ratingRepository.deleteAll();
-        testUser.setEmailVerified(true);
-        userRepository.save(testUser);
-    }
 
     private static Stream<Arguments> provideValidRatingParams() {
         return Stream.of(
@@ -68,11 +54,26 @@ class RateitAPIRatingITTest extends AbstractBaseIntegrationTest {
         );
     }
 
+    private static Stream<Arguments> provideInvalidRatingParams() {
+        return Stream.of(
+                Arguments.of(7, null, null), // value is too high
+                Arguments.of(0, null, "something bad") // value is too low
+        );
+    }
+
+    @BeforeEach
+    void setup() {
+        userRepository.deleteAll();
+        ratingRepository.deleteAll();
+        testUser.setEmailVerified(true);
+        userRepository.save(testUser);
+    }
+
     @ParameterizedTest
     @MethodSource("provideValidRatingParams")
     void createRating_positive_returnsStatusOk(int value, String positive, String negative) throws Exception {
         ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest( value, positive, negative));
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(value, positive, negative));
 
         var resultActions = mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON)
                 .with(user(testUser)));
@@ -93,18 +94,11 @@ class RateitAPIRatingITTest extends AbstractBaseIntegrationTest {
         assertEquals(testRit.getId(), ratingRepository.getRatingById(rating.getId()).getRit().getId(), "Rating rit must be equal to the input rit");
     }
 
-    private static Stream<Arguments> provideInvalidRatingParams() {
-        return Stream.of(
-                Arguments.of(7, null, null), // value is too high
-                Arguments.of(0, null, "something bad") // value is too low
-        );
-    }
-
     @ParameterizedTest
     @MethodSource("provideInvalidRatingParams")
     void createRating_negative_returnsBadRequest(int value, String positive, String negative) throws Exception {
         ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest( value, positive, negative));
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(value, positive, negative));
 
         mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON)
                         .with(user(testUser)))
@@ -115,7 +109,7 @@ class RateitAPIRatingITTest extends AbstractBaseIntegrationTest {
     @Test
     void createRating_negative_unauthorized_returnsForbidden() throws Exception {
         ritRepository.save(testRit);
-        String input = objectMapper.writeValueAsString(new RatingCreateRequest( 4, "test", "test"));
+        String input = objectMapper.writeValueAsString(new RatingCreateRequest(4, "test", "test"));
 
         mockMvc.perform(post("/api/rits/" + testRit.getId() + "/ratings").content(input).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
