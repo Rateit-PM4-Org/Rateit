@@ -5,8 +5,8 @@
     </ion-buttons>
     <ion-title>Rit</ion-title>
 
-    <ion-buttons slot="end" *ngIf="mode === 'edit'">
-      <ion-button [disabled]="!ritName?.trim()" (click)="updateRit()" (keydown.enter)="updateRit()">
+    <ion-buttons *ngIf="mode === 'edit'" slot="end">
+      <ion-button (click)="updateRit()" (keydown.enter)="updateRit()" [disabled]="!ritName?.trim()">
         Confirm
       </ion-button>
     </ion-buttons>
@@ -17,8 +17,8 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title class="rit-title-container">
-        <ion-input [readonly]="mode === 'view'" [value]="ritName" (ionInput)="setRitName($event)"
-          placeholder="Rit Name...">
+        <ion-input (ionInput)="setRitName($event)" [readonly]="mode === 'view'" [value]="ritName"
+                   placeholder="Rit Name...">
         </ion-input>
       </ion-card-title>
       <ion-card-subtitle>
@@ -27,17 +27,17 @@
     </ion-card-header>
     <ion-card-content *ngIf="ritNameErrorMessage" class="name-error-container">
       <ion-text color="danger">
-        <p>{{ritNameErrorMessage}}</p>
+        <p>{{ ritNameErrorMessage }}</p>
       </ion-text>
     </ion-card-content>
 
     <ion-card-content class="tags-container" testId="tags-container">
-      <app-tag-selector [selectedTags]="tags" [disabled]="mode === 'view'" (tagsChange)="onTagsChange($event)">
+      <app-tag-selector (tagsChange)="onTagsChange($event)" [disabled]="mode === 'view'" [selectedTags]="tags">
       </app-tag-selector>
     </ion-card-content>
     <ion-card-content *ngIf="tagsErrorMessage" class="tags-error-container">
       <ion-text color="danger">
-        <p>{{tagsErrorMessage}}</p>
+        <p>{{ tagsErrorMessage }}</p>
       </ion-text>
     </ion-card-content>
   </ion-card>
@@ -48,11 +48,11 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-textarea [readonly]="mode === 'view'" [disabled]="mode === 'view'" [value]="details"
-        (ionInput)="setDetails($event)" placeholder="Details..." [autoGrow]="true">
+      <ion-textarea (ionInput)="setDetails($event)" [autoGrow]="true" [disabled]="mode === 'view'"
+                    [readonly]="mode === 'view'" [value]="details" placeholder="Details...">
       </ion-textarea>
-      <ion-text color="danger" *ngIf="detailsErrorMessage">
-        <p>{{detailsErrorMessage}}</p>
+      <ion-text *ngIf="detailsErrorMessage" color="danger">
+        <p>{{ detailsErrorMessage }}</p>
       </ion-text>
     </ion-card-content>
   </ion-card>
@@ -64,30 +64,32 @@
 
     <ion-card-content>
       <div>
-        <ion-chip color="primary" *ngFor="let code of codes;">
+        <ion-chip *ngFor="let code of codes;" color="primary">
           <ion-label>{{ code }}</ion-label>
-          <ion-icon name="close" *ngIf="mode === 'edit'" (click)="removeCode(code)"
-            (keydown.enter)="removeCode(code)"></ion-icon>
+          <ion-icon (click)="removeCode(code)" (keydown.enter)="removeCode(code)" *ngIf="mode === 'edit'"
+                    name="close"></ion-icon>
         </ion-chip>
         <ion-text *ngIf="codes.length == 0">No Barcodes present</ion-text>
       </div>
-      <ion-button class="ion-margin-top" *ngIf="mode !== 'view'" (click)="openScanner()"
-        (keydown.enter)="openScanner()">
+      <ion-button (click)="openScanner()" (keydown.enter)="openScanner()" *ngIf="mode !== 'view'"
+                  class="ion-margin-top">
         <ion-icon name="qr-code-outline"></ion-icon>
         Scan Barcode
       </ion-button>
-      <ion-text color="danger" *ngIf="codesErrorMessage">
-        <p>{{codesErrorMessage}}</p>
+      <ion-text *ngIf="codesErrorMessage" color="danger">
+        <p>{{ codesErrorMessage }}</p>
       </ion-text>
     </ion-card-content>
   </ion-card>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button *ngIf="mode === 'view'" (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
+  <ion-fab horizontal="end" slot="fixed" vertical="bottom">
+    <ion-fab-button (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'" *ngIf="mode === 'view'">
       <ion-icon name="create-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
 </ion-content>
-<app-modal-view [title]="'Update Rit'" [content]="ritUpdate" [confirmable]="false"
-  #ritUpdateModal><app-scanner-update-modal #ritUpdate></app-scanner-update-modal></app-modal-view>
+<app-modal-view #ritUpdateModal [confirmable]="false" [content]="ritUpdate"
+                [title]="'Update Rit'">
+  <app-scanner-update-modal #ritUpdate></app-scanner-update-modal>
+</app-modal-view>

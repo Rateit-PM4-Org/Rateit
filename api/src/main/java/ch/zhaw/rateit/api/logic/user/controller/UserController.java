@@ -1,11 +1,11 @@
 package ch.zhaw.rateit.api.logic.user.controller;
 
 import ch.zhaw.rateit.api.config.auth.TokenResponse;
+import ch.zhaw.rateit.api.logic.user.entity.User;
 import ch.zhaw.rateit.api.logic.user.entity.UserLoginRequest;
+import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.service.UserLoginService;
 import ch.zhaw.rateit.api.logic.user.service.UserRegistrationService;
-import ch.zhaw.rateit.api.logic.user.entity.User;
-import ch.zhaw.rateit.api.logic.user.entity.UserRegistrationRequest;
 import ch.zhaw.rateit.api.logic.user.service.UserVerificationService;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +36,19 @@ public class UserController {
         this.userVerificationService = userVerificationService;
     }
 
-    /**
-     * Register a new user
-     *
-     * @param userRegistrationRequest
-     * @return created user
-     */
     @PostMapping(path = "/register")
     public User register(@RequestBody @Validated UserRegistrationRequest userRegistrationRequest) {
         return userRegistrationService.register(userRegistrationRequest);
     }
 
-
+    /**
+     * Verifies a user's email by validating the provided token. If the token is valid,
+     * the user's email is marked as verified and the token is cleared.
+     *
+     * @param token the email verification token provided to the user
+     * @return a {@code ResponseEntity} containing a success response with a null body if the token is valid,
+     * or an error message if the token is invalid or verification fails
+     */
     @GetMapping("/mail-confirmation")
     public ResponseEntity<Map<String, Object>> verifyUser(@RequestParam @NotEmpty String token) {
         boolean isVerified = userVerificationService.verifyUser(token);
@@ -62,8 +63,8 @@ public class UserController {
     /**
      * Exchange Login-Information for a JWT-Access-Token
      *
-     * @param userLoginRequest
-     * @return
+     * @param userLoginRequest the login request containing the user's email and password
+     * @return a {@code TokenResponse} containing the generated authentication token
      */
     @PostMapping(path = "/login")
     public TokenResponse login(@RequestBody @Validated UserLoginRequest userLoginRequest) {
@@ -73,8 +74,8 @@ public class UserController {
     /**
      * Get own user information
      *
-     * @param user
-     * @return
+     * @param user the authenticated user instance provided by the security context
+     * @return the authenticated {@code User} instance
      */
     @GetMapping(path = "/me")
     public User me(@AuthenticationPrincipal User user) {

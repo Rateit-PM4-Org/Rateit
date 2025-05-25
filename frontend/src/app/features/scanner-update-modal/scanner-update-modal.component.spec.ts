@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonModal } from '@ionic/angular/standalone';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {IonModal} from '@ionic/angular/standalone';
 import {ScannerUpdateModalComponent} from './scanner-update-modal.component';
 
 describe('ScannerSearchModalComponent', () => {
@@ -43,6 +43,6 @@ describe('ScannerSearchModalComponent', () => {
     const scannedCodes = new Set(['code1', 'code2']);
     component.registerModal(modalSpy);
     component.onScanned(scannedCodes);
-    expect(modalSpy.dismiss).toHaveBeenCalledWith({ scannedCodes: Array.from(scannedCodes) });
+    expect(modalSpy.dismiss).toHaveBeenCalledWith({scannedCodes: Array.from(scannedCodes)});
   });
 });

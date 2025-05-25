@@ -19,7 +19,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Configuration
 @ConditionalOnProperty(value = "rate.limiting.enabled", havingValue = "true")
 public class RateLimitInterceptor implements HandlerInterceptor {
+
     private static final Logger logger = LoggerFactory.getLogger(RateLimitInterceptor.class);
+
     private RateLimitService rateLimitService;
 
     private RateLimitProperties rateLimitProperties;
@@ -33,22 +35,22 @@ public class RateLimitInterceptor implements HandlerInterceptor {
      * Pre-handle method to check if the request is allowed to be processed.
      * If the request is allowed, the remaining tokens are added to the response.
      * If the request is not allowed, the response is set to a 429 status code.
-     *
+     * <p>
      * The method checks if the rate limiting is enabled and if the request is not an error request.
      *
-     * @param request current HTTP request
-     * @param response current HTTP response
-     * @param handler chosen handler to execute, for type and/or instance evaluation
-     * @return
-     * @throws Exception
+     * @param request  the HttpServletRequest object containing client request information
+     * @param response the HttpServletResponse object for responding to the client
+     * @param handler  the handler to execute, chosen by the HandlerMapping
+     * @return true if the request passes the rate-limiting checks and is allowed, or false if it is denied
+     * @throws Exception if any error occurs during the handling process
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(!rateLimitProperties.isEnabled()){
+        if (!rateLimitProperties.isEnabled()) {
             logger.trace("RateLimitInterceptor is disabled");
             return true;
         }
-        if(request.getRequestURI().equals("/error")) {
+        if (request.getRequestURI().equals("/error")) {
             logger.trace("Request to error endpoint. Skipping rate limiting.");
             return true;
         }

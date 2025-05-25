@@ -1,15 +1,15 @@
-import { TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {TestBed} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { provideHttpClient } from '@angular/common/http';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ProfileComponent } from './profile.component';
-import { UserService } from '../../../shared/services/user.service';
-import { of, throwError } from 'rxjs';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../shared/services/auth.service';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideMockAuthService } from '../../../shared/test-util/test-util';
+import {provideHttpClient} from '@angular/common/http';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {ProfileComponent} from './profile.component';
+import {UserService} from '../../../shared/services/user.service';
+import {of} from 'rxjs';
+import {Router} from '@angular/router';
+import {AuthService} from '../../../shared/services/auth.service';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
+import {provideMockAuthService} from '../../../shared/test-util/test-util';
 
 describe('ProfileComponent', () => {
   beforeEach(async () => {
@@ -39,10 +39,10 @@ describe('ProfileComponent', () => {
 
   it('should fetch and set profile data on ngOnInit', () => {
     const userServiceSpy = jasmine.createSpyObj('UserService', ['getProfile']);
-    const mockProfile = { name: 'John Doe', email: 'john.doe@example.com' };
+    const mockProfile = {name: 'John Doe', email: 'john.doe@example.com'};
     userServiceSpy.getProfile.and.returnValue(of(mockProfile));
 
-    TestBed.overrideProvider(UserService, { useValue: userServiceSpy });
+    TestBed.overrideProvider(UserService, {useValue: userServiceSpy});
     const fixture = TestBed.createComponent(ProfileComponent);
     const component = fixture.componentInstance;
 
@@ -57,7 +57,7 @@ describe('ProfileComponent', () => {
 
 
     TestBed.overrideProvider(AuthService, provideMockAuthService(false));
-    TestBed.overrideProvider(Router, { useValue: routerSpy });
+    TestBed.overrideProvider(Router, {useValue: routerSpy});
     const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     const fixture = TestBed.createComponent(ProfileComponent);
     const component = fixture.componentInstance;

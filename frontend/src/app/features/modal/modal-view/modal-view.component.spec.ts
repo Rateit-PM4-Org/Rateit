@@ -1,13 +1,13 @@
-import { provideHttpClient } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { IonicModule } from '@ionic/angular';
-import { ActionSheetController, ToastController } from '@ionic/angular/standalone';
-import { of, throwError } from 'rxjs';
-import { RitService } from '../../../shared/services/rit.service';
-import { UserService } from '../../../shared/services/user.service';
-import { RitCreateComponent } from '../../rit/rit-create/rit-create.component';
-import { ModalViewComponent } from './modal-view.component';
+import {provideHttpClient} from '@angular/common/http';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {IonicModule} from '@ionic/angular';
+import {ActionSheetController, ToastController} from '@ionic/angular/standalone';
+import {of} from 'rxjs';
+import {RitService} from '../../../shared/services/rit.service';
+import {UserService} from '../../../shared/services/user.service';
+import {ModalViewComponent} from './modal-view.component';
+
 const userServiceMock = {
   isLoggedIn: () => of(true)
 };
@@ -30,10 +30,10 @@ describe('ModalViewComponent', () => {
       imports: [ModalViewComponent, IonicModule.forRoot(),
         NoopAnimationsModule],
       providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
-        { provide: ToastController, useValue: toastSpy },
-        { provide: ActionSheetController, useValue: actionSheetSpy },
+        {provide: UserService, useValue: userServiceMock},
+        {provide: RitService, useValue: ritServiceSpy},
+        {provide: ToastController, useValue: toastSpy},
+        {provide: ActionSheetController, useValue: actionSheetSpy},
         provideHttpClient()
       ]
     }).compileComponents();
@@ -52,7 +52,7 @@ describe('ModalViewComponent', () => {
 
   it('should dismiss modal if createRit returns true', async () => {
     const dismissSpy = jasmine.createSpy();
-    component.modal = { dismiss: dismissSpy } as any;
+    component.modal = {dismiss: dismissSpy} as any;
 
     component.content = {
       submit: () => Promise.resolve(true)
@@ -65,7 +65,7 @@ describe('ModalViewComponent', () => {
 
   it('should not dismiss modal if createRit returns false', async () => {
     const dismissSpy = jasmine.createSpy();
-    component.modal = { dismiss: dismissSpy } as any;
+    component.modal = {dismiss: dismissSpy} as any;
 
     component.content = {
       submit: () => Promise.resolve(false)
@@ -103,7 +103,7 @@ describe('ModalViewComponent', () => {
 
   it('canDismiss returns true if actionSheet returns confirm', async () => {
     const present = jasmine.createSpy().and.returnValue(Promise.resolve());
-    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({ role: 'confirm' }));
+    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({role: 'confirm'}));
     actionSheetControllerSpy.create.and.returnValue(Promise.resolve({
       present,
       onWillDismiss
@@ -117,7 +117,7 @@ describe('ModalViewComponent', () => {
 
   it('canDismiss returns false if actionSheet returns cancel', async () => {
     const present = jasmine.createSpy().and.returnValue(Promise.resolve());
-    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({ role: 'cancel' }));
+    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({role: 'cancel'}));
     actionSheetControllerSpy.create.and.returnValue(Promise.resolve({
       present,
       onWillDismiss
@@ -127,10 +127,10 @@ describe('ModalViewComponent', () => {
     expect(result).toBeFalse();
   });
 
-  
+
   it('should dismiss modal if createRit returns true', async () => {
     const dismissSpy = jasmine.createSpy();
-    component.modal = { dismiss: dismissSpy } as any;
+    component.modal = {dismiss: dismissSpy} as any;
 
     component.content = {
       submit: () => Promise.resolve(true)
@@ -143,7 +143,7 @@ describe('ModalViewComponent', () => {
 
   it('should not dismiss modal if createRit returns false', async () => {
     const dismissSpy = jasmine.createSpy();
-    component.modal = { dismiss: dismissSpy } as any;
+    component.modal = {dismiss: dismissSpy} as any;
 
     component.content = {
       submit: () => Promise.resolve(false)
@@ -181,7 +181,7 @@ describe('ModalViewComponent', () => {
 
   it('canDismiss returns true if actionSheet returns confirm', async () => {
     const present = jasmine.createSpy().and.returnValue(Promise.resolve());
-    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({ role: 'confirm' }));
+    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({role: 'confirm'}));
     actionSheetControllerSpy.create.and.returnValue(Promise.resolve({
       present,
       onWillDismiss
@@ -195,7 +195,7 @@ describe('ModalViewComponent', () => {
 
   it('canDismiss returns false if actionSheet returns cancel', async () => {
     const present = jasmine.createSpy().and.returnValue(Promise.resolve());
-    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({ role: 'cancel' }));
+    const onWillDismiss = jasmine.createSpy().and.returnValue(Promise.resolve({role: 'cancel'}));
     actionSheetControllerSpy.create.and.returnValue(Promise.resolve({
       present,
       onWillDismiss

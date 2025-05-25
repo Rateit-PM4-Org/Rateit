@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 /**
- * Service for managing user-logins and tokens
+ * Service for managing user-logins and tokens.
  *
  * @author Achille Hünenberger
  */
@@ -28,10 +28,11 @@ public class UserLoginService {
     }
 
     /**
-     * Verifies the login of a user and returns a token
+     * This method authenticates the user using their email and password. If successful, it retrieves
+     * the user details and generates a JWT token, which is then returned as a {@code TokenResponse}.
      *
-     * @param userLoginRequest
-     * @return
+     * @param userLoginRequest the user login request containing the email and password for authentication
+     * @return a {@code TokenResponse} containing the generated JWT token
      */
     public TokenResponse verifyLoginAndGetToken(UserLoginRequest userLoginRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.email(), userLoginRequest.password()));

@@ -1,7 +1,6 @@
 package ch.zhaw.rateit.api.logic.rit;
 
 import ch.zhaw.rateit.api.config.WebsecurityConfig;
-import ch.zhaw.rateit.api.logic.attachment.repository.AttachmentRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
@@ -42,23 +41,13 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private AttachmentRepository attachmentRepository;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
-    private final List<String> tags = List.of("tag1", "tag2");
-    private final List<String> codes = List.of("code1", "code2", "code3");
 
-    @BeforeEach
-    void setup() {
-        userRepository.deleteAll();
-        ritRepository.deleteAll();
-        attachmentRepository.deleteAll();
-        testUser.setEmailVerified(true);
-        userRepository.save(testUser);
-    }
+    private final List<String> tags = List.of("tag1", "tag2");
+
+    private final List<String> codes = List.of("code1", "code2", "code3");
 
     private static Stream<Arguments> provideValidRitCreateParams() {
         return Stream.of(
@@ -68,6 +57,24 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
                 Arguments.of("TestRit", null, List.of(), List.of("code1")),
                 Arguments.of("TestRit", null, List.of(), List.of("code1", "code2"))
         );
+    }
+
+    private static Stream<Arguments> provideInvalidRitCreateParams() {
+        return Stream.of(
+                Arguments.of("", "Details", List.of(), List.of()), // name blank
+                Arguments.of("   ", "Details", List.of(), List.of()), // name blank with spaces
+                Arguments.of(null, "Details", List.of(), List.of()), // name null
+                Arguments.of("TestRit", "Details", null, List.of()), // tags null
+                Arguments.of("TestRit", "Details", List.of(), null) // codes null
+        );
+    }
+
+    @BeforeEach
+    void setup() {
+        userRepository.deleteAll();
+        ritRepository.deleteAll();
+        testUser.setEmailVerified(true);
+        userRepository.save(testUser);
     }
 
     @ParameterizedTest
@@ -90,16 +97,6 @@ class RateitAPIRitCreateITTest extends AbstractBaseIntegrationTest {
         assertEquals(tags, rit.getTags(), "Rit tags must be equal to the input tags");
         assertFalse(rit.isPublished(), "Rit must not be published");
         assertEquals(testUser.getId(), rit.getOwner().getId(), "Rit owner must be equal to the input owner");
-    }
-
-    private static Stream<Arguments> provideInvalidRitCreateParams() {
-        return Stream.of(
-                Arguments.of("", "Details", List.of(), List.of()), // name blank
-                Arguments.of("   ", "Details", List.of(), List.of()), // name blank with spaces
-                Arguments.of(null, "Details", List.of(), List.of()), // name null
-                Arguments.of("TestRit", "Details", null, List.of()), // tags null
-                Arguments.of("TestRit", "Details", List.of(), null) // codes null
-        );
     }
 
     @ParameterizedTest

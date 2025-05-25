@@ -6,11 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Request object for creating a new rit.
+ * Request object for creating a new Rit.
  *
- * @param name    The name of the rit.
- * @param details The details of the rit.
- * @param tags    The tags of the rit.
+ * @param name    The name of the Rit
+ * @param details The details of the Rit
+ * @param tags    The tags of the Rit
+ * @param codes   The barcodes of the Rit
+ * @author Micha Mettler
  */
 public record RitCreateRequest(
         @NotBlank String name,

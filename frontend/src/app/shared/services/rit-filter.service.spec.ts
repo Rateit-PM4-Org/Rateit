@@ -1,8 +1,13 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { RatingComparisonOperator, RitSortAndFilterOptions, RitFilterService, SortOptionOperator, SortDirection } from './rit-filter.service';
-import { Rit } from '../../model/rit';
-import { barcode } from 'ionicons/icons';
+import {
+  RatingComparisonOperator,
+  RitFilterService,
+  RitSortAndFilterOptions,
+  SortDirection,
+  SortOptionOperator
+} from './rit-filter.service';
+import {Rit} from '../../model/rit';
 
 describe('RitFilterService', () => {
   let service: RitFilterService;
@@ -19,8 +24,8 @@ describe('RitFilterService', () => {
 
   it('should filter rits based on search text', () => {
     const rits: Rit[] = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
-      { id: '2', name: 'Another Rit', details: 'Details 2', tags: ['tag2'], codes: ['code2'] }
+      {id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1']},
+      {id: '2', name: 'Another Rit', details: 'Details 2', tags: ['tag2'], codes: ['code2']}
     ];
     const options: RitSortAndFilterOptions = {
       searchText: 'Test',
@@ -40,8 +45,8 @@ describe('RitFilterService', () => {
 
   it('should filter rits based on selected tag', () => {
     const rits: Rit[] = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1', 'common'], codes: ['code1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2', 'common'], codes: ['code2'] }
+      {id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1', 'common'], codes: ['code1']},
+      {id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2', 'common'], codes: ['code2']}
     ];
     const options: RitSortAndFilterOptions = {
       searchText: '',
@@ -61,9 +66,9 @@ describe('RitFilterService', () => {
 
   it('should filter rits based on both search text and tag', () => {
     const rits: Rit[] = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2'] },
-      { id: '3', name: 'Another Rit', details: 'Details 3', tags: ['tag1'], codes: ['code3'] }
+      {id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1']},
+      {id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2']},
+      {id: '3', name: 'Another Rit', details: 'Details 3', tags: ['tag1'], codes: ['code3']}
     ];
     const options: RitSortAndFilterOptions = {
       searchText: 'Test',
@@ -117,15 +122,15 @@ describe('RitFilterService', () => {
     const rits: Rit[] = [
       {
         id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+        ratings: [{value: 4, createdAt: '2023-01-01'}]
       },
       {
         id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+        ratings: [{value: 3, createdAt: '2023-01-01'}]
       },
       {
         id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
-        ratings: [{ value: 2, createdAt: '2023-01-01' }]
+        ratings: [{value: 2, createdAt: '2023-01-01'}]
       }
     ];
     const options: RitSortAndFilterOptions = {
@@ -149,15 +154,15 @@ describe('RitFilterService', () => {
     const rits: Rit[] = [
       {
         id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+        ratings: [{value: 4, createdAt: '2023-01-01'}]
       },
       {
         id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+        ratings: [{value: 3, createdAt: '2023-01-01'}]
       },
       {
         id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+        ratings: [{value: 3, createdAt: '2023-01-01'}]
       }
     ];
     const options: RitSortAndFilterOptions = {
@@ -181,15 +186,15 @@ describe('RitFilterService', () => {
     const rits: Rit[] = [
       {
         id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+        ratings: [{value: 4, createdAt: '2023-01-01'}]
       },
       {
         id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+        ratings: [{value: 3, createdAt: '2023-01-01'}]
       },
       {
         id: '3', name: 'Rit 3', details: 'Details 3', tags: [], codes: [],
-        ratings: [{ value: 2, createdAt: '2023-01-01' }]
+        ratings: [{value: 2, createdAt: '2023-01-01'}]
       }
     ];
     const options: RitSortAndFilterOptions = {
@@ -214,14 +219,14 @@ describe('RitFilterService', () => {
       {
         id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
         ratings: [
-          { value: 2, createdAt: '2023-01-01' },
-          { value: 5, createdAt: '2023-03-01' }, // Latest should be used
-          { value: 3, createdAt: '2023-02-01' }
+          {value: 2, createdAt: '2023-01-01'},
+          {value: 5, createdAt: '2023-03-01'}, // Latest should be used
+          {value: 3, createdAt: '2023-02-01'}
         ]
       },
       {
         id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+        ratings: [{value: 3, createdAt: '2023-01-01'}]
       }
     ];
     const options: RitSortAndFilterOptions = {
@@ -244,7 +249,7 @@ describe('RitFilterService', () => {
     const rits: Rit[] = [
       {
         id: '1', name: 'Rit 1', details: 'Details 1', tags: [], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+        ratings: [{value: 4, createdAt: '2023-01-01'}]
       },
       {
         id: '2', name: 'Rit 2', details: 'Details 2', tags: [], codes: [],
@@ -275,17 +280,17 @@ describe('RitFilterService', () => {
       {
         id: '1', name: 'Test Rit', details: 'Details 1',
         tags: ['tag1', 'tag2'], codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+        ratings: [{value: 4, createdAt: '2023-01-01'}]
       },
       {
         id: '2', name: 'Test Rit 2', details: 'Details 2',
         tags: ['tag1'], codes: [],
-        ratings: [{ value: 2, createdAt: '2023-01-01' }]
+        ratings: [{value: 2, createdAt: '2023-01-01'}]
       },
       {
         id: '3', name: 'Another Rit', details: 'Details 3',
         tags: ['tag1', 'tag2'], codes: [],
-        ratings: [{ value: 5, createdAt: '2023-01-01' }]
+        ratings: [{value: 5, createdAt: '2023-01-01'}]
       }
     ];
 
@@ -311,7 +316,7 @@ describe('RitFilterService', () => {
       details: 'Details 1',
       tags: ['tag1', 'tag2'],
       codes: ['code1'],
-      ratings: [{ id: 'r1', value: 4, createdAt: new Date().toISOString() }]
+      ratings: [{id: 'r1', value: 4, createdAt: new Date().toISOString()}]
     },
     {
       id: '2',
@@ -327,7 +332,7 @@ describe('RitFilterService', () => {
       details: 'Details 3',
       tags: ['tag1', 'tag3'],
       codes: ['code3'],
-      ratings: [{ id: 'r2', value: 2, createdAt: new Date().toISOString() }]
+      ratings: [{id: 'r2', value: 2, createdAt: new Date().toISOString()}]
     },
     {
       id: '4',
@@ -355,9 +360,9 @@ describe('RitFilterService', () => {
     const options = RitFilterService.getDefaultSortAndFilterOptions();
     options.ratingOperator = RatingComparisonOperator.NoRating;
     options.tags = ['tag3']; // Only include rits with 'tag3'
-    
+
     const filteredRits = RitFilterService.filterRits(mockRits, options);
-    
+
     expect(filteredRits.length).toBe(1);
     expect(filteredRits[0].id).toBe('2');
     expect(filteredRits[0].tags).toContain('tag3');
@@ -368,15 +373,15 @@ describe('RitFilterService', () => {
     // First with NoRating
     let options = RitFilterService.getDefaultSortAndFilterOptions();
     options.ratingOperator = RatingComparisonOperator.NoRating;
-    
+
     let filteredRits = RitFilterService.filterRits(mockRits, options);
     expect(filteredRits.length).toBe(2);
     expect(filteredRits.every(rit => !rit.ratings || rit.ratings.length === 0)).toBe(true);
-    
+
     // Now with GreaterThanOrEqual and a rating value
     options.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
     options.rating = 3;
-    
+
     filteredRits = RitFilterService.filterRits(mockRits, options);
     expect(filteredRits.length).toBe(1);
     expect(filteredRits[0].id).toBe('1');
@@ -388,9 +393,9 @@ describe('RitFilterService', () => {
     options.ratingOperator = RatingComparisonOperator.NoRating;
     options.sortOptionOperator = SortOptionOperator.Name;
     options.sortDirection = SortDirection.Ascending;
-    
+
     const filteredRits = RitFilterService.filterRits(mockRits, options);
-    
+
     expect(filteredRits.length).toBe(2);
     expect(filteredRits[0].id).toBe('4'); // "Another rit without rating" comes first alphabetically
     expect(filteredRits[1].id).toBe('2'); // "Rit with no rating" comes second
@@ -468,28 +473,28 @@ describe('getFilterOptionsFromUrl', () => {
   });
 
   it('should extract search text from query params', () => {
-    const params = { search: 'test query' };
+    const params = {search: 'test query'};
     const options = RitFilterService.getFilterOptionsFromUrl(params);
 
     expect(options.searchText).toBe('test query');
   });
 
   it('should extract a single tag from query params', () => {
-    const params = { tag: 'singleTag' };
+    const params = {tag: 'singleTag'};
     const options = RitFilterService.getFilterOptionsFromUrl(params);
 
     expect(options.tags).toEqual(['singleTag']);
   });
 
   it('should extract multiple tags from query params', () => {
-    const params = { tag: ['tag1', 'tag2'] };
+    const params = {tag: ['tag1', 'tag2']};
     const options = RitFilterService.getFilterOptionsFromUrl(params);
 
     expect(options.tags).toEqual(['tag1', 'tag2']);
   });
 
   it('should extract rating value from query params', () => {
-    const params = { rating: '4' };
+    const params = {rating: '4'};
     const options = RitFilterService.getFilterOptionsFromUrl(params);
 
     expect(options.rating).toBe(4);
@@ -550,7 +555,7 @@ describe('buildQueryParams', () => {
 
     const params = RitFilterService.buildQueryParams(options);
 
-    expect(params).toEqual({ search: 'test query' });
+    expect(params).toEqual({search: 'test query'});
   });
 
   it('should include tags in query params when set', () => {
@@ -566,7 +571,7 @@ describe('buildQueryParams', () => {
 
     const params = RitFilterService.buildQueryParams(options);
 
-    expect(params).toEqual({ tag: ['tag1', 'tag2'] });
+    expect(params).toEqual({tag: ['tag1', 'tag2']});
   });
 
   it('should include rating and operator in query params when rating is set', () => {
@@ -819,7 +824,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 1',
         tags: [],
         codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+        ratings: [{value: 3, createdAt: '2023-01-01'}]
       },
       {
         id: '2',
@@ -827,7 +832,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 2',
         tags: [],
         codes: [],
-        ratings: [{ value: 5, createdAt: '2023-01-01' }]
+        ratings: [{value: 5, createdAt: '2023-01-01'}]
       },
       {
         id: '3',
@@ -835,7 +840,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 3',
         tags: [],
         codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+        ratings: [{value: 4, createdAt: '2023-01-01'}]
       }
     ];
 
@@ -865,7 +870,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 1',
         tags: [],
         codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }]
+        ratings: [{value: 3, createdAt: '2023-01-01'}]
       },
       {
         id: '2',
@@ -873,7 +878,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 2',
         tags: [],
         codes: [],
-        ratings: [{ value: 5, createdAt: '2023-01-01' }]
+        ratings: [{value: 5, createdAt: '2023-01-01'}]
       },
       {
         id: '3',
@@ -881,7 +886,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 3',
         tags: [],
         codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }]
+        ratings: [{value: 4, createdAt: '2023-01-01'}]
       }
     ];
 
@@ -912,8 +917,8 @@ describe('RitFilterService - Sorting Tests', () => {
         tags: [],
         codes: [],
         ratings: [
-          { value: 2, createdAt: '2023-01-01' },
-          { value: 4, createdAt: '2023-03-01' } // Latest should be used
+          {value: 2, createdAt: '2023-01-01'},
+          {value: 4, createdAt: '2023-03-01'} // Latest should be used
         ]
       },
       {
@@ -922,7 +927,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 2',
         tags: [],
         codes: [],
-        ratings: [{ value: 5, createdAt: '2023-01-01' }]
+        ratings: [{value: 5, createdAt: '2023-01-01'}]
       },
       {
         id: '3',
@@ -959,7 +964,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 1',
         tags: ['tag1'],
         codes: [],
-        ratings: [{ value: 3, createdAt: '2023-01-01' }],
+        ratings: [{value: 3, createdAt: '2023-01-01'}],
         createdAt: '2023-01-15T10:00:00Z'
       },
       {
@@ -968,7 +973,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 2',
         tags: ['tag2'],
         codes: [],
-        ratings: [{ value: 5, createdAt: '2023-01-01' }],
+        ratings: [{value: 5, createdAt: '2023-01-01'}],
         createdAt: '2023-01-10T10:00:00Z'
       },
       {
@@ -977,7 +982,7 @@ describe('RitFilterService - Sorting Tests', () => {
         details: 'Details 3',
         tags: ['tag1'],
         codes: [],
-        ratings: [{ value: 4, createdAt: '2023-01-01' }],
+        ratings: [{value: 4, createdAt: '2023-01-01'}],
         createdAt: '2023-01-20T10:00:00Z'
       }
     ];
@@ -1000,11 +1005,10 @@ describe('RitFilterService - Sorting Tests', () => {
   });
 
 
-
   it('should calculate lastInteractionAt correctly - rating newer', () => {
     const ritMock = {
       updatedAt: '2023-01-01T00:00:00Z',
-      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+      ratings: [{createdAt: '2023-01-01T00:00:01Z'}]
     } as Rit;
 
     const result = RitFilterService.calculateLastInteractionAt(ritMock);
@@ -1015,7 +1019,7 @@ describe('RitFilterService - Sorting Tests', () => {
   it('should calculate lastInteractionAt correctly - multiple ratings', () => {
     const ritMock = {
       updatedAt: '2023-01-01T00:00:00Z',
-      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }, { createdAt: '2023-01-02T00:00:01Z' }]
+      ratings: [{createdAt: '2023-01-01T00:00:01Z'}, {createdAt: '2023-01-02T00:00:01Z'}]
     } as Rit;
 
     const result = RitFilterService.calculateLastInteractionAt(ritMock);
@@ -1037,7 +1041,7 @@ describe('RitFilterService - Sorting Tests', () => {
   it('should calculate lastInteractionAt correctly - updatedAt newer', () => {
     const ritMock = {
       updatedAt: '2023-01-01T00:00:02Z',
-      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+      ratings: [{createdAt: '2023-01-01T00:00:01Z'}]
     } as Rit;
 
     const result = RitFilterService.calculateLastInteractionAt(ritMock);
@@ -1057,7 +1061,7 @@ describe('RitFilterService - Sorting Tests', () => {
   it('should calculate lastInteractionAt correctly - no updatedAt', () => {
     const ritMock = {
       updatedAt: undefined,
-      ratings: [{ createdAt: '2023-01-01T00:00:01Z' }]
+      ratings: [{createdAt: '2023-01-01T00:00:01Z'}]
     } as Rit;
 
     const result = RitFilterService.calculateLastInteractionAt(ritMock);

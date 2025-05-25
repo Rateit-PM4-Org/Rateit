@@ -6,10 +6,10 @@
     <ion-card-content>
       <ion-grid>
         <ion-row>
-          <ion-col size="auto" *ngFor="let star of [1,2,3,4,5]; let i = index"
-            [class]="rating > 3 ? 'star-green' : (rating < 3 ? 'star-red' : 'star-orange')">
-            <ion-icon class="rating-star" [class.filled]="i < rating" [name]="i < rating ? 'star' : 'star-outline'"
-              (keydown.enter)="setRating(i + 1)" (click)="setRating(i + 1)">
+          <ion-col *ngFor="let star of [1,2,3,4,5]; let i = index" [class]="rating > 3 ? 'star-green' : (rating < 3 ? 'star-red' : 'star-orange')"
+                   size="auto">
+            <ion-icon (click)="setRating(i + 1)" (keydown.enter)="setRating(i + 1)" [class.filled]="i < rating"
+                      [name]="i < rating ? 'star' : 'star-outline'" class="rating-star">
             </ion-icon>
           </ion-col>
         </ion-row>
@@ -22,8 +22,8 @@
       <ion-card-title>Positive</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-textarea label="Enter Pros" [autoGrow]="true" labelPlacement="floating" fill="outline"
-        placeholder="Enter text" [value]="positiveComment" (ionInput)="setPositiveComment($event)">
+      <ion-textarea (ionInput)="setPositiveComment($event)" [autoGrow]="true" [value]="positiveComment" fill="outline"
+                    label="Enter Pros" labelPlacement="floating" placeholder="Enter text">
       </ion-textarea>
     </ion-card-content>
   </ion-card>
@@ -33,8 +33,8 @@
       <ion-card-title>Negative</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-textarea label="Enter Cons" [autoGrow]="true" labelPlacement="floating" fill="outline"
-        placeholder="Enter text" [value]="negativeComment" (ionInput)="setNegativeComment($event)">
+      <ion-textarea (ionInput)="setNegativeComment($event)" [autoGrow]="true" [value]="negativeComment" fill="outline"
+                    label="Enter Cons" labelPlacement="floating" placeholder="Enter text">
       </ion-textarea>
     </ion-card-content>
   </ion-card>

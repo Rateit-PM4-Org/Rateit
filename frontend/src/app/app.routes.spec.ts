@@ -1,14 +1,12 @@
-import { Location } from '@angular/common';
-import { Component } from '@angular/core';
-import { TestBed, waitForAsync } from '@angular/core/testing';
-import { provideRouter, Router, RouterOutlet } from '@angular/router';
-import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
-import { AuthGuard } from './shared/guards/auth.guard';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { AuthService } from './shared/services/auth.service';
-import { of } from 'rxjs';
-import { provideMockAuthService } from './shared/test-util/test-util';
+import {Location} from '@angular/common';
+import {Component} from '@angular/core';
+import {TestBed, waitForAsync} from '@angular/core/testing';
+import {provideRouter, Router, RouterOutlet} from '@angular/router';
+import {routes} from './app.routes';
+import {provideHttpClient} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
+import {AuthService} from './shared/services/auth.service';
+import {provideMockAuthService} from './shared/test-util/test-util';
 
 @Component({
   standalone: true,
@@ -16,7 +14,8 @@ import { provideMockAuthService } from './shared/test-util/test-util';
   template: '<router-outlet></router-outlet>',
   imports: [RouterOutlet],
 })
-class TestHostComponent { }
+class TestHostComponent {
+}
 
 describe('App Routing', () => {
   let router: Router;
@@ -40,7 +39,7 @@ describe('App Routing', () => {
   it('should not navigate to /profile (empty instead) if not authenticated', waitForAsync(async () => {
     const authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     authServiceSpy.isAuthenticated.and.returnValue(false);
-    
+
     const fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
 
@@ -73,14 +72,14 @@ describe('App Routing', () => {
   }));
 
   it('should navigate to /tabs/user/mail-confirmation', waitForAsync(async () => {
-    const fixture = TestBed.createComponent(TestHostComponent);
-    fixture.detectChanges();
+      const fixture = TestBed.createComponent(TestHostComponent);
+      fixture.detectChanges();
 
-    await router.navigate(['/tabs/user/mail-confirmation']);
-    fixture.detectChanges();
+      await router.navigate(['/tabs/user/mail-confirmation']);
+      fixture.detectChanges();
 
-    expect(location.path()).toBe('/tabs/user/mail-confirmation');
-  }
+      expect(location.path()).toBe('/tabs/user/mail-confirmation');
+    }
   ));
 
   it('should navigate to /tabs/login', waitForAsync(async () => {

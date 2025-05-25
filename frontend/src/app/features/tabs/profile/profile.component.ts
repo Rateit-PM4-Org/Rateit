@@ -17,8 +17,8 @@ import {ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
   ],
 })
 export class ProfileComponent implements ViewWillEnter, ViewWillLeave {
-  private profileSubscription: Subscription | null = null;
   profile: any;
+  private profileSubscription: Subscription | null = null;
 
   constructor(
     private readonly userService: UserService,

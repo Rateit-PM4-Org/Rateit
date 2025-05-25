@@ -18,7 +18,7 @@ import java.io.IOException;
 
 /**
  * Security-Filter for JWT-Auth:
- * - validates JWT and loads the current user into the Security-Context if successfull
+ * - validates JWT and loads the current user into the Security-Context if successful
  *
  * @author Achille Hünenberger
  */
@@ -34,6 +34,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Processes incoming HTTP requests, attempting to extract and validate a JWT token
+     * from the "Authorization" header. If a valid token is present and the user is not
+     * yet authenticated, it sets up the security context with the authenticated user's details.
+     * Otherwise, the request proceeds without authentication modification.
+     *
+     * @param request     the incoming HTTP request
+     * @param response    the outgoing HTTP response
+     * @param filterChain the filter chain for further processing of the request
+     * @throws ServletException if an error occurs during filtering
+     * @throws IOException      if an I/O error occurs during filtering
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
@@ -62,7 +74,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 
         } catch (RuntimeException e) {
-            logger.trace("JWT-Request-Filter failed: ",e.getCause());
+            logger.trace("JWT-Request-Filter failed: ", e.getCause());
         }
         filterChain.doFilter(request, response);
     }

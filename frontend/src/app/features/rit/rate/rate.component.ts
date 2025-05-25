@@ -22,8 +22,11 @@ addIcons({star, 'star-outline': starOutline});
 export class RateComponent implements ModalContent, OnInit, OnDestroy {
   @Input() rit!: Observable<Rit | null> | null;
   @Output() isDisabled = new EventEmitter<boolean>();
-  private ritSubscription: any;
+  rating: number = 0;
+  positiveComment: string = '';
+  negativeComment: string = '';
   protected currentRit: Rit | null = null;
+  private ritSubscription: any;
 
   constructor(private readonly ritService: RitService, private readonly toastController: ToastController) {
   }
@@ -39,10 +42,6 @@ export class RateComponent implements ModalContent, OnInit, OnDestroy {
       this.ritSubscription.unsubscribe();
     }
   }
-
-  rating: number = 0;
-  positiveComment: string = '';
-  negativeComment: string = '';
 
   setRating(value: number) {
     this.rating = this.rating === value ? 0 : value;
@@ -94,6 +93,10 @@ export class RateComponent implements ModalContent, OnInit, OnDestroy {
     await toast.present();
   }
 
+  validateFields() {
+    console.log(this.rating)
+    this.isDisabled.emit(this.rating === 0);
+  }
 
   private buildRequest(): Rating {
     return {
@@ -116,24 +119,9 @@ export class RateComponent implements ModalContent, OnInit, OnDestroy {
     const baseError = err.error?.error ?? 'Unknown error';
     const fields = err.error?.fields;
 
-    if (fields) {
-      this.setFieldErrorMessages(fields);
-    } else {
+    if (!fields) {
       this.showErrorToast(baseError);
     }
-  }
-
-  private setFieldErrorMessages(fields: any) {
-    // TODO: Handle field errors show in the UI
-  }
-
-  private formatFieldError(fieldError: string | string[]): string {
-    return Array.isArray(fieldError) ? fieldError.join(', ') : `${fieldError}`;
-  }
-
-  validateFields() {
-    console.log(this.rating)
-    this.isDisabled.emit(this.rating === 0);
   }
 
 

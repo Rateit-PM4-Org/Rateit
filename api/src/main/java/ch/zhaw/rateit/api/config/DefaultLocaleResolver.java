@@ -7,6 +7,12 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
+/**
+ * Configuration class responsible for defining the locale resolution strategy
+ * for the application.
+ *
+ * @author Achille Hünenberger
+ */
 @Configuration
 public class DefaultLocaleResolver {
     @Bean
