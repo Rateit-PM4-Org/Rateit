@@ -1,4 +1,4 @@
-FROM gradle:8.14.0-jdk-alpine AS build
+FROM gradle:8.14.1-jdk-alpine AS build
 
 COPY --chown=root:root --chmod=744 api/settings.gradle /app/settings.gradle
 COPY --chown=root:root --chmod=744 api/build.gradle /app/build.gradle
