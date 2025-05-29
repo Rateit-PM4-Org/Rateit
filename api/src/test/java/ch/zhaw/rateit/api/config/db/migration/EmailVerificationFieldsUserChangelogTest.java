@@ -11,7 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EmailVerificationFieldsUserChangelogTest extends AbstractBaseIntegrationTest {
 
-    @Autowired UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @BeforeEach
     void init() {

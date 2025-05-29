@@ -1,8 +1,8 @@
 package ch.zhaw.rateit.api.logic.rit;
 
-import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.entity.Rit;
 import ch.zhaw.rateit.api.logic.rit.entity.RitCreateRequest;
+import ch.zhaw.rateit.api.logic.rit.repository.RatingRepository;
 import ch.zhaw.rateit.api.logic.rit.repository.RitRepository;
 import ch.zhaw.rateit.api.logic.rit.service.RitService;
 import ch.zhaw.rateit.api.logic.user.entity.User;
@@ -12,8 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,13 +24,16 @@ class RateitAPIRitCreateTest {
 
     @Mock
     private RitRepository ritRepository;
+
     @Mock
     private RatingRepository ratingRepository;
 
     private RitService ritService;
 
     private final User testUser = new User("test@test.ch", "TestUser", "$2a$12$fTeYfYBa6t0CwZsPpv79IOcEePccWixAEDa9kg3aJcoDNu1dIVokq");
+
     private final List<String> tags = List.of("tag1", "tag2");
+
     private final List<String> codes = List.of("code1", "code2", "code3");
 
     @BeforeEach

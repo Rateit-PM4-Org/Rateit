@@ -1,10 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { AppBuildInfoComponent } from './app-build-info.component';
-import { provideHttpClient } from '@angular/common/http';
-import { provideMockApiService } from '../../../shared/test-util/test-util';
-import { ApiService } from '../../../shared/services/api.service';
-import { of } from 'rxjs';
+import {AppBuildInfoComponent} from './app-build-info.component';
+import {provideHttpClient} from '@angular/common/http';
+import {ApiService} from '../../../shared/services/api.service';
+import {of} from 'rxjs';
 
 describe('AppBuildInfoComponent', () => {
   let component: AppBuildInfoComponent;
@@ -19,7 +18,7 @@ describe('AppBuildInfoComponent', () => {
       providers: [
         {provide: ApiService, useValue: apiServiceSpy},
         provideHttpClient()
-      
+
       ],
     }).compileComponents();
 

@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { FabComponent } from './fab.component';
-import { of } from 'rxjs';
-import { provideHttpClient } from '@angular/common/http';
-import { UserService } from '../../../shared/services/user.service';
+import {FabComponent} from './fab.component';
+import {of} from 'rxjs';
+import {provideHttpClient} from '@angular/common/http';
+import {UserService} from '../../../shared/services/user.service';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -17,7 +17,7 @@ describe('FabComponent', () => {
     TestBed.configureTestingModule({
       imports: [FabComponent],
       providers: [
-        { provide: UserService, useValue: userServiceMock },
+        {provide: UserService, useValue: userServiceMock},
         provideHttpClient(),
       ]
 

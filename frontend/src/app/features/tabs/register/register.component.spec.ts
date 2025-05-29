@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RegisterComponent } from './register.component';
-import { provideHttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { UserService } from '../../../shared/services/user.service';
-import { of, throwError } from 'rxjs';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {RegisterComponent} from './register.component';
+import {provideHttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {UserService} from '../../../shared/services/user.service';
+import {of, throwError} from 'rxjs';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -19,8 +19,8 @@ describe('RegisterComponent', () => {
       imports: [RegisterComponent],
       providers: [
         provideHttpClient(),
-        { provide: UserService, useValue: userServiceSpy },
-        { provide: Router, useValue: routerSpy },
+        {provide: UserService, useValue: userServiceSpy},
+        {provide: Router, useValue: routerSpy},
       ]
     }).compileComponents();
 
@@ -53,25 +53,6 @@ describe('RegisterComponent', () => {
 
     expect(component['registrationSuccess']).toBe(true);
   });
-
-  /*it('should set errorMessage and clear password on registration error', () => {
-    const mockError = {
-      error: {
-        message: 'Registration failed.'
-      }
-    };
-    component['email'] = 'notAnEmail';
-    component['displayName'] = 'John Doe';
-    component['password'] = 'badPassword';
-
-    userServiceSpy.register.and.returnValue(throwError(() => mockError));
-
-    component.register();
-
-    expect(component['registrationErrorMessage']).toBe('Registration Error');
-    expect(component['registrationErrorFields']).toEqual({});
-    expect(component['password']).toBe('');
-  });*/
 
   it('should set registrationSuccess on registration error', () => {
     const mockError = {

@@ -17,14 +17,13 @@ import {ScannerSearchModalComponent} from '../../scanner-search-modal/scanner-se
 })
 export class FabIntegrationComponent implements OnInit, OnDestroy {
   @Input() rit!: Observable<Rit | null> | null;
-  private ritSubscription: any;
   currentRit: Rit | null = null;
   @ViewChild(FabComponent) fabComponent!: FabComponent;
   @ViewChild("ritCreateModal") ritCreateModalComponent!: ModalViewComponent;
   @ViewChild("rateModal") ratingCreateModalComponent!: ModalViewComponent;
   @ViewChild("ritSearchModal") ritSearchModal!: ModalViewComponent;
-
   buttons: FabButton[] = [];
+  private ritSubscription: any;
 
   ngOnInit() {
     this.updateButtons();

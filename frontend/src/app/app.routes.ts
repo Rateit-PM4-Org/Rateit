@@ -1,6 +1,6 @@
-import { Routes } from '@angular/router';
-import { TabMenuComponent } from './features/tabs/tab-menu/tab-menu.component';
-import { AuthGuard } from './shared/guards/auth.guard';
+import {Routes} from '@angular/router';
+import {TabMenuComponent} from './features/tabs/tab-menu/tab-menu.component';
+import {AuthGuard} from './shared/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -20,7 +20,7 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/rit/rit-create/rit-create.component').then((m) => m.RitCreateComponent),
             canActivate: [AuthGuard],
-            data: { mode: 'view' },
+            data: {mode: 'view'},
           },
           {
             path: 'rits/ratings/:ritId',
@@ -44,7 +44,7 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/rit/rit-create/rit-create.component').then((m) => m.RitCreateComponent),
             canActivate: [AuthGuard],
-            data: { mode: 'view' },
+            data: {mode: 'view'},
           },
           {
             path: 'ratings/:ritId',

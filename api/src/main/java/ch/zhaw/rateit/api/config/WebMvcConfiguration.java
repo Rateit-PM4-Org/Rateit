@@ -23,6 +23,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         this.rateLimitInterceptor = rateLimitInterceptor;
     }
 
+    /**
+     * Registers interceptors with the application.
+     * This method adds the rate-limit interceptor to the provided {@code InterceptorRegistry},
+     * applying it to all request paths if the interceptor is enabled.
+     *
+     * @param registry the {@code InterceptorRegistry} where interceptors are registered
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // Add the rate limit interceptor if it is not null (enabled).

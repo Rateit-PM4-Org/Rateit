@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-import { By } from '@angular/platform-browser';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
+import {By} from '@angular/platform-browser';
 import {RatingListItemComponent} from './rating-list-item.component';
 import {Rating} from '../../../model/rating';
 

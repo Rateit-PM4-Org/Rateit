@@ -1,14 +1,19 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { AllRitsComponent } from './all-rits.component';
-import { UserService } from '../../../shared/services/user.service';
-import { RitService } from '../../../shared/services/rit.service';
-import { provideHttpClient } from '@angular/common/http';
-import { Rit } from '../../../model/rit';
-import { of, throwError } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RatingComparisonOperator, RitFilterService, SortDirection, SortOptionOperator } from '../../../shared/services/rit-filter.service';
+import {AllRitsComponent} from './all-rits.component';
+import {UserService} from '../../../shared/services/user.service';
+import {RitService} from '../../../shared/services/rit.service';
+import {provideHttpClient} from '@angular/common/http';
+import {Rit} from '../../../model/rit';
+import {of, throwError} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  RatingComparisonOperator,
+  RitFilterService,
+  SortDirection,
+  SortOptionOperator
+} from '../../../shared/services/rit-filter.service';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -30,8 +35,8 @@ describe('AllRitsComponent', () => {
     TestBed.configureTestingModule({
       imports: [AllRitsComponent, IonicModule.forRoot()],
       providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
+        {provide: UserService, useValue: userServiceMock},
+        {provide: RitService, useValue: ritServiceSpy},
         {
           provide: ActivatedRoute,
           useValue: {
@@ -39,7 +44,7 @@ describe('AllRitsComponent', () => {
             queryParams: of({})
           }
         },
-        { provide: Router, useValue: routerSpy },
+        {provide: Router, useValue: routerSpy},
         provideHttpClient()
       ]
     }).compileComponents();
@@ -55,8 +60,8 @@ describe('AllRitsComponent', () => {
 
   it('should load rits on initialization', () => {
     const mockRits: Rit[] = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2'] }
+      {id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1']},
+      {id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2']}
     ];
     ritServiceSpy.getRits.and.returnValue(of(mockRits));
 
@@ -66,7 +71,7 @@ describe('AllRitsComponent', () => {
   });
 
   it('should show previous rits list when loading rits fails', () => {
-    const mockError = { error: { error: 'Failed to load rits' } };
+    const mockError = {error: {error: 'Failed to load rits'}};
     ritServiceSpy.getRits.and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
@@ -77,7 +82,7 @@ describe('AllRitsComponent', () => {
   it('should show error toast on error', async () => {
     spyOn(component, 'showErrorToast');
 
-    const mockError = { error: { error: 'Failed to load rits' } };
+    const mockError = {error: {error: 'Failed to load rits'}};
     ritServiceSpy.getRits.and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
@@ -91,7 +96,7 @@ describe('AllRitsComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
-        queryParams: jasmine.objectContaining({ tag: ['newTag'] })
+        queryParams: jasmine.objectContaining({tag: ['newTag']})
       })
     );
     expect(component.sortAndFilterOptions.tags).toEqual(['newTag']);
@@ -106,7 +111,7 @@ describe('AllRitsComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
-        queryParams: { search: 'someSearch' }
+        queryParams: {search: 'someSearch'}
       })
     );
     expect(component.sortAndFilterOptions.tags).toEqual([]);
@@ -131,7 +136,7 @@ describe('AllRitsComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
-        queryParams: jasmine.objectContaining({ tag: ['existingTag', 'newTag'] })
+        queryParams: jasmine.objectContaining({tag: ['existingTag', 'newTag']})
       })
     );
     expect(component.sortAndFilterOptions.tags).toEqual(['existingTag', 'newTag']);
@@ -145,7 +150,7 @@ describe('AllRitsComponent', () => {
     expect(routerSpy.navigate).not.toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
-        queryParams: jasmine.objectContaining({ tag: ['existingTag', 'existingTag'] })
+        queryParams: jasmine.objectContaining({tag: ['existingTag', 'existingTag']})
       })
     );
   });
@@ -157,7 +162,7 @@ describe('AllRitsComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],
       jasmine.objectContaining({
-        queryParams: jasmine.objectContaining({ tag: ['tag1', 'tag3'] })
+        queryParams: jasmine.objectContaining({tag: ['tag1', 'tag3']})
       })
     );
     expect(component.sortAndFilterOptions.tags).toEqual(['tag1', 'tag3']);
@@ -259,16 +264,16 @@ describe('AllRitsComponent', () => {
     TestBed.configureTestingModule({
       imports: [AllRitsComponent, IonicModule.forRoot()],
       providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
+        {provide: UserService, useValue: userServiceMock},
+        {provide: RitService, useValue: ritServiceSpy},
         {
           provide: ActivatedRoute,
           useValue: {
             params: of({}),
-            queryParams: of({ tag: 'testTag', search: 'testSearch' })
+            queryParams: of({tag: 'testTag', search: 'testSearch'})
           }
         },
-        { provide: Router, useValue: routerSpy },
+        {provide: Router, useValue: routerSpy},
         provideHttpClient()
       ]
     }).compileComponents();
@@ -334,8 +339,8 @@ describe('AllRitsComponent', () => {
     TestBed.configureTestingModule({
       imports: [AllRitsComponent, IonicModule.forRoot()],
       providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
+        {provide: UserService, useValue: userServiceMock},
+        {provide: RitService, useValue: ritServiceSpy},
         {
           provide: ActivatedRoute,
           useValue: {
@@ -346,7 +351,7 @@ describe('AllRitsComponent', () => {
             })
           }
         },
-        { provide: Router, useValue: routerSpy },
+        {provide: Router, useValue: routerSpy},
         provideHttpClient()
       ]
     }).compileComponents();
@@ -362,8 +367,8 @@ describe('AllRitsComponent', () => {
 
   it('should properly use RitFilterService.filterRits for filtering and sorting', () => {
     const mockRits: Rit[] = [
-      { id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1'] },
-      { id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2'] }
+      {id: '1', name: 'Test Rit 1', details: 'Details 1', tags: ['tag1'], codes: ['code1']},
+      {id: '2', name: 'Test Rit 2', details: 'Details 2', tags: ['tag2'], codes: ['code2']}
     ];
 
     component.rits = mockRits;
@@ -379,9 +384,9 @@ describe('AllRitsComponent', () => {
   it('should toggle to NoRating operator when toggleNoRatingFilter is called', () => {
     component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
     component.sortAndFilterOptions.rating = 3;
-    
+
     component.toggleNoRatingFilter();
-    
+
     expect(component.sortAndFilterOptions.ratingOperator).toBe(RatingComparisonOperator.NoRating);
     expect(component.sortAndFilterOptions.rating).toBe(0);
     expect(routerSpy.navigate).toHaveBeenCalledWith(
@@ -397,9 +402,9 @@ describe('AllRitsComponent', () => {
   it('should toggle back to default operator when toggleNoRatingFilter is called again', () => {
     // Initially set to NoRating operator
     component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.NoRating;
-    
+
     component.toggleNoRatingFilter();
-    
+
     expect(component.sortAndFilterOptions.ratingOperator).toBe(RatingComparisonOperator.GreaterThanOrEqual);
     expect(component.sortAndFilterOptions.rating).toBe(0);
     expect(routerSpy.navigate).toHaveBeenCalledWith(
@@ -415,21 +420,21 @@ describe('AllRitsComponent', () => {
     component.sortAndFilterOptions.tags = [];
     component.sortAndFilterOptions.rating = 0;
     component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.GreaterThanOrEqual;
-    
+
     expect(component.hasFilter()).toBe(false);
-    
+
     // Set NoRating filter
     component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.NoRating;
-    
+
     expect(component.hasFilter()).toBe(true);
   });
 
   it('should reset NoRating filter when clearFilters is called', () => {
     // Set NoRating filter
     component.sortAndFilterOptions.ratingOperator = RatingComparisonOperator.NoRating;
-    
+
     component.clearFilters();
-    
+
     expect(component.sortAndFilterOptions.ratingOperator).toBe(RatingComparisonOperator.GreaterThanOrEqual);
     expect(routerSpy.navigate).toHaveBeenCalledWith(
       [],

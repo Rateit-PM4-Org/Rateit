@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Rit } from '../../model/rit';
+import {Injectable} from '@angular/core';
+import {Rit} from '../../model/rit';
 
 export enum RatingComparisonOperator {
   GreaterThanOrEqual = 'gte',
@@ -35,7 +35,8 @@ export interface RitSortAndFilterOptions {
 })
 export class RitFilterService {
 
-  constructor() { }
+  constructor() {
+  }
 
   public static filterRits(rits: Rit[], options: RitSortAndFilterOptions): Rit[] {
     // Filter the rits first
@@ -78,76 +79,6 @@ export class RitFilterService {
 
     // Then sort the filtered results
     return this.sortRits(filteredRits, options);
-  }
-
-  private static sortRits(rits: Rit[], options: RitSortAndFilterOptions): Rit[] {
-
-    rits.sort((a, b) => {
-      let comparison = 0;
-
-      switch (options.sortOptionOperator) {
-        case SortOptionOperator.DateCreated: {
-          // Sort by creation date
-          const dateA = new Date(a.createdAt || 0);
-          const dateB = new Date(b.createdAt || 0);
-          comparison = dateA.getTime() - dateB.getTime();
-          break;
-        }
-
-        case SortOptionOperator.LastUpdated: {
-          // Use calculateLastInteractionAt for last update date
-          const lastInteractionA = this.calculateLastInteractionAt(a).getTime();
-          const lastInteractionB = this.calculateLastInteractionAt(b).getTime();
-          comparison = lastInteractionA - lastInteractionB;
-          break;
-        }
-
-        case SortOptionOperator.Rating: {
-          // Sort by rating
-          const ratingA = this.getLatestRatingValue(a);
-          const ratingB = this.getLatestRatingValue(b);
-          comparison = ratingA - ratingB;
-          break;
-        }
-
-        case SortOptionOperator.Name: {
-          // Sort by name
-          const nameA = a.name?.toLowerCase() || '';
-          const nameB = b.name?.toLowerCase() || '';
-          comparison = nameA.localeCompare(nameB);
-          break;
-        }
-
-        default: {
-          // Default to creation date if an unsupported sort option is provided
-          const defaultDateA = new Date(a.createdAt || 0);
-          const defaultDateB = new Date(b.createdAt || 0);
-          comparison = defaultDateA.getTime() - defaultDateB.getTime();
-          break;
-        }
-      }
-
-      // Apply sort direction
-      if (options.sortDirection === SortDirection.Descending) {
-        comparison = -comparison; // Invert the comparison for descending order
-      }
-
-      return comparison;
-    });
-
-    return rits;
-  }
-
-  private static getLatestRatingValue(rit: Rit): number {
-    if (!rit.ratings?.length) {
-      return 0;
-    }
-
-    const latestRating = rit.ratings.reduce((prev, current) => {
-      return new Date(prev.createdAt!) > new Date(current.createdAt!) ? prev : current;
-    }, rit.ratings[0]);
-
-    return latestRating.value ?? 0;
   }
 
   public static calculateLastInteractionAt(rit: Rit): Date {
@@ -239,5 +170,75 @@ export class RitFilterService {
       sortOptionOperator: SortOptionOperator.DateCreated,
       sortDirection: SortDirection.Descending,
     };
+  }
+
+  private static sortRits(rits: Rit[], options: RitSortAndFilterOptions): Rit[] {
+
+    rits.sort((a, b) => {
+      let comparison = 0;
+
+      switch (options.sortOptionOperator) {
+        case SortOptionOperator.DateCreated: {
+          // Sort by creation date
+          const dateA = new Date(a.createdAt || 0);
+          const dateB = new Date(b.createdAt || 0);
+          comparison = dateA.getTime() - dateB.getTime();
+          break;
+        }
+
+        case SortOptionOperator.LastUpdated: {
+          // Use calculateLastInteractionAt for last update date
+          const lastInteractionA = this.calculateLastInteractionAt(a).getTime();
+          const lastInteractionB = this.calculateLastInteractionAt(b).getTime();
+          comparison = lastInteractionA - lastInteractionB;
+          break;
+        }
+
+        case SortOptionOperator.Rating: {
+          // Sort by rating
+          const ratingA = this.getLatestRatingValue(a);
+          const ratingB = this.getLatestRatingValue(b);
+          comparison = ratingA - ratingB;
+          break;
+        }
+
+        case SortOptionOperator.Name: {
+          // Sort by name
+          const nameA = a.name?.toLowerCase() || '';
+          const nameB = b.name?.toLowerCase() || '';
+          comparison = nameA.localeCompare(nameB);
+          break;
+        }
+
+        default: {
+          // Default to creation date if an unsupported sort option is provided
+          const defaultDateA = new Date(a.createdAt || 0);
+          const defaultDateB = new Date(b.createdAt || 0);
+          comparison = defaultDateA.getTime() - defaultDateB.getTime();
+          break;
+        }
+      }
+
+      // Apply sort direction
+      if (options.sortDirection === SortDirection.Descending) {
+        comparison = -comparison; // Invert the comparison for descending order
+      }
+
+      return comparison;
+    });
+
+    return rits;
+  }
+
+  private static getLatestRatingValue(rit: Rit): number {
+    if (!rit.ratings?.length) {
+      return 0;
+    }
+
+    const latestRating = rit.ratings.reduce((prev, current) => {
+      return new Date(prev.createdAt!) > new Date(current.createdAt!) ? prev : current;
+    }, rit.ratings[0]);
+
+    return latestRating.value ?? 0;
   }
 }

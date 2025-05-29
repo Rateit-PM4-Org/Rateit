@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { UserService } from '../../../shared/services/user.service';
-import { provideHttpClient } from '@angular/common/http';
-import { of, throwError } from 'rxjs';
+import {UserService} from '../../../shared/services/user.service';
+import {provideHttpClient} from '@angular/common/http';
+import {of, throwError} from 'rxjs';
 import {AllRatingsComponent} from './all-ratings.component';
 import {Rating} from '../../../model/rating';
-import { ActivatedRoute } from '@angular/router';
-import { RitService } from '../../../shared/services/rit.service';
-import { Rit } from '../../../model/rit';
+import {ActivatedRoute} from '@angular/router';
+import {RitService} from '../../../shared/services/rit.service';
+import {Rit} from '../../../model/rit';
 
 const userServiceMock = {
   isLoggedIn: () => of(true)
@@ -28,14 +28,14 @@ describe('AllRatingsComponent', () => {
     TestBed.configureTestingModule({
       imports: [AllRatingsComponent, IonicModule.forRoot()],
       providers: [
-        { provide: UserService, useValue: userServiceMock },
-        { provide: RitService, useValue: ritServiceSpy },
+        {provide: UserService, useValue: userServiceMock},
+        {provide: RitService, useValue: ritServiceSpy},
         provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              params: { ritId: '1' }
+              params: {ritId: '1'}
             }
           }
         }
@@ -53,8 +53,8 @@ describe('AllRatingsComponent', () => {
 
   it('should load ratings on initialization', () => {
     const mockRatings: Rating[] = [
-      { id: '1', value: 5 },
-      { id: '2', value: 4 }
+      {id: '1', value: 5},
+      {id: '2', value: 4}
     ];
     const mockRit: Rit = {
       id: '1',
@@ -73,7 +73,7 @@ describe('AllRatingsComponent', () => {
   });
 
   it('should handle show empty list when loading ratings fails', () => {
-    const mockError = { error: { error: 'Failed to load ratings' } };
+    const mockError = {error: {error: 'Failed to load ratings'}};
     ritServiceSpy.getRitById.and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
@@ -84,7 +84,7 @@ describe('AllRatingsComponent', () => {
   it('should show error toast on error', async () => {
     spyOn(component, 'showErrorToast');
 
-    const mockError = { error: { error: 'Failed to load ratings' } };
+    const mockError = {error: {error: 'Failed to load ratings'}};
     ritServiceSpy.getRitById.and.returnValue(throwError(() => mockError));
 
     component.ionViewWillEnter();
@@ -101,7 +101,7 @@ describe('AllRatingsComponent', () => {
     spyOn(component, 'loadRatings');
     spyOn(component, 'showSuccessToast');
 
-    component['activatedRoute'].snapshot.params = { ritId };
+    component['activatedRoute'].snapshot.params = {ritId};
 
     component.deleteRating(ratingId);
 

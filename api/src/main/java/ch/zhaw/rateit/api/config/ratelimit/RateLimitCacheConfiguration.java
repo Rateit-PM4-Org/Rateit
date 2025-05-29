@@ -17,12 +17,14 @@ import java.util.concurrent.TimeUnit;
  * Configuration for the rate limit cache.
  * The cache is used to store the rate limit buckets.
  *
- * @see RateLimitService
  * @author Achille Hünenberger
+ * @see RateLimitService
  */
 @Configuration
 @ConditionalOnProperty(value = "rate.limiting.enabled", havingValue = "true")
 public class RateLimitCacheConfiguration {
+
+    private static final Logger logger = LoggerFactory.getLogger(RateLimitCacheConfiguration.class);
 
     /**
      * Maximum size of the cache.
@@ -31,13 +33,15 @@ public class RateLimitCacheConfiguration {
     private long maximumSize;
 
     /**
-     * Expire after write time of the cache in Minutes.
+     * Expire after writing time of the cache in Minutes.
      */
     @Value("${rate.limiting.cache.expire-after-write}")
     private long expireAfterWrite;
 
-    private static final Logger logger = LoggerFactory.getLogger(RateLimitCacheConfiguration.class);
-
+    /**
+     * Logs the configuration details of the rate limit cache after the application
+     * initializes the corresponding properties.
+     */
     @PostConstruct
     public void init() {
         logger.info("Rate limit cache configuration: Maximum size: {} - Expire after write: {} minutes", maximumSize, expireAfterWrite);
