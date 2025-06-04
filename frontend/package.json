@@ -27,7 +27,7 @@
     "@angular/service-worker": "^20.0.0",
     "@ionic/angular": "^8.5.8",
     "@ionic/pwa-elements": "^3.3.0",
-    "ionicons": "^8.0.8",
+    "ionicons": "^8.0.9",
     "karma-sonarqube-reporter": "^1.4.0",
     "quagga": "^0.12.1",
     "rxjs": "~7.8.0",
