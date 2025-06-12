@@ -35,9 +35,9 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^20.0.1",
-    "@angular/cli": "^20.0.1",
-    "@angular/compiler-cli": "^20.0.2",
+    "@angular-devkit/build-angular": "^20.0.2",
+    "@angular/cli": "^20.0.2",
+    "@angular/compiler-cli": "^20.0.3",
     "@ionic/angular-toolkit": "^12.2.0",
     "@types/jasmine": "~5.1.8",
     "fs-extra": "11.3.0",
