@@ -41,7 +41,7 @@ dependencies {
 
 	// Cacheing
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
-	implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.2.1'
 
 	// Auth
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
