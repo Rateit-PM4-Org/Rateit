@@ -25,7 +25,7 @@
     "@angular/platform-browser-dynamic": "^20.0.4",
     "@angular/router": "^20.0.4",
     "@angular/service-worker": "^20.0.4",
-    "@ionic/angular": "^8.6.1",
+    "@ionic/angular": "^8.6.2",
     "@ionic/pwa-elements": "^3.3.0",
     "ionicons": "^8.0.9",
     "karma-sonarqube-reporter": "^1.4.0",
