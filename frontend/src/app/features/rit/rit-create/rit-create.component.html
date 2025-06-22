@@ -48,7 +48,7 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-textarea (ionInput)="setDetails($event)" [autoGrow]="true" [disabled]="mode === 'view'"
+      <ion-textarea (ionInput)="setDetails($event)" [autoGrow]="true" [readonly]="mode === 'view'"
                     [readonly]="mode === 'view'" [value]="details" placeholder="Details...">
       </ion-textarea>
       <ion-text *ngIf="detailsErrorMessage" color="danger">
