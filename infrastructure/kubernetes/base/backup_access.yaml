@@ -27,7 +27,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: backup-access-container
-          image: svenstaro/miniserve:0.29.0
+          image: svenstaro/miniserve:0.31.0
           volumeMounts:
             - name: backup-storage
               mountPath: /files
