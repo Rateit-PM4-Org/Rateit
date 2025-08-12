@@ -49,7 +49,7 @@ jobs:
               app-id: ${{ vars.RATEIT_BOT_APPID }}
               private-key: ${{ secrets.RATEIT_BOT_SECRET }}
           - name: Checkout repository
-            uses: actions/checkout@v4
+            uses: actions/checkout@v5
             with:
               token: ${{ steps.app-token.outputs.token }}
           - name: Update Deployment Image Tags in FIles
