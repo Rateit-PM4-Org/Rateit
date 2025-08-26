@@ -1,11 +1,11 @@
 import org.springframework.boot.gradle.tasks.run.BootRun
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.2'
+	id 'org.springframework.boot' version '3.5.5'
 	id 'io.spring.dependency-management' version '1.1.7'
-	id "com.gorylenko.gradle-git-properties" version "2.5.0"
+	id "com.gorylenko.gradle-git-properties" version "2.5.2"
 	id 'jacoco'
-	id "org.sonarqube" version "6.2.0.5505"
+	id "org.sonarqube" version "6.3.0.5676"
 }
 
 group = 'ch.zhaw.rateit'
@@ -41,12 +41,12 @@ dependencies {
 
 	// Cacheing
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
-	implementation 'com.github.ben-manes.caffeine:caffeine:3.2.1'
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.2.2'
 
 	// Auth
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+	implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.13.0'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.13.0'
 
 	// Mongock
 	implementation "io.mongock:mongock:5.5.1"
@@ -59,10 +59,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testImplementation "org.testcontainers:testcontainers:1.21.2"
-	testImplementation "org.testcontainers:junit-jupiter:1.21.2"
-	testImplementation "org.testcontainers:mongodb:1.21.2"
-	testImplementation 'org.mockito:mockito-junit-jupiter:5.18.0'
+	testImplementation "org.testcontainers:testcontainers:1.21.3"
+	testImplementation "org.testcontainers:junit-jupiter:1.21.3"
+	testImplementation "org.testcontainers:mongodb:1.21.3"
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.19.0'
 
 }
 
