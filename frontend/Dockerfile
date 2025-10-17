@@ -1,4 +1,4 @@
-FROM node:24 AS build
+FROM node:25 AS build
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ COPY .git/ .git/
 
 RUN npm run build -- --output-path=dist/browser
 
-FROM nginx:1.27.5-alpine-slim
+FROM nginx:1.29.2-alpine-slim
 
 WORKDIR /usr/share/nginx/html
 
