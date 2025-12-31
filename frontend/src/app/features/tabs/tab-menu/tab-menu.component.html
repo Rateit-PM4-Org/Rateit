@@ -5,22 +5,28 @@
       Home
     </ion-tab-button>
 
-    <ion-tab-button (click)="navigateToTab('rits')" (keydown.enter)="navigateToTab('rits')" *ngIf="isAuthenticated"
-                    tab="rits">
-      <ion-icon name="star-outline"></ion-icon>
-      Rits
-    </ion-tab-button>
+    @if (isAuthenticated) {
+      <ion-tab-button (click)="navigateToTab('rits')" (keydown.enter)="navigateToTab('rits')"
+        tab="rits">
+        <ion-icon name="star-outline"></ion-icon>
+        Rits
+      </ion-tab-button>
+    }
 
-    <ion-tab-button (click)="navigateToTab('login')" (keydown.enter)="navigateToTab('login')" *ngIf="!isAuthenticated"
-                    tab="login">
-      <ion-icon name="log-in-outline"></ion-icon>
-      Login
-    </ion-tab-button>
+    @if (!isAuthenticated) {
+      <ion-tab-button (click)="navigateToTab('login')" (keydown.enter)="navigateToTab('login')"
+        tab="login">
+        <ion-icon name="log-in-outline"></ion-icon>
+        Login
+      </ion-tab-button>
+    }
 
-    <ion-tab-button (click)="navigateToTab('profile')" (keydown.enter)="navigateToTab('profile')" *ngIf="isAuthenticated"
-                    tab="profile">
-      <ion-icon name="person-outline"></ion-icon>
-      Profile
-    </ion-tab-button>
+    @if (isAuthenticated) {
+      <ion-tab-button (click)="navigateToTab('profile')" (keydown.enter)="navigateToTab('profile')"
+        tab="profile">
+        <ion-icon name="person-outline"></ion-icon>
+        Profile
+      </ion-tab-button>
+    }
   </ion-tab-bar>
 </ion-tabs>
