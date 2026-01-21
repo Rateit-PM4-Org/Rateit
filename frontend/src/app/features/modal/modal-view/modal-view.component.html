@@ -8,11 +8,13 @@
           </ion-button>
         </ion-buttons>
         <ion-title>{{ title }}</ion-title>
-        <ion-buttons *ngIf="confirmable" slot="end">
-          <ion-button (click)="confirm()" (keydown.enter)="confirm()" [disabled]="isDisabled" [strong]="true">
-            Confirm
-          </ion-button>
-        </ion-buttons>
+        @if (confirmable) {
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" (keydown.enter)="confirm()" [disabled]="isDisabled" [strong]="true">
+              Confirm
+            </ion-button>
+          </ion-buttons>
+        }
       </ion-toolbar>
     </ion-header>
 

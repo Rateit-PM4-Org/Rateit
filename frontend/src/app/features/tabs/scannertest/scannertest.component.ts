@@ -2,7 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {ScannerComponent} from '../../scanner/scanner.component';
 import {ToastController, ViewDidEnter} from '@ionic/angular';
-import {CommonModule} from '@angular/common';
+
 import {ViewWillLeave} from '@ionic/angular/standalone';
 
 @Component({
@@ -10,7 +10,7 @@ import {ViewWillLeave} from '@ionic/angular/standalone';
   templateUrl: './scannertest.component.html',
   styleUrls: ['./scannertest.component.scss'],
   standalone: true,
-  imports: [...IonicStandaloneStandardImports, ScannerComponent, CommonModule],
+  imports: [...IonicStandaloneStandardImports, ScannerComponent],
 })
 export class ScannertestComponent implements ViewDidEnter, ViewWillLeave {
 
