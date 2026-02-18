@@ -38,36 +38,39 @@
   <ion-text>
     <h2>Backend</h2>
   </ion-text>
-  <ion-text *ngIf="backend==null">Backend is not available</ion-text>
-  <ion-list *ngIf="backend!=null">
-
-    <ion-item>
-      <ion-label>Short Hash</ion-label>
-      <ion-note>{{ backend.git.commit.id.abbrev }}</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-label>Full Hash</ion-label>
-      <ion-note>{{ backend.git.commit.id.full }}</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-label>Commit</ion-label>
-      <ion-note>{{ backend.git.commit.message.short }}</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-label>Committer</ion-label>
-      <ion-note>{{ backend.git.commit.user.name }}</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-label>Commit Time</ion-label>
-      <ion-note>{{ backend.git.commit.time | date: 'full' }}</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-label>Branch</ion-label>
-      <ion-note>{{ backend.git.branch }}</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-label>Build Time</ion-label>
-      <ion-note>{{ backend.build.time | date: 'full' }}</ion-note>
-    </ion-item>
-  </ion-list>
+  @if (backend==null) {
+    <ion-text>Backend is not available</ion-text>
+  }
+  @if (backend!=null) {
+    <ion-list>
+      <ion-item>
+        <ion-label>Short Hash</ion-label>
+        <ion-note>{{ backend.git.commit.id.abbrev }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Full Hash</ion-label>
+        <ion-note>{{ backend.git.commit.id.full }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Commit</ion-label>
+        <ion-note>{{ backend.git.commit.message.short }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Committer</ion-label>
+        <ion-note>{{ backend.git.commit.user.name }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Commit Time</ion-label>
+        <ion-note>{{ backend.git.commit.time | date: 'full' }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Branch</ion-label>
+        <ion-note>{{ backend.git.branch }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Build Time</ion-label>
+        <ion-note>{{ backend.build.time | date: 'full' }}</ion-note>
+      </ion-item>
+    </ion-list>
+  }
 </ion-content>
