@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component, OnInit} from '@angular/core';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {AuthService} from '../../../shared/services/auth.service';
@@ -13,8 +13,9 @@ import {ViewWillEnter} from '@ionic/angular/standalone';
   styleUrls: ['./login.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports
-  ],
+    ReactiveFormsModule,
+    ...IonicStandaloneStandardImports
+],
 })
 export class LoginComponent implements OnInit, ViewWillEnter {
   form: FormGroup = new FormGroup({

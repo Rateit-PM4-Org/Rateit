@@ -24,7 +24,7 @@ import {
 } from 'ionicons/icons';
 import {AppComponent} from './app/app.component';
 import {routes} from './app/app.routes';
-import {isDevMode} from '@angular/core';
+import {isDevMode, provideZoneChangeDetection} from '@angular/core';
 import {provideServiceWorker} from '@angular/service-worker';
 
 // Call the element loader before the bootstrapModule/bootstrapApplication call
@@ -32,7 +32,7 @@ defineCustomElements(window);
 
 bootstrapApplication(AppComponent, {
   providers: [
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    provideZoneChangeDetection(),{provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     provideHttpClient(),
     provideIonicAngular({mode: 'ios'}),
     provideRouter(routes), provideServiceWorker('ngsw-worker.js', {
