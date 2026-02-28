@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component} from '@angular/core';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {Router} from '@angular/router';
@@ -13,8 +13,9 @@ import {ViewWillEnter} from '@ionic/angular/standalone';
   styleUrls: ['./register.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports
-  ],
+    ReactiveFormsModule,
+    ...IonicStandaloneStandardImports
+],
 })
 export class RegisterComponent implements ViewWillEnter {
   form: FormGroup = new FormGroup({
