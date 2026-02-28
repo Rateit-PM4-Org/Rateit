@@ -4,55 +4,59 @@
   </ion-toolbar>
 </ion-header>
 
-<div *ngIf="loading" class="loading-overlay">
-  <ion-spinner name="crescent"></ion-spinner>
-</div>
-
-<ion-content *ngIf="(authState$ | async) === AuthState.NOT_AUTHENTICATED" class="ion-padding" scroll-y="false">
-  <div class="welcome-container">
-    <img alt="App Logo" class="welcome-logo" src="/icons/AppIcon.png"/>
-    <h1>Welcome to Rateit!</h1>
-    <p>Discover honest ratings. Keep track of your experiences in a simple and authentic way.</p>
-    <ion-button (click)="goToLogin()" (keydown.enter)="goToLogin()" type="submit">Get Started</ion-button>
+@if (loading) {
+  <div class="loading-overlay">
+    <ion-spinner name="crescent"></ion-spinner>
   </div>
-</ion-content>
+}
 
-<ng-container *ngIf="(authState$ | async) === AuthState.AUTHENTICATED">
+@if ((authState$ | async) === AuthState.NOT_AUTHENTICATED) {
+  <ion-content class="ion-padding" scroll-y="false">
+    <div class="welcome-container">
+      <img alt="App Logo" class="welcome-logo" src="/icons/AppIcon.png"/>
+      <h1>Welcome to Rateit!</h1>
+      <p>Discover honest ratings. Keep track of your experiences in a simple and authentic way.</p>
+      <ion-button (click)="goToLogin()" (keydown.enter)="goToLogin()" type="submit">Get Started</ion-button>
+    </div>
+  </ion-content>
+}
+
+@if ((authState$ | async) === AuthState.AUTHENTICATED) {
   <div class="ion-padding" scroll-y="false">
     <ion-label>Your top Tags</ion-label>
   </div>
-
   <div class="ion-padding-horizontal" scroll-y="false">
     <ion-grid>
       <ion-row>
-        <ion-col *ngFor="let tag of tags; let i = index" data-testid="tag-item" size="6">
-          <app-tag-list-item [tag]="tag"></app-tag-list-item>
-        </ion-col>
+        @for (tag of tags; track tag; let i = $index) {
+          <ion-col data-testid="tag-item" size="6">
+            <app-tag-list-item [tag]="tag"></app-tag-list-item>
+          </ion-col>
+        }
       </ion-row>
     </ion-grid>
   </div>
-
   <div class="ion-padding" scroll-y="false">
     <div class="rits-header-row">
       <ion-label>Your latest Rits</ion-label>
       <ion-button (click)="goToRitsTab()" (keydown.enter)="goToRitsTab()" class="show-all-button" data-testid="show-all-rits"
-                  size="small">
+        size="small">
         Show all
         <ion-icon name="chevron-forward" slot="end"></ion-icon>
       </ion-button>
     </div>
   </div>
-
   <ion-content class="ion-padding-horizontal" scroll-y="true">
     <ion-refresher (ionRefresh)="handleRefresh($event)" slot="fixed">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-list>
-      <app-rit-list-item *ngFor="let rit of latestRits()" [onTagClick]="handleTagNavigation" [rit]="rit">
-      </app-rit-list-item>
+      @for (rit of latestRits(); track rit) {
+        <app-rit-list-item [onTagClick]="handleTagNavigation" [rit]="rit">
+        </app-rit-list-item>
+      }
     </ion-list>
   </ion-content>
-
   <app-fab-integration></app-fab-integration>
-</ng-container>
+}
 
