@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component} from '@angular/core';
 import {IonApp, IonRouterOutlet} from '@ionic/angular/standalone';
 
@@ -6,9 +6,9 @@ import {IonApp, IonRouterOutlet} from '@ionic/angular/standalone';
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule,
-    IonApp, IonRouterOutlet
-  ],
+    IonApp,
+    IonRouterOutlet
+],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

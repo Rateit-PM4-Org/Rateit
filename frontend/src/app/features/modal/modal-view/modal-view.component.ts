@@ -1,13 +1,13 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActionSheetController, IonModal, ToastController} from '@ionic/angular/standalone';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
-import {CommonModule} from '@angular/common';
+
 
 @Component({
   selector: 'app-modal-view',
   templateUrl: './modal-view.component.html',
   styleUrls: ['./modal-view.component.scss'],
-  imports: [CommonModule, ...IonicStandaloneStandardImports],
+  imports: [...IonicStandaloneStandardImports],
   standalone: true,
 })
 export class ModalViewComponent implements OnInit, OnDestroy, AfterViewInit {
