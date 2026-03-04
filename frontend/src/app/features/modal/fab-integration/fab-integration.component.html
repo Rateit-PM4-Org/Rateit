@@ -2,9 +2,11 @@
 <app-modal-view #ritCreateModal [confirmable]="true" [content]="ritCreate" [title]="'Create Rit'">
   <app-rit-create #ritCreate></app-rit-create>
 </app-modal-view>
-<app-modal-view #rateModal *ngIf="currentRit != null" [confirmable]="true" [content]="rate" [title]="'Create Rating'">
-  <app-rate #rate [rit]="rit"></app-rate>
-</app-modal-view>
+@if (currentRit != null) {
+  <app-modal-view #rateModal [confirmable]="true" [content]="rate" [title]="'Create Rating'">
+    <app-rate #rate [rit]="rit"></app-rate>
+  </app-modal-view>
+}
 <app-modal-view #ritSearchModal [confirmable]="false" [content]="ritSearch" [title]="'Search Rit'">
   <app-scanner-search-modal #ritSearch></app-scanner-search-modal>
 </app-modal-view>
