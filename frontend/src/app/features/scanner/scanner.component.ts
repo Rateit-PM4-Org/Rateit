@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import Quagga from 'quagga';
-import {CommonModule} from '@angular/common';
+
 
 
 @Component({
@@ -8,7 +8,7 @@ import {CommonModule} from '@angular/common';
   templateUrl: './scanner.component.html',
   styleUrls: ['./scanner.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
 })
 export class ScannerComponent {
   @ViewChild('videoElement', {static: false}) videoElement!: ElementRef<HTMLDivElement>;
