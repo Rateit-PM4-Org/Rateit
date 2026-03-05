@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component} from '@angular/core';
 import {ToastController, ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
@@ -22,12 +22,7 @@ import {
   templateUrl: './all-rits.component.html',
   styleUrls: ['./all-rits.component.scss'],
   standalone: true,
-  imports: [CommonModule,
-    ...IonicStandaloneStandardImports,
-    FormsModule,
-    RitListItemComponent,
-    FabIntegrationComponent
-  ],
+  imports: [...IonicStandaloneStandardImports, FormsModule, RitListItemComponent, FabIntegrationComponent],
 })
 
 export class AllRitsComponent implements ViewWillEnter, ViewWillLeave {
