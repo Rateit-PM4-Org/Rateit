@@ -1,45 +1,52 @@
-<ion-header *ngIf="mode !== 'create'">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>Rit</ion-title>
-
-    <ion-buttons *ngIf="mode === 'edit'" slot="end">
-      <ion-button (click)="updateRit()" (keydown.enter)="updateRit()" [disabled]="!ritName?.trim()">
-        Confirm
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+@if (mode !== 'create') {
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>Rit</ion-title>
+      @if (mode === 'edit') {
+        <ion-buttons slot="end">
+          <ion-button (click)="updateRit()" (keydown.enter)="updateRit()" [disabled]="!ritName?.trim()">
+            Confirm
+          </ion-button>
+        </ion-buttons>
+      }
+    </ion-toolbar>
+  </ion-header>
+}
 
 <ion-content>
   <ion-card>
     <ion-card-header>
       <ion-card-title class="rit-title-container">
         <ion-input (ionInput)="setRitName($event)" [readonly]="mode === 'view'" [value]="ritName"
-                   placeholder="Rit Name...">
+          placeholder="Rit Name...">
         </ion-input>
       </ion-card-title>
       <ion-card-subtitle>
         Rit Name
       </ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content *ngIf="ritNameErrorMessage" class="name-error-container">
-      <ion-text color="danger">
-        <p>{{ ritNameErrorMessage }}</p>
-      </ion-text>
-    </ion-card-content>
+    @if (ritNameErrorMessage) {
+      <ion-card-content class="name-error-container">
+        <ion-text color="danger">
+          <p>{{ ritNameErrorMessage }}</p>
+        </ion-text>
+      </ion-card-content>
+    }
 
     <ion-card-content class="tags-container" testId="tags-container">
       <app-tag-selector (tagsChange)="onTagsChange($event)" [disabled]="mode === 'view'" [selectedTags]="tags">
       </app-tag-selector>
     </ion-card-content>
-    <ion-card-content *ngIf="tagsErrorMessage" class="tags-error-container">
-      <ion-text color="danger">
-        <p>{{ tagsErrorMessage }}</p>
-      </ion-text>
-    </ion-card-content>
+    @if (tagsErrorMessage) {
+      <ion-card-content class="tags-error-container">
+        <ion-text color="danger">
+          <p>{{ tagsErrorMessage }}</p>
+        </ion-text>
+      </ion-card-content>
+    }
   </ion-card>
 
   <ion-card>
@@ -49,47 +56,62 @@
 
     <ion-card-content>
       <ion-textarea (ionInput)="setDetails($event)" [autoGrow]="true" [readonly]="mode === 'view'"
-                    [readonly]="mode === 'view'" [value]="details" placeholder="Details...">
+        [readonly]="mode === 'view'" [value]="details" placeholder="Details...">
       </ion-textarea>
-      <ion-text *ngIf="detailsErrorMessage" color="danger">
-        <p>{{ detailsErrorMessage }}</p>
-      </ion-text>
+      @if (detailsErrorMessage) {
+        <ion-text color="danger">
+          <p>{{ detailsErrorMessage }}</p>
+        </ion-text>
+      }
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="codes.length > 0 || mode !== 'view'">
-    <ion-card-header>
-      <ion-card-title>Barcodes</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <div>
-        <ion-chip *ngFor="let code of codes;" color="primary">
-          <ion-label>{{ code }}</ion-label>
-          <ion-icon (click)="removeCode(code)" (keydown.enter)="removeCode(code)" *ngIf="mode === 'edit'"
-                    name="close"></ion-icon>
-        </ion-chip>
-        <ion-text *ngIf="codes.length == 0">No Barcodes present</ion-text>
-      </div>
-      <ion-button (click)="openScanner()" (keydown.enter)="openScanner()" *ngIf="mode !== 'view'"
-                  class="ion-margin-top">
-        <ion-icon name="qr-code-outline"></ion-icon>
-        Scan Barcode
-      </ion-button>
-      <ion-text *ngIf="codesErrorMessage" color="danger">
-        <p>{{ codesErrorMessage }}</p>
-      </ion-text>
-    </ion-card-content>
-  </ion-card>
+  @if (codes.length > 0 || mode !== 'view') {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Barcodes</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div>
+          @for (code of codes; track code) {
+            <ion-chip color="primary">
+              <ion-label>{{ code }}</ion-label>
+              @if (mode === 'edit') {
+                <ion-icon (click)="removeCode(code)" (keydown.enter)="removeCode(code)"
+                name="close"></ion-icon>
+              }
+            </ion-chip>
+          }
+          @if (codes.length == 0) {
+            <ion-text>No Barcodes present</ion-text>
+          }
+        </div>
+        @if (mode !== 'view') {
+          <ion-button (click)="openScanner()" (keydown.enter)="openScanner()"
+            class="ion-margin-top">
+            <ion-icon name="qr-code-outline"></ion-icon>
+            Scan Barcode
+          </ion-button>
+        }
+        @if (codesErrorMessage) {
+          <ion-text color="danger">
+            <p>{{ codesErrorMessage }}</p>
+          </ion-text>
+        }
+      </ion-card-content>
+    </ion-card>
+  }
 
   <ion-fab horizontal="end" slot="fixed" vertical="bottom">
-    <ion-fab-button (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'" *ngIf="mode === 'view'">
-      <ion-icon name="create-outline"></ion-icon>
-    </ion-fab-button>
+    @if (mode === 'view') {
+      <ion-fab-button (click)="mode = 'edit'" (keydown.enter)="mode = 'edit'">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-fab-button>
+    }
   </ion-fab>
 
 </ion-content>
 <app-modal-view #ritUpdateModal [confirmable]="false" [content]="ritUpdate"
-                [title]="'Update Rit'">
+  [title]="'Update Rit'">
   <app-scanner-update-modal #ritUpdate></app-scanner-update-modal>
 </app-modal-view>
