@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FabButton, FabComponent} from '../fab/fab.component';
 import {ModalViewComponent} from '../modal-view/modal-view.component';
@@ -12,7 +12,7 @@ import {ScannerSearchModalComponent} from '../../scanner-search-modal/scanner-se
   selector: 'app-fab-integration',
   templateUrl: './fab-integration.component.html',
   styleUrls: ['./fab-integration.component.scss'],
-  imports: [CommonModule, FabComponent, ModalViewComponent, RitCreateComponent, RateComponent, ScannerSearchModalComponent],
+  imports: [FabComponent, ModalViewComponent, RitCreateComponent, RateComponent, ScannerSearchModalComponent],
   standalone: true,
 })
 export class FabIntegrationComponent implements OnInit, OnDestroy {
