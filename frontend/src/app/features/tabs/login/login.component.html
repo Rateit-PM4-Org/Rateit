@@ -7,13 +7,21 @@
 <ion-content class="ion-padding" scroll-y="false">
   <form (ngSubmit)="login()" [formGroup]="form">
     <ion-input formControlName="email" label="Email" ngModel type="email"></ion-input>
-    <ion-text *ngIf="loginErrorFields['email']" color="danger">
-      <p *ngFor="let message of loginErrorFields['email']">{{ message }}</p>
-    </ion-text>
+    @if (loginErrorFields['email']) {
+      <ion-text color="danger">
+        @for (message of loginErrorFields['email']; track message) {
+          <p>{{ message }}</p>
+        }
+      </ion-text>
+    }
     <ion-input formControlName="password" label="Password" ngModel type="password"></ion-input>
-    <ion-text *ngIf="loginErrorFields['password']" color="danger">
-      <p *ngFor="let message of loginErrorFields['password']">{{ message }}</p>
-    </ion-text>
+    @if (loginErrorFields['password']) {
+      <ion-text color="danger">
+        @for (message of loginErrorFields['password']; track message) {
+          <p>{{ message }}</p>
+        }
+      </ion-text>
+    }
     <ion-button [disabled]="!form.valid" type="submit">Submit</ion-button>
     <ion-button (click)="register()" (keydown.enter)="register()">Register</ion-button>
     <ion-ripple-effect></ion-ripple-effect>
