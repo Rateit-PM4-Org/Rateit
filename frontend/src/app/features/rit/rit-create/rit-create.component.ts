@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {IonBackButton, ToastController, ViewWillEnter} from '@ionic/angular/standalone';
@@ -14,7 +14,7 @@ import {ScannerUpdateModalComponent} from '../../scanner-update-modal/scanner-up
   templateUrl: './rit-create.component.html',
   styleUrls: ['./rit-create.component.scss'],
   standalone: true,
-  imports: [IonBackButton, CommonModule, TagSelectorComponent, ...IonicStandaloneStandardImports, ModalViewComponent, ScannerUpdateModalComponent],
+  imports: [IonBackButton, TagSelectorComponent, ...IonicStandaloneStandardImports, ModalViewComponent, ScannerUpdateModalComponent],
 })
 export class RitCreateComponent implements ViewWillEnter, ModalContent {
 
