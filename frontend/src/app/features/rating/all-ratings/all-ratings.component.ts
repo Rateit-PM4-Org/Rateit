@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
+
 import {ReactiveFormsModule} from '@angular/forms';
 import {IonBackButton, ToastController, ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
@@ -17,8 +17,12 @@ import {Observable, Subscription} from 'rxjs';
   styleUrls: ['./all-ratings.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, ...IonicStandaloneStandardImports, RatingListItemComponent, FabIntegrationComponent, IonBackButton
-  ],
+    ReactiveFormsModule,
+    ...IonicStandaloneStandardImports,
+    RatingListItemComponent,
+    FabIntegrationComponent,
+    IonBackButton
+],
 })
 
 export class AllRatingsComponent implements ViewWillEnter, ViewWillLeave {
