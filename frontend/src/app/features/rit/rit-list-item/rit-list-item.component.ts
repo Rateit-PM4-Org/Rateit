@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Rating} from '../../../model/rating';
@@ -13,7 +13,7 @@ import {ToastController} from '@ionic/angular/standalone';
   templateUrl: './rit-list-item.component.html',
   styleUrls: ['./rit-list-item.component.scss'],
   standalone: true,
-  imports: [CommonModule, ...IonicStandaloneStandardImports],
+  imports: [...IonicStandaloneStandardImports],
 })
 
 export class RitListItemComponent implements OnInit {
