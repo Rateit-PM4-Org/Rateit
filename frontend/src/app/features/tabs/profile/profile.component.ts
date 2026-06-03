@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component} from '@angular/core';
 import {IonicStandaloneStandardImports} from '../../../shared/ionic-imports';
 import {UserService} from '../../../shared/services/user.service';
@@ -13,8 +13,8 @@ import {ViewWillEnter, ViewWillLeave} from '@ionic/angular/standalone';
   styleUrls: ['./profile.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, ...IonicStandaloneStandardImports
-  ],
+    ...IonicStandaloneStandardImports
+],
 })
 export class ProfileComponent implements ViewWillEnter, ViewWillLeave {
   profile: any;
