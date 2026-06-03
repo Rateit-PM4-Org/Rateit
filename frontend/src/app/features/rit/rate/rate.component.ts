@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ToastController} from '@ionic/angular/standalone';
 import {addIcons} from 'ionicons';
@@ -16,7 +16,7 @@ addIcons({star, 'star-outline': starOutline});
   selector: 'app-rate',
   templateUrl: './rate.component.html',
   styleUrls: ['./rate.component.scss'],
-  imports: [CommonModule, ...IonicStandaloneStandardImports],
+  imports: [...IonicStandaloneStandardImports],
   standalone: true,
 })
 export class RateComponent implements ModalContent, OnInit, OnDestroy {
